@@ -7,15 +7,19 @@ import java.awt.image.BufferedImage;
  */
 public class Zombie extends Entity {
 
-    private Team team;
+    private State state;
+
+    private enum State {
+        WILD, PLAYER, OPPONENT;
+    }
 
     public Zombie(float x, float y, BufferedImage image) {
         super(x, y, image);
-        this.team = Team.WILD;
+        this.state = State.WILD;
     }
 
     public void convert() {
-        team = Team.PLAYER;
+        state = State.PLAYER;
     }
 
 }
