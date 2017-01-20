@@ -8,8 +8,21 @@ import java.awt.*;
  */
 public class Game extends JPanel {
 
+    private boolean running;
+    private Player player;
+    private Zombie[] zombies;
+
     public Game() {
         setPreferredSize(new Dimension(640, 640));
+        running = true;
+    }
+
+    private void init() {
+
+    }
+
+    private void update() {
+
     }
 
     public static void main(String[] args) {
@@ -22,6 +35,7 @@ public class Game extends JPanel {
         f.pack();
         f.setResizable(false);
         f.setVisible(true);
+        game.init();
     }
 
 }
