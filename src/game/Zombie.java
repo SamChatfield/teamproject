@@ -1,25 +1,74 @@
 package game;
 
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.util.ArrayList;
 
-/**
- * Created by Sam on 20/01/2017.
- */
-public class Zombie extends Entity {
+public class Zombie {
+	private static final int DIAMETER = 20;
 
-    private State state;
+	public int x;
+	public int y;
+	public int xa;
+	public int ya;
+	private Game game;
+	
+	int health = 500;
 
-    private enum State {
-        WILD, PLAYER, OPPONENT;
-    }
+	public Zombie(Game game, int x, int y, int xa, int ya) {
+		this.game = game;
+		this.x = x;
+		this.y = y;
+		this.xa = xa;
+		this.ya = ya;
+	}
 
-    public Zombie(float x, float y, BufferedImage image) {
-        super(x, y, image);
-        this.state = State.WILD;
-    }
+	public void paint(Graphics2D g) {
+		g.fillOval(x, y, DIAMETER, DIAMETER);
+	}
 
-    public void convert() {
-        state = State.PLAYER;
-    }
+	void move() {
+		if (x + xa < 0) {
+			xa = 2;
+			// game.edgeOfMap();
+		}
+		if (x + xa > game.getWidth() - DIAMETER) {
+			xa = -2;
+			// game.edgeOfMap();
+		}
+		if (y + ya < 0) {
+			ya = 2;
+			// game.edgeOfMap();
+		}
+		if (y + ya > game.getHeight() - DIAMETER) {
+			ya = -2;
+			// game.edgeOfMap();
+		}
+
+		x = x + xa;
+		y = y + ya;
+	}
+
+	
+	
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getXa() {
+		return xa;
+	}
+
+	public int getYa() {
+		return ya;
+	}
+
+	public int getDiameter() {
+		return DIAMETER;
+	}
 
 }
