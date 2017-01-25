@@ -27,4 +27,8 @@ public class ResourceLoader {
         return ImageIO.read(new File(RES_PATH + image));
     }
 
+    public static BufferedImage playerImage() throws IOException {
+        return imageFromResPath("playerFront.png");
+    }
+
 }
