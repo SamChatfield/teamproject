@@ -21,7 +21,7 @@ public class Entity {
         this.image = image;
         width = image.getWidth();
         height = image.getHeight();
-        moveSpeed = 1.0f;
+        moveSpeed = 2.0f;
         velX = velY = 0.0f;
     }
 

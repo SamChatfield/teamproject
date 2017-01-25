@@ -1,5 +1,7 @@
 package game;
 
+import game.util.Vector;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -103,10 +105,8 @@ public class Game extends Canvas {
     }
 
     private void update(double delta) {
-//        player.move(delta);
+        System.out.println("d: " + delta);
         // Player movement
-        float pdx = 0;
-        float pdy = 0;
         float pMoveSpeed = player.getMoveSpeed();
 
         // Change the player movement speed with 1 and 2
@@ -117,19 +117,25 @@ public class Game extends Canvas {
             player.setMoveSpeed(pMoveSpeed += 0.1f);
         }
 
+        Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
+
         // Handle player movement
         if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
-            pdy -= pMoveSpeed * delta;
+            pdv.add(new Vector(0.0f, -1.0f));
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
-            pdx -= pMoveSpeed * delta;
+            pdv.add(new Vector(-1.0f, 0.0f));
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
-            pdx += pMoveSpeed * delta;
+            pdv.add(new Vector(1.0f, 0.0f));
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
-            pdy += pMoveSpeed * delta;
+            pdv.add(new Vector(0.0f, 1.0f));
         }
+
+        Vector pnv = pdv.normalise(); // Player normal direction vector for this update
+        float pdx = pnv.x() * pMoveSpeed * ((float) delta); // Actual change in x this update
+        float pdy = pnv.y() * pMoveSpeed * ((float) delta); // Actual change in y this update
         player.move(pdx, pdy);
     }
 
