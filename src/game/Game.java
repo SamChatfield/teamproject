@@ -11,13 +11,10 @@ import java.io.IOException;
  */
 public class Game extends Canvas {
 
-    static final String TITLE = "Team Project";
+    private static final String TITLE = "Team Project";
     static final Dimension GAME_DIMENSION = new Dimension(640, 640);
-    static final double REFRESH_HZ = 30.0;
-    static final double NS_BETWEEN_UPDATES = 1000000000 / REFRESH_HZ;
-    static final int MAX_UPDATES_BETWEEN_RENDER = 5;
-    static final double TARGET_FPS = 60.0;
-    static final double TARGET_NS_BETWEEN_RENDER = 1000000000 / TARGET_FPS;
+    private static final int TARGET_FPS = 60;
+    private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
     private JFrame container;
     private BufferStrategy bufferStrategy;
@@ -26,7 +23,7 @@ public class Game extends Canvas {
     private Entity player;
     private Entity[] zombies;
 
-    public Game() {
+    private Game() {
         container = new JFrame(TITLE);
         JPanel panel = (JPanel) container.getContentPane();
         panel.setPreferredSize(GAME_DIMENSION);
@@ -52,65 +49,13 @@ public class Game extends Canvas {
         bufferStrategy = getBufferStrategy();
 
         running = true;
-
-//        init();
     }
 
     private void loop() {
         init();
         Renderer renderer = new Renderer(bufferStrategy, player);
 
-        double lastUpdate = System.nanoTime();
-        double lastRender = System.nanoTime();
-
-        int lastSecondTime = (int) (lastUpdate / 1000000000);
-
-        while (running) {
-            System.out.println("loop de loop");
-            double now = System.nanoTime();
-            int updateCounter = 0;
-
-            // Do as many updates as needed, maybe catching up
-            while( now - lastUpdate > NS_BETWEEN_UPDATES && updateCounter < MAX_UPDATES_BETWEEN_RENDER ) {
-                update();
-                lastUpdate += NS_BETWEEN_UPDATES;
-                updateCounter++;
-            }
-
-            // REMOVED SOMETHING FROM EXAMPLE
-
-            // Render
-            System.out.println("render thyme");
-            float interpolation = Math.min(1.0f, (float) ((now - lastUpdate) / NS_BETWEEN_UPDATES));
-            renderer.render(interpolation);
-            lastRender = now;
-
-            // Yield thread
-            while ( now - lastRender < TARGET_NS_BETWEEN_RENDER && now - lastUpdate < NS_BETWEEN_UPDATES) {
-                Thread.yield();
-
-                //This stops the app from consuming all your CPU. It makes this slightly less accurate, but is worth it.
-                //You can remove this try block and it will still work (better), your CPU just climbs on certain OSes.
-                //FYI on some OS's this can cause pretty bad stuttering. Scroll down and have a look at different peoples' solutions to this.
-//                try {
-//                    Thread.sleep(1);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                    System.out.println("loop thread interrupted exception");
-//                }
-
-                now = System.nanoTime();
-            }
-        }
-    }
-
-    private void loopvariable() {
-        init();
-        Renderer renderer = new Renderer(bufferStrategy, player);
-
         long lastLoopTime = System.nanoTime();
-        final int targetFPS = 60;
-        final long optimalTime = 1000000000L / targetFPS;
 
         while (running) {
             // Calculate how long since last update
@@ -118,9 +63,9 @@ public class Game extends Canvas {
             long now = System.nanoTime();
             long updateLength = now - lastLoopTime;
             lastLoopTime = now;
-            double delta = updateLength / ((double) optimalTime);
+            double delta = updateLength / ((double) OPTIMAL_TIME_DIFF);
 
-            // FPS counter stuff if using TODO Add an option for this
+            // FPS counter stuff would go here TODO Add an option for this
 
             // Update game with the delta
             update(delta);
@@ -128,14 +73,14 @@ public class Game extends Canvas {
             // Render
             renderer.render();
 
-            // We want each frame to be the active frame for optimalTime nanoseconds to give 60 FPS
+            // We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
             // So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
             // next loop) is less than this optimal time then we need to sleep the thread for the remaining time to fix
             // at 60 FPS
             now = System.nanoTime();
-            if (now - lastLoopTime < optimalTime) {
+            if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
                 try {
-                    Thread.sleep((lastLoopTime - now + optimalTime) / 1000000);
+                    Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     System.out.println("Game loop interrupted exception");
@@ -163,7 +108,7 @@ public class Game extends Canvas {
         float pdx = 0;
         float pdy = 0;
         float pMoveSpeed = player.getMoveSpeed();
-        
+
         // Change the player movement speed with 1 and 2
         if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
             player.setMoveSpeed(pMoveSpeed -= 0.1f);
@@ -172,6 +117,7 @@ public class Game extends Canvas {
             player.setMoveSpeed(pMoveSpeed += 0.1f);
         }
 
+        // Handle player movement
         if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
             pdy -= pMoveSpeed * delta;
         }
@@ -188,22 +134,8 @@ public class Game extends Canvas {
     }
 
     public static void main(String[] args) {
-//        JFrame f = new JFrame("Team Project");
-//
-//        JPanel panel = (JPanel) f.getContentPane();
-//        panel.setPreferredSize(new Dimension(640, 640));
-//        panel.setLayout(null);
-//
-//        Game game = new Game(panel);
-//
-//        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        f.add(panel);
-//        f.pack();
-//        f.setResizable(false);
-//        f.setVisible(true);
-//        game.init();
         Game game = new Game();
-        Thread gameThread = new Thread(() -> game.loopvariable());
+        Thread gameThread = new Thread(() -> game.loop());
         gameThread.start();
     }
 }

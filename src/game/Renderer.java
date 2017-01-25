@@ -33,16 +33,18 @@ public class Renderer {
     }
 
     public void render() {
+        // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+
+        // Clear the screen
         g2d.setColor(g2d.getBackground());
         g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
 
-        g2d.drawRect(50, 50, 100, 100);
+        g2d.setColor(Color.BLACK);
 
-//        g2d.drawImage(player.getImage(), player.x(), player.y());
         player.draw(g2d);
 
-        // Clean up and flip buffer
+        // Clean up and flip the buffer
         g2d.dispose();
         bufferStrategy.show();
     }
