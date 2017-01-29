@@ -18,6 +18,9 @@ public class Game extends JPanel {
 
 	ArrayList<Zombie> zombieList = new ArrayList<Zombie>();
 	ArrayList<Weapon> weaponList = new ArrayList<Weapon>();
+	Sound soundManager = new Sound();
+	Boolean musicOn = true;
+	Boolean SFXOn = true;
 
 	Player player = new Player(this);
 	Random r = new Random();
@@ -35,6 +38,9 @@ public class Game extends JPanel {
 	 */
 
 	public Game() {
+		if(musicOn) {
+			soundManager.playMusic();
+		}
 		addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -61,6 +67,9 @@ public class Game extends JPanel {
 	
 	public void shootBullet(int d, int x, int y){
 		weaponList.add( new Weapon(d, x, y, player.xa, player.ya));
+		if(SFXOn) {
+			soundManager.bulletSound();
+		}
 		System.out.println(weaponList);
 	}
 	
@@ -103,7 +112,7 @@ public class Game extends JPanel {
 
 	public void collide() {
 		Collision.checkZombiePlayerCol(zombieList, player);
-		Collision.checkWeaponCol(weaponList, zombieList);
+		Collision.checkWeaponCol(weaponList, zombieList, soundManager);
 	}
 
 	public static void gameOver() {

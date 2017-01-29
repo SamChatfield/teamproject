@@ -33,7 +33,7 @@ public class Collision {
 	}
 	
 	
-	public static void checkWeaponCol(ArrayList<Weapon> bullets, ArrayList<Zombie> zombies) {
+	public static void checkWeaponCol(ArrayList<Weapon> bullets, ArrayList<Zombie> zombies, Sound soundManager) {
 		//Check weapon collision
 		for (int i = 0; i < zombies.size(); i++) {
 			Zombie z = zombies.get(i);
@@ -46,7 +46,8 @@ public class Collision {
 
 				
 				if (rz.intersects(rb)) {
-
+					//not great as it plays it multiple times
+					soundManager.zombieDeath();
 					if (z.health == 0) {
 						zombies.remove(i);
 						System.out.println(zombies);
