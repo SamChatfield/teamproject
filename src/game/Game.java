@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by Sam on 20/01/2017.
@@ -15,6 +16,8 @@ public class Game extends Canvas {
 
     private static final String TITLE = "Team Project";
     static final Dimension GAME_DIMENSION = new Dimension(640, 640);
+    static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
+    public static final int VIEW_SIZE = 10; // how many tiles can be seen in the game window e.g. 10 => 10x10 view
     private static final int TARGET_FPS = 60;
     private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
@@ -22,8 +25,12 @@ public class Game extends Canvas {
     private BufferStrategy bufferStrategy;
     private InputHandler inputHandler;
     private boolean running;
-    private Entity player;
-    private Entity[] zombies;
+    private Map map;
+    private Player player;
+    private Zombie[] zombies;
+
+    // Non final stuff, remove before release
+    private final int zombieCount = 5;
 
     private Game() {
         container = new JFrame(TITLE);
@@ -55,7 +62,7 @@ public class Game extends Canvas {
 
     private void loop() {
         init();
-        Renderer renderer = new Renderer(bufferStrategy, player);
+        Renderer renderer = new Renderer(bufferStrategy, map, player, zombies);
 
         long lastLoopTime = System.nanoTime();
 
@@ -92,20 +99,24 @@ public class Game extends Canvas {
     }
 
     private void init() {
+        map = new Map(50.0f, 50.0f);
+        zombies = new Zombie[5];
         try {
             player = new Player(0.0f, 0.0f, ResourceLoader.playerImage());
+
+            // Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
+            for (int i = 0; i < zombieCount; i++) {
+                zombies[i] = new Zombie(10.0f, 10.0f, ResourceLoader.zombieImage());
+                Vector znv = Vector.randomVector().normalised();
+                zombies[i].newMovingDir();
+            }
         } catch (IOException e) {
             System.out.println("Uh oh. Player image failed to load. RIP");
             System.exit(1);
         }
     }
 
-    private void update() {
-        player.move(1.0f, 1.0f);
-    }
-
     private void update(double delta) {
-        System.out.println("d: " + delta);
         // Player movement
         float pMoveSpeed = player.getMoveSpeed();
 
@@ -119,7 +130,7 @@ public class Game extends Canvas {
 
         Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 
-        // Handle player movement
+        // Handle player keyboard input to move
         if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
             pdv.add(new Vector(0.0f, -1.0f));
         }
@@ -133,15 +144,55 @@ public class Game extends Canvas {
             pdv.add(new Vector(0.0f, 1.0f));
         }
 
-        Vector pnv = pdv.normalise(); // Player normal direction vector for this update
+        // Show collision boxes for debugging purposes
+        if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
+            player.setShowCollBox(true);
+            for (Zombie z : zombies) {
+                z.setShowCollBox(true);
+            }
+        } else {
+            player.setShowCollBox(false);
+            for (Zombie z : zombies) {
+                z.setShowCollBox(false);
+            }
+        }
+
+        // Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
+        Vector pnv = pdv.normalised(); // Player normal direction vector for this update
         float pdx = pnv.x() * pMoveSpeed * ((float) delta); // Actual change in x this update
         float pdy = pnv.y() * pMoveSpeed * ((float) delta); // Actual change in y this update
         player.move(pdx, pdy);
+
+        // Face the player in the direction of the mouse pointer
+        Point mousePos = inputHandler.getMousePos();
+        if (inputHandler.isMouseInside() && mousePos != null) {
+            player.face(mousePos.x, mousePos.y);
+        }
+
+        // Move the zombies around randomly
+        Random rand = new Random();
+        for (Zombie zombie : zombies) {
+            // Change the zombie's direction with given probability
+            if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                zombie.newMovingDir();
+            }
+            zombie.move(delta);
+            Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
+        }
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public static void main(String[] args) {
         Game game = new Game();
-        Thread gameThread = new Thread(() -> game.loop());
+
+        // Create and start the game loop over the loop method of the game object.
+        // :: is a method reference since loop is an existing method,
+        // semantically the same as () -> game.loop() lambda expression.
+        Thread gameThread = new Thread(game::loop);
         gameThread.start();
     }
+
 }

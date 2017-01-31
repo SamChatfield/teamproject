@@ -9,27 +9,15 @@ import java.awt.image.BufferStrategy;
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
+    private Map map;
     private Entity player;
-    private Entity[] zombies;
+    private Zombie[] zombies;
 
-    public Renderer(BufferStrategy bufferStrategy, Entity player) {
+    public Renderer(BufferStrategy bufferStrategy, Map map, Entity player, Zombie[] zombies) {
         this.bufferStrategy = bufferStrategy;
+        this.map = map;
         this.player = player;
-    }
-
-    public void render(float interpolation) {
-        Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g2d.setColor(g2d.getBackground());
-        g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
-
-        g2d.drawRect(50, 50, 100, 100);
-
-//        g2d.drawImage(player.getImage(), player.x(), player.y());
-        player.draw(g2d, interpolation);
-
-        // Clean up and flip buffer
-        g2d.dispose();
-        bufferStrategy.show();
+        this.zombies = zombies;
     }
 
     public void render() {
@@ -42,7 +30,11 @@ public class Renderer {
 
         g2d.setColor(Color.BLACK);
 
-        player.draw(g2d);
+        player.draw(g2d, map);
+
+        for (Zombie z : zombies) {
+            z.draw(g2d, map);
+        }
 
         // Clean up and flip the buffer
         g2d.dispose();

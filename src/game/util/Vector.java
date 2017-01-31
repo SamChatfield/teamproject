@@ -1,5 +1,7 @@
 package game.util;
 
+import java.util.Random;
+
 /**
  * A simple 2D float vector
  *
@@ -14,7 +16,7 @@ public class Vector {
         this.y = y;
     }
 
-    public Vector normalise() {
+    public Vector normalised() {
         float mag = magnitude();
         float nx = 0.0f;
         float ny = 0.0f;
@@ -36,6 +38,19 @@ public class Vector {
     public void add(Vector a) {
         x += a.x();
         y += a.y();
+    }
+
+    /**
+     * Return a randomised a vector between with x,y = -1.0 | 1.0
+     * Application includes randomising zombie movement
+     */
+    // TODO zombies only move diagonally because neither of the components of the vector can be 0
+    public static Vector randomVector() {
+        Random rand = new Random();
+        float x = (float) (rand.nextInt(2) * 2 - 1);
+        float y = (float) (rand.nextInt(2) * 2 - 1);
+
+        return new Vector(x, y);
     }
 
     public float x() {
@@ -64,4 +79,8 @@ public class Vector {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
 }

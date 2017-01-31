@@ -31,4 +31,9 @@ public class ResourceLoader {
         return imageFromResPath("playerFront.png");
     }
 
+    // TODO streamline this and player loading since they will do pretty much the same thing
+    public static BufferedImage zombieImage() throws IOException {
+        return imageFromResPath("playerBack.png");
+    }
+
 }
