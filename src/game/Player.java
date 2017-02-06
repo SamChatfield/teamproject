@@ -21,12 +21,17 @@ public class Player extends Entity {
         bullets = new ArrayList<>(20);
     }
 
-    public void shoot() {
+    public void shoot(float aimX, float aimY) {
+        // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
         if (now - lastAttackTime > SHOOT_DELAY) {
             lastAttackTime = now;
-            System.out.println("Shoot");
+            bullets.add(new Bullet(this, aimX, aimY, 5.0f, 5.0f));
         }
+    }
+
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
     }
 
 }

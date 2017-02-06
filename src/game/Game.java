@@ -5,8 +5,10 @@ import game.util.Vector;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -18,6 +20,7 @@ public class Game extends Canvas {
     static final Dimension GAME_DIMENSION = new Dimension(640, 640);
     static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
     public static final int VIEW_SIZE = 10; // how many tiles can be seen in the game window e.g. 10 => 10x10 view
+    private static final int TILE_SIZE = GAME_DIMENSION.width / VIEW_SIZE;
     private static final int TARGET_FPS = 60;
     private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
@@ -27,7 +30,8 @@ public class Game extends Canvas {
     private boolean running;
     private Map map;
     private Player player;
-    private Zombie[] zombies;
+//    private Zombie[] zombies;
+    private ArrayList<Zombie> zombies;
 
     // Non final stuff, remove before release
     private final int zombieCount = 5;
@@ -100,15 +104,15 @@ public class Game extends Canvas {
 
     private void init() {
         map = new Map(50.0f, 50.0f);
-        zombies = new Zombie[5];
+//        zombies = new Zombie[5];
+        zombies = new ArrayList<>(zombieCount);
         try {
             player = new Player(0.0f, 0.0f, ResourceLoader.playerImage());
 
             // Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
             for (int i = 0; i < zombieCount; i++) {
-                zombies[i] = new Zombie(10.0f, 10.0f, ResourceLoader.zombieImage());
-                Vector znv = Vector.randomVector().normalised();
-                zombies[i].newMovingDir();
+                zombies.add(new Zombie(10.0f, 10.0f, ResourceLoader.zombieImage()));
+                zombies.get(i).newMovingDir();
             }
         } catch (IOException e) {
             System.out.println("Uh oh. Player image failed to load. RIP");
@@ -167,7 +171,26 @@ public class Game extends Canvas {
         Point mousePos = inputHandler.getMousePos();
         if (inputHandler.isMouseInside() && mousePos != null) {
             player.face(mousePos.x, mousePos.y);
+
+            // Player shooting
+            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+                // game coord x and y position of the aim
+//                float aimX = ((float) mousePos.x - (float) (GAME_DIMENSION.getWidth() / 2.0f)) / TILE_SIZE;
+//                float aimY = ((float) mousePos.y - (float) (GAME_DIMENSION.getHeight() / 2.0f)) / TILE_SIZE;
+                double playerAngle = player.getFacingAngle();
+                float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
+                float aimY = (float) Math.sin(playerAngle + Math.PI / 2);
+                player.shoot(aimX, aimY);
+            }
         }
+
+//        // Player shooting
+//        if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+//            // game coord x and y position of the aim
+//            float aimX = ((float) mousePos.x - (float) (GAME_DIMENSION.getWidth() / 2.0f)) / TILE_SIZE;
+//            float aimX = (mousePos.x - GAME_DIMENSION.getWidth() / 2) / TILE_SIZE;
+//            player.shoot(aimPos);
+//        }
 
         // Move the zombies around randomly
         Random rand = new Random();
@@ -178,6 +201,20 @@ public class Game extends Canvas {
             }
             zombie.move(delta);
             Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
+        }
+
+        // Bullet movement
+//        for (Bullet bullet : player.getBullets()) {
+        for (int i = 0; i < player.getBullets().size(); i++) {
+            player.getBullets().get(i).move(delta);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies);
+        }
+
+        for (int i = 0; i < zombies.size(); i++) {
+            if (zombies.get(i).health <= 0) {
+                zombies.remove(i);
+                i--;
+            }
         }
     }
 

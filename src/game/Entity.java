@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class Entity {
 
     private double facingAngle;
-    private float x, y; // x and y position of this entity in the game coord system N.B. (0.0, 0.0) is the middle of the entity sprite
+    private float x, y; // x and y position of the centre of this entity in the game coord system
     private float moveSpeed; // how fast can this entity move through the world (normal speed is 1.0f)
     private BufferedImage image;
     private CollisionBox collisionBox;
@@ -25,6 +25,7 @@ public class Entity {
         this.collisionBox = collisionBox;
         this.image = image;
         showCollBox = false;
+        this.health = health;
         lastAttackTime = 0L;
         facingAngle = 0.0d;
     }
@@ -50,7 +51,7 @@ public class Entity {
         x += dx;
         y += dy;
         collisionBox.move(dx, dy);
-        this.facingAngle = facingAngle;
+//        this.facingAngle = facingAngle;
     }
 
     public void face(int mx, int my) {
@@ -67,6 +68,10 @@ public class Entity {
 
     public CollisionBox getCollisionBox() {
         return collisionBox;
+    }
+
+    public double getFacingAngle() {
+        return facingAngle;
     }
 
     public void draw(Graphics2D g2d, Map map) {

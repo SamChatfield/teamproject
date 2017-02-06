@@ -2,6 +2,7 @@ package game;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 /**
  * Created by Sam on 20/01/2017.
@@ -10,10 +11,10 @@ public class Renderer {
 
     private BufferStrategy bufferStrategy;
     private Map map;
-    private Entity player;
-    private Zombie[] zombies;
+    private Player player;
+    private ArrayList<Zombie> zombies;
 
-    public Renderer(BufferStrategy bufferStrategy, Map map, Entity player, Zombie[] zombies) {
+    public Renderer(BufferStrategy bufferStrategy, Map map, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
         this.map = map;
         this.player = player;
@@ -23,6 +24,7 @@ public class Renderer {
     public void render() {
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Clear the screen
         g2d.setColor(g2d.getBackground());
@@ -31,6 +33,10 @@ public class Renderer {
         g2d.setColor(Color.BLACK);
 
         player.draw(g2d, map);
+
+        for (Bullet b : player.getBullets()) {
+            b.draw(g2d);
+        }
 
         for (Zombie z : zombies) {
             z.draw(g2d, map);

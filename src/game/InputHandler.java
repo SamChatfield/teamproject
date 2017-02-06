@@ -51,7 +51,7 @@ public class InputHandler implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        game.getPlayer().shoot();
+//        game.getPlayer().shoot();
     }
 
     @Override
