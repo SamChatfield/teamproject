@@ -35,9 +35,7 @@ public class InputHandler implements KeyListener, MouseListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -50,9 +48,7 @@ public class InputHandler implements KeyListener, MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-//        game.getPlayer().shoot();
-    }
+    public void mouseClicked(MouseEvent e) {}
 
     @Override
     public void mousePressed(MouseEvent e) {

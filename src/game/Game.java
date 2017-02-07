@@ -30,7 +30,6 @@ public class Game extends Canvas {
     private boolean running;
     private Map map;
     private Player player;
-//    private Zombie[] zombies;
     private ArrayList<Zombie> zombies;
 
     // Non final stuff, remove before release
@@ -175,22 +174,12 @@ public class Game extends Canvas {
             // Player shooting
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
                 // game coord x and y position of the aim
-//                float aimX = ((float) mousePos.x - (float) (GAME_DIMENSION.getWidth() / 2.0f)) / TILE_SIZE;
-//                float aimY = ((float) mousePos.y - (float) (GAME_DIMENSION.getHeight() / 2.0f)) / TILE_SIZE;
                 double playerAngle = player.getFacingAngle();
                 float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
                 float aimY = (float) Math.sin(playerAngle + Math.PI / 2);
                 player.shoot(aimX, aimY);
             }
         }
-
-//        // Player shooting
-//        if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-//            // game coord x and y position of the aim
-//            float aimX = ((float) mousePos.x - (float) (GAME_DIMENSION.getWidth() / 2.0f)) / TILE_SIZE;
-//            float aimX = (mousePos.x - GAME_DIMENSION.getWidth() / 2) / TILE_SIZE;
-//            player.shoot(aimPos);
-//        }
 
         // Move the zombies around randomly
         Random rand = new Random();
@@ -204,7 +193,6 @@ public class Game extends Canvas {
         }
 
         // Bullet movement
-//        for (Bullet bullet : player.getBullets()) {
         for (int i = 0; i < player.getBullets().size(); i++) {
             player.getBullets().get(i).move(delta);
             Collision.checkBulletCollision(i, player.getBullets(), zombies);

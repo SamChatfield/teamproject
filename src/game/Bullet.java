@@ -37,10 +37,6 @@ public class Bullet {
         active = true;
     }
 
-    public Bullet(Player player, float aimX, float aimY) {
-        new Bullet(player, aimX, aimY, 5.0f, 5.0f);
-    }
-
     public void move(double delta) {
         x += dx * BULLET_SPEED * delta;
         y += dy * BULLET_SPEED * delta;
