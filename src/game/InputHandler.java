@@ -13,15 +13,13 @@ public class InputHandler implements KeyListener, MouseListener {
 
     private boolean[] keyArray, mouseButtonArray;
     private boolean mouseInside;
-    private Component parent;
+    private Game game;
 
-    public InputHandler(Component parent) {
+    public InputHandler(Game game) {
         keyArray = new boolean[256];
         mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
         mouseInside = false;
-        this.parent = parent;
-        this.parent.addKeyListener(this);
-        this.parent.addMouseListener(this);
+        this.game = game;
     }
 
     public boolean isKeyDown(int keyCode) {
@@ -29,7 +27,7 @@ public class InputHandler implements KeyListener, MouseListener {
     }
 
     public Point getMousePos() {
-        return parent.getMousePosition();
+        return game.getMousePosition();
     }
 
     public boolean isMouseButtonDown(int button) {
@@ -70,6 +68,10 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         mouseInside = false;
+    }
+
+    public boolean isMouseInside() {
+        return mouseInside;
     }
 
 }
