@@ -2,6 +2,9 @@ package game;
 
 import java.io.File;
 import javax.sound.sampled.*;
+
+import com.sun.glass.events.KeyEvent;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -20,6 +23,7 @@ public class Sound extends Thread{
     
     public void run() {
     	try {
+    		
     		while(running) {
     			update();
     			
@@ -31,7 +35,10 @@ public class Sound extends Thread{
     }
     
     public void update() {
-    	if(InputHandler.isKeyPressed)
+    	if(input.isKeyDown(KeyEvent.VK_SPACE)){
+    		bulletSound();
+    	}
+    	
     }
 //create the clip and load a specific file
     public Clip createClip(String fileName) {

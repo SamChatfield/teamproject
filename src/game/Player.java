@@ -1,118 +1,37 @@
 package game;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
-public class Player {
-	// private static final int Y = 330;
-	private static final int WIDTH = 30;
-	private static final int HEIGHT = 30;
-	int x = 295;
-	int xa = 0;
-	int y = 295;
-	int ya = 0;
-	private Game game;
-	static int direction;
+/**
+ * Created by Sam on 20/01/2017.
+ */
+public class Player extends Entity {
 
-	Weapon weapon;
+    private static final float COLL_BOX_WIDTH = 25.0f;
+    private static final float COLL_BOX_HEIGHT = 25.0f;
+    private static final int HEALTH = 50;
+    private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
 
-	int health = 1000;
+    private ArrayList<Bullet> bullets;
 
-	public Player(Game game) {
-		this.game = game;
-	}
+    public Player(float x, float y, BufferedImage image) {
+//        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
+        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
+        bullets = new ArrayList<>(20);
+    }
 
-	public void paint(Graphics2D g) {
-		g.fillRect(x, y, WIDTH, HEIGHT);
-	}
-	// going to the sides will bump you back in
+    public void shoot(float aimX, float aimY) {
+        // Limit the player to firing at their shooting speed
+        long now = System.nanoTime();
+        if (now - lastAttackTime > SHOOT_DELAY) {
+            lastAttackTime = now;
+            bullets.add(new Bullet(this, aimX, aimY, 5.0f, 5.0f));
+        }
+    }
 
-	public void move() {
-		if (x + xa >= 0) {
-			x = x + xa;
-		} else {
-			// game.edgeOfMap(); // do whatever when it reaches the edge of the
-			// map
-			xa = 1;
-		}
-		if (x + xa < game.getWidth() - WIDTH) {
-			x = x + xa;
-		} else {
-			// game.edgeOfMap(); // do whatever when it reaches the edge of the
-			// map
-			xa = -1;
-		}
-
-		// going to the top or bottom will stop you moving off the map
-		if (y + ya > 0) {
-			y = y + ya;
-		} else {
-			// game.edgeOfMap(); // do whatever when it reaches the edge of the
-			// map
-			ya = 1;
-		}
-		if (y + ya < game.getHeight() - HEIGHT) {
-			y = y + ya;
-		} else {
-			// game.edgeOfMap(); // do whatever when it reaches the edge of the
-			// map
-			ya = -1;
-		}
-
-	}
-
-	public void keyReleased(KeyEvent e) {
-		xa = 0;
-		ya = 0;
-	}
-
-	public void keyPressed(KeyEvent e) {
-
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			ya = -1;
-			direction = 1;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			xa = -1;
-			direction = -2;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
-			ya = 1;
-			direction = -1;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			xa = 1;
-			direction = 2;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			game.shootBullet(direction, x, y);
-		}
-
-	}
-
-	public int getTopY() {
-		return y;
-	}
-
-	public int getBottomY() {
-		return y - HEIGHT;
-	}
-
-	public int getWidth() {
-		return WIDTH;
-	}
-
-	public int getHeight() {
-		return HEIGHT;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
 
 }

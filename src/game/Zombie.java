@@ -1,74 +1,61 @@
 package game;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.util.ArrayList;
+import game.util.Vector;
 
-public class Zombie {
-	private static final int DIAMETER = 20;
+import java.awt.image.BufferedImage;
 
-	public int x;
-	public int y;
-	public int xa;
-	public int ya;
-	private Game game;
-	
-	int health = 500;
+/**
+ * Created by Sam on 20/01/2017.
+ */
+public class Zombie extends Entity {
 
-	public Zombie(Game game, int x, int y, int xa, int ya) {
-		this.game = game;
-		this.x = x;
-		this.y = y;
-		this.xa = xa;
-		this.ya = ya;
-	}
+    private State state;
+    private float dx, dy; // Which direction is the zombie moving in every tick?
 
-	public void paint(Graphics2D g) {
-		g.fillOval(x, y, DIAMETER, DIAMETER);
-	}
+    public static final float DIRECTION_CHANGE_PROBABILITY = 0.01f;
+    private static final float COLL_BOX_WIDTH = 25.0f;
+    private static final float COLL_BOX_HEIGHT = 25.0f;
+    private static final int HEALTH = 25;
 
-	void move() {
-		if (x + xa < 0) {
-			xa = 2;
-			// game.edgeOfMap();
-		}
-		if (x + xa > game.getWidth() - DIAMETER) {
-			xa = -2;
-			// game.edgeOfMap();
-		}
-		if (y + ya < 0) {
-			ya = 2;
-			// game.edgeOfMap();
-		}
-		if (y + ya > game.getHeight() - DIAMETER) {
-			ya = -2;
-			// game.edgeOfMap();
-		}
+    private enum State {
+        WILD, PLAYER, OPPONENT;
+    }
 
-		x = x + xa;
-		y = y + ya;
-	}
+    public Zombie(float x, float y, BufferedImage image) {
+        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
+        this.state = State.WILD;
+    }
 
-	
-	
-	public int getX() {
-		return x;
-	}
+    public float getDx() {
+        return dx;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public float getDy() {
+        return dy;
+    }
 
-	public int getXa() {
-		return xa;
-	}
+    public void convert() {
+        state = State.PLAYER;
+    }
 
-	public int getYa() {
-		return ya;
-	}
+    public void move(double delta) {
+        super.move(dx * getMoveSpeed() * (float) delta, dy * getMoveSpeed() * (float) delta);
+    }
 
-	public int getDiameter() {
-		return DIAMETER;
-	}
+    public void newMovingDir() {
+        Vector zdv = Vector.randomVector().normalised();
+
+        dx = zdv.x();
+        dy = zdv.y();
+    }
+
+    public void attack(Entity entity, int damageDone) {
+        long now = System.nanoTime();
+        if (now - lastAttackTime > 1000000000L) {
+            lastAttackTime = now;
+            entity.health -= damageDone;
+            System.out.println("player health: " + entity.health);
+        }
+    }
 
 }

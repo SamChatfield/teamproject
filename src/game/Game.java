@@ -1,139 +1,223 @@
 package game;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import game.util.Vector;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.lang.reflect.Array;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferStrategy;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+/**
+ * Created by Sam on 20/01/2017.
+ */
+public class Game extends Canvas {
 
-//@SuppressWarnings("serial")
-public class Game extends JPanel {
+    private static final String TITLE = "Team Project";
+    static final Dimension GAME_DIMENSION = new Dimension(640, 640);
+    static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
+    public static final int VIEW_SIZE = 10; // how many tiles can be seen in the game window e.g. 10 => 10x10 view
+    private static final int TILE_SIZE = GAME_DIMENSION.width / VIEW_SIZE;
+    private static final int TARGET_FPS = 60;
+    private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
-	ArrayList<Zombie> zombieList = new ArrayList<Zombie>();
-	ArrayList<Weapon> weaponList = new ArrayList<Weapon>();
-	boolean musicOn = true;
-	boolean SFXOn = true;
+    private JFrame container;
+    private BufferStrategy bufferStrategy;
+    private InputHandler inputHandler;
+    private boolean running;
+    private Map map;
+    private Player player;
+    private ArrayList<Zombie> zombies;
 
-	Player player = new Player(this);
-	Random r = new Random();
+    // Non final stuff, remove before release
+    private final int zombieCount = 5;
 
-	private void makeZombie(int n) {
-		for (int i = 0; i < n; i++) {
-			zombieList.add(new Zombie(this, r.nextInt(641), r.nextInt(641), (r.nextBoolean() ? 1 : -1),
-					(r.nextBoolean() ? 1 : -1)));
-		}
-	}
+    private Game() {
+        container = new JFrame(TITLE);
+        JPanel panel = (JPanel) container.getContentPane();
+        panel.setPreferredSize(GAME_DIMENSION);
+        panel.setLayout(null);
 
-	/*
-	 * public void makeBullet(Weapon w){ weaponList.add(new Weapon(this,
-	 * w.direction, w.x, w.y, w.xv, w.yv)); }
-	 */
+        setBounds(0, 0, GAME_DIMENSION.width, GAME_DIMENSION.height);
+        panel.add(this);
 
-	public Game() {
-		addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
+        setIgnoreRepaint(true);
 
-			@Override
-			public void keyReleased(KeyEvent e) {
-				player.keyReleased(e);
-			}
+        container.pack();
+        container.setResizable(false);
+        container.setVisible(true);
+        container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				player.keyPressed(e);
+        inputHandler = new InputHandler(this);
+        addMouseListener(inputHandler);
+        addKeyListener(inputHandler);
 
-			}
-			
-			
-		});
+        requestFocus();
 
+        createBufferStrategy(2);
+        bufferStrategy = getBufferStrategy();
 
-		setFocusable(true);
-	}
+        running = true;
+    }
 
-	
-	public void shootBullet(int d, int x, int y){
-		weaponList.add( new Weapon(d, x, y, player.xa, player.ya));
-		System.out.println(weaponList);
-	}
-	
-	private void move() {
+    private void loop() {
+        init();
+        Renderer renderer = new Renderer(bufferStrategy, map, player, zombies);
 
-		for (int i = 0; i < zombieList.size(); i++) {
-			zombieList.get(i).move();
-		}
+        long lastLoopTime = System.nanoTime();
 
-		for (int i = 0; i < weaponList.size(); i++) {
-			weaponList.get(i).move();
-		}
+        while (running) {
+            // Calculate how long since last update
+            // Delta is how far things should move this update to compensate
+            long now = System.nanoTime();
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            double delta = updateLength / ((double) OPTIMAL_TIME_DIFF);
 
-		player.move();
+            // FPS counter stuff would go here TODO Add an option for this
 
-	}
+            // Update game with the delta
+            update(delta);
 
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // Render
+            renderer.render();
 
-		for (int i = 0; i < zombieList.size(); i++) {
-			zombieList.get(i).paint(g2d);
-		}
+            // We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
+            // So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
+            // next loop) is less than this optimal time then we need to sleep the thread for the remaining time to fix
+            // at 60 FPS
+            now = System.nanoTime();
+            if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
+                try {
+                    Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.out.println("Game loop interrupted exception");
+                }
+            }
+        }
+    }
 
-		for (int i = 0; i < weaponList.size(); i++) {
-			weaponList.get(i).paint(g2d);
-		}
+    private void init() {
+        map = new Map(50.0f, 50.0f);
+//        zombies = new Zombie[5];
+        zombies = new ArrayList<>(zombieCount);
+        try {
+            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage());
 
-		player.paint(g2d);
+            // Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
+            for (int i = 0; i < zombieCount; i++) {
+                zombies.add(new Zombie(10.0f, 10.0f, ResourceLoader.zombieImage()));
+                zombies.get(i).newMovingDir();
+            }
+        } catch (IOException e) {
+            System.out.println("Uh oh. Player image failed to load. RIP");
+            System.exit(1);
+        }
+    }
 
-	}
+    private void update(double delta) {
+        // Player movement
+        float pMoveSpeed = player.getMoveSpeed();
 
-	public void edgeOfMap() {
-		JOptionPane.showMessageDialog(null, "at the edge");
-		// System.exit(ABORT);
-	}
+        // Change the player movement speed with 1 and 2
+        if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
+            player.setMoveSpeed(pMoveSpeed -= 0.1f);
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
+            player.setMoveSpeed(pMoveSpeed += 0.1f);
+        }
 
-	public void collide() {
-		Collision.checkZombiePlayerCol(zombieList, player);
-		Collision.checkWeaponCol(weaponList, zombieList);
-	}
+        Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 
-	public static void gameOver() {
+        // Handle player keyboard input to move
+        if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
+            pdv.add(new Vector(0.0f, -1.0f));
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
+            pdv.add(new Vector(-1.0f, 0.0f));
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
+            pdv.add(new Vector(1.0f, 0.0f));
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
+            pdv.add(new Vector(0.0f, 1.0f));
+        }
 
-		JOptionPane.showMessageDialog(null, "YOU LOSE");
-		System.exit(ABORT);
+        // Show collision boxes for debugging purposes
+        if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
+            player.setShowCollBox(true);
+            for (Zombie z : zombies) {
+                z.setShowCollBox(true);
+            }
+        } else {
+            player.setShowCollBox(false);
+            for (Zombie z : zombies) {
+                z.setShowCollBox(false);
+            }
+        }
 
-	}
+        // Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
+        Vector pnv = pdv.normalised(); // Player normal direction vector for this update
+        float pdx = pnv.x() * pMoveSpeed * ((float) delta); // Actual change in x this update
+        float pdy = pnv.y() * pMoveSpeed * ((float) delta); // Actual change in y this update
+        player.move(pdx, pdy);
 
-	public static void main(String[] args) throws InterruptedException {
-		JFrame frame = new JFrame("Zombies");
-		Game game = new Game();
-		frame.add(game);
-		frame.setSize(640, 640);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Face the player in the direction of the mouse pointer
+        Point mousePos = inputHandler.getMousePos();
+        if (inputHandler.isMouseInside() && mousePos != null) {
+            player.face(mousePos.x, mousePos.y);
 
-		game.makeZombie(5);
+            // Player shooting
+            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+                // game coord x and y position of the aim
+                double playerAngle = player.getFacingAngle();
+                float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
+                float aimY = (float) Math.sin(playerAngle + Math.PI / 2);
+                player.shoot(aimX, aimY);
+            }
+        }
 
-		while (true) {
-			game.move();
-			game.repaint();
-			game.collide();
+        // Move the zombies around randomly
+        Random rand = new Random();
+        for (Zombie zombie : zombies) {
+            // Change the zombie's direction with given probability
+            if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                zombie.newMovingDir();
+            }
+            zombie.move(delta);
+            Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
+        }
 
-			// simple thread.sleep probably going to want to change this
-			Thread.sleep(10);
+        // Bullet movement
+        for (int i = 0; i < player.getBullets().size(); i++) {
+            player.getBullets().get(i).move(delta);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies);
+        }
 
-		}
-	}
+        for (int i = 0; i < zombies.size(); i++) {
+            if (zombies.get(i).health <= 0) {
+                zombies.remove(i);
+                i--;
+            }
+        }
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+
+        // Create and start the game loop over the loop method of the game object.
+        // :: is a method reference since loop is an existing method,
+        // semantically the same as () -> game.loop() lambda expression.
+        Thread gameThread = new Thread(game::loop);
+        gameThread.start();
+    }
 
 }
