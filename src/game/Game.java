@@ -34,7 +34,7 @@ public class Game extends Canvas {
 	private MapData mapData;
 	private Player player;
 	private ArrayList<Zombie> zombies;
-	
+
 
 	// Game state
 	private enum STATE {
@@ -46,7 +46,7 @@ public class Game extends Canvas {
 	private enum MSTATE {
 		MAIN,
 		HELP,
-		OPTIONS, 
+		OPTIONS,
 		NONE
 	}
 	private STATE currentState;
@@ -84,6 +84,9 @@ public class Game extends Canvas {
 		menu = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
+
+        Sound soundManager = new Sound(inputHandler);
+        soundManager.start();
 	}
 
 	private void loop() {
@@ -110,11 +113,11 @@ public class Game extends Canvas {
 		//timer.start();
 		Timer timer = new Timer(180);
 		new Thread(timer).start();
-	
-		
+
+
 		while (currentState == STATE.GAME) {
-			
-			
+
+
 			// Calculate how long since last update
 			// Delta is how far things should move this update to compensate
 			long now = System.nanoTime();
@@ -143,16 +146,16 @@ public class Game extends Canvas {
 					System.out.println("Game loop interrupted exception");
 				}
 			}
-			
+
 			if(timer.getTimeRemaining() <= 0) {
 				currentState = STATE.END;
 				break;
 			}
 		}
-		
+
 		while(currentState == STATE.END) {
 			renderer.renderGameOver();
-			
+
 			try {
 				Thread.sleep(3000);
 				System.exit(0);
@@ -193,7 +196,7 @@ public class Game extends Canvas {
 
 		}
 		else if(menuState == MSTATE.MAIN) {
-			
+
 			int playX = (int)menu.playButton.getX();
 			int playY = (int) menu.playButton.getY();
 			int optionsX = (int)menu.optionsButton.getX();
@@ -336,7 +339,7 @@ public class Game extends Canvas {
             b.move(delta);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
-        
+
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
             if (zombies.get(i).health <= 0) {
@@ -348,7 +351,7 @@ public class Game extends Canvas {
             }
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
-		
+
 		if(player.health <= -100) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
