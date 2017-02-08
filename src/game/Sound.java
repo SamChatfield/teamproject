@@ -5,16 +5,34 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public class Sound {
+public class Sound extends Thread{
     private String pistolSound = "src/game/sounds/pistol.wav";
     private String music = "src/game/sounds/music.wav";
     private String zombieDeath = "src/game/sounds/zombie.wav";
+    private boolean running;
     Clip musicClip;
+    public InputHandler input;
 
-    public Sound() {
-    	
+    public Sound(InputHandler input) {
+    	running = true;
+    	this.input = input;
     }
     
+    public void run() {
+    	try {
+    		while(running) {
+    			update();
+    			
+    			Thread.sleep(100);
+    		}
+    	} catch (InterruptedException e) {
+    		System.out.println("Sound loop interrupted exception");
+    	}
+    }
+    
+    public void update() {
+    	if(InputHandler.isKeyPressed)
+    }
 //create the clip and load a specific file
     public Clip createClip(String fileName) {
     	Clip sound;
@@ -66,5 +84,10 @@ public class Sound {
     	if(musicClip.isActive()) {
     		musicClip.stop();
     	}
+    }
+    
+    public void playZombieSounds() {
+    	this.createClip(zombieDeath).start();
+    	
     }
 }
