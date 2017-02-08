@@ -50,7 +50,6 @@ public class Client {
 		// Starting threads
 		client_sender.start();
 		client_receiver.start();
-		
 		// TODO: Closure method for threads
 	}
 }

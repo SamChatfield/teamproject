@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Daniel on 02/02/2017.
  * Modified by George on 04/02/2017.
  */
-public class SampleObject implements Serializable {
+public class SampleObject extends Object implements Serializable {
 
     private String name;
     private int value;

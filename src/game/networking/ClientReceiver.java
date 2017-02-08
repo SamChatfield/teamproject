@@ -27,7 +27,7 @@ public class ClientReceiver extends Thread {
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
-				System.out.println("Receiving object");
+//				System.out.println("Receiving object");
 				SampleObject obj1 = (SampleObject)objIn.readObject();
 				if(obj1 != null) {
 					System.out.println("Object = " +obj1.toString() + " | value = " + obj1.getValue());

@@ -9,7 +9,6 @@ package game.networking;
 public class ClientTable {
 	
 	ClientTable() {
-		
 	}
 
 	public void addToTable(String username) {

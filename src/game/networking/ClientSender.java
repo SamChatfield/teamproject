@@ -42,8 +42,9 @@ public class ClientSender extends Thread {
 	public void run() {
 		System.out.println("DEBUG: ClientSender running");
 		sendObject(username);
-		String dummyMessage = "Hello from " + username;
-		
+		//String dummyMessage = "Hello from " + username;
+		Object dummyMessage = new SampleObject("Hello World",1);
+
 		while(true) {
 			try {
 				Thread.sleep(3000);
