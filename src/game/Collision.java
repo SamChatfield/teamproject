@@ -33,7 +33,7 @@ public class Collision {
 	}
 	
 	
-	public static void checkWeaponCol(ArrayList<Weapon> bullets, ArrayList<Zombie> zombies, Sound soundManager) {
+	public static void checkWeaponCol(ArrayList<Weapon> bullets, ArrayList<Zombie> zombies) {
 		//Check weapon collision
 		for (int i = 0; i < zombies.size(); i++) {
 			Zombie z = zombies.get(i);
