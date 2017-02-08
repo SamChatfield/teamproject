@@ -31,6 +31,9 @@ public class Game extends Canvas {
     private Map map;
     private Player player;
     private ArrayList<Zombie> zombies;
+    
+    public static boolean musicOn = true;
+    public static boolean SFXOn = true;
 
     // Non final stuff, remove before release
     private final int zombieCount = 5;
@@ -61,6 +64,9 @@ public class Game extends Canvas {
         bufferStrategy = getBufferStrategy();
 
         running = true;
+        
+        Sound soundManager = new Sound(inputHandler);
+        soundManager.start();
     }
 
     private void loop() {
@@ -212,6 +218,7 @@ public class Game extends Canvas {
 
     public static void main(String[] args) {
         Game game = new Game();
+        
 
         // Create and start the game loop over the loop method of the game object.
         // :: is a method reference since loop is an existing method,

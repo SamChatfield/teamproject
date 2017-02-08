@@ -1,12 +1,13 @@
 package game;
 
-import java.io.File;
-import javax.sound.sampled.*;
-
 import com.sun.glass.events.KeyEvent;
 
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+
+import javax.sound.sampled.*;
 
 public class Sound extends Thread{
     private String pistolSound = "src/game/sounds/pistol.wav";
@@ -22,12 +23,17 @@ public class Sound extends Thread{
     }
     
     public void run() {
+    	playMusic();
     	try {
-    		
     		while(running) {
+    			if(!Game.musicOn) {
+    				stopMusic();
+    			}
+    			
     			update();
     			
-    			Thread.sleep(100);
+    			
+    			Thread.sleep(50);
     		}
     	} catch (InterruptedException e) {
     		System.out.println("Sound loop interrupted exception");
@@ -35,7 +41,7 @@ public class Sound extends Thread{
     }
     
     public void update() {
-    	if(input.isKeyDown(KeyEvent.VK_SPACE)){
+    	if(input.isMouseButtonDown(MouseEvent.BUTTON1)){
     		bulletSound();
     	}
     	
@@ -91,10 +97,5 @@ public class Sound extends Thread{
     	if(musicClip.isActive()) {
     		musicClip.stop();
     	}
-    }
-    
-    public void playZombieSounds() {
-    	this.createClip(zombieDeath).start();
-    	
     }
 }
