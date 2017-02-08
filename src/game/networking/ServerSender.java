@@ -8,15 +8,16 @@ import java.io.ObjectOutputStream;
  * Class for managing sending from the server to the specified client
  */
 public class ServerSender extends Thread {
-	
+
+	private GameStateInterface state;
 	private ObjectOutputStream objOut;
 	
 	/**
 	 * Constructor method
 	 * @param objOut The ObjectOutputStream
 	 */
-	public ServerSender(ObjectOutputStream objOut) {
-		this.objOut = objOut;
+	public ServerSender(ObjectOutputStream objOut, GameStateInterface inter) {
+		this.objOut = objOut; this.state = inter;
 	}
 	
 	/**
@@ -39,9 +40,7 @@ public class ServerSender extends Thread {
             try {
 				Thread.sleep(1000);
 				sendObject(new SampleObject("IanKenny", 9));
-				Thread.sleep(500);
-				sendObject(new SampleObject("PaulLevvy", 10));
-				System.out.println("Sending objects ...");
+				//	System.out.println("Sending objects ...");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 

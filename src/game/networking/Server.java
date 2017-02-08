@@ -30,7 +30,8 @@ public class Server {
       
         // Create ServerSocket
         ServerSocket outSocket = null;
-        
+
+        GameStateInterface inter = new GameStateInterface();
         try {
         	outSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -48,7 +49,7 @@ public class Server {
         		 
         		 ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
         		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream());
-                 System.out.println("DEBUG: I/O straems created");
+                 System.out.println("DEBUG: I/O streams created");
                  
                  // Get name from client -- sort out duplicates later
                  String clientName = (String)objIn.readObject();
@@ -57,9 +58,9 @@ public class Server {
                  clientTable.addToTable(clientName);
                  
                  // Start threads
-                 ServerSender server_sender = new ServerSender(objOut);
+                 ServerSender server_sender = new ServerSender(objOut,inter);
                  server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn);
+                 ServerReceiver server_receiver = new ServerReceiver(objIn,inter);
                  server_receiver.start();
         		
                  // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
