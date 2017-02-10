@@ -1,5 +1,7 @@
 package game;
 
+import game.map.MapData;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -18,12 +20,12 @@ public class Player extends Entity {
     private static final float MOVE_SPEED = 0.1f;
 
     private ArrayList<Bullet> bullets;
-    private Map map;
+    private MapData mapData;
 
-    public Player(float x, float y, BufferedImage image, Map map) {
+    public Player(float x, float y, BufferedImage image, MapData mapData) {
 //        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
 //        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, image, map);
+        super(x, y, MOVE_SPEED, HEALTH, image, mapData);
         bullets = new ArrayList<>(20);
     }
 
@@ -33,7 +35,7 @@ public class Player extends Entity {
         if (now - lastAttackTime > SHOOT_DELAY) {
             lastAttackTime = now;
             try {
-                bullets.add(new Bullet(this, aimX, aimY, ResourceLoader.bulletImage(), map));
+                bullets.add(new Bullet(this, aimX, aimY, ResourceLoader.bulletImage(), mapData));
             } catch (IOException e) {
                 System.out.println("Couldn't get bullet image. RIP");
                 e.printStackTrace();
@@ -42,7 +44,7 @@ public class Player extends Entity {
         }
     }
 
-    public void draw(Graphics2D g2d, Map map) {
+    public void draw(Graphics2D g2d, MapData mapData) {
         int screenX;
         int screenY;
 

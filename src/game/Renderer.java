@@ -1,5 +1,7 @@
 package game;
 
+import game.map.MapData;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
@@ -10,13 +12,13 @@ import java.util.ArrayList;
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
-    private Map map;
+    private MapData mapData;
     private Player player;
     private ArrayList<Zombie> zombies;
 
-    public Renderer(BufferStrategy bufferStrategy, Map map, Player player, ArrayList<Zombie> zombies) {
+    public Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
-        this.map = map;
+        this.mapData = mapData;
         this.player = player;
         this.zombies = zombies;
     }
@@ -32,14 +34,14 @@ public class Renderer {
 
         g2d.setColor(Color.BLACK);
 
-        player.draw(g2d, map);
+        player.draw(g2d, mapData);
 
         for (Bullet b : player.getBullets()) {
             b.draw(g2d);
         }
 
         for (Zombie z : zombies) {
-            z.draw(g2d, map, player);
+            z.draw(g2d, mapData, player);
         }
 
         // Clean up and flip the buffer

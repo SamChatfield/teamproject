@@ -1,5 +1,6 @@
 package game;
 
+import game.map.MapData;
 import game.util.Vector;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class Game extends Canvas {
     private BufferStrategy bufferStrategy;
     private InputHandler inputHandler;
     private boolean running;
-    private Map map;
+    private MapData mapData;
     private Player player;
     private ArrayList<Zombie> zombies;
 
@@ -65,7 +66,7 @@ public class Game extends Canvas {
 
     private void loop() {
         init();
-        Renderer renderer = new Renderer(bufferStrategy, map, player, zombies);
+        Renderer renderer = new Renderer(bufferStrategy, mapData, player, zombies);
 
         long lastLoopTime = System.nanoTime();
 
@@ -102,15 +103,17 @@ public class Game extends Canvas {
     }
 
     private void init() {
-        map = new Map(50.0f, 50.0f);
-//        camera = new Camera(GAME_DIMENSION.width, GAME_DIMENSION.height, )
+        // Create the map and parse it
+        mapData = new MapData("grassdirtmap.png", "tilesheet.png", "tiledata.csv");
+
+        // Initialise the entities
         zombies = new ArrayList<>(zombieCount);
         try {
-            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), map);
+            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), mapData);
 
-            // Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
+            // Create zombieCount zombies and place them all at 50, 50 on the mapData TODO change this
             for (int i = 0; i < zombieCount; i++) {
-                zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), map));
+                zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), mapData));
                 zombies.get(i).newMovingDir();
             }
         } catch (IOException e) {
@@ -205,7 +208,7 @@ public class Game extends Canvas {
             b.move(delta);
             Collision.checkBulletCollision(i, player.getBullets(), zombies);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
-            if (!map.isInMap(b.getX(), b.getY())) {
+            if (!mapData.isInMap(b.getX(), b.getY())) {
                 player.getBullets().remove(i);
                 i--;
             }
