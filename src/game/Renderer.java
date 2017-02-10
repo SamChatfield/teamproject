@@ -39,7 +39,7 @@ public class Renderer {
         }
 
         for (Zombie z : zombies) {
-            z.draw(g2d, map);
+            z.draw(g2d, map, player);
         }
 
         // Clean up and flip the buffer
