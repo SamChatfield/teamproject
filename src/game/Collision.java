@@ -19,6 +19,7 @@ public class Collision {
             	Sound.zombieHit();
                 bullets.get(bulletIndex).damage(zombies.get(i), 25);
                 bullets.remove(bulletIndex);
+                System.out.println("Hit");
                 break;
             }
         }

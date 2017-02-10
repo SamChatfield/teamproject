@@ -20,7 +20,7 @@ public class Game extends Canvas {
     static final Dimension GAME_DIMENSION = new Dimension(640, 640);
     static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
     public static final int VIEW_SIZE = 10; // how many tiles can be seen in the game window e.g. 10 => 10x10 view
-    private static final int TILE_SIZE = GAME_DIMENSION.width / VIEW_SIZE;
+    public static final int TILE_SIZE = 64;
     private static final int TARGET_FPS = 60;
     private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
@@ -36,7 +36,7 @@ public class Game extends Canvas {
     public static boolean SFXOn = true;
 
     // Non final stuff, remove before release
-    private final int zombieCount = 5;
+    private final int zombieCount = 100;
 
     private Game() {
         container = new JFrame(TITLE);
@@ -109,14 +109,14 @@ public class Game extends Canvas {
 
     private void init() {
         map = new Map(50.0f, 50.0f);
-//        zombies = new Zombie[5];
+//        camera = new Camera(GAME_DIMENSION.width, GAME_DIMENSION.height, )
         zombies = new ArrayList<>(zombieCount);
         try {
-            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage());
+            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), map);
 
             // Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
             for (int i = 0; i < zombieCount; i++) {
-                zombies.add(new Zombie(10.0f, 10.0f, ResourceLoader.zombieImage()));
+                zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), map));
                 zombies.get(i).newMovingDir();
             }
         } catch (IOException e) {
@@ -131,17 +131,17 @@ public class Game extends Canvas {
 
         // Change the player movement speed with 1 and 2
         if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
-            player.setMoveSpeed(pMoveSpeed -= 0.1f);
+            player.setMoveSpeed(pMoveSpeed -= 0.01f);
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
-            player.setMoveSpeed(pMoveSpeed += 0.1f);
+            player.setMoveSpeed(pMoveSpeed += 0.01f);
         }
 
         Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 
         // Handle player keyboard input to move
         if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
-            pdv.add(new Vector(0.0f, -1.0f));
+            pdv.add(new Vector(0.0f, 1.0f));
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
             pdv.add(new Vector(-1.0f, 0.0f));
@@ -150,20 +150,27 @@ public class Game extends Canvas {
             pdv.add(new Vector(1.0f, 0.0f));
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
-            pdv.add(new Vector(0.0f, 1.0f));
+            pdv.add(new Vector(0.0f, -1.0f));
         }
 
-        // Show collision boxes for debugging purposes
+        // Other debugging key bindings
+        // Display collision boxes
         if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
             player.setShowCollBox(true);
             for (Zombie z : zombies) {
                 z.setShowCollBox(true);
             }
-        } else {
+        }
+        // Hide collision boxes
+        if (inputHandler.isKeyDown(KeyEvent.VK_L)){
             player.setShowCollBox(false);
             for (Zombie z : zombies) {
                 z.setShowCollBox(false);
             }
+        }
+        // Print the player's position
+        if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
+            System.out.println("Player: (" + player.x() + ", " + player.y() + ")");
         }
 
         // Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
@@ -182,7 +189,7 @@ public class Game extends Canvas {
                 // game coord x and y position of the aim
                 double playerAngle = player.getFacingAngle();
                 float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
-                float aimY = (float) Math.sin(playerAngle + Math.PI / 2);
+                float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
                 player.shoot(aimX, aimY);
             }
         }
@@ -200,8 +207,14 @@ public class Game extends Canvas {
 
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
-            player.getBullets().get(i).move(delta);
+            Bullet b = player.getBullets().get(i);
+            b.move(delta);
             Collision.checkBulletCollision(i, player.getBullets(), zombies);
+            // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
+            if (!map.isInMap(b.getX(), b.getY())) {
+                player.getBullets().remove(i);
+                i--;
+            }
         }
 
         for (int i = 0; i < zombies.size(); i++) {
