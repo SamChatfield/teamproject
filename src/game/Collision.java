@@ -18,6 +18,7 @@ public class Collision {
             if (bullets.get(bulletIndex).getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {
                 bullets.get(bulletIndex).damage(zombies.get(i), 25);
                 bullets.remove(bulletIndex);
+                System.out.println("Hit");
                 break;
             }
         }

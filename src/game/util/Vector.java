@@ -41,14 +41,14 @@ public class Vector {
     }
 
     /**
-     * Return a randomised a vector between with x,y = -1.0 | 1.0
+     * Return a randomised a vector between with x,y = -1.0 | 0.0 | 1.0
      * Application includes randomising zombie movement
      */
     // TODO zombies only move diagonally because neither of the components of the vector can be 0
     public static Vector randomVector() {
         Random rand = new Random();
-        float x = (float) (rand.nextInt(2) * 2 - 1);
-        float y = (float) (rand.nextInt(2) * 2 - 1);
+        float x = (float) (rand.nextInt(3) - 1);
+        float y = (float) (rand.nextInt(3) - 1);
 
         return new Vector(x, y);
     }

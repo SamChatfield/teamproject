@@ -2,6 +2,8 @@ package game;
 
 import game.util.Vector;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 /**
@@ -16,13 +18,15 @@ public class Zombie extends Entity {
     private static final float COLL_BOX_WIDTH = 25.0f;
     private static final float COLL_BOX_HEIGHT = 25.0f;
     private static final int HEALTH = 25;
+    private static final float MOVE_SPEED = 0.05f;
 
     private enum State {
         WILD, PLAYER, OPPONENT;
     }
 
-    public Zombie(float x, float y, BufferedImage image) {
-        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
+    public Zombie(float x, float y, BufferedImage image, Map map) {
+//        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
+        super(x, y, MOVE_SPEED, HEALTH, image, map);
         this.state = State.WILD;
     }
 
@@ -39,7 +43,7 @@ public class Zombie extends Entity {
     }
 
     public void move(double delta) {
-        super.move(dx * getMoveSpeed() * (float) delta, dy * getMoveSpeed() * (float) delta);
+        super.move(dx * moveSpeed * (float) delta, dy * moveSpeed * (float) delta);
     }
 
     public void newMovingDir() {
@@ -56,6 +60,35 @@ public class Zombie extends Entity {
             entity.health -= damageDone;
             System.out.println("player health: " + entity.health);
         }
+    }
+
+    public void draw(Graphics2D g2d, Map map, Player player) {
+        // Width and height of the entity sprite
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+//        float px = player.x(); // player x pos
+//        float py = player.y(); // player y pos
+//        float pvr = Game.VIEW_SIZE / 2.0f; // player view radius - 5.0
+//        int swr = Game.GAME_DIMENSION.width / 2; // screen width radius
+//        int shr = Game.GAME_DIMENSION.height / 2; // screen height radius
+
+//        int drawX = swr + Math.round((x - px) / pvr * swr) - (w / 2); // 320 + ((2 - 6) / 5 * 320)
+//        int drawY = shr + Math.round((py - y) / pvr * shr) - (h / 2); // 320 + ((6 - 2) / 5 * 320) y is inverted because our coord system is traditional whereas awt origin is top-left
+        Point drawPoint = player.relativeDrawPoint(x, y, w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        if (showCollBox) {
+            g2d.setColor(Color.RED);
+            g2d.draw(collisionBox.getDrawRect(player));
+            g2d.setColor(Color.BLACK);
+        }
+
+        AffineTransform at = g2d.getTransform();
+        g2d.rotate(facingAngle, x, y);
+        g2d.drawImage(image, drawX, drawY, null);
+        g2d.setTransform(at);
     }
 
 }

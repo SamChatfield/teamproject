@@ -36,4 +36,8 @@ public class ResourceLoader {
         return imageFromResPath("playerBack.png");
     }
 
+    public static BufferedImage bulletImage() throws IOException {
+        return imageFromResPath("bullet.png");
+    }
+
 }

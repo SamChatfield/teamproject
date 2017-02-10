@@ -13,6 +13,12 @@ public class Map {
         this.height = height;
     }
 
+    public boolean isInMap(float x, float y) {
+        float wBound = width - (width / 2.0f);
+        float hBound = height - (height / 2.0f);
+        return x >= -wBound && x <= wBound && y >= -hBound && y <= hBound;
+    }
+
     public float getWidth() {
         return width;
     }
