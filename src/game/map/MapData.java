@@ -1,7 +1,9 @@
 package game.map;
 
+import game.Entity;
 import game.ResourceLoader;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ import java.util.HashMap;
 public class MapData {
 
     private int width, height; // width and height of the mapData in game coords, e.g. for 50x50 tile mapData w=50.0, h=50.0
-    private HashMap<String, TileType> tileTypes;
+    private HashMap<Color, TileType> tileTypes;
     private Tile[][] map;
 
     public MapData(String mapPath, String tilesheet, String tileData) {
@@ -38,14 +40,29 @@ public class MapData {
         }
     }
 
-    public boolean isInMap(float x, float y) {
-        float wBound = width - (width / 2.0f);
-        float hBound = height - (height / 2.0f);
-        return x >= -wBound && x <= wBound && y >= -hBound && y <= hBound;
+    public boolean isEntityMoveValid(float x, float y, Entity e) {
+        float wBound = width / 2.0f;
+        float hBound = height / 2.0f;
+        float ewr = e.getCollisionBox().getWidth() / 2.0f; // entity width radius
+        float ehr = e.getCollisionBox().getHeight() / 2.0f; // entity height radius
+
+        return x >= -wBound + ewr && x <= wBound - ewr && y >= -hBound + ehr && y <= hBound - ehr;
     }
 
-    public HashMap<String, TileType> getTileTypes() {
+    public HashMap<Color, TileType> getTileTypes() {
         return tileTypes;
+    }
+
+    public Tile[][] getMap() {
+        return map;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
 }

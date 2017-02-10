@@ -52,7 +52,7 @@ public class Entity {
         float nx = x + dx;
         float ny = y + dy;
 
-        if (mapData.isInMap(nx, ny)) {
+        if (mapData.isEntityMoveValid(nx, ny, this)) {
             x += dx;
             y += dy;
         }

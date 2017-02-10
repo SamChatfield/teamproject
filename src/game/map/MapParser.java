@@ -17,8 +17,8 @@ import java.util.HashMap;
  */
 public class MapParser {
 
-    public static HashMap<String, TileType> parseTileTypes(String tilesheetName, String tileDataName) throws IOException {
-        HashMap<String, TileType> tileTypes = new HashMap<>();
+    public static HashMap<Color, TileType> parseTileTypes(String tilesheetName, String tileDataName) throws IOException {
+        HashMap<Color, TileType> tileTypes = new HashMap<>();
 
         BufferedImage tilesheet = ImageIO.read(new File(ResourceLoader.RES_PATH + tilesheetName));
         BufferedReader br = new BufferedReader(new FileReader(ResourceLoader.RES_PATH + tileDataName));
@@ -37,7 +37,7 @@ public class MapParser {
             boolean obstacle = Boolean.parseBoolean(a[4]);
 
 //            tileTypes.add(new TileType(name, colour, image, obstacle));
-            tileTypes.put(name, new TileType(name, colour, image, obstacle));
+            tileTypes.put(colour, new TileType(name, colour, image, obstacle));
         }
         System.out.println(tileTypes);
 
@@ -46,12 +46,19 @@ public class MapParser {
         return tileTypes;
     }
 
-    public static Tile[][] parseMap(HashMap<String, TileType> tileTypes, BufferedImage mapImage){
+    public static Tile[][] parseMap(HashMap<Color, TileType> tileTypes, BufferedImage mapImage){
         int width = mapImage.getWidth();
         int height = mapImage.getHeight();
         Tile[][] map = new Tile[width][height];
 
-
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color colour = new Color(mapImage.getRGB(x, y));
+                TileType type = tileTypes.get(colour);
+                map[x][y] = new Tile(x - width / 2.0f + 0.5f, height / 2.0f - 0.5f - y, type);
+            }
+            System.out.println();
+        }
 
         return map;
     }

@@ -1,6 +1,7 @@
 package game;
 
 import game.map.MapData;
+import game.map.Tile;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -34,6 +35,9 @@ public class Renderer {
 
         g2d.setColor(Color.BLACK);
 
+        // Draw the map
+        drawMap(g2d, mapData, player);
+
         player.draw(g2d, mapData);
 
         for (Bullet b : player.getBullets()) {
@@ -47,6 +51,20 @@ public class Renderer {
         // Clean up and flip the buffer
         g2d.dispose();
         bufferStrategy.show();
+    }
+
+    public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
+        Tile[][] map = mapData.getMap();
+        int width = mapData.getWidth();
+        int height = mapData.getHeight();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Tile here = map[x][y];
+                Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Game.TILE_SIZE, Game.TILE_SIZE);
+                g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
+            }
+        }
     }
 
 }

@@ -208,7 +208,7 @@ public class Game extends Canvas {
             b.move(delta);
             Collision.checkBulletCollision(i, player.getBullets(), zombies);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
-            if (!mapData.isInMap(b.getX(), b.getY())) {
+            if (!mapData.isEntityMoveValid(b.x(), b.y(), b)) {
                 player.getBullets().remove(i);
                 i--;
             }

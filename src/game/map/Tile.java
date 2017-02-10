@@ -9,7 +9,9 @@ public class Tile {
     private TileType type;
 
     public Tile(float x, float y, TileType type) {
-
+        this.x = x;
+        this.y = y;
+        this.type = type;
     }
 
     public float getX() {
@@ -22,6 +24,11 @@ public class Tile {
 
     public TileType getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ") - " + type;
     }
 
 }
