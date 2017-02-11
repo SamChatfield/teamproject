@@ -27,6 +27,8 @@ public class Game extends Canvas {
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
+    
+    public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
@@ -85,7 +87,7 @@ public class Game extends Canvas {
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
 
-        Sound soundManager = new Sound(inputHandler);
+        soundManager = new Sound();
         soundManager.start();
 	}
 
@@ -306,27 +308,29 @@ public class Game extends Canvas {
 		Point mousePos = inputHandler.getMousePos();
 		if (inputHandler.isMouseInside() && mousePos != null) {
 			player.face(mousePos.x, mousePos.y);
+            // Player shooting
+            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+                // game coord x and y position of the aim
+                double playerAngle = player.getFacingAngle();
+                float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
+                float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
+                boolean playerShot = player.shoot(aimX, aimY);
+                soundManager.bulletSound(playerShot);
 
-			// Player shooting
-			if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-				// game coord x and y position of the aim
-				double playerAngle = player.getFacingAngle();
-				float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
-				float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
-				player.shoot(aimX, aimY);
-			}
-		}
 
-		// Move the zombies around randomly
-		Random rand = new Random();
-		for (Zombie zombie : zombies) {
-			// Change the zombie's direction with given probability
-			if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-				zombie.newMovingDir();
-			}
-			zombie.move(delta);
-			Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
-		}
+            }
+        }
+
+        // Move the zombies around randomly
+        Random rand = new Random();
+        for (Zombie zombie : zombies) {
+            // Change the zombie's direction with given probability
+            if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                zombie.newMovingDir();
+            }
+            zombie.move(delta);
+            Collision.checkCollision(zombie, player, soundManager); // check if this zombie has collided with the player
+        }
 
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
@@ -337,6 +341,7 @@ public class Game extends Canvas {
             }
             Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
             b.move(delta);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies, soundManager);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
 
