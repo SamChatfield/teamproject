@@ -47,7 +47,8 @@ public class Game extends Canvas {
 	private enum MSTATE {
 		MAIN,
 		HELP,
-		OPTIONS
+		OPTIONS, 
+		NONE
 	}
 	private STATE currentState;
 	private MSTATE menuState;
@@ -108,9 +109,21 @@ public class Game extends Canvas {
 		init();
 		Renderer renderer = new Renderer(bufferStrategy, map, player, zombies);
 		long lastLoopTime = System.nanoTime();
-
-
+		//Timer timer = new Timer();
+		//timer.start();
+		Timer timer = new Timer();
+		new Thread(timer).start();
+	
+		
 		while (currentState == STATE.GAME) {
+			
+			/*
+			if(timer.time <= 0) {
+				currentState = STATE.END;
+				break;
+			}
+			*/
+			
 			// Calculate how long since last update
 			// Delta is how far things should move this update to compensate
 			long now = System.nanoTime();
@@ -124,7 +137,7 @@ public class Game extends Canvas {
 			update(delta);
 
 			// Render
-			renderer.render();
+			renderer.render(timer);
 
 			// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
 			// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
@@ -138,6 +151,18 @@ public class Game extends Canvas {
 					e.printStackTrace();
 					System.out.println("Game loop interrupted exception");
 				}
+			}
+		}
+		
+		while(currentState == STATE.END) {
+			renderer.renderGameOver();
+			
+			try {
+				Thread.sleep(3000);
+				System.exit(0);
+			}
+			catch(Exception e) {
+				System.out.println("Thread Exception: " + e.getMessage());
 			}
 		}
 	}
@@ -205,7 +230,8 @@ public class Game extends Canvas {
 					if(inputHandler.isMouseButtonDown(1)) {
 						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
-					}
+						menuState = MSTATE.NONE;
+						}
 				}
 			};
 
@@ -330,6 +356,11 @@ public class Game extends Canvas {
 				zombies.remove(i);
 				i--;
 			}
+		}
+		
+		if(player.health <= -100) {
+			currentState = STATE.END;
+			System.out.println("GAME OVER");
 		}
 	}
 
