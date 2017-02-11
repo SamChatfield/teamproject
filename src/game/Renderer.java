@@ -13,6 +13,7 @@ public class Renderer {
     private Map map;
     private Player player;
     private ArrayList<Zombie> zombies;
+    
 
     public Renderer(BufferStrategy bufferStrategy, Map map, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
@@ -20,7 +21,8 @@ public class Renderer {
         this.player = player;
         this.zombies = zombies;
     }
-
+    
+    
     public void render() {
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();

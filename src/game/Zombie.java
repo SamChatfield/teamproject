@@ -80,10 +80,11 @@ public class Zombie extends Entity {
         int drawY = drawPoint.y;
 
         if (showCollBox) {
-            g2d.setColor(Color.RED);
+            g2d.setColor(Color.BLUE);
             g2d.draw(collisionBox.getDrawRect(player));
             g2d.setColor(Color.BLACK);
         }
+        g2d.setColor(Color.BLUE);
 
         AffineTransform at = g2d.getTransform();
         g2d.rotate(facingAngle, x, y);
