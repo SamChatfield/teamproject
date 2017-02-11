@@ -32,8 +32,7 @@ public class Game extends Canvas {
     private Player player;
     private ArrayList<Zombie> zombies;
     
-    public static boolean musicOn = true;
-    public static boolean SFXOn = true;
+    public Sound soundManager;
 
     // Non final stuff, remove before release
     private final int zombieCount = 100;
@@ -65,7 +64,7 @@ public class Game extends Canvas {
 
         running = true;
         
-        Sound soundManager = new Sound(inputHandler);
+        soundManager = new Sound();
         soundManager.start();
     }
 
@@ -190,7 +189,10 @@ public class Game extends Canvas {
                 double playerAngle = player.getFacingAngle();
                 float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
                 float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
-                player.shoot(aimX, aimY);
+                boolean playerShot = player.shoot(aimX, aimY);
+                soundManager.bulletSound(playerShot);
+                
+                
             }
         }
 
@@ -202,14 +204,14 @@ public class Game extends Canvas {
                 zombie.newMovingDir();
             }
             zombie.move(delta);
-            Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
+            Collision.checkCollision(zombie, player, soundManager); // check if this zombie has collided with the player
         }
 
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
             b.move(delta);
-            Collision.checkBulletCollision(i, player.getBullets(), zombies);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies, soundManager);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
             if (!map.isInMap(b.getX(), b.getY())) {
                 player.getBullets().remove(i);
