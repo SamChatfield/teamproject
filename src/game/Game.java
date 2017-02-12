@@ -111,14 +111,11 @@ public class Game extends Canvas {
 		long lastLoopTime = System.nanoTime();
 		//Timer timer = new Timer();
 		//timer.start();
-		Timer timer = new Timer();
+		Timer timer = new Timer(180);
 		new Thread(timer).start();
 	
 		
 		while (currentState == STATE.GAME) {
-			
-			System.out.println(timer.time);
-
 			
 			
 			// Calculate how long since last update
@@ -150,7 +147,7 @@ public class Game extends Canvas {
 				}
 			}
 			
-			if(timer.time <= 0) {
+			if(timer.getTimeRemaining() <= 0) {
 				currentState = STATE.END;
 				break;
 			}

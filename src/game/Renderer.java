@@ -27,7 +27,7 @@ public class Renderer {
        
     
     public void render(Timer timer) {
-    	int currentTime = timer.time;
+    	int timeRemaining = timer.getTimeRemaining();
     	
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
@@ -42,7 +42,14 @@ public class Renderer {
         player.draw(g2d, map);
 
         for (Bullet b : player.getBullets()) {
-            b.draw(g2d);
+            if(b.active) {
+            	b.draw(g2d);
+            }
+            else {
+            	// TODO: Make the bullet get removed from the arrayList
+            	//player.getBullets().remove(b);
+            }
+        	
         }
 
         for (Zombie z : zombies) {
@@ -65,7 +72,7 @@ public class Renderer {
 		Font hud = new Font("Arial", Font.BOLD, 15);
 		g2d.setFont(hud);
 		g2d.setColor(Color.BLACK);
-		String remainingTime = String.format("Time Remaining - %d:%02d", (currentTime/60), (currentTime % 60));
+		String remainingTime = String.format("Time Remaining - %d:%02d", (timeRemaining/60), (timeRemaining % 60));
 		g2d.drawString(remainingTime, gameW - 170, 20);
 		
 

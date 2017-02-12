@@ -10,6 +10,8 @@ import java.util.ArrayList;
  * Created by Sam on 20/01/2017.
  */
 public class Player extends Entity {
+	
+	// TODO: Fix issue of spawning on top of zombies
 
     private static final float COLL_BOX_WIDTH = 25.0f;
     private static final float COLL_BOX_HEIGHT = 25.0f;

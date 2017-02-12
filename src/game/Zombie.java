@@ -40,6 +40,10 @@ public class Zombie extends Entity {
     public float getDy() {
         return dy;
     }
+    
+    public State getState() {
+    	return state;
+    }
 
     public void convert() {
         state = State.PLAYER;
