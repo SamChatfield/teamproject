@@ -31,11 +31,11 @@ public class Game extends Canvas {
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
-	private boolean menu;
-	private boolean running;
+	private boolean menu, running;
 	private Map map;
 	private Player player;
 	private ArrayList<Zombie> zombies;
+	
 
 	// Game state
 	private enum STATE {
@@ -117,12 +117,9 @@ public class Game extends Canvas {
 		
 		while (currentState == STATE.GAME) {
 			
-			/*
-			if(timer.time <= 0) {
-				currentState = STATE.END;
-				break;
-			}
-			*/
+			System.out.println(timer.time);
+
+			
 			
 			// Calculate how long since last update
 			// Delta is how far things should move this update to compensate
@@ -152,6 +149,11 @@ public class Game extends Canvas {
 					System.out.println("Game loop interrupted exception");
 				}
 			}
+			
+			if(timer.time <= 0) {
+				currentState = STATE.END;
+				break;
+			}
 		}
 		
 		while(currentState == STATE.END) {
@@ -176,7 +178,7 @@ public class Game extends Canvas {
 
 			// Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
 			for (int i = 0; i < zombieCount; i++) {
-				zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), map));
+				zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), map));
 				zombies.get(i).newMovingDir();
 			}
 		} catch (IOException e) {
@@ -304,7 +306,14 @@ public class Game extends Canvas {
 			System.out.println("Player: (" + player.x() + ", " + player.y() + ")");
 		}
 		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
-			System.out.println("Enabled conversion");
+			if(player.conversionMode) {
+				player.conversionMode = false;
+				System.out.println("Disabled conversion mode!");
+				}
+			else {
+				player.conversionMode = true;
+				System.out.println("Enabled conversion mode!");
+			}
 		}
 
 		// Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
@@ -343,7 +352,7 @@ public class Game extends Canvas {
 		for (int i = 0; i < player.getBullets().size(); i++) {
 			Bullet b = player.getBullets().get(i);
 			b.move(delta);
-			Collision.checkBulletCollision(i, player.getBullets(), zombies);
+			Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
 			// System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
 			if (!map.isInMap(b.getX(), b.getY())) {
 				player.getBullets().remove(i);

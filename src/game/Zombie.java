@@ -20,13 +20,16 @@ public class Zombie extends Entity {
     private static final int HEALTH = 25;
     private static final float MOVE_SPEED = 0.05f;
 
+    private BufferedImage playerImage;
+    
     private enum State {
         WILD, PLAYER, OPPONENT;
     }
 
-    public Zombie(float x, float y, BufferedImage image, Map map) {
+    public Zombie(float x, float y, BufferedImage image, BufferedImage imagePlayer, Map map) {
 //        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
         super(x, y, MOVE_SPEED, HEALTH, image, map);
+    	this.playerImage = imagePlayer;
         this.state = State.WILD;
     }
 
@@ -55,10 +58,16 @@ public class Zombie extends Entity {
 
     public void attack(Entity entity, int damageDone) {
         long now = System.nanoTime();
-        if (now - lastAttackTime > 1000000000L) {
-            lastAttackTime = now;
-            entity.health -= damageDone;
-            System.out.println("player health: " + entity.health);
+        
+        if(this.state == State.PLAYER) {
+        	System.out.println("DEBUG: Player's zombie");
+        }
+        else {
+            if (now - lastAttackTime > 1000000000L) {
+                lastAttackTime = now;
+                entity.health -= damageDone;
+                System.out.println("player health: " + entity.health);
+            }
         }
     }
 
@@ -84,11 +93,20 @@ public class Zombie extends Entity {
             g2d.draw(collisionBox.getDrawRect(player));
             g2d.setColor(Color.BLACK);
         }
-        g2d.setColor(Color.BLUE);
-
+        
         AffineTransform at = g2d.getTransform();
         g2d.rotate(facingAngle, x, y);
-        g2d.drawImage(image, drawX, drawY, null);
+        
+        if(state == State.PLAYER) {
+        	g2d.drawImage(playerImage, drawX, drawY, null);
+        }
+        else if(state == State.OPPONENT) {
+        	// Change this later
+        	g2d.drawImage(image, drawX, drawY, null);
+        }
+        else {
+        	g2d.drawImage(image, drawX, drawY, null);
+        }
         g2d.setTransform(at);
     }
 

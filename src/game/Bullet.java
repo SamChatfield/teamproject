@@ -60,11 +60,18 @@ public class Bullet extends Entity {
         g2d.setTransform(at);
     }
 
-    public void damage(Entity entity, int damageDone) {
+    public void damage(Entity entity, int damageDone, boolean conversionMode) {
         if (active) {
-//            System.out.println("Player hit entity");
-            entity.health -= damageDone;
-            active = false;
+        	if(conversionMode) {
+        		Zombie zom = (Zombie) entity;
+        		zom.convert();
+        		System.out.println("Successfully converted zombie!");
+        	}
+        	else {
+//              System.out.println("Player hit entity");
+                entity.health -= damageDone;
+                active = false;
+        	}
         }
     }
 
