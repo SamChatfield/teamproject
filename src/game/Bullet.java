@@ -1,5 +1,6 @@
 package game;
 
+import game.map.MapData;
 import game.util.Vector;
 
 import java.awt.*;
@@ -24,8 +25,8 @@ public class Bullet extends Entity {
     private double distance;
     private static final double fadeDistance = 3;
     
-    public Bullet(Player player, float aimX, float aimY, BufferedImage image, Map map) {
-        super(player.x(), player.y(), BULLET_SPEED, 0, image, map);
+    public Bullet(Player player, float aimX, float aimY, BufferedImage image, MapData mapData) {
+        super(player.x(), player.y(), BULLET_SPEED, 0, image, mapData);
 //        x = player.x();
 //        y = player.y();
 

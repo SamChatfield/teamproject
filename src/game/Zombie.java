@@ -1,5 +1,6 @@
 package game;
 
+import game.map.MapData;
 import game.util.Vector;
 
 import java.awt.*;
@@ -26,9 +27,9 @@ public class Zombie extends Entity {
         WILD, PLAYER, OPPONENT;
     }
 
-    public Zombie(float x, float y, BufferedImage image, BufferedImage imagePlayer, Map map) {
+    public Zombie(float x, float y, BufferedImage image, BufferedImage imagePlayer, MapData mapData) {
 //        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, image, map);
+        super(x, y, MOVE_SPEED, HEALTH, image, mapData);
     	this.playerImage = imagePlayer;
         this.state = State.WILD;
     }
@@ -75,7 +76,7 @@ public class Zombie extends Entity {
         }
     }
 
-    public void draw(Graphics2D g2d, Map map, Player player) {
+    public void draw(Graphics2D g2d, MapData mapData, Player player) {
         // Width and height of the entity sprite
         int w = image.getWidth();
         int h = image.getHeight();

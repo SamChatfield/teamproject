@@ -1,17 +1,15 @@
 package game;
 
+import game.map.MapData;
 import game.util.Vector;
 
 import javax.swing.*;
-
-import com.sun.glass.ui.Menu;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,7 +30,7 @@ public class Game extends Canvas {
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
 	private boolean menu, running;
-	private Map map;
+	private MapData mapData;
 	private Player player;
 	private ArrayList<Zombie> zombies;
 	
@@ -107,7 +105,7 @@ public class Game extends Canvas {
 		}
 
 		init();
-		Renderer renderer = new Renderer(bufferStrategy, map, player, zombies);
+		Renderer renderer = new Renderer(bufferStrategy, mapData, player, zombies);
 		long lastLoopTime = System.nanoTime();
 		//Timer timer = new Timer();
 		//timer.start();
@@ -166,26 +164,7 @@ public class Game extends Canvas {
 		}
 	}
 
-	private void init() {
-		map = new Map(50.0f, 50.0f);
-		// camera = new Camera(GAME_DIMENSION.width, GAME_DIMENSION.height, )
-		zombies = new ArrayList<>(zombieCount);
-		try {
-			player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), map);
-
-			// Create zombieCount zombies and place them all at 50, 50 on the map TODO change this
-			for (int i = 0; i < zombieCount; i++) {
-				zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), map));
-				zombies.get(i).newMovingDir();
-			}
-		} catch (IOException e) {
-			System.out.println("Uh oh. Player image failed to load. RIP");
-			System.exit(1);
-		}
-	}
-
 	private void menuUpdate(MenuRenderer menu) {
-		
 		double mx, my;
 		try {
 			mx = inputHandler.getMousePos().getX();
@@ -232,7 +211,7 @@ public class Game extends Canvas {
 						menuState = MSTATE.NONE;
 						}
 				}
-			};
+			}
 
 			if(mx >= helpX && mx <= (helpX + buttonWidth)) {
 				if(my >= helpY && my <= (helpY + buttonHeight)) {
@@ -241,7 +220,7 @@ public class Game extends Canvas {
 						menuState = MSTATE.HELP;
 					}
 				}
-			};
+			}
 
 			if(mx >= optionsX && mx <= (optionsX + buttonWidth)) {
 				if(my >= optionsY && my <= (optionsY + buttonHeight)) {
@@ -250,8 +229,7 @@ public class Game extends Canvas {
 						menuState = MSTATE.OPTIONS;
 					}
 				}
-			};
-
+			}
 		}
 	}
 
@@ -345,24 +323,24 @@ public class Game extends Canvas {
 			Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
 		}
 
-		// Bullet movement
-		for (int i = 0; i < player.getBullets().size(); i++) {
-			Bullet b = player.getBullets().get(i);
-			b.move(delta);
-			Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
-			// System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
-			if (!map.isInMap(b.getX(), b.getY())) {
-				player.getBullets().remove(i);
-				i--;
-			}
-		}
+        // Bullet movement
+        for (int i = 0; i < player.getBullets().size(); i++) {
+            Bullet b = player.getBullets().get(i);
+            if (!mapData.isEntityMoveValid(b.x(), b.y(), b)) {
+                player.getBullets().remove(i);
+                continue;
+            }
+            Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
+            b.move(delta);
+            // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
+        }
 
-		for (int i = 0; i < zombies.size(); i++) {
-			if (zombies.get(i).health <= 0) {
-				zombies.remove(i);
-				i--;
-			}
-		}
+        for (int i = 0; i < zombies.size(); i++) {
+            if (zombies.get(i).health <= 0) {
+                zombies.remove(i);
+                i--;
+            }
+        }
 		
 		if(player.health <= -100) {
 			currentState = STATE.END;
@@ -370,18 +348,38 @@ public class Game extends Canvas {
 		}
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
+    private void init() {
+        // Create the map and parse it
+        mapData = new MapData("testmap.png", "tilesheet.png", "tiledata.csv");
 
-	public static void main(String[] args) {
-		Game game = new Game();
+        // Initialise the entities
+        zombies = new ArrayList<>(zombieCount);
+        try {
+            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), mapData);
 
-		// Create and start the game loop over the loop method of the game object.
-		// :: is a method reference since loop is an existing method,
-		// semantically the same as () -> game.loop() lambda expression.
-		Thread gameThread = new Thread(game::loop);
-		gameThread.start();
-	}
+            // Create zombieCount zombies and place them all at 50, 50 on the mapData TODO change this
+            for (int i = 0; i < zombieCount; i++) {
+                zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
+                zombies.get(i).newMovingDir();
+            }
+        } catch (IOException e) {
+            System.out.println("Uh oh. Player image failed to load. RIP");
+            System.exit(1);
+        }
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+
+        // Create and start the game loop over the loop method of the game object.
+        // :: is a method reference since loop is an existing method,
+        // semantically the same as () -> game.loop() lambda expression.
+        Thread gameThread = new Thread(game::loop);
+        gameThread.start();
+    }
 
 }

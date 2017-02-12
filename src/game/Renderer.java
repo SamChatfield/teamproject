@@ -1,5 +1,8 @@
 package game;
 
+import game.map.MapData;
+import game.map.Tile;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
@@ -10,15 +13,15 @@ import java.util.ArrayList;
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
-    private Map map;
+    private MapData mapData;
     private Player player;
     private ArrayList<Zombie> zombies;
     private int gameH, gameW;
     
 
-    public Renderer(BufferStrategy bufferStrategy, Map map, Player player, ArrayList<Zombie> zombies) {
+    public Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
-        this.map = map;
+        this.mapData = mapData;
         this.player = player;
         this.zombies = zombies;
         this.gameH = Game.GAME_DIMENSION.height;
@@ -39,7 +42,10 @@ public class Renderer {
 
         g2d.setColor(Color.BLACK);
 
-        player.draw(g2d, map);
+        // Draw the map
+        drawMap(g2d, mapData, player);
+
+        player.draw(g2d, mapData);
 
         for (Bullet b : player.getBullets()) {
             if(b.active) {
@@ -53,7 +59,7 @@ public class Renderer {
         }
 
         for (Zombie z : zombies) {
-            z.draw(g2d, map, player);
+            z.draw(g2d, mapData, player);
         }
         
 		// Health bar
@@ -104,4 +110,19 @@ public class Renderer {
         bufferStrategy.show();
     	
     }
+
+    public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
+        Tile[][] map = mapData.getMap();
+        int width = mapData.getWidth();
+        int height = mapData.getHeight();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Tile here = map[x][y];
+                Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Game.TILE_SIZE, Game.TILE_SIZE);
+                g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
+            }
+        }
+    }
+
 }

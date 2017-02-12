@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public class ResourceLoader {
 
-    private static final String RES_PATH = "src/game/res/";
+    public static final String RES_PATH = "src/game/res/";
 
     public static BufferedImage[] playerImages() throws IOException {
         String[] playerImages = {"playerFront.png", "playerBack.png","playerBack2.png", "playerLeft.png", "playerRight.png"};
@@ -23,7 +23,7 @@ public class ResourceLoader {
         return images;
     }
 
-    private static BufferedImage imageFromResPath(String image) throws IOException {
+    public static BufferedImage imageFromResPath(String image) throws IOException {
         return ImageIO.read(new File(RES_PATH + image));
     }
 
