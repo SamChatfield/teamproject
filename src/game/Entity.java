@@ -47,7 +47,6 @@ public class Entity {
         return moveSpeed;
     }
 
-    // TODO Stop things from moving out of the mapData
     public void move(float dx, float dy) {
         float nx = x + dx;
         float ny = y + dy;

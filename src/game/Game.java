@@ -104,7 +104,7 @@ public class Game extends Canvas {
 
     private void init() {
         // Create the map and parse it
-        mapData = new MapData("grassdirtmap.png", "tilesheet.png", "tiledata.csv");
+        mapData = new MapData("testmap.png", "tilesheet.png", "tiledata.csv");
 
         // Initialise the entities
         zombies = new ArrayList<>(zombieCount);
@@ -205,13 +205,13 @@ public class Game extends Canvas {
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
-            b.move(delta);
-            Collision.checkBulletCollision(i, player.getBullets(), zombies);
-            // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
             if (!mapData.isEntityMoveValid(b.x(), b.y(), b)) {
                 player.getBullets().remove(i);
-                i--;
+                continue;
             }
+            Collision.checkBulletCollision(i, player.getBullets(), zombies);
+            b.move(delta);
+            // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
 
         for (int i = 0; i < zombies.size(); i++) {

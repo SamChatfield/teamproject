@@ -46,11 +46,26 @@ public class MapData {
         float ewr = e.getCollisionBox().getWidth() / 2.0f; // entity width radius
         float ehr = e.getCollisionBox().getHeight() / 2.0f; // entity height radius
 
-        return x >= -wBound + ewr && x <= wBound - ewr && y >= -hBound + ehr && y <= hBound - ehr;
+        boolean inBounds = x >= -wBound + ewr && x <= wBound - ewr && y >= -hBound + ehr && y <= hBound - ehr;
+
+        if (!inBounds) {
+            return false;
+        }
+
+        TileType tileHere = tileTypeAt(x, y);
+        boolean nonObstacle = !tileHere.isObstacle();
+
+        if (nonObstacle)
+            return true;
+        else
+            return false;
     }
 
-    public HashMap<Color, TileType> getTileTypes() {
-        return tileTypes;
+    private TileType tileTypeAt(float x, float y) {
+        int ix = Math.round(x + width / 2.0f - 0.5f);
+        int iy = Math.round(height / 2.0f - 0.5f - y);
+        //System.out.println("ix:" + ix + ", iy:" + iy);
+        return map[ix][iy].getType();
     }
 
     public Tile[][] getMap() {
