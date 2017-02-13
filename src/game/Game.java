@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 /**
  * Created by Sam on 20/01/2017.
  */
@@ -359,7 +360,14 @@ public class Game extends Canvas {
 
             // Create zombieCount zombies and place them all at 50, 50 on the mapData TODO change this
             for (int i = 0; i < zombieCount; i++) {
-                zombies.add(new Zombie(0.0f, 0.0f, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
+
+            	// Daniel does some random stuff here... (like speaking in the third person)
+
+
+				Random rand = new Random();
+				float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+				float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+                zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
                 zombies.get(i).newMovingDir();
             }
         } catch (IOException e) {
