@@ -19,7 +19,7 @@ public class Sound extends Thread{
     private String music = "src/game/sounds/music.wav";
     private String zombieDeath = "src/game/sounds/zombieDeath.wav";
     private String zombieSound ="src/game/sounds/zombieSound";
-    private String hurt = "src/game/sounds/hurt.wav";
+    //private String hurt = "src/game/sounds/bite.wav";
     private boolean running;
     private Clip musicClip, gunClip;
     private static final float ZOMBIE_SOUND_PROBABILITY = 0.01f;
@@ -149,10 +149,13 @@ public class Sound extends Thread{
      * Method to play the sound of player being hit by a zombie.
      */
     
-    public void playerHurt() {
-    	Clip playerHurt = this.createClip(hurt);
-    	playerHurt.start();
-    }
+//Currently the sound is played several times in a short space of time
+//due to the loop in Game. Need to figure out how to make it play only once.
+    
+//    public void playerHurt() {
+//    	Clip playerHurt = this.createClip(hurt);
+//    	playerHurt.start();
+//    }
     
     /**
      * Method used to played random background zombie sounds.
