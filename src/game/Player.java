@@ -93,5 +93,4 @@ public class Player extends Entity {
     public ArrayList<Bullet> getBullets() {
         return bullets;
     }
-
 }

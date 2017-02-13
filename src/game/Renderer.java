@@ -18,8 +18,7 @@ public class Renderer {
     private ArrayList<Zombie> zombies;
     private int gameH, gameW;
     
-
-    public Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
+Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
         this.mapData = mapData;
         this.player = player;
@@ -46,16 +45,20 @@ public class Renderer {
         drawMap(g2d, mapData, player);
 
         player.draw(g2d, mapData);
+        
+        ArrayList<Bullet> deleteBullets = new ArrayList<Bullet>();
 
         for (Bullet b : player.getBullets()) {
             if(b.active) {
             	b.draw(g2d);
             }
             else {
-            	// TODO: Make the bullet get removed from the arrayList
-            	//player.getBullets().remove(b);
+            	deleteBullets.add(b);
             }
-        	
+        }
+        
+        for(Bullet b : deleteBullets) {
+        	player.getBullets().remove(b);
         }
 
         for (Zombie z : zombies) {
