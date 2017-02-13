@@ -179,15 +179,15 @@ public class Game extends Canvas {
 		int buttonWidth = (int)menu.playButton.getWidth();
 		int buttonHeight = (int)menu.playButton.getHeight();
 
-		if(menuState == MSTATE.HELP || menuState == MSTATE.OPTIONS) {
-			System.out.println("test");
+		if(menuState == MSTATE.HELP || menuState == MSTATE.OPTIONS) {;
 			int returnX = (int)menu.returnButton.getX();
 			int returnY = (int)menu.returnButton.getY();
 
 			if(mx >= returnX && mx <= (returnX + buttonWidth)) {
 				if(my >= returnY && my <= (returnY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						menuState = MSTATE.MAIN;
+						inputHandler.setMouseClicked(false);
 						System.out.println("RETURN BUTTON CLICKED");
 					}
 				}
@@ -206,28 +206,31 @@ public class Game extends Canvas {
 
 			if(mx >= playX && mx <= (playX + buttonWidth)) {
 				if(my >= playY && my <= (playY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
+						//inputHandler.setMouseClicked(false);
 						}
 				}
 			}
 
 			if(mx >= helpX && mx <= (helpX + buttonWidth)) {
 				if(my >= helpY && my <= (helpY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						System.out.println("HELP BUTTON CLICKED");
 						menuState = MSTATE.HELP;
+						//inputHandler.setMouseClicked(false);
 					}
 				}
 			}
 
 			if(mx >= optionsX && mx <= (optionsX + buttonWidth)) {
 				if(my >= optionsY && my <= (optionsY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						System.out.println("OPTIONS BUTTON CLICKED");
 						menuState = MSTATE.OPTIONS;
+						//inputHandler.setMouseClicked(false);
 					}
 				}
 			}
@@ -327,7 +330,7 @@ public class Game extends Canvas {
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
-            if (!mapData.isEntityMoveValid(b.x(), b.y(), b)) {
+            if ((!mapData.isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
                 player.getBullets().remove(i);
                 continue;
             }
@@ -335,13 +338,18 @@ public class Game extends Canvas {
             b.move(delta);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
-
+        
+        int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
             if (zombies.get(i).health <= 0) {
                 zombies.remove(i);
                 i--;
             }
+            if(zombies.get(i).getState() == Zombie.State.PLAYER) {;
+            	newNumConvertedZombies += 1;
+            }
         }
+        player.setNumConvertedZombies(newNumConvertedZombies);
 		
 		if(player.health <= -100) {
 			currentState = STATE.END;

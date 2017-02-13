@@ -52,14 +52,8 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
             if(b.active) {
             	b.draw(g2d);
             }
-            else {
-            	deleteBullets.add(b);
-            }
         }
-        
-        for(Bullet b : deleteBullets) {
-        	player.getBullets().remove(b);
-        }
+       
 
         for (Zombie z : zombies) {
             z.draw(g2d, mapData, player);
@@ -68,23 +62,32 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
 		// Health bar
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
+		
+		g2d.setColor(new Color(0, 0, 0, 120));
+		Rectangle healthBar2 = new Rectangle(10, 10, 200, 20);
+		g2d.fill(healthBar2);
+		
 		g2d.setColor(Color.GREEN);
-		Rectangle healthBarFill = new Rectangle(10, 10, 250 - (250/100) * -player.health, 20);
+		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 2, 20);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
-		Rectangle healthBar = new Rectangle(10,10,250,20);
+		Rectangle healthBar = new Rectangle(10,10,200,20);
 		g2d.draw(healthBar);
-		g2d.drawString("Health: " + player.health, 10, 40);
+		g2d.setColor(Color.BLACK);
+		g2d.drawString("Health: " + player.health + "%", 15, 25);
 		
 		
 		// Display time remaining
 		Font hud = new Font("Arial", Font.BOLD, 15);
 		g2d.setFont(hud);
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(new Color(0, 0, 0, 200));
+		//g2d.setColor(Color.WHITE);
 		String remainingTime = String.format("Time Remaining - %d:%02d", (timeRemaining/60), (timeRemaining % 60));
 		g2d.drawString(remainingTime, gameW - 170, 20);
 		
-
+		// Display number of converted zombies
+		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombies.size() , 450, 630);
+		
         // Clean up and flip the buffer
         g2d.dispose();
         bufferStrategy.show();
@@ -104,7 +107,7 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
         g2d.setColor(Color.RED);
 		Font title = new Font("Comic Sans MS", Font.BOLD, 50);
 		g2d.setFont(title);
-		String text = "YOU DIED";
+		String text = "GAME OVER";
 		int twidth = g2d.getFontMetrics().stringWidth(text);
 		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - twidth / 2, Game.GAME_DIMENSION.height / 5);
 		
