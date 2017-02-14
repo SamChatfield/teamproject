@@ -36,7 +36,7 @@ public class Player extends Entity {
         conversionMode = false;
     }
 
-    public void shoot(float aimX, float aimY) {
+    public boolean shoot(float aimX, float aimY) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
         if (now - lastAttackTime > SHOOT_DELAY) {
@@ -48,6 +48,9 @@ public class Player extends Entity {
                 e.printStackTrace();
                 System.exit(1);
             }
+            return true;
+        } else {
+        	return false;
         }
     }
 

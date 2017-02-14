@@ -27,6 +27,8 @@ public class Game extends Canvas {
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
+    
+    public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
@@ -34,7 +36,7 @@ public class Game extends Canvas {
 	private MapData mapData;
 	private Player player;
 	private ArrayList<Zombie> zombies;
-	
+
 
 	// Game state
 	private enum STATE {
@@ -46,7 +48,7 @@ public class Game extends Canvas {
 	private enum MSTATE {
 		MAIN,
 		HELP,
-		OPTIONS, 
+		OPTIONS,
 		NONE
 	}
 	private STATE currentState;
@@ -84,6 +86,9 @@ public class Game extends Canvas {
 		menu = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
+
+        soundManager = new Sound();
+        soundManager.start();
 	}
 
 	private void loop() {
@@ -110,11 +115,11 @@ public class Game extends Canvas {
 		//timer.start();
 		Timer timer = new Timer(180);
 		new Thread(timer).start();
-	
-		
+
+
 		while (currentState == STATE.GAME) {
-			
-			
+
+
 			// Calculate how long since last update
 			// Delta is how far things should move this update to compensate
 			long now = System.nanoTime();
@@ -143,16 +148,16 @@ public class Game extends Canvas {
 					System.out.println("Game loop interrupted exception");
 				}
 			}
-			
+
 			if(timer.getTimeRemaining() <= 0) {
 				currentState = STATE.END;
 				break;
 			}
 		}
-		
+
 		while(currentState == STATE.END) {
 			renderer.renderGameOver();
-			
+
 			try {
 				Thread.sleep(3000);
 				System.exit(0);
@@ -193,7 +198,7 @@ public class Game extends Canvas {
 
 		}
 		else if(menuState == MSTATE.MAIN) {
-			
+
 			int playX = (int)menu.playButton.getX();
 			int playY = (int) menu.playButton.getY();
 			int optionsX = (int)menu.optionsButton.getX();
@@ -303,27 +308,29 @@ public class Game extends Canvas {
 		Point mousePos = inputHandler.getMousePos();
 		if (inputHandler.isMouseInside() && mousePos != null) {
 			player.face(mousePos.x, mousePos.y);
+            // Player shooting
+            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+                // game coord x and y position of the aim
+                double playerAngle = player.getFacingAngle();
+                float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
+                float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
+                boolean playerShot = player.shoot(aimX, aimY);
+                soundManager.bulletSound(playerShot);
 
-			// Player shooting
-			if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-				// game coord x and y position of the aim
-				double playerAngle = player.getFacingAngle();
-				float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
-				float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
-				player.shoot(aimX, aimY);
-			}
-		}
 
-		// Move the zombies around randomly
-		Random rand = new Random();
-		for (Zombie zombie : zombies) {
-			// Change the zombie's direction with given probability
-			if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-				zombie.newMovingDir();
-			}
-			zombie.move(delta);
-			Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
-		}
+            }
+        }
+
+        // Move the zombies around randomly
+        Random rand = new Random();
+        for (Zombie zombie : zombies) {
+            // Change the zombie's direction with given probability
+            if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                zombie.newMovingDir();
+            }
+            zombie.move(delta);
+            Collision.checkCollision(zombie, player, soundManager); // check if this zombie has collided with the player
+        }
 
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
@@ -332,11 +339,11 @@ public class Game extends Canvas {
                 player.getBullets().remove(i);
                 continue;
             }
-            Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies, player, soundManager);
             b.move(delta);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
-        
+
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
             if (zombies.get(i).health <= 0) {
@@ -348,7 +355,7 @@ public class Game extends Canvas {
             }
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
-		
+
 		if(player.health <= -100) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
