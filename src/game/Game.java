@@ -91,18 +91,16 @@ public class Game extends Canvas {
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
 
 		while(currentState == STATE.START) {
-			while(menuState == MSTATE.MAIN) {
+			if(menuState == MSTATE.MAIN) {
 				menu.renderMenu();
-				menuUpdate(menu);
 			}
-			while(menuState == MSTATE.HELP) {
+			else if(menuState == MSTATE.HELP) {
 				menu.renderHelp();
-				menuUpdate(menu);
 			}
-			while(menuState == MSTATE.OPTIONS) {
+			else if(menuState == MSTATE.OPTIONS) {
 				menu.renderOptions();
-				menuUpdate(menu);
 			}
+			menuUpdate(menu);
 		}
 
 		init();

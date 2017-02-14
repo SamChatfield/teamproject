@@ -49,6 +49,7 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keyArray[e.getKeyCode()] = true;
+        System.out.println(e.getKeyChar());
     }
 
     @Override
@@ -59,13 +60,11 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
     	clicked = true;
-    	System.out.println("TEST");
     	try {
 			Thread.sleep(5);
-			System.out.println("FALSE");
-			this.setMouseClicked(false);
+			clicked = false;
 		} catch (InterruptedException e1) {
-			System.out.println("ERROR");
+			System.out.println("ERROR! " + e1.getMessage());
 		} {
     		
     	}
