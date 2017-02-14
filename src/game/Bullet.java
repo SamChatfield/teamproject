@@ -1,5 +1,6 @@
 package game;
 
+import game.map.MapData;
 import game.util.Vector;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.image.BufferedImage;
  */
 public class Bullet extends Entity {
 
-    public static final float BULLET_SPEED = 0.25f;
+    public static final float BULLET_SPEED = 0.15f;
 
 //    private float x, y; // the x and y coord of the middle of the bullet
     private float dx, dy; // the change in x and y of the bullet each update before delta
@@ -19,11 +20,13 @@ public class Bullet extends Entity {
     private double facingAngle;
 //    private CollisionBox collisionBox;
 //    private Rectangle2D.Float shape;
-    private boolean active;
+    public boolean active;
     private Player player;
-
-    public Bullet(Player player, float aimX, float aimY, BufferedImage image, Map map) {
-        super(player.x(), player.y(), BULLET_SPEED, 0, image, map);
+    private double distance;
+    private static final double fadeDistance = 3;
+    
+    public Bullet(Player player, float aimX, float aimY, BufferedImage image, MapData mapData) {
+        super(player.x(), player.y(), BULLET_SPEED, 0, image, mapData);
 //        x = player.x();
 //        y = player.y();
 
@@ -39,8 +42,15 @@ public class Bullet extends Entity {
     }
 
     public void move(double delta) {
+    	float deltX = (float) (dx * BULLET_SPEED * delta);
+    	float deltY = (float) (dy * BULLET_SPEED * delta);
         x += dx * BULLET_SPEED * delta;
         y += dy * BULLET_SPEED * delta;
+        distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
+        
+        if(distance > fadeDistance) {
+        	this.active = false;
+        }
     }
 
     public void draw(Graphics2D g2d) {
@@ -60,11 +70,18 @@ public class Bullet extends Entity {
         g2d.setTransform(at);
     }
 
-    public void damage(Entity entity, int damageDone) {
+    public void damage(Entity entity, int damageDone, boolean conversionMode) {
+    	Zombie zom = (Zombie) entity;
         if (active) {
-//            System.out.println("Player hit entity");
-            entity.health -= damageDone;
-            active = false;
+        	if(conversionMode) {
+        		zom.convert();
+        		System.out.println("Successfully converted zombie!");
+        	}
+        	else {
+        		// TODO: Add in so converted zombies won't damage player
+                entity.health -= damageDone;
+                active = false;
+        	}
         }
     }
 

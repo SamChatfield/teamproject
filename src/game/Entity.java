@@ -1,5 +1,7 @@
 package game;
 
+import game.map.MapData;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -15,10 +17,10 @@ public class Entity {
     protected boolean showCollBox;
     protected int health;
     protected long lastAttackTime;
-    protected Map map;
+    protected MapData mapData;
 
 //    public Entity(float x, float y, float moveSpeed, int health, CollisionBox collisionBox, BufferedImage image) {
-    public Entity(float x, float y, float moveSpeed, int health, BufferedImage image, Map map) {
+    public Entity(float x, float y, float moveSpeed, int health, BufferedImage image, MapData mapData) {
         this.x = x;
         this.y = y;
         this.moveSpeed = moveSpeed;
@@ -29,7 +31,7 @@ public class Entity {
         this.health = health;
         lastAttackTime = 0L;
         facingAngle = 0.0d;
-        this.map = map;
+        this.mapData = mapData;
         collisionBox = new CollisionBox(this);
     }
 
@@ -45,12 +47,11 @@ public class Entity {
         return moveSpeed;
     }
 
-    // TODO Stop things from moving out of the map
     public void move(float dx, float dy) {
         float nx = x + dx;
         float ny = y + dy;
 
-        if (map.isInMap(nx, ny)) {
+        if (mapData.isEntityMoveValid(nx, ny, this)) {
             x += dx;
             y += dy;
         }

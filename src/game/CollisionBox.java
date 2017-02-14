@@ -55,6 +55,14 @@ public CollisionBox(Entity owner) {
         return owner.y();
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
     public boolean intersects(CollisionBox otherBox) {
 //        System.out.println("                       this: " + getRect() + " and other: " + otherBox.getRect());
         return getRect().intersects(otherBox.getRect());

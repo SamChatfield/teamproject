@@ -14,9 +14,11 @@ public class Collision {
         }
     }
 
+    public static void checkBulletCollision(int bulletIndex, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies, Player player) {
     public static void checkBulletCollision(int bulletIndex, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies, Sound sound) {
         for (int i = 0; i < zombies.size(); i++) {
             if (bullets.get(bulletIndex).getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {
+                bullets.get(bulletIndex).damage(zombies.get(i), 25, player.conversionMode);
             	sound.zombieDeath();
                 bullets.get(bulletIndex).damage(zombies.get(i), 25);
                 bullets.remove(bulletIndex);

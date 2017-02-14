@@ -10,10 +10,10 @@ import java.io.IOException;
  */
 public class ResourceLoader {
 
-    private static final String RES_PATH = "src/game/res/";
+    public static final String RES_PATH = "src/game/res/";
 
     public static BufferedImage[] playerImages() throws IOException {
-        String[] playerImages = {"playerFront.png", "playerBack.png", "playerLeft.png", "playerRight.png"};
+        String[] playerImages = {"playerFront.png", "playerBack.png","playerBack2.png", "playerLeft.png", "playerRight.png"};
         BufferedImage[] images = new BufferedImage[playerImages.length];
 
         for (int i = 0; i < images.length; i++) {
@@ -23,7 +23,7 @@ public class ResourceLoader {
         return images;
     }
 
-    private static BufferedImage imageFromResPath(String image) throws IOException {
+    public static BufferedImage imageFromResPath(String image) throws IOException {
         return ImageIO.read(new File(RES_PATH + image));
     }
 
@@ -34,6 +34,10 @@ public class ResourceLoader {
     // TODO streamline this and player loading since they will do pretty much the same thing
     public static BufferedImage zombieImage() throws IOException {
         return imageFromResPath("playerBack.png");
+    }
+    
+    public static BufferedImage zombiePlayerImage() throws IOException {
+    	return imageFromResPath("playerBack2.png");
     }
 
     public static BufferedImage bulletImage() throws IOException {
