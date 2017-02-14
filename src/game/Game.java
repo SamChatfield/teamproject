@@ -339,9 +339,8 @@ public class Game extends Canvas {
                 player.getBullets().remove(i);
                 continue;
             }
-            Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies, player, soundManager);
             b.move(delta);
-            Collision.checkBulletCollision(i, player.getBullets(), zombies, soundManager);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
 
