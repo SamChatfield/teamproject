@@ -13,6 +13,7 @@ public class InputHandler implements KeyListener, MouseListener {
 
     private boolean[] keyArray, mouseButtonArray;
     private boolean mouseInside;
+    private boolean clicked;
     private Game game;
 
     public InputHandler(Game game) {
@@ -20,6 +21,14 @@ public class InputHandler implements KeyListener, MouseListener {
         mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
         mouseInside = false;
         this.game = game;
+    }
+    
+    public boolean wasMouseClicked() {
+    	return clicked;
+    }
+    
+    public void setMouseClicked(boolean bool) {
+    	this.clicked = bool;
     }
 
     public boolean isKeyDown(int keyCode) {
@@ -40,6 +49,7 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keyArray[e.getKeyCode()] = true;
+        System.out.println(e.getKeyChar());
     }
 
     @Override
@@ -48,7 +58,17 @@ public class InputHandler implements KeyListener, MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+    	clicked = true;
+    	try {
+			Thread.sleep(5);
+			clicked = false;
+		} catch (InterruptedException e1) {
+			System.out.println("ERROR! " + e1.getMessage());
+		} {
+    		
+    	}
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {

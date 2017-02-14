@@ -23,7 +23,7 @@ public class Zombie extends Entity {
 
     private BufferedImage playerImage;
     
-    private enum State {
+    public enum State {
         WILD, PLAYER, OPPONENT;
     }
 
@@ -65,7 +65,7 @@ public class Zombie extends Entity {
         long now = System.nanoTime();
         
         if(this.state == State.PLAYER) {
-        	System.out.println("DEBUG: Player's zombie");
+        	// Currently, do nothing
         }
         else {
             if (now - lastAttackTime > 1000000000L) {

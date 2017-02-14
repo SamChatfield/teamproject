@@ -2,12 +2,14 @@ package game;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
-
-import javax.swing.JPanel;
+import java.io.File;
+import java.io.IOException;
 
 public class MenuRenderer {
 	
@@ -15,13 +17,14 @@ public class MenuRenderer {
 	private Font font1;
 	private int gameH;
 	private int gameW;
+	private Font tradeWinds;
 	 
 	// Buttons
-	public Rectangle playButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 3, 150, 50);
-	public Rectangle helpButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 5, 150, 50);
-	public Rectangle optionsButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 7, 150, 50);
+	public Rectangle playButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 4, 150, 50);
+	public Rectangle helpButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 6, 150, 50);
+	public Rectangle optionsButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 8, 150, 50);
 	
-	public Rectangle returnButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 7, 150, 50);
+	public Rectangle returnButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 9, 150, 50);
 	
 	/**
 	 * Creates a new MenuRenderer, initialising fonts and sizes
@@ -32,6 +35,20 @@ public class MenuRenderer {
 		font1 = new Font("Comic Sans MS", Font.BOLD, 30);
 		gameH = Game.GAME_DIMENSION.height;
 		gameW = Game.GAME_DIMENSION.width;
+		
+		// Import font
+		File font_file = new File("src/game/res/tradewinds.ttf");
+		try {
+			tradeWinds = Font.createFont(Font.TRUETYPE_FONT, font_file);
+			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			genv.registerFont(tradeWinds);
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -45,21 +62,23 @@ public class MenuRenderer {
     	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
     	// Fill background
-        g2d.setColor(Color.BLUE);
+        g2d.setColor(Color.DARK_GRAY);
         g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
         
         // Set font
-        Font title = new Font("Comic Sans MS", Font.BOLD, 40);
-		g2d.setFont(title);
+		g2d.setFont(tradeWinds.deriveFont(50f));
+		g2d.setColor(Color.WHITE);
 		
 		// Display /filler/ text
-		g2d.setColor(Color.RED);
-		String text = "Options";
-		int width = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 7);
+		int width = g2d.getFontMetrics().stringWidth("Options");
+		g2d.drawString("Options", (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 7);
 		
 		// Display buttons
-		g2d.drawString("Return", returnButton.x + 20, returnButton.y + 30);
+		g2d.setFont(tradeWinds.deriveFont(25f));
+		int width_return = g2d.getFontMetrics().stringWidth("Return");
+		int cenw_return = (int) ((returnButton.getWidth() - width_return) / 2);
+		int cenh_return = (int) ((returnButton.getHeight() / 2));
+		g2d.drawString("Return", returnButton.x + cenw_return, returnButton.y + 5 + cenh_return);
 		g2d.draw(returnButton);
 		
         // Clean up and flip the buffer
@@ -78,21 +97,23 @@ public class MenuRenderer {
     	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
     	// Fill background
-        g2d.setColor(Color.BLUE);
+        g2d.setColor(Color.DARK_GRAY);
         g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
         
         // Set font
-        Font title = new Font("Comic Sans MS", Font.BOLD, 40);
-		g2d.setFont(title);
+		g2d.setFont(tradeWinds.deriveFont(50f));
+		g2d.setColor(Color.WHITE);
 		
 		// Display /filler/ text
-		g2d.setColor(Color.RED);
-		String text = "Help";
-		int width = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 7);
+		int width = g2d.getFontMetrics().stringWidth("Help");
+		g2d.drawString("Help", (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 7);
 		
 		// Display buttons
-		g2d.drawString("Return", returnButton.x + 20, returnButton.y + 30);
+		g2d.setFont(tradeWinds.deriveFont(25f));
+		int width_return = g2d.getFontMetrics().stringWidth("Return");
+		int cenw_return = (int) ((returnButton.getWidth() - width_return) / 2);
+		int cenh_return = (int) ((returnButton.getHeight() / 2));
+		g2d.drawString("Return", returnButton.x + cenw_return, returnButton.y + 5 + cenh_return);
 		g2d.draw(returnButton);
 		
         // Clean up and flip the buffer
@@ -112,8 +133,7 @@ public class MenuRenderer {
         g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
         
         // Set font
-		Font title = new Font("Comic Sans MS", Font.BOLD, 50);
-		g2d.setFont(title);
+		g2d.setFont(tradeWinds.deriveFont(60f));
 		String gameName = "Capture the Zom.biz";
 		int width = g2d.getFontMetrics().stringWidth(gameName);
 		
@@ -124,20 +144,31 @@ public class MenuRenderer {
 		// Buttons
 		
         // Create font
-		Font font_buttons = new Font("Copperplate", Font.PLAIN, 30);
-		g2d.setFont(font_buttons);
+		//Font font_buttons = new Font("Copperplate", Font.PLAIN, 30);
+		g2d.setFont(tradeWinds.deriveFont(25f));
 		g2d.setColor(Color.WHITE);
 		
+		//// TODO: Fix hardcoded verticial allignment of button text
+		
 		// Play Button
-		g2d.drawString("Play", playButton.x + 20, playButton.y + 30);
+		int width_play = g2d.getFontMetrics().stringWidth("Play");
+		int cenw_play = (int) ((playButton.getWidth() - width_play) / 2);
+		int cenh_play = (int) ((playButton.getHeight() / 2));
+		g2d.drawString("Play", playButton.x + cenw_play, playButton.y + 5 + cenh_play);
 		g2d.draw(playButton);
 		
 		// Help button
-		g2d.drawString("Help", helpButton.x + 20, helpButton.y + 30);
+		int width_help = g2d.getFontMetrics().stringWidth("Help");
+		int cenw_help = (int) ((helpButton.getWidth() - width_help) / 2);
+		int cenh_help = (int) ((helpButton.getHeight() / 2));
+		g2d.drawString("Help", helpButton.x + cenw_help, helpButton.y + 5 + cenh_help);
 		g2d.draw(helpButton);
 		
 		// Settings button
-		g2d.drawString("Options", optionsButton.x + 20, optionsButton.y + 30);
+		int width_options = g2d.getFontMetrics().stringWidth("Options");
+		int cenw_options = (int) ((optionsButton.getWidth() - width_options) / 2);
+		int cenh_options = (int) ((optionsButton.getHeight() / 2));
+		g2d.drawString("Options", optionsButton.x + cenw_options, optionsButton.y + 5 + cenh_options);
 		g2d.draw(optionsButton);
 			    
         // Clean up and flip the buffer

@@ -49,7 +49,6 @@ public class Bullet extends Entity {
         distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
         
         if(distance > fadeDistance) {
-        	System.out.println("NOOOO");
         	this.active = false;
         }
     }
