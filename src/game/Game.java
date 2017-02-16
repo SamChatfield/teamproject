@@ -364,7 +364,7 @@ public class Game extends Canvas {
 
     private void init() {
         // Create the map and parse it
-        mapData = new MapData("testmap.png", "tilesheet.png", "tiledata.csv");
+        mapData = new MapData("prototypemap.png", "tilesheet.png", "tiledata.csv");
 
         // Initialise the entities
         zombies = new ArrayList<>(zombieCount);
