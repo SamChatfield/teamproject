@@ -5,6 +5,7 @@ import game.util.Vector;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
@@ -59,6 +60,7 @@ public class Zombie extends Entity {
 
         dx = zdv.x();
         dy = zdv.y();
+        facingAngle = Math.toDegrees(Math.atan2(dy,dx));
     }
 
     public void attack(Entity entity, int damageDone) {
@@ -100,8 +102,9 @@ public class Zombie extends Entity {
         }
         
         AffineTransform at = g2d.getTransform();
+
         g2d.rotate(facingAngle, x, y);
-        
+
         if(state == State.PLAYER) {
         	g2d.drawImage(playerImage, drawX, drawY, null);
         }
