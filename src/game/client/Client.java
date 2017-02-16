@@ -6,9 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 /**
- * Main client clas
+ * Main client class
  * Created by Daniel on 31/01/2017.
  * Modified by George on 04/02/2017.
  */
@@ -46,12 +45,16 @@ public class Client {
 		ClientSender client_sender = new ClientSender(username, objOut);
 		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
 
+		// Then create a game state for the client
+		ClientGameState state = new ClientGameState();
+		ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
+		client_receiver.addInterface(stateInt); //must be called before starting the thread.
+		// If this method didn't exist, interface would need to be added above, but interface relies on receiver.
+
 		// Starting threads
 		client_sender.start();
 		client_receiver.start();
 
-		ClientGameState state = new ClientGameState();
-		ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
 
 		// TODO: Closure method for threads
 	}
