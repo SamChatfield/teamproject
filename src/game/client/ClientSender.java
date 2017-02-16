@@ -1,9 +1,6 @@
 package game.client;
 
-import game.networking.SampleObject;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
@@ -44,8 +41,9 @@ public class ClientSender extends Thread {
 	public void run() {
 		System.out.println("DEBUG: ClientSender running");
 		sendObject(username);
+
 		//String dummyMessage = "Hello from " + username;
-		Object dummyMessage = new SampleObject("Hello World",1);
+		//Object dummyMessage = new SampleObject("Hello World",1);
 
 		while(true) {
 			try {
@@ -54,7 +52,7 @@ public class ClientSender extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			sendObject(dummyMessage);
+			//sendObject(dummyMessage);
 		}
 	}
 }
