@@ -1,6 +1,5 @@
 package game.client;
 
-import game.networking.SampleObject;
 import game.server.ServerGameState;
 
 import java.io.ObjectInputStream;
@@ -20,11 +19,16 @@ public class ClientReceiver extends Thread {
 	 * @param username Name of user
 	 * @param objIn ObjectInputStream
 	 */
-	ClientReceiver(String username, ObjectInputStream objIn, ClientGameStateInterface inter) {
+	ClientReceiver(String username, ObjectInputStream objIn) {
 		this.username = username;
 		this.objIn = objIn;
+	}
+
+
+	public void addInterface(ClientGameStateInterface inter){
 		this.inter = inter;
 	}
+
 
 	// Main method to run when thread starts
 	public void run() {

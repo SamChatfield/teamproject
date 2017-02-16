@@ -43,4 +43,9 @@ public class ClientGameState {
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
+
+    public void clearGameState(){
+        this.zombies = null;
+        this.players = null;
+    }
 }
