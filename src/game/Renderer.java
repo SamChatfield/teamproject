@@ -44,7 +44,7 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
         // Draw the map
         drawMap(g2d, mapData, player);
 
-        player.draw(g2d, mapData);
+        player.draw(g2d);
         
         ArrayList<Bullet> deleteBullets = new ArrayList<Bullet>();
 
@@ -56,7 +56,7 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
        
 
         for (Zombie z : zombies) {
-            z.draw(g2d, mapData, player);
+            z.draw(g2d, player);
         }
         
 		// Health bar

@@ -28,16 +28,16 @@ public class ResourceLoader {
     }
 
     public static BufferedImage playerImage() throws IOException {
-        return imageFromResPath("playerFront.png");
+        return imageFromResPath("player.png");
     }
 
     // TODO streamline this and player loading since they will do pretty much the same thing
     public static BufferedImage zombieImage() throws IOException {
-        return imageFromResPath("playerBack.png");
+        return imageFromResPath("zombie.png");
     }
     
     public static BufferedImage zombiePlayerImage() throws IOException {
-    	return imageFromResPath("playerBack2.png");
+    	return imageFromResPath("zombieBlue.png");
     }
 
     public static BufferedImage bulletImage() throws IOException {
