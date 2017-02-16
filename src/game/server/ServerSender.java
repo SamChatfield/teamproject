@@ -1,10 +1,10 @@
-package game.networking;
+package game.server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 /**
- * @author georgesabourin
+ * @author georgesabourin, Daniel Tonks
  * Class for managing sending from the server to the specified client
  */
 public class ServerSender extends Thread {
@@ -22,11 +22,10 @@ public class ServerSender extends Thread {
 	
 	/**
 	 * Send an object down the ObjectOutputStream to the client
-	 * @param obj The object to send
 	 */
-	private void sendObject(Object obj) {
+	private void sendGameState() {
 		try {
-			objOut.writeObject(obj);
+			objOut.writeObject(state.getPackagedState());
 			objOut.flush();
 		} catch (IOException e) {
 			System.err.println("Communication Error! " + e.getMessage());
@@ -39,8 +38,7 @@ public class ServerSender extends Thread {
 		while(true) {
             try {
 				Thread.sleep(1000);
-				sendObject(new SampleObject("IanKenny", 9));
-				//	System.out.println("Sending objects ...");
+				sendGameState(); // send the game state
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 

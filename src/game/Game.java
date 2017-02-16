@@ -362,8 +362,6 @@ public class Game extends Canvas {
             for (int i = 0; i < zombieCount; i++) {
 
             	// Daniel does some random stuff here... (like speaking in the third person)
-
-
 				Random rand = new Random();
 				float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
 				float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();

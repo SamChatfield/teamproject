@@ -1,9 +1,8 @@
-package game.networking;
+package game.server;
 
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -31,7 +30,10 @@ public class Server {
         // Create ServerSocket
         ServerSocket outSocket = null;
 
-        GameStateInterface inter = new GameStateInterface();
+        ServerGameState state = new ServerGameState();
+        GameStateInterface inter = new GameStateInterface(state); // connect the state with its interface.
+
+
         try {
         	outSocket = new ServerSocket(port);
         } catch (IOException e) {

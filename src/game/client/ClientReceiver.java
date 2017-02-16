@@ -1,4 +1,6 @@
-package game.networking;
+package game.client;
+
+import game.networking.SampleObject;
 
 import java.io.ObjectInputStream;
 

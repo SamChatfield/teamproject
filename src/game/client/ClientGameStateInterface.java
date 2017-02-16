@@ -1,7 +1,9 @@
 package game.client;
 
-import game.networking.ClientReceiver;
-import game.networking.ClientSender;
+import game.Player;
+import game.Zombie;
+import game.server.ServerGameState;
+import java.util.ArrayList;
 
 /**
  * Created by Daniel on 16/02/2017.
@@ -16,5 +18,13 @@ public class ClientGameStateInterface {
         this.state = state;
         this.receiver =receiver;
         this.sender = sender;
+    }
+
+    public void update(ServerGameState updatedState){
+        ArrayList<Zombie> zom = updatedState.getZombies();
+        ArrayList<Player> players = updatedState.getPlayers();
+
+        state.setZombies(zom);
+        state.setPlayers(players);
     }
 }
