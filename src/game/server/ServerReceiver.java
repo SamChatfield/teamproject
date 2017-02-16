@@ -1,4 +1,6 @@
-package game.networking;
+package game.server;
+
+import game.networking.SampleObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +29,7 @@ public class ServerReceiver extends Thread {
 		while(true) {
 			try {
 				SampleObject obj = (SampleObject) objIn.readObject();
-				state.insert(obj);
+				state.updateGameState(obj);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
