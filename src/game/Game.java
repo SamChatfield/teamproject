@@ -1,27 +1,17 @@
 package game;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Point;
+import game.map.MapData;
+import game.util.Vector;
+
+import javax.swing.*;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
-import game.map.MapData;
-import game.networking.ClientReceiver;
-import game.networking.ClientSender;
-import game.util.Vector;
 
 
 /**
@@ -36,6 +26,7 @@ public class Game extends Canvas {
 	public static final int TILE_SIZE = 64;
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
+
     
     public Sound soundManager;
 	private JFrame container;
@@ -125,36 +116,7 @@ public class Game extends Canvas {
 		Timer timer = new Timer(180);
 		new Thread(timer).start();
 
-		////  Connecting to the server
-		// Rearrange this later
-		Random random = new Random();
-		int port = 8080;
-		String host = "localhost";
-		String username = "user" + random.nextInt(100);	
-		ObjectOutputStream objOut = null;
-		ObjectInputStream objIn = null;
-		Socket outSocket = null;
 
-		try {
-			outSocket = new Socket(host,port);
-			System.out.println("DEBUG: Socket created");
-			objOut = new ObjectOutputStream(outSocket.getOutputStream());
-			objIn = new ObjectInputStream(outSocket.getInputStream());
-			System.out.println("DEBUG: I/O streams created");
-		} catch(UnknownHostException e) {
-			System.err.println("Error! Unknown host - " + host);
-			System.exit(1);
-		} catch (IOException e) {
-			System.err.println("Error! Perhaps the server hasn't been started? " + e.getMessage());
-			System.exit(1);
-		}
-
-		ClientSender clientSender = new ClientSender(username, objOut);
-		ClientReceiver clientReceiver = new ClientReceiver(username, objIn);
-
-		// Starting threads
-		clientSender.start();
-		clientReceiver.start();
 		while (currentState == STATE.GAME) {
 
 
@@ -170,11 +132,6 @@ public class Game extends Canvas {
 			// Update game with the delta
 			update(delta);
 
-			if(player != null) {
-				clientSender.sendObject(player.playerData);
-			}
-		
-			
 			// Render
 			renderer.render(timer);
 
@@ -331,12 +288,14 @@ public class Game extends Canvas {
 			System.out.println("Player: (" + player.x() + ", " + player.y() + ")");
 		}
 		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
-			player.conversionMode = true;
-			System.out.println("Enabled conversion mode");
-		}
-		if(inputHandler.isKeyDown(KeyEvent.VK_X)) {
-			player.conversionMode = false;
-			System.out.println("Disabled converison mode");
+			if(player.conversionMode) {
+				player.conversionMode = false;
+				System.out.println("Disabled conversion mode!");
+				}
+			else {
+				player.conversionMode = true;
+				System.out.println("Enabled conversion mode!");
+			}
 		}
 
 		// Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
@@ -395,11 +354,9 @@ public class Game extends Canvas {
             	newNumConvertedZombies += 1;
             }
         }
-        player.playerData.setnumberConvertedZombies(newNumConvertedZombies);
         player.setNumConvertedZombies(newNumConvertedZombies);
-        player.playerData.setHealth(player.health);
-        
-		if(player.health <= 0) {
+
+		if(player.health <= -100) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}

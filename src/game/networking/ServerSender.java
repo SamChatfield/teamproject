@@ -26,7 +26,6 @@ public class ServerSender extends Thread {
 	 */
 	private void sendObject(Object obj) {
 		try {
-			objOut.reset();
 			objOut.writeObject(obj);
 			objOut.flush();
 		} catch (IOException e) {
@@ -43,8 +42,7 @@ public class ServerSender extends Thread {
 				sendObject(new SampleObject("IanKenny", 9));
 				//	System.out.println("Sending objects ...");
 			} catch (InterruptedException e) {
-				System.err.println("Error! "+ e.getMessage());
-				System.exit(1);
+				e.printStackTrace();
 			} 
 		}
 	}

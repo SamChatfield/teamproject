@@ -3,8 +3,8 @@ package game.networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,7 +13,7 @@ import java.net.Socket;
  * Created by Daniel on 31/01/2017.
  * Modified by George on 04/02/2017
  */
-public class Server implements Serializable {
+public class Server {
 
     public static void main(String[] args){
         if(args.length != 2){
@@ -60,7 +60,7 @@ public class Server implements Serializable {
                  // Start threads
                  ServerSender server_sender = new ServerSender(objOut,inter);
                  server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn,inter,clientName);
+                 ServerReceiver server_receiver = new ServerReceiver(objIn,inter);
                  server_receiver.start();
         		
                  // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER

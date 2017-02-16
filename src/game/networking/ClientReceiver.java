@@ -16,7 +16,7 @@ public class ClientReceiver extends Thread {
 	 * @param username Name of user
 	 * @param objIn ObjectInputStream
 	 */
-	public ClientReceiver(String username, ObjectInputStream objIn) {
+	ClientReceiver(String username, ObjectInputStream objIn) {
 		this.username = username;
 		this.objIn = objIn;
 	}
@@ -24,21 +24,17 @@ public class ClientReceiver extends Thread {
 	// Main method to run when thread starts
 	public void run() {
 		
-		
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
 //				System.out.println("Receiving object");
-				
-				/*
 				SampleObject obj1 = (SampleObject)objIn.readObject();
 				if(obj1 != null) {
 					System.out.println("Object = " +obj1.toString() + " | value = " + obj1.getValue());
 				}
 				else {
 					System.out.println("ERROR! Object is null!");
-				}
-				*/	
+				}	
 			}
 		} catch(Exception e) {
 			System.err.println("Error! " + e.getMessage());
