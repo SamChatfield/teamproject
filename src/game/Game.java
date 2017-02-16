@@ -351,23 +351,11 @@ public class Game extends Canvas {
 
     private void init() {
         // Create the map and parse it
-        mapData = new MapData("testmap.png", "tilesheet.png", "tiledata.csv");
 
         // Initialise the entities
-        zombies = new ArrayList<>(zombieCount);
         try {
             player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), mapData);
 
-            // Create zombieCount zombies and place them all at 50, 50 on the mapData TODO change this
-            for (int i = 0; i < zombieCount; i++) {
-
-            	// Daniel does some random stuff here... (like speaking in the third person)
-				Random rand = new Random();
-				float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
-				float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
-                zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
-                zombies.get(i).newMovingDir();
-            }
         } catch (IOException e) {
             System.out.println("Uh oh. Player image failed to load. RIP");
             System.exit(1);
@@ -380,12 +368,10 @@ public class Game extends Canvas {
 
     public static void main(String[] args) {
         Game game = new Game();
-
         // Create and start the game loop over the loop method of the game object.
         // :: is a method reference since loop is an existing method,
         // semantically the same as () -> game.loop() lambda expression.
         Thread gameThread = new Thread(game::loop);
         gameThread.start();
     }
-
 }

@@ -19,11 +19,11 @@ public class ServerSender extends Thread {
 	public ServerSender(ObjectOutputStream objOut, GameStateInterface inter) {
 		this.objOut = objOut; this.state = inter;
 	}
-	
+
 	/**
 	 * Send an object down the ObjectOutputStream to the client
 	 */
-	private void sendGameState() {
+	public void sendGameState() {
 		try {
 			objOut.writeObject(state.getPackagedState());
 			objOut.flush();

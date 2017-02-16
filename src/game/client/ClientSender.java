@@ -11,15 +11,17 @@ public class ClientSender extends Thread {
 
 	private String username;
 	private ObjectOutputStream objOut;
+	private ClientGameStateInterface inter;
 
 	/**
 	 * Constructor
 	 * @param username Name of user
 	 * @param objOut ObjectOutputStream
 	 */
-	ClientSender(String username, ObjectOutputStream objOut) {
+	ClientSender(String username, ObjectOutputStream objOut, ClientGameStateInterface inter) {
 		this.username = username;
 		this.objOut = objOut;
+		this.inter = inter;
 	}
 
 	/**
@@ -42,11 +44,11 @@ public class ClientSender extends Thread {
 		System.out.println("DEBUG: ClientSender running");
 		sendObject(username);
 
-		//String dummyMessage = "Hello from " + username;
-		//Object dummyMessage = new SampleObject("Hello World",1);
+
 
 		while(true) {
 			try {
+				objOut.writeObject(inter.getPlayer());
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
