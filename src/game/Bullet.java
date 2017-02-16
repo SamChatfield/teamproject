@@ -1,16 +1,18 @@
 package game;
 
-import game.map.MapData;
-import game.util.Vector;
-
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
+
+import game.map.MapData;
+import game.util.Vector;
 
 /**
  * Created by Sam on 31/01/2017.
  */
-public class Bullet extends Entity {
+public class Bullet extends Entity implements Serializable {
 
     public static final float BULLET_SPEED = 0.15f;
 

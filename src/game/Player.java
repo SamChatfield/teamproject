@@ -1,25 +1,27 @@
 package game;
 
-import game.map.MapData;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import game.map.MapData;
+
 /**
  * Created by Sam on 20/01/2017.
  */
 public class Player extends Entity {
-	
-	// TODO: Fix issue of spawning on top of zombies
 
     private static final float COLL_BOX_WIDTH = 25.0f;
     private static final float COLL_BOX_HEIGHT = 25.0f;
     private static final int HEALTH = 100;
     private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
     private static final float MOVE_SPEED = 0.1f;
+    
+    public PlayerData playerData;
     
     private int numConvertedZombies;
 	public boolean conversionMode;
@@ -34,6 +36,7 @@ public class Player extends Entity {
         super(x, y, MOVE_SPEED, HEALTH, image, mapData);
         bullets = new ArrayList<>(20);
         conversionMode = false;
+        playerData = new PlayerData();
     }
 
     public boolean shoot(float aimX, float aimY) {

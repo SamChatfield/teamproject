@@ -46,7 +46,6 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
 
         player.draw(g2d, mapData);
         
-        ArrayList<Bullet> deleteBullets = new ArrayList<Bullet>();
 
         for (Bullet b : player.getBullets()) {
             if(b.active) {
