@@ -1,5 +1,8 @@
 package game.networking;
 
+import game.client.ClientGameState;
+import game.client.ClientGameStateInterface;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
@@ -50,6 +53,10 @@ public class Client {
 		// Starting threads
 		client_sender.start();
 		client_receiver.start();
+
+		ClientGameState state = new ClientGameState();
+		ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
+
 		// TODO: Closure method for threads
 	}
 }
