@@ -27,4 +27,14 @@ public class ClientGameStateInterface {
         state.setZombies(zom);
         state.setPlayers(players);
     }
+
+    public Player getPlayer(String username){
+        ArrayList<Player> plrs = state.getPlayers();
+        for(Player p:plrs){
+            if(p.getUsername().equals(username)){
+                return p;
+            }
+        }
+        return null; // player not found
+    }
 }
