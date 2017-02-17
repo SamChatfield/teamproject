@@ -13,6 +13,7 @@ public class ClientSender extends Thread {
 	private ObjectOutputStream objOut;
 	private ClientGameStateInterface inter;
 
+
 	/**
 	 * Constructor
 	 * @param username Name of user
@@ -44,17 +45,19 @@ public class ClientSender extends Thread {
 		System.out.println("DEBUG: ClientSender running");
 		sendObject(username);
 
-
-
+		// Keep running, sending the player object from the client game state every so often.
 		while(true) {
 			try {
-				objOut.writeObject(inter.getPlayer());
+				objOut.writeObject(inter.getPlayer(username));
+				objOut.flush();
 				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//sendObject(dummyMessage);
 		}
 	}
+
+	public void addInterface(ClientGameStateInterface inter){
+	    this.inter = inter;
+    }
 }

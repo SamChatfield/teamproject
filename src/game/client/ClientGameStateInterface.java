@@ -2,6 +2,7 @@ package game.client;
 
 import game.Player;
 import game.Zombie;
+import game.map.MapData;
 import game.server.ServerGameState;
 import java.util.ArrayList;
 
@@ -22,19 +23,27 @@ public class ClientGameStateInterface {
 
     public void update(ServerGameState updatedState){
         ArrayList<Zombie> zom = updatedState.getZombies();
-        ArrayList<Player> players = updatedState.getPlayers();
+        ArrayList<EntityData> players = updatedState.getPlayers();
 
         state.setZombies(zom);
         state.setPlayers(players);
     }
 
-    public Player getPlayer(String username){
-        ArrayList<Player> plrs = state.getPlayers();
-        for(Player p:plrs){
+    public EntityData getPlayer(String username){
+        ArrayList<EntityData> plrs = state.getPlayers();
+        for(EntityData p:plrs){
             if(p.getUsername().equals(username)){
                 return p;
             }
         }
         return null; // player not found
+    }
+
+    public int getTimeRemaining(){
+        return state.getTimeRemaining();
+    }
+
+    public MapData getMapData(){
+        return state.getMapData();
     }
 }

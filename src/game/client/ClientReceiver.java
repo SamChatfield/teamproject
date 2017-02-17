@@ -36,6 +36,7 @@ public class ClientReceiver extends Thread {
 		try {
 			while(true) {
 				ServerGameState state = (ServerGameState)objIn.readObject();
+				System.out.println("Got an array of players, size "+state.getPlayers().size());
 				inter.update(state); // update the clients view of the game state.
 			}
 		} catch(Exception e) {

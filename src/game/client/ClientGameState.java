@@ -2,6 +2,7 @@ package game.client;
 
 import game.Player;
 import game.Zombie;
+import game.map.MapData;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,10 @@ import java.util.ArrayList;
 public class ClientGameState {
 
     private ArrayList<Zombie> zombies;
-    private ArrayList<Player> players;
+    private ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
+    private MapData mapData;
+    private int timeRemaining;
+
 
     public ClientGameState(){
 
@@ -26,13 +30,23 @@ public class ClientGameState {
     public ClientGameState(ClientGameState state){
         this.zombies = state.getZombies();
         this.players = state.getPlayers();
+        this.mapData = state.getMapData();
+        this.timeRemaining = state.getTimeRemaining();
+    }
+
+    public MapData getMapData() {
+        return mapData;
+    }
+
+    public int getTimeRemaining() {
+        return timeRemaining;
     }
 
     public ArrayList<Zombie> getZombies() {
         return zombies;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public ArrayList<EntityData> getPlayers() {
         return players;
     }
 
@@ -40,7 +54,7 @@ public class ClientGameState {
         this.zombies = zombies;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
+    public void setPlayers(ArrayList<EntityData> players) {
         this.players = players;
     }
 
