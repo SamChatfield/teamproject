@@ -26,7 +26,6 @@ public class Player extends Entity {
 
 
     private ArrayList<Bullet> bullets;
-    private MapData mapData;
 
     public Player(float x, float y, BufferedImage image, MapData mapData) {
 //        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
@@ -54,10 +53,7 @@ public class Player extends Entity {
         }
     }
 
-    public void draw(Graphics2D g2d, MapData mapData) {
-        int screenX;
-        int screenY;
-
+    public void draw(Graphics2D g2d) {
         // Width and height of the entity sprite
         int w = image.getWidth();
         int h = image.getHeight();
@@ -70,6 +66,7 @@ public class Player extends Entity {
 
         AffineTransform at = g2d.getTransform();
         g2d.rotate(facingAngle, 320, 320);
+
         g2d.drawImage(image, 320 - w / 2, 320 - h / 2, null);
         g2d.setTransform(at);
     }

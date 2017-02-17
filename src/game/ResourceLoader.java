@@ -12,32 +12,21 @@ public class ResourceLoader {
 
     public static final String RES_PATH = "src/game/res/";
 
-    public static BufferedImage[] playerImages() throws IOException {
-        String[] playerImages = {"playerFront.png", "playerBack.png","playerBack2.png", "playerLeft.png", "playerRight.png"};
-        BufferedImage[] images = new BufferedImage[playerImages.length];
-
-        for (int i = 0; i < images.length; i++) {
-            images[i] = imageFromResPath(playerImages[i]);
-        }
-
-        return images;
-    }
-
     public static BufferedImage imageFromResPath(String image) throws IOException {
         return ImageIO.read(new File(RES_PATH + image));
     }
 
     public static BufferedImage playerImage() throws IOException {
-        return imageFromResPath("playerFront.png");
+        return imageFromResPath("player.png");
     }
 
     // TODO streamline this and player loading since they will do pretty much the same thing
     public static BufferedImage zombieImage() throws IOException {
-        return imageFromResPath("playerBack.png");
+        return imageFromResPath("zombie.png");
     }
     
     public static BufferedImage zombiePlayerImage() throws IOException {
-    	return imageFromResPath("playerBack2.png");
+    	return imageFromResPath("zombieBlue.png");
     }
 
     public static BufferedImage bulletImage() throws IOException {

@@ -55,7 +55,7 @@ public class Game extends Canvas {
 	private MSTATE menuState;
 
 	// Non final stuff, remove before release
-	private final int zombieCount = 100;
+	private final int zombieCount = 50;
 
 	private Game() {
 		container = new JFrame(TITLE);
@@ -307,17 +307,17 @@ public class Game extends Canvas {
 		// Face the player in the direction of the mouse pointer
 		Point mousePos = inputHandler.getMousePos();
 		if (inputHandler.isMouseInside() && mousePos != null) {
-			player.face(mousePos.x, mousePos.y);
+//			player.face(mousePos.x - 320, mousePos.y - 320);
+			Vector fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
+			player.face(fv.x(), fv.y());
             // Player shooting
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
                 // game coord x and y position of the aim
                 double playerAngle = player.getFacingAngle();
-                float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
-                float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
+                float aimX = (float) Math.cos(playerAngle);
+                float aimY = (float) -Math.sin(playerAngle);
                 boolean playerShot = player.shoot(aimX, aimY);
                 soundManager.bulletSound(playerShot);
-
-
             }
         }
 
@@ -364,7 +364,7 @@ public class Game extends Canvas {
 
     private void init() {
         // Create the map and parse it
-        mapData = new MapData("testmap.png", "tilesheet.png", "tiledata.csv");
+        mapData = new MapData("prototypemap.png", "tilesheet.png", "tiledata.csv");
 
         // Initialise the entities
         zombies = new ArrayList<>(zombieCount);
