@@ -376,10 +376,15 @@ public class Game extends Canvas {
 
             	// Daniel does some random stuff here... (like speaking in the third person)
 
-
 				Random rand = new Random();
 				float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
 				float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+
+				while(mapData.tileTypeAt(x,y).isObstacle()){
+					x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+					y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+				}
+
                 zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
                 zombies.get(i).newMovingDir();
             }

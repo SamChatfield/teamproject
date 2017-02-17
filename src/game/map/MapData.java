@@ -61,7 +61,7 @@ public class MapData {
             return false;
     }
 
-    private TileType tileTypeAt(float x, float y) {
+    public TileType tileTypeAt(float x, float y) {
         int ix = Math.round(x + width / 2.0f - 0.5f);
         int iy = Math.round(height / 2.0f - 0.5f - y);
         //System.out.println("ix:" + ix + ", iy:" + iy);
