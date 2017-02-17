@@ -16,8 +16,6 @@ public CollisionBox(Entity owner) {
         this.owner = owner;
         width = (float) owner.image.getWidth() / (float) Game.TILE_SIZE;
         height = (float) owner.image.getHeight() / (float) Game.TILE_SIZE;
-        System.out.println(owner.image.getWidth() + " d " + owner.image.getHeight());
-        if (owner instanceof Player) System.out.println("pwh: " + width + " " + height);
     }
 
     public Rectangle2D.Float getRect() {
