@@ -17,6 +17,7 @@ public class Renderer {
     private Player player;
     private ArrayList<Zombie> zombies;
     private int gameH, gameW;
+    private int maxHealth;
     
 Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
@@ -68,13 +69,18 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
 		g2d.fill(healthBar2);
 		
 		g2d.setColor(Color.GREEN);
-		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 2, 20);
+		//System.out.println(player.health);
+		//System.out.println(percentage);
+		float percentage = player.health / 50.0f;
+		System.out.println(percentage);
+		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 4, 20);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 		Rectangle healthBar = new Rectangle(10,10,200,20);
 		g2d.draw(healthBar);
 		g2d.setColor(Color.BLACK);
-		g2d.drawString("Health: " + player.health + "%", 15, 25);
+		g2d.drawString("Health: " + (percentage * 100) + "%", 15, 25);
+		
 		
 		
 		// Display time remaining

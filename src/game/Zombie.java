@@ -73,7 +73,6 @@ public class Zombie extends Entity {
             if (now - lastAttackTime > 1000000000L) {
                 lastAttackTime = now;
                 entity.health -= damageDone;
-                System.out.println("player health: " + entity.health);
             }
         }
     }
@@ -86,6 +85,11 @@ public class Zombie extends Entity {
         Point drawPoint = player.relativeDrawPoint(x, y, w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
+        
+        g2d.setColor(Color.GREEN);
+        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, this.health, 2);
+		g2d.fill(healthBarFill);
+		g2d.setColor(Color.BLACK);
 
         if (showCollBox) {
             g2d.setColor(Color.BLUE);

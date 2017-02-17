@@ -55,7 +55,7 @@ public class Game extends Canvas {
 	private MSTATE menuState;
 
 	// Non final stuff, remove before release
-	private final int zombieCount = 50;
+	private final int zombieCount = 150;
 
 	private Game() {
 		container = new JFrame(TITLE);
@@ -287,15 +287,29 @@ public class Game extends Canvas {
 		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
 			System.out.println("Player: (" + player.x() + ", " + player.y() + ")");
 		}
+				
+		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
+			System.out.println("Sound ON");
+			soundManager.musicPlayback = true;
+			soundManager.sfxPlayback = true;
+			soundManager.playMusic();
+		}
+		if(inputHandler.isKeyDown(KeyEvent.VK_M)) {
+			System.out.println("Sound OFF");
+			soundManager.musicPlayback = false;
+			soundManager.sfxPlayback = false;
+			soundManager.stopMusic();
+		}
+		
+		
+		// Toggle conversion mode
 		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
-			if(player.conversionMode) {
-				player.conversionMode = false;
-				System.out.println("Disabled conversion mode!");
-				}
-			else {
-				player.conversionMode = true;
-				System.out.println("Enabled conversion mode!");
-			}
+			player.conversionMode = true;
+			System.out.println("Enabled conversion mode!");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
+			player.conversionMode = false;
+			System.out.println("Disabled conversion mode!");
 		}
 
 		// Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
@@ -350,13 +364,13 @@ public class Game extends Canvas {
                 zombies.remove(i);
                 i--;
             }
-            if(zombies.get(i).getState() == Zombie.State.PLAYER) {;
+            else if(zombies.get(i).getState() == Zombie.State.PLAYER) {;
             	newNumConvertedZombies += 1;
             }
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
 
-		if(player.health <= -100) {
+		if(player.health <= 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}

@@ -24,8 +24,8 @@ public class Sound extends Thread{
     private Clip musicClip, gunClip;
     private static final float ZOMBIE_SOUND_PROBABILITY = 0.01f;
     Random rn, oneTwoOrThree;
-    public static boolean musicOn = true;
-    public static boolean SFXOn = true;
+    public static boolean musicPlayback = true;
+    public static boolean sfxPlayback = true;
     
     /**
      * initialises basic variables
@@ -46,7 +46,7 @@ public class Sound extends Thread{
     	playMusic();
     	try {
     		while(running) {
-    			if(!musicOn) {
+    			if(!musicPlayback) {
     				stopMusic();
     			}
     			
@@ -119,7 +119,7 @@ public class Sound extends Thread{
      * @param playerShot boolean of wherever the player has been allowed to shoot (fire rate)
      */
     public void bulletSound(boolean playerShot) {
-    	if (playerShot) {
+    	if (playerShot && sfxPlayback) {
         	Clip gunClip = this.createClip(pistolSound);
         	turnDownVolume(gunClip, -10.0f);
     	    gunClip.start();
@@ -141,8 +141,10 @@ public class Sound extends Thread{
      */
     
     public void zombieDeath() {
-    	Clip zombie = this.createClip(zombieDeath);
-    	zombie.start();
+    	if(sfxPlayback) {
+        	Clip zombie = this.createClip(zombieDeath);
+        	zombie.start();
+    	}
     }
     
     /**
