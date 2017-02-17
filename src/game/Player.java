@@ -58,14 +58,14 @@ public class Player extends Entity {
         int w = image.getWidth();
         int h = image.getHeight();
 
-        AffineTransform at = g2d.getTransform();
-        g2d.rotate(facingAngle, 320, 320);
-
         if (showCollBox) {
             g2d.setColor(Color.RED);
             g2d.draw(collisionBox.getDrawRect(this));
             g2d.setColor(Color.BLACK);
         }
+
+        AffineTransform at = g2d.getTransform();
+        g2d.rotate(facingAngle, 320, 320);
 
         g2d.drawImage(image, 320 - w / 2, 320 - h / 2, null);
         g2d.setTransform(at);
