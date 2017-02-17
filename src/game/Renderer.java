@@ -92,7 +92,6 @@ public class Renderer {
 		//System.out.println(player.health);
 		//System.out.println(percentage);
 		float percentage = player.health / 50.0f;
-		System.out.println(percentage);
 		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 4, 20);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);

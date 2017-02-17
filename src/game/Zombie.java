@@ -19,7 +19,7 @@ public class Zombie extends Entity {
     private static final float COLL_BOX_WIDTH = 25.0f;
     private static final float COLL_BOX_HEIGHT = 25.0f;
     private static final int HEALTH = 25;
-    private static final float MOVE_SPEED = 0.08f;
+    private static final float MOVE_SPEED = 0.06f;
     public static final float AGGRO_RANGE = 4.0f;
 
     private BufferedImage playerImage;

@@ -9,7 +9,7 @@ public class Collision {
 
     public static void checkCollision(Zombie zombie, Player player, Sound sound) {
         if (zombie.getCollisionBox().intersects(player.getCollisionBox())) {
-            zombie.attack(player, 25);
+            zombie.attack(player, 5);
             //sound.playerHurt();
         }
     }
