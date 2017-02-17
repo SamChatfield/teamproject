@@ -25,7 +25,7 @@ public class Renderer {
     public Rectangle menuButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 4, 150, 50);
     public Rectangle exitButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 6, 150, 50);
     
-Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
+    Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
         this.mapData = mapData;
         this.player = player;
@@ -33,7 +33,7 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
         this.gameH = Game.GAME_DIMENSION.height;
         this.gameW = Game.GAME_DIMENSION.width;
         
-//Breaking DRY. Could be put in a separate class
+        //Breaking DRY. Could be put in a separate class
 		File font_file = new File("src/game/res/tradewinds.ttf");
 		try {
 			tradeWinds = Font.createFont(Font.TRUETYPE_FONT, font_file);
