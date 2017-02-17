@@ -68,12 +68,13 @@ public class Zombie extends Entity {
   //Zombie vector changed to follow player, if wild.
     public void followDirection(Player player) {
     	if(state == State.WILD){
-        	Vector zdv = ArtInt.followPlayer(x, y, player).normalised();
+        	Vector zdv = ArtInt.followPlayer(x, y, player);
+        	Vector znv = zdv.normalised();
         	
-            dx = zdv.x();
-            dy = zdv.y();
+            dx = znv.x();
+            dy = znv.y();
             
-
+            face((int) zdv.x(), (int) zdv.y());
     	}
     }      
     
