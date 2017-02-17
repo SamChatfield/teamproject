@@ -14,13 +14,13 @@ public class InputHandler implements KeyListener, MouseListener {
     private boolean[] keyArray, mouseButtonArray;
     private boolean mouseInside;
     private boolean clicked;
-    private Client game;
+    private Client client;
 
-    public InputHandler(Client game) {
+    public InputHandler(Client client) {
         keyArray = new boolean[256];
         mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
         mouseInside = false;
-        this.game = game;
+        this.client = client;
     }
     
     public boolean wasMouseClicked() {
@@ -36,7 +36,7 @@ public class InputHandler implements KeyListener, MouseListener {
     }
 
     public Point getMousePos() {
-        return game.getMousePosition();
+        return client.getMousePosition();
     }
 
     public boolean isMouseButtonDown(int button) {

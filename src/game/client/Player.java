@@ -3,7 +3,6 @@ package game.client;
 import game.Bullet;
 import game.Entity;
 import game.ResourceLoader;
-import game.client.Client;
 import game.map.MapData;
 
 import java.awt.*;

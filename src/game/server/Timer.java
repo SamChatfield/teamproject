@@ -27,7 +27,6 @@ public class Timer implements Runnable {
 	}
 	
 	public void run() {
-		
 		for(time = 180; time>0; time--) {
 			try {
 				inter.updateTime(time);

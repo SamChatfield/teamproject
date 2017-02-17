@@ -33,7 +33,6 @@ public class Server {
         ServerGameState state = new ServerGameState();
         GameStateInterface inter = new GameStateInterface(state); // connect the state with its interface.
 
-
         try {
         	outSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -43,13 +42,7 @@ public class Server {
         
         System.out.println("Success! Server successfully started");
 
-
-        // Lets start a new game
-        Timer timer = new Timer(180);
-        new Thread(timer).start();
-
         try {
-        	
         	while(true) {
         		 Socket clientSocket = outSocket.accept();
 
@@ -58,7 +51,7 @@ public class Server {
         		 System.out.println("DEBUG: Accepting socket connection");
         		 
         		 ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
-        		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream());
+        		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
                  System.out.println("DEBUG: I/O streams created");
                  
                  // Get name from client -- sort out duplicates later

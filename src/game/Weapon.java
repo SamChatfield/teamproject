@@ -1,7 +1,5 @@
 package game;
 
-import game.client.Client;
-
 import java.awt.Graphics2D;
 
 public class Weapon {

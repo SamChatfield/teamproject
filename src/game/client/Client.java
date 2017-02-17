@@ -2,9 +2,7 @@ package game.client;
 
 import game.Bullet;
 import game.Collision;
-import game.ResourceLoader;
 import game.Zombie;
-import game.map.MapData;
 import game.util.Vector;
 
 import javax.swing.*;
@@ -12,7 +10,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -23,6 +20,9 @@ import java.util.Random;
 /**
  * Created by Sam on 20/01/2017.
  * Modified extensively by Daniel.
+ *
+ * This class is the one that the player will run when they want to start the game.
+ * When they click "play" in the menu, it will create a new 'Client' thread that will control input and data send/receive.
  */
 public class Client extends Canvas {
 
@@ -46,7 +46,7 @@ public class Client extends Canvas {
 	private Renderer renderer;
 
 
-	// Game state
+	// Client state
 	private enum STATE {
 		START,
 		GAME,
@@ -151,7 +151,7 @@ public class Client extends Canvas {
 						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-						System.out.println("Game loop interrupted exception");
+						System.out.println("Client loop interrupted exception");
 					}
 				}
 	
@@ -282,6 +282,10 @@ public class Client extends Canvas {
 		}
 	}
 
+    /**
+     * Runs during the game to update the displayed game state.
+     * @param delta
+     */
 	private void update(double delta) {
 
 	    ArrayList<Zombie> zombies = inter.getZombies();
@@ -443,12 +447,16 @@ public class Client extends Canvas {
         // Initialise
         ObjectOutputStream objOut = null;
         ObjectInputStream objIn = null;
-        Socket outSocket = null;
+        try{
+            Socket outSocket = new Socket(host,port);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
 
         ClientSender client_sender = new ClientSender(username, objOut,null);
         ClientReceiver client_receiver = new ClientReceiver(username, objIn);
 
-        // Then create a game state for the client
+        // Then create a client state for the client
         ClientGameState state = new ClientGameState();
         ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
         client_receiver.addInterface(stateInt); //must be called before starting the thread.
@@ -459,12 +467,12 @@ public class Client extends Canvas {
         client_sender.start();
         client_receiver.start();
 
-        Client game = new Client(stateInt);
+        Client client = new Client(stateInt);
 
-        // Create and start the game loop over the loop method of the game object.
+        // Create and start the client loop over the loop method of the client object.
         // :: is a method reference since loop is an existing method,
-        // semantically the same as () -> game.loop() lambda expression.
-        Thread gameThread = new Thread(game::loop);
+        // semantically the same as () -> client.loop() lambda expression.
+        Thread gameThread = new Thread(client::loop);
         gameThread.start();
     }
 

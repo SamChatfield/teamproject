@@ -152,7 +152,7 @@ public class Sound extends Thread{
      */
     
 //Currently the sound is played several times in a short space of time
-//due to the loop in Game. Need to figure out how to make it play only once.
+//due to the loop in Client. Need to figure out how to make it play only once.
     
 //    public void playerHurt() {
 //    	Clip playerHurt = this.createClip(hurt);

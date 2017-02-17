@@ -21,7 +21,7 @@ public class ServerGameState {
     private int timeRemaining;
 
     public ServerGameState(){
-
+       // startNewGame();
     }
 
     /**
@@ -54,9 +54,10 @@ public class ServerGameState {
         return players;
     }
 
+    // TODO: Stop this from terminating the program
     public void startNewGame(){
         // First we want to generate the map
-        mapData = new MapData("testmap.png", "tilesheet.png", "tiledata.csv");
+        mapData = new MapData("prototypemap.png", "tilesheet.png", "tiledata.csv");
 
         int zombieCount = 100;
         try{
@@ -73,6 +74,9 @@ public class ServerGameState {
             System.exit(0);
         }
 
+        // Lets start a new game
+        Timer timer = new Timer(180);
+        new Thread(timer).start();
     }
 
     public void updateTime(int time){
