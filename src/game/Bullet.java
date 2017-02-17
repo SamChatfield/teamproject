@@ -23,7 +23,7 @@ public class Bullet extends Entity {
     public boolean active;
     private Player player;
     private double distance;
-    private static final double fadeDistance = 3;
+    private static final double fadeDistance = 5;
     
     public Bullet(Player player, float aimX, float aimY, BufferedImage image, MapData mapData) {
         super(player.x(), player.y(), BULLET_SPEED, 0, image, mapData);
@@ -79,7 +79,7 @@ public class Bullet extends Entity {
         	}
         	else {
         		// TODO: Add in so converted zombies won't damage player
-                entity.health -= damageDone;
+                entity.health -= damageDone/1.5;
                 active = false;
         	}
         }

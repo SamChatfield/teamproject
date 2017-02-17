@@ -5,6 +5,8 @@ import game.map.Tile;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -17,14 +19,33 @@ public class Renderer {
     private Player player;
     private ArrayList<Zombie> zombies;
     private int gameH, gameW;
+    private int maxHealth;
+    private Font tradeWinds;
     
-Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
+    public Rectangle menuButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 4, 150, 50);
+    public Rectangle exitButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 6, 150, 50);
+    
+    Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
         this.mapData = mapData;
         this.player = player;
         this.zombies = zombies;
         this.gameH = Game.GAME_DIMENSION.height;
         this.gameW = Game.GAME_DIMENSION.width;
+        
+        //Breaking DRY. Could be put in a separate class
+		File font_file = new File("src/game/res/tradewinds.ttf");
+		try {
+			tradeWinds = Font.createFont(Font.TRUETYPE_FONT, font_file);
+			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			genv.registerFont(tradeWinds);
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
        
     
@@ -68,13 +89,18 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
 		g2d.fill(healthBar2);
 		
 		g2d.setColor(Color.GREEN);
-		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 2, 20);
+		//System.out.println(player.health);
+		//System.out.println(percentage);
+		float percentage = player.health / 50.0f;
+		System.out.println(percentage);
+		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 4, 20);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 		Rectangle healthBar = new Rectangle(10,10,200,20);
 		g2d.draw(healthBar);
 		g2d.setColor(Color.BLACK);
-		g2d.drawString("Health: " + player.health + "%", 15, 25);
+		g2d.drawString("Health: " + (percentage * 100) + "%", 15, 25);
+		
 		
 		
 		// Display time remaining
@@ -105,11 +131,25 @@ Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayLis
 
         // Apply text
         g2d.setColor(Color.RED);
-		Font title = new Font("Comic Sans MS", Font.BOLD, 50);
-		g2d.setFont(title);
+		g2d.setFont(tradeWinds.deriveFont(50f));
 		String text = "GAME OVER";
 		int twidth = g2d.getFontMetrics().stringWidth(text);
 		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - twidth / 2, Game.GAME_DIMENSION.height / 5);
+		
+		g2d.setFont(tradeWinds.deriveFont(30f));
+		
+		// Play Button
+		int width_menu = g2d.getFontMetrics().stringWidth("Menu");
+		int cenw_menu = (int) ((menuButton.getWidth() - width_menu) / 2);
+		int cenh_menu = (int) ((menuButton.getHeight() / 2));
+		g2d.drawString("Menu", menuButton.x + cenw_menu, menuButton.y + 5 + cenh_menu);
+		g2d.draw(menuButton);
+		
+		int width_exit = g2d.getFontMetrics().stringWidth("Exit");
+		int cenw_exit = (int) ((exitButton.getWidth() - width_exit) /2);
+		int cenh_exit = (int) ((exitButton.getHeight() /2));
+		g2d.drawString("Exit", exitButton.x + cenw_exit, exitButton.y + 5 + cenh_exit);
+		g2d.draw(exitButton);
 		
         // Clean up and flip the buffer
         g2d.dispose();

@@ -49,7 +49,6 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keyArray[e.getKeyCode()] = true;
-        System.out.println(e.getKeyChar());
     }
 
     @Override
