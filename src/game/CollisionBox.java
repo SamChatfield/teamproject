@@ -64,7 +64,6 @@ public CollisionBox(Entity owner) {
     }
 
     public boolean intersects(CollisionBox otherBox) {
-//        System.out.println("                       this: " + getRect() + " and other: " + otherBox.getRect());
         return getRect().intersects(otherBox.getRect());
     }
 

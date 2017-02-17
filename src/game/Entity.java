@@ -24,8 +24,6 @@ public class Entity {
         this.x = x;
         this.y = y;
         this.moveSpeed = moveSpeed;
-//        this.collisionBox = collisionBox;
-//        collisionBox = new CollisionBox(this, image.getWidth(), image.getHeight());
         this.image = image;
         showCollBox = false;
         this.health = health;
@@ -52,15 +50,18 @@ public class Entity {
         float ny = y + dy;
 
         if (mapData.isEntityMoveValid(nx, ny, this)) {
-            x += dx;
-            y += dy;
+            x = nx;
+            y = ny;
+        } else if (mapData.isEntityMoveValid(nx, y, this)) {
+            x = nx;
+        } else if (mapData.isEntityMoveValid(x, ny, this)) {
+            y = ny;
         }
-//        collisionBox.move(dx, dy);
-//        this.facingAngle = facingAngle;
     }
 
-    public void face(int mx, int my) {
-        facingAngle = -Math.atan2(mx - 320, my - 320);
+    public void face(float fx, float fy) {
+        facingAngle = Math.atan2(fx, fy) - Math.PI / 2;
+//        System.out.println("fx: " + fx + " fy: " + fy + " = " + facingAngle);
     }
 
     public void setMoveSpeed(float moveSpeed) {
