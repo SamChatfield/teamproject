@@ -1,6 +1,5 @@
 package game;
 
-import game.Zombie.State;
 import game.map.MapData;
 import game.util.Vector;
 
@@ -20,7 +19,8 @@ public class Zombie extends Entity {
     private static final float COLL_BOX_WIDTH = 25.0f;
     private static final float COLL_BOX_HEIGHT = 25.0f;
     private static final int HEALTH = 25;
-    private static final float MOVE_SPEED = 0.05f;
+    private static final float MOVE_SPEED = 0.08f;
+    public static final float AGGRO_RANGE = 4.0f;
 
     private BufferedImage playerImage;
     
@@ -64,10 +64,9 @@ public class Zombie extends Entity {
         super.move(dx * moveSpeed * (float) delta, dy * moveSpeed * (float) delta);
     }
 
-    
-  //Zombie vector changed to follow player, if wild.
+    // Zombie vector changed to follow player, if wild.
     public void followDirection(Player player) {
-    	if(state == State.WILD){
+    	if (state == State.WILD) {
         	Vector zdv = ArtInt.followPlayer(x, y, player);
         	Vector znv = zdv.normalised();
         	
