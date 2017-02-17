@@ -33,6 +33,8 @@ public class Entity {
         collisionBox = new CollisionBox(this);
     }
 
+    
+    
     public float x() {
         return x;
     }
