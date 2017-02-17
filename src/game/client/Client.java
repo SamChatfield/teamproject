@@ -1,5 +1,7 @@
 package game.client;
 
+import game.Bullet;
+import game.Collision;
 import game.ResourceLoader;
 import game.Zombie;
 import game.map.MapData;
@@ -11,6 +13,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -34,10 +39,10 @@ public class Client extends Canvas {
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
 	private boolean running;
-	private MapData mapData;
 	private Player player;
-	private ArrayList<Zombie> zombies;
-	private Timer timer;
+
+	private ClientGameStateInterface inter;
+
 	private Renderer renderer;
 
 
@@ -61,7 +66,8 @@ public class Client extends Canvas {
 	// Non final stuff, remove before release
 	private final int zombieCount = 70;
 
-	private Game() {
+	private Client(ClientGameStateInterface inter) {
+	    this.inter = inter;
 		container = new JFrame(TITLE);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -96,12 +102,10 @@ public class Client extends Canvas {
 	private void loop() {
 
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
-		
-		init();
-		long lastLoopTime = System.nanoTime();
-		//Timer timer = new Timer();
-		//timer.start();
-		timer = new Timer(180);
+        renderer = new Renderer(bufferStrategy, inter, player);
+
+        long lastLoopTime = System.nanoTime();
+
 		soundManager.start();
 		
 		while(running) {
@@ -135,7 +139,7 @@ public class Client extends Canvas {
 				update(delta);
 	
 				// Render
-				renderer.render(timer);
+				renderer.render();
 	
 				// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
 				// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
@@ -151,7 +155,7 @@ public class Client extends Canvas {
 					}
 				}
 	
-				if(timer.getTimeRemaining() <= 0) {
+				if(inter.getTimeRemaining() <= 0) {
 					currentState = STATE.END;
 					break;
 				}
@@ -188,7 +192,6 @@ public class Client extends Canvas {
 			if(my >= playY && my <= (playY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
 					System.out.println("MENU BUTTON CLICKED");
-					init();
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
 					
@@ -252,7 +255,6 @@ public class Client extends Canvas {
 						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
-						new Thread(timer).start();
 						//inputHandler.setMouseClicked(false);
 						}
 				}
@@ -281,6 +283,8 @@ public class Client extends Canvas {
 	}
 
 	private void update(double delta) {
+
+	    ArrayList<Zombie> zombies = inter.getZombies();
 		// Player movement
 		float pMoveSpeed = player.getMoveSpeed();
 
@@ -394,7 +398,7 @@ public class Client extends Canvas {
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
-            if ((!mapData.isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
+            if ((!inter.getMapData().isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
                 player.getBullets().remove(i);
                 continue;
             }
@@ -405,7 +409,7 @@ public class Client extends Canvas {
 
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
-            if (zombies.get(i).health <= 0) {
+            if (zombies.get(i).getHealth() <= 0) {
                 zombies.remove(i);
                 i--;
             }
@@ -415,52 +419,47 @@ public class Client extends Canvas {
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
 
-		if(player.health <= 0) {
+		if(player.getHealth() <= 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}
 	}
 
-    private void init() {
-        // Create the map and parse it
-        mapData = new MapData("prototypemap.png", "tilesheet.png", "tiledata.csv");
-
-        // Initialise the entities
-        zombies = new ArrayList<>(zombieCount);
-        try {
-            player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), mapData);
-
-            // Create zombieCount zombies and place them all at 50, 50 on the mapData TODO change this
-            for (int i = 0; i < zombieCount; i++) {
-
-            	// Daniel does some random stuff here... (like speaking in the third person)
-
-				Random rand = new Random();
-				float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
-				float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
-
-				while(mapData.tileTypeAt(x,y).isObstacle()){
-					x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
-					y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
-				}
-
-                zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
-                zombies.get(i).newMovingDir();
-            }
-        } catch (IOException e) {
-            System.out.println("Uh oh. Player image failed to load. RIP");
-            System.exit(1);
-        }
-        
-		renderer = new Renderer(bufferStrategy, mapData, player, zombies);
-    }
 
     public Player getPlayer() {
         return player;
     }
 
     public static void main(String[] args) {
-        Client game = new Client();
+        if(args.length != 3){
+            System.out.println("Usage: java Client <username> <host> <port>");
+            System.exit(0);
+        }
+
+        String username = args[0];
+        String host = args[1];
+        int port = Integer.parseInt(args[2]);
+
+        // Initialise
+        ObjectOutputStream objOut = null;
+        ObjectInputStream objIn = null;
+        Socket outSocket = null;
+
+        ClientSender client_sender = new ClientSender(username, objOut,null);
+        ClientReceiver client_receiver = new ClientReceiver(username, objIn);
+
+        // Then create a game state for the client
+        ClientGameState state = new ClientGameState();
+        ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
+        client_receiver.addInterface(stateInt); //must be called before starting the thread.
+        client_sender.addInterface(stateInt);
+        // If this method didn't exist, interface would need to be added above, but interface relies on receiver.
+
+        // Starting threads
+        client_sender.start();
+        client_receiver.start();
+
+        Client game = new Client(stateInt);
 
         // Create and start the game loop over the loop method of the game object.
         // :: is a method reference since loop is an existing method,

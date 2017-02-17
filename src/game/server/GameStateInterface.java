@@ -24,4 +24,8 @@ public class GameStateInterface {
     public void updateTime(int time){
         state.updateTime(time);
     }
+
+    public void startNewGame(){
+        state.startNewGame();
+    }
 }
