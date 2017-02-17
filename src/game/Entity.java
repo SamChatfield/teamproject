@@ -50,8 +50,12 @@ public class Entity {
         float ny = y + dy;
 
         if (mapData.isEntityMoveValid(nx, ny, this)) {
-            x += dx;
-            y += dy;
+            x = nx;
+            y = ny;
+        } else if (mapData.isEntityMoveValid(nx, y, this)) {
+            x = nx;
+        } else if (mapData.isEntityMoveValid(x, ny, this)) {
+            y = ny;
         }
     }
 
