@@ -1,5 +1,6 @@
 package game;
 
+import game.client.ClientGameStateInterface;
 import game.map.MapData;
 import game.util.Vector;
 
@@ -31,10 +32,8 @@ public class Game extends Canvas {
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
 	private boolean menu, running;
-	private MapData mapData;
+	private ClientGameStateInterface inter;
 	private Player player;
-	private ArrayList<Zombie> zombies;
-	
 
 	// Game state
 	private enum STATE {
@@ -52,10 +51,10 @@ public class Game extends Canvas {
 	private STATE currentState;
 	private MSTATE menuState;
 
-	// Non final stuff, remove before release
-	private final int zombieCount = 100;
 
-	private Game() {
+	private Game(ClientGameStateInterface inter) {
+		this.inter = inter; // store the game state
+
 		container = new JFrame(TITLE);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -106,13 +105,8 @@ public class Game extends Canvas {
 		}
 
 		init();
-		Renderer renderer = new Renderer(bufferStrategy, mapData, player, zombies);
+		Renderer renderer = new Renderer(bufferStrategy,inter,player);
 		long lastLoopTime = System.nanoTime();
-		//Timer timer = new Timer();
-		//timer.start();
-		Timer timer = new Timer(180);
-		new Thread(timer).start();
-	
 		
 		while (currentState == STATE.GAME) {
 			
@@ -130,7 +124,7 @@ public class Game extends Canvas {
 			update(delta);
 
 			// Render
-			renderer.render(timer);
+			renderer.render();
 
 			// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
 			// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the

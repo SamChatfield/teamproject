@@ -45,6 +45,8 @@ public class Server {
 
 
         // Lets start a new game
+        Timer timer = new Timer(180);
+        new Thread(timer).start();
 
         try {
         	

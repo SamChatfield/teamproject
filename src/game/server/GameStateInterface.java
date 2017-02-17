@@ -22,4 +22,8 @@ public class GameStateInterface {
         ServerGameState copyOf = new ServerGameState(state); // create a copy of the state.
         return copyOf; // return this so that it can be sent.
     }
+
+    public void updateTime(int time){
+        state.updateTime(time);
+    }
 }

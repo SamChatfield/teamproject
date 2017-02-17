@@ -1,8 +1,8 @@
 package game.server;
 
-import game.Player;
 import game.ResourceLoader;
 import game.Zombie;
+import game.client.EntityData;
 import game.map.MapData;
 
 import java.util.ArrayList;
@@ -16,8 +16,9 @@ import java.util.Random;
 public class ServerGameState {
 
     private ArrayList<Zombie> zombies;
-    private ArrayList<Player> players;
+    private ArrayList<EntityData> players;
     private MapData mapData;
+    private int timeRemaining;
 
     public ServerGameState(){
 
@@ -25,19 +26,31 @@ public class ServerGameState {
 
     /**
      * Secondary constructor used for copying this class for sending.
+     * The main game state is passed into here as a parameter, and then this object is sendable.
      *
      * @param state State to create a copy of.
      */
     public ServerGameState(ServerGameState state){
         this.zombies = state.getZombies();
         this.players = state.getPlayers();
+        this.mapData = state.getMapData();
+        this.timeRemaining = state.getTimeRemaining();
+
+    }
+
+    public MapData getMapData() {
+        return mapData;
+    }
+
+    public int getTimeRemaining() {
+        return timeRemaining;
     }
 
     public ArrayList<Zombie> getZombies() {
         return zombies;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public ArrayList<EntityData> getPlayers() {
         return players;
     }
 
@@ -60,6 +73,10 @@ public class ServerGameState {
             System.exit(0);
         }
 
+    }
+
+    public void updateTime(int time){
+        timeRemaining = time;
     }
 
 

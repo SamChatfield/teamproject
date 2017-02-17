@@ -1,7 +1,9 @@
 package game;
 
+import game.client.ClientGameStateInterface;
 import game.map.MapData;
 import game.map.Tile;
+import game.server.Timer;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -13,25 +15,29 @@ import java.util.ArrayList;
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
+    private ClientGameStateInterface inter;
+
     private MapData mapData;
     private Player player;
-    private ArrayList<Zombie> zombies;
+
     private int gameH, gameW;
     
 
-    public Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
+    public Renderer(BufferStrategy bufferStrategy, ClientGameStateInterface inter, Player player) {
         this.bufferStrategy = bufferStrategy;
-        this.mapData = mapData;
+        this.inter = inter;
+
+        this.mapData = inter.getMapData();
         this.player = player;
-        this.zombies = zombies;
+
         this.gameH = Game.GAME_DIMENSION.height;
         this.gameW = Game.GAME_DIMENSION.width;
     }
        
     
-    public void render(Timer timer) {
-    	int timeRemaining = timer.getTimeRemaining();
-    	
+    public void render() {
+    	int timeRemaining = inter.getTimeRemaining();
+
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -58,9 +64,9 @@ public class Renderer {
         	
         }
 
-        for (Zombie z : zombies) {
-            z.draw(g2d, mapData, player);
-        }
+      //  for (Zombie z : zombies) {
+      //      z.draw(g2d, mapData, player);
+      //  }
         
 		// Health bar
 		Font health = new Font("Arial", Font.BOLD, 10);
