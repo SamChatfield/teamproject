@@ -1,5 +1,6 @@
 package game;
 
+import game.client.Player;
 import game.map.MapData;
 import game.util.Vector;
 

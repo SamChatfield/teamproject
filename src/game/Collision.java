@@ -1,6 +1,7 @@
 package game;
 
 import game.client.Player;
+import game.client.Sound;
 
 import java.util.ArrayList;
 

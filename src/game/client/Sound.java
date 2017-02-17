@@ -1,4 +1,4 @@
-package game;
+package game.client;
 
 import java.awt.event.MouseEvent;
 import java.io.File;

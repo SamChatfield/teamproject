@@ -1,10 +1,11 @@
-package game;
+package game.client;
 
+import game.ResourceLoader;
+import game.Zombie;
 import game.map.MapData;
 import game.util.Vector;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -16,10 +17,9 @@ import java.util.Random;
 
 /**
  * Created by Sam on 20/01/2017.
+ * Modified extensively by Daniel.
  */
-public class Game extends Canvas {
-
-	// adding stuff
+public class Client extends Canvas {
 
 	private static final String TITLE = "Capture the Zom.biz";
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
@@ -460,7 +460,7 @@ public class Game extends Canvas {
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
+        Client game = new Client();
 
         // Create and start the game loop over the loop method of the game object.
         // :: is a method reference since loop is an existing method,
