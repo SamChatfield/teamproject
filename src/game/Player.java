@@ -70,6 +70,15 @@ public class Player extends Entity {
         g2d.drawImage(image, 320 - w / 2, 320 - h / 2, null);
         g2d.setTransform(at);
     }
+    
+    
+    public float getX() {
+        return x;
+    }
+    
+    public float getY() {
+        return y;
+    }
 
     /**
      * Calculate the point relative to the player at which the given entity will be drawn
