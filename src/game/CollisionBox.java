@@ -1,5 +1,8 @@
 package game;
 
+import game.client.Client;
+import game.client.Player;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
@@ -14,8 +17,8 @@ public class CollisionBox {
 //    public CollisionBox(Entity owner, float width, float height) {
 public CollisionBox(Entity owner) {
         this.owner = owner;
-        width = (float) owner.image.getWidth() / (float) Game.TILE_SIZE;
-        height = (float) owner.image.getHeight() / (float) Game.TILE_SIZE;
+        width = (float) owner.image.getWidth() / (float) Client.TILE_SIZE;
+        height = (float) owner.image.getHeight() / (float) Client.TILE_SIZE;
     }
 
     public Rectangle2D.Float getRect() {
