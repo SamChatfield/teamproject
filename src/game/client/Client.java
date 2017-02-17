@@ -1,6 +1,5 @@
-package game.client;
+package game;
 
-import game.*;
 import game.map.MapData;
 import game.util.Vector;
 
@@ -11,21 +10,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 
 
 /**
  * Created by Sam on 20/01/2017.
- * Edited extensively by Daniel.
  */
-public class Client extends Canvas {
-
-	// just to force a commit
+public class Game extends Canvas {
 
 	private static final String TITLE = "Capture the Zom.biz";
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
@@ -34,20 +26,25 @@ public class Client extends Canvas {
 	public static final int TILE_SIZE = 64;
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
-
+    
+    public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
-	private boolean menu, running;
-	private ClientGameStateInterface inter;
+	private boolean running;
 	private MapData mapData;
 	private Player player;
+	private ArrayList<Zombie> zombies;
+	private Timer timer;
+	private Renderer renderer;
 
-	// Client state
+
+	// Game state
 	private enum STATE {
 		START,
 		GAME,
-		END
+		END, 
+		EXIT
 	};
 	// Menu state
 	private enum MSTATE {
@@ -59,11 +56,10 @@ public class Client extends Canvas {
 	private STATE currentState;
 	private MSTATE menuState;
 
+	// Non final stuff, remove before release
+	private final int zombieCount = 70;
 
-	private Client(ClientGameStateInterface inter) {
-		this.inter = inter; // store the game state
-		this.mapData = inter.getMapData();
-
+	private Game() {
 		container = new JFrame(TITLE);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -88,82 +84,123 @@ public class Client extends Canvas {
 		createBufferStrategy(2);
 		bufferStrategy = getBufferStrategy();
 
-		running = false;
-		menu = true;
+		running = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
+
+        soundManager = new Sound();
 	}
 
 	private void loop() {
 
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
-
-		while(currentState == STATE.START) {
-			while(menuState == MSTATE.MAIN) {
-				menu.renderMenu();
-				menuUpdate(menu);
-			}
-			while(menuState == MSTATE.HELP) {
-				menu.renderHelp();
-				menuUpdate(menu);
-			}
-			while(menuState == MSTATE.OPTIONS) {
-				menu.renderOptions();
-				menuUpdate(menu);
-			}
-		}
-
-		init();
-		Renderer renderer = new Renderer(bufferStrategy,inter,player);
-		long lastLoopTime = System.nanoTime();
 		
-		while (currentState == STATE.GAME) {
-			
-			
-			// Calculate how long since last update
-			// Delta is how far things should move this update to compensate
-			long now = System.nanoTime();
-			long updateLength = now - lastLoopTime;
-			lastLoopTime = now;
-			double delta = updateLength / ((double) OPTIMAL_TIME_DIFF);
+		init();
+		long lastLoopTime = System.nanoTime();
+		//Timer timer = new Timer();
+		//timer.start();
+		timer = new Timer(180);
+		soundManager.start();
+		
+		while(running) {
 
-			// FPS counter stuff would go here TODO Add an option for this
-
-			// Update game with the delta
-			update(delta);
-
-			// Render
-			renderer.render();
-
-			// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
-			// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
-			// next loop) is less than this optimal time then we need to sleep the thread for the remaining time to fix
-			// at 60 FPS
-			now = System.nanoTime();
-			if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
-				try {
-					Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					System.out.println("Client loop interrupted exception");
+			while(currentState == STATE.START) {
+				if(menuState == MSTATE.MAIN) {
+					menu.renderMenu();
+				}
+				else if(menuState == MSTATE.HELP) {
+					menu.renderHelp();
+				}
+				else if(menuState == MSTATE.OPTIONS) {
+					menu.renderOptions();
+				}
+				menuUpdate(menu);
+			}
+	
+			while (currentState == STATE.GAME) {
+	
+	
+				// Calculate how long since last update
+				// Delta is how far things should move this update to compensate
+				long now = System.nanoTime();
+				long updateLength = now - lastLoopTime;
+				lastLoopTime = now;
+				double delta = updateLength / ((double) OPTIMAL_TIME_DIFF);
+	
+				// FPS counter stuff would go here TODO Add an option for this
+	
+				// Update game with the delta
+				update(delta);
+	
+				// Render
+				renderer.render(timer);
+	
+				// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
+				// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
+				// next loop) is less than this optimal time then we need to sleep the thread for the remaining time to fix
+				// at 60 FPS
+				now = System.nanoTime();
+				if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
+					try {
+						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						System.out.println("Game loop interrupted exception");
+					}
+				}
+	
+				if(timer.getTimeRemaining() <= 0) {
+					currentState = STATE.END;
+					break;
 				}
 			}
 			
-			if(inter.getTimeRemaining() <= 0) {
-				currentState = STATE.END;
-				break;
+			while(currentState == STATE.END) {
+				renderer.renderGameOver();
+				gameOverUpdate(renderer);
 			}
 		}
 		
-		while(currentState == STATE.END) {
-			renderer.renderGameOver();
-			
-			try {
-				Thread.sleep(3000);
-				System.exit(0);
+		System.exit(0);
+	}
+	
+	private void gameOverUpdate(Renderer rend) {
+		double mx, my;
+		try {
+			mx = inputHandler.getMousePos().getX();
+			my = inputHandler.getMousePos().getY();
+		} catch(NullPointerException e) {
+			mx = 0;
+			my = 0;
+		}
+		int buttonWidth = (int)rend.menuButton.getWidth();
+		int buttonHeight = (int)rend.menuButton.getHeight();
+		
+		int playX = (int)rend.menuButton.getX();
+		int playY = (int) rend.menuButton.getY();
+		int exitX = (int)rend.exitButton.getX();
+		int exitY = (int)rend.exitButton.getY();
+
+
+		if(mx >= playX && mx <= (playX + buttonWidth)) {
+			if(my >= playY && my <= (playY + buttonHeight)) {
+				if(inputHandler.wasMouseClicked()) {
+					System.out.println("MENU BUTTON CLICKED");
+					init();
+					currentState = STATE.START;
+					menuState = MSTATE.MAIN;
+					
+					}
 			}
-			catch(Exception e) {
-				System.out.println("Thread Exception: " + e.getMessage());
+		}
+
+		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
+			if(my >= exitY && my <= (exitY + buttonHeight)) {
+				if(inputHandler.wasMouseClicked()) {
+					System.out.println("EXIT BUTTON CLICKED");
+					currentState = STATE.EXIT;
+					running = false;
+				}
 			}
 		}
 	}
@@ -182,15 +219,15 @@ public class Client extends Canvas {
 		int buttonWidth = (int)menu.playButton.getWidth();
 		int buttonHeight = (int)menu.playButton.getHeight();
 
-		if(menuState == MSTATE.HELP || menuState == MSTATE.OPTIONS) {
-			System.out.println("test");
+		if(menuState == MSTATE.HELP || menuState == MSTATE.OPTIONS) {;
 			int returnX = (int)menu.returnButton.getX();
 			int returnY = (int)menu.returnButton.getY();
 
 			if(mx >= returnX && mx <= (returnX + buttonWidth)) {
 				if(my >= returnY && my <= (returnY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						menuState = MSTATE.MAIN;
+						inputHandler.setMouseClicked(false);
 						System.out.println("RETURN BUTTON CLICKED");
 					}
 				}
@@ -198,7 +235,7 @@ public class Client extends Canvas {
 
 		}
 		else if(menuState == MSTATE.MAIN) {
-			
+
 			int playX = (int)menu.playButton.getX();
 			int playY = (int) menu.playButton.getY();
 			int optionsX = (int)menu.optionsButton.getX();
@@ -209,28 +246,32 @@ public class Client extends Canvas {
 
 			if(mx >= playX && mx <= (playX + buttonWidth)) {
 				if(my >= playY && my <= (playY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
+						new Thread(timer).start();
+						//inputHandler.setMouseClicked(false);
 						}
 				}
 			}
 
 			if(mx >= helpX && mx <= (helpX + buttonWidth)) {
 				if(my >= helpY && my <= (helpY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						System.out.println("HELP BUTTON CLICKED");
 						menuState = MSTATE.HELP;
+						//inputHandler.setMouseClicked(false);
 					}
 				}
 			}
 
 			if(mx >= optionsX && mx <= (optionsX + buttonWidth)) {
 				if(my >= optionsY && my <= (optionsY + buttonHeight)) {
-					if(inputHandler.isMouseButtonDown(1)) {
+					if(inputHandler.wasMouseClicked()) {
 						System.out.println("OPTIONS BUTTON CLICKED");
 						menuState = MSTATE.OPTIONS;
+						//inputHandler.setMouseClicked(false);
 					}
 				}
 			}
@@ -239,7 +280,6 @@ public class Client extends Canvas {
 
 	private void update(double delta) {
 		// Player movement
-		ArrayList<Zombie> zombies = inter.getZombies();
 		float pMoveSpeed = player.getMoveSpeed();
 
 		// Change the player movement speed with 1 and 2
@@ -285,15 +325,29 @@ public class Client extends Canvas {
 		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
 			System.out.println("Player: (" + player.x() + ", " + player.y() + ")");
 		}
+				
+		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
+			System.out.println("Sound ON");
+			//soundManager.musicPlayback = true;
+			soundManager.sfxPlayback = true;
+			soundManager.playMusic();
+		}
+		if(inputHandler.isKeyDown(KeyEvent.VK_M)) {
+			System.out.println("Sound OFF");
+			soundManager.musicPlayback = false;
+			soundManager.sfxPlayback = false;
+			soundManager.stopMusic();
+		}
+		
+		
+		// Toggle conversion mode
 		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
-			if(player.conversionMode) {
-				player.conversionMode = false;
-				System.out.println("Disabled conversion mode!");
-				}
-			else {
-				player.conversionMode = true;
-				System.out.println("Enabled conversion mode!");
-			}
+			player.conversionMode = true;
+			System.out.println("Enabled conversion mode!");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
+			player.conversionMode = false;
+			System.out.println("Disabled conversion mode!");
 		}
 
 		// Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
@@ -305,49 +359,61 @@ public class Client extends Canvas {
 		// Face the player in the direction of the mouse pointer
 		Point mousePos = inputHandler.getMousePos();
 		if (inputHandler.isMouseInside() && mousePos != null) {
-			player.face(mousePos.x, mousePos.y);
+//			player.face(mousePos.x - 320, mousePos.y - 320);
+			Vector fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
+			player.face(fv.x(), fv.y());
+            // Player shooting
+            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+                // game coord x and y position of the aim
+                double playerAngle = player.getFacingAngle();
+                float aimX = (float) Math.cos(playerAngle);
+                float aimY = (float) -Math.sin(playerAngle);
+                boolean playerShot = player.shoot(aimX, aimY);
+                soundManager.bulletSound(playerShot);
+            }
+        }
 
-			// Player shooting
-			if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-				// game coord x and y position of the aim
-				double playerAngle = player.getFacingAngle();
-				float aimX = (float) Math.cos(playerAngle + Math.PI / 2);
-				float aimY = (float) -Math.sin(playerAngle + Math.PI / 2);
-				player.shoot(aimX, aimY);
-			}
-		}
-
-		// Move the zombies around randomly
+        // Move the zombies around randomly
 		Random rand = new Random();
-		for (Zombie zombie : zombies) {
-			// Change the zombie's direction with given probability
-			if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-				zombie.newMovingDir();
-			}
-			zombie.move(delta);
-			Collision.checkCollision(zombie, player); // check if this zombie has collided with the player
-		}
+        for (Zombie zombie : zombies) {
+            // Change the zombie's direction with given probability
+        	if(Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE){
+        		zombie.followDirection(player);
+        	}
+        	else{
+        		if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+        			zombie.newMovingDir();
+        		}
+        	}
+            zombie.move(delta);
+            Collision.checkCollision(zombie, player, soundManager);
+        }
 
         // Bullet movement
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
-            if (!mapData.isEntityMoveValid(b.x(), b.y(), b)) {
+            if ((!mapData.isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
                 player.getBullets().remove(i);
                 continue;
             }
-            Collision.checkBulletCollision(i, player.getBullets(), zombies, player);
+            Collision.checkBulletCollision(i, player.getBullets(), zombies, player, soundManager);
             b.move(delta);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
 
+        int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
-            if (zombies.get(i).getHealth() <= 0) {
+            if (zombies.get(i).health <= 0) {
                 zombies.remove(i);
                 i--;
             }
+            else if(zombies.get(i).getState() == Zombie.State.PLAYER) {;
+            	newNumConvertedZombies += 1;
+            }
         }
-		
-		if(player.getHealth() <= -100) {
+        player.setNumConvertedZombies(newNumConvertedZombies);
+
+		if(player.health <= 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}
@@ -355,15 +421,36 @@ public class Client extends Canvas {
 
     private void init() {
         // Create the map and parse it
+        mapData = new MapData("prototypemap.png", "tilesheet.png", "tiledata.csv");
 
         // Initialise the entities
+        zombies = new ArrayList<>(zombieCount);
         try {
             player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), mapData);
 
+            // Create zombieCount zombies and place them all at 50, 50 on the mapData TODO change this
+            for (int i = 0; i < zombieCount; i++) {
+
+            	// Daniel does some random stuff here... (like speaking in the third person)
+
+				Random rand = new Random();
+				float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+				float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+
+				while(mapData.tileTypeAt(x,y).isObstacle()){
+					x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+					y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+				}
+
+                zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
+                zombies.get(i).newMovingDir();
+            }
         } catch (IOException e) {
             System.out.println("Uh oh. Player image failed to load. RIP");
             System.exit(1);
         }
+        
+		renderer = new Renderer(bufferStrategy, mapData, player, zombies);
     }
 
     public Player getPlayer() {
@@ -371,55 +458,13 @@ public class Client extends Canvas {
     }
 
     public static void main(String[] args) {
+        Game game = new Game();
 
-		if(args.length != 3){
-			System.out.println("Usage: java Client <username> <host> <port>");
-			System.exit(0);
-		}
-
-		String username = args[0];
-		String host = args[1];
-		int port = Integer.parseInt(args[2]);
-
-		// Initialise
-		ObjectOutputStream objOut = null;
-		ObjectInputStream objIn = null;
-		Socket outSocket = null;
-/**
-		try {
-			outSocket = new Socket(host,port);
-			System.out.println("DEBUG: Socket created");
-			objOut = new ObjectOutputStream(outSocket.getOutputStream());
-			objIn = new ObjectInputStream(outSocket.getInputStream());
-			System.out.println("DEBUG: I/O streams created");
-		} catch(UnknownHostException e) {
-			System.err.println("Error! Unknown host - " + host);
-			System.exit(1);
-		} catch (IOException e) {
-			System.err.println("Error! Perhaps the server hasn't been started? " + e.getMessage());
-			System.exit(1);
-		}
-*/
-		ClientSender client_sender = new ClientSender(username, objOut,null);
-		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
-
-		// Then create a game state for the client
-		ClientGameState state = new ClientGameState();
-		ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
-		client_receiver.addInterface(stateInt); //must be called before starting the thread.
-		client_sender.addInterface(stateInt);
-		// If this method didn't exist, interface would need to be added above, but interface relies on receiver.
-
-		// Starting threads
-		client_sender.start();
-		client_receiver.start();
-		// TODO: Closure method for threads
-
-        Client game = new Client(stateInt);
         // Create and start the game loop over the loop method of the game object.
         // :: is a method reference since loop is an existing method,
         // semantically the same as () -> game.loop() lambda expression.
         Thread gameThread = new Thread(game::loop);
         gameThread.start();
     }
+
 }
