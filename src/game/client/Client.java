@@ -25,6 +25,8 @@ import java.util.Random;
  */
 public class Client extends Canvas {
 
+	// just to force a commit
+
 	private static final String TITLE = "Capture the Zom.biz";
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
 	static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
