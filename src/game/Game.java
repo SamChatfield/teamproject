@@ -57,7 +57,7 @@ public class Game extends Canvas {
 	private MSTATE menuState;
 
 	// Non final stuff, remove before release
-	private final int zombieCount = 100;
+	private final int zombieCount = 70;
 
 	private Game() {
 		container = new JFrame(TITLE);

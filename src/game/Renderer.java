@@ -98,9 +98,8 @@ public class Renderer {
 		Rectangle healthBar = new Rectangle(10,10,200,20);
 		g2d.draw(healthBar);
 		g2d.setColor(Color.BLACK);
-		g2d.drawString("Health: " + (percentage * 100) + "%", 15, 25);
-		
-		
+		String healthFormat = String.format("%.2f", percentage * 100);
+		g2d.drawString("Health: " + healthFormat + "%", 15, 25);
 		
 		// Display time remaining
 		Font hud = new Font("Arial", Font.BOLD, 15);
