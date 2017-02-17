@@ -400,6 +400,7 @@ public class Client extends Canvas {
         }
 
         // Bullet movement
+
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
             if ((!inter.getMapData().isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
@@ -410,6 +411,7 @@ public class Client extends Canvas {
             b.move(delta);
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
+
 
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
@@ -429,7 +431,6 @@ public class Client extends Canvas {
 		}
 	}
 
-
     public Player getPlayer() {
         return player;
     }
@@ -447,8 +448,12 @@ public class Client extends Canvas {
         // Initialise
         ObjectOutputStream objOut = null;
         ObjectInputStream objIn = null;
+
+        Socket outSocket = null;
         try{
-            Socket outSocket = new Socket(host,port);
+            outSocket = new Socket(host,port);
+            objOut = new ObjectOutputStream(outSocket.getOutputStream());
+            objIn = new ObjectInputStream(outSocket.getInputStream());
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -475,5 +480,4 @@ public class Client extends Canvas {
         Thread gameThread = new Thread(client::loop);
         gameThread.start();
     }
-
 }

@@ -48,8 +48,11 @@ public class ClientSender extends Thread {
 		// Keep running, sending the player object from the client game state every so often.
 		while(true) {
 			try {
-				objOut.writeObject(inter.getPlayer(username));
-				objOut.flush();
+				if(inter.inProgress() == true){
+					objOut.writeObject(inter.getPlayer(username));
+					objOut.flush();
+				}
+
 				Thread.sleep(3000);
 			} catch (Exception e) {
 				e.printStackTrace();

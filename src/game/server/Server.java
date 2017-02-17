@@ -47,7 +47,6 @@ public class Server {
         		 Socket clientSocket = outSocket.accept();
 
         		 // Someone connected, for debug we'll now generate the game state
-
         		 System.out.println("DEBUG: Accepting socket connection");
         		 
         		 ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -72,7 +71,7 @@ public class Server {
         	}
 
         } catch(Exception e) {
-			System.err.println("Error! -- " + e.getMessage());
+			e.printStackTrace();
 			System.exit(1); 
         }
     }

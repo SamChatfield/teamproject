@@ -15,11 +15,10 @@ public class ClientGameState extends GameState {
 
     private ArrayList<Zombie> zombies;
     private ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
-    private MapData mapData;
-    private int timeRemaining;
+    private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
 
     public ClientGameState(){
-
+        this.mapImage = null;
     }
     /**
      * Secondary constructor used for copying this class for sending.
@@ -28,9 +27,16 @@ public class ClientGameState extends GameState {
     public ClientGameState(ClientGameState state){
         this.zombies = state.getZombies();
         this.players = state.getPlayers();
-        this.mapData = state.getMapData();
+        this.mapImage = state.getMapImage();
         this.timeRemaining = state.getTimeRemaining();
     }
 
+    public void setUpMapData(String mapImage){
+        this.mapImage = mapImage;
+        mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
+    }
 
+    public MapData getMapData(){
+        return mapData;
+    }
 }

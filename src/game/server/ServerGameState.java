@@ -1,10 +1,12 @@
 package game.server;
 
+import game.GameState;
 import game.ResourceLoader;
 import game.Zombie;
 import game.client.EntityData;
 import game.map.MapData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,15 +15,13 @@ import java.util.Random;
  *
  * The game state of the server at any one time.
  */
-public class ServerGameState {
+public class ServerGameState extends GameState {
 
     private ArrayList<Zombie> zombies;
     private ArrayList<EntityData> players;
-    private MapData mapData;
-    private int timeRemaining;
 
     public ServerGameState(){
-       // startNewGame();
+        startNewGame();
     }
 
     /**
@@ -33,41 +33,24 @@ public class ServerGameState {
     public ServerGameState(ServerGameState state){
         this.zombies = state.getZombies();
         this.players = state.getPlayers();
-        this.mapData = state.getMapData();
+        this.mapImage = state.getMapImage();
         this.timeRemaining = state.getTimeRemaining();
-
-    }
-
-    public MapData getMapData() {
-        return mapData;
-    }
-
-    public int getTimeRemaining() {
-        return timeRemaining;
-    }
-
-    public ArrayList<Zombie> getZombies() {
-        return zombies;
-    }
-
-    public ArrayList<EntityData> getPlayers() {
-        return players;
     }
 
     // TODO: Stop this from terminating the program
     public void startNewGame(){
         // First we want to generate the map
-        mapData = new MapData("prototypemap.png", "tilesheet.png", "tiledata.csv");
-
+        mapImage = "prototypemap.png";
         int zombieCount = 100;
         try{
             for (int i = 0; i < zombieCount; i++) {
                 // Daniel does some random stuff here... (like speaking in the third person)
                 Random rand = new Random();
-                float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
-                float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
-                zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
-                zombies.get(i).newMovingDir();
+              //  float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+               // float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+                //zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
+
+                //zombies.get(i).newMovingDir();
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -75,8 +58,8 @@ public class ServerGameState {
         }
 
         // Lets start a new game
-        Timer timer = new Timer(180);
-        new Thread(timer).start();
+       // Timer timer = new Timer(180);
+       // new Thread(timer).start();
     }
 
     public void updateTime(int time){

@@ -35,11 +35,13 @@ public class ClientReceiver extends Thread {
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
-				ServerGameState state = (ServerGameState)objIn.readObject();
-				System.out.println("Got an array of players, size "+state.getPlayers().size());
+				ServerGameState state = (ServerGameState) objIn.readObject();
+				//System.out.println(state.getMapImage());
+				//System.out.println("Got an array of players, size "+state.getPlayers().size());
 				inter.update(state); // update the clients view of the game state.
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
 			System.err.println("Error! " + e.getMessage());
 		}
 	}

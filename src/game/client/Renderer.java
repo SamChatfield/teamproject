@@ -29,7 +29,7 @@ public class Renderer {
     
     Renderer(BufferStrategy bufferStrategy, ClientGameStateInterface inter, Player player) {
         this.bufferStrategy = bufferStrategy;
-        this.mapData = inter.getMapData();
+       // this.mapData = inter.getMapData();
         this.inter = inter;
         this.player = player;
         this.gameH = Client.GAME_DIMENSION.height;

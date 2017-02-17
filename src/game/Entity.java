@@ -3,11 +3,12 @@ package game;
 import game.map.MapData;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 /**
  * Created by Sam on 20/01/2017.
  */
-public class Entity {
+public class Entity implements Serializable {
 
     protected double facingAngle;
     protected float x, y; // x and y position of the centre of this entity in the game coord system

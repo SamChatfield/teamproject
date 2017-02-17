@@ -23,10 +23,11 @@ public class ServerReceiver extends Thread {
 	
 	// Main method to run when thread starts
 	public void run() {
-		/**
+
 		while(true) {
 			try {
-				//obj =  objIn.readObject();
+				ServerGameState obj =  (ServerGameState) objIn.readObject();
+				System.out.println(obj.getPlayers().size());
 				//state.updateGameState(obj);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -37,6 +38,6 @@ public class ServerReceiver extends Thread {
 			}
 			
 		}
-		 */
+
 	}
 }

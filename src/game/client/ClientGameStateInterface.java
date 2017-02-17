@@ -21,6 +21,9 @@ public class ClientGameStateInterface {
     }
 
     public void update(ServerGameState updatedState){
+        if(state.getMapImage()==null){
+            state.setUpMapData(updatedState.getMapImage());
+        }
         ArrayList<Zombie> zom = updatedState.getZombies();
         ArrayList<EntityData> players = updatedState.getPlayers();
 
@@ -46,7 +49,13 @@ public class ClientGameStateInterface {
         return state.getTimeRemaining();
     }
 
-    public MapData getMapData(){
+
+    public MapData getMapData() {
         return state.getMapData();
+    }
+
+
+    public boolean inProgress() {
+        return state.inProgress();
     }
 }
