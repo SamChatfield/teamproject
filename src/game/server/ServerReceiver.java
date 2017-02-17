@@ -1,7 +1,5 @@
 package game.server;
 
-import game.networking.SampleObject;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
@@ -25,11 +23,11 @@ public class ServerReceiver extends Thread {
 	
 	// Main method to run when thread starts
 	public void run() {
-		
+		/**
 		while(true) {
 			try {
-				SampleObject obj = (SampleObject) objIn.readObject();
-				state.updateGameState(obj);
+				//obj =  objIn.readObject();
+				//state.updateGameState(obj);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -39,5 +37,6 @@ public class ServerReceiver extends Thread {
 			}
 			
 		}
+		 */
 	}
 }

@@ -2,9 +2,7 @@ package game.server;
 
 /**
  * Created by Daniel on 07/02/2017.
- *
  * Used to interface with the game state that is held by the server.
- *
  */
 public class GameStateInterface {
 

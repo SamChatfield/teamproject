@@ -1,11 +1,11 @@
 package game;
 
+import game.client.Player;
 import game.map.MapData;
 import game.util.Vector;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
@@ -85,9 +85,9 @@ public class Zombie extends Entity {
 
 //        float px = player.x(); // player x pos
 //        float py = player.y(); // player y pos
-//        float pvr = Game.VIEW_SIZE / 2.0f; // player view radius - 5.0
-//        int swr = Game.GAME_DIMENSION.width / 2; // screen width radius
-//        int shr = Game.GAME_DIMENSION.height / 2; // screen height radius
+//        float pvr = Client.VIEW_SIZE / 2.0f; // player view radius - 5.0
+//        int swr = Client.GAME_DIMENSION.width / 2; // screen width radius
+//        int shr = Client.GAME_DIMENSION.height / 2; // screen height radius
 
 //        int drawX = swr + Math.round((x - px) / pvr * swr) - (w / 2); // 320 + ((2 - 6) / 5 * 320)
 //        int drawY = shr + Math.round((py - y) / pvr * shr) - (h / 2); // 320 + ((6 - 2) / 5 * 320) y is inverted because our coord system is traditional whereas awt origin is top-left

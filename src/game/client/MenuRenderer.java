@@ -1,4 +1,6 @@
-package game;
+package game.client;
+
+import game.client.Client;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,8 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
-
-import javax.swing.JPanel;
 
 public class MenuRenderer {
 	
@@ -17,11 +17,11 @@ public class MenuRenderer {
 	private int gameW;
 	 
 	// Buttons
-	public Rectangle playButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 3, 150, 50);
-	public Rectangle helpButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 5, 150, 50);
-	public Rectangle optionsButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 7, 150, 50);
+	public Rectangle playButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 3, 150, 50);
+	public Rectangle helpButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 5, 150, 50);
+	public Rectangle optionsButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 7, 150, 50);
 	
-	public Rectangle returnButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 7, 150, 50);
+	public Rectangle returnButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 7, 150, 50);
 	
 	/**
 	 * Creates a new MenuRenderer, initialising fonts and sizes
@@ -30,8 +30,8 @@ public class MenuRenderer {
 	public MenuRenderer(BufferStrategy bufferStrategy) {
 		this.bufferStrategy = bufferStrategy;
 		font1 = new Font("Comic Sans MS", Font.BOLD, 30);
-		gameH = Game.GAME_DIMENSION.height;
-		gameW = Game.GAME_DIMENSION.width;
+		gameH = Client.GAME_DIMENSION.height;
+		gameW = Client.GAME_DIMENSION.width;
 	}
 	
 
@@ -46,7 +46,7 @@ public class MenuRenderer {
 
     	// Fill background
         g2d.setColor(Color.BLUE);
-        g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
+        g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
         
         // Set font
         Font title = new Font("Comic Sans MS", Font.BOLD, 40);
@@ -56,7 +56,7 @@ public class MenuRenderer {
 		g2d.setColor(Color.RED);
 		String text = "Options";
 		int width = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 7);
+		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - width / 2, Client.GAME_DIMENSION.height / 7);
 		
 		// Display buttons
 		g2d.drawString("Return", returnButton.x + 20, returnButton.y + 30);
@@ -79,7 +79,7 @@ public class MenuRenderer {
 
     	// Fill background
         g2d.setColor(Color.BLUE);
-        g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
+        g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
         
         // Set font
         Font title = new Font("Comic Sans MS", Font.BOLD, 40);
@@ -89,7 +89,7 @@ public class MenuRenderer {
 		g2d.setColor(Color.RED);
 		String text = "Help";
 		int width = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 7);
+		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - width / 2, Client.GAME_DIMENSION.height / 7);
 		
 		// Display buttons
 		g2d.drawString("Return", returnButton.x + 20, returnButton.y + 30);
@@ -109,7 +109,7 @@ public class MenuRenderer {
 
     	// Fill background
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
+        g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
         
         // Set font
 		Font title = new Font("Comic Sans MS", Font.BOLD, 50);
@@ -119,7 +119,7 @@ public class MenuRenderer {
 		
 		// Display game name
 		g2d.setColor(Color.GREEN);
-		g2d.drawString(gameName, (Game.GAME_DIMENSION.width / 2) - width / 2, Game.GAME_DIMENSION.height / 5);
+		g2d.drawString(gameName, (Client.GAME_DIMENSION.width / 2) - width / 2, Client.GAME_DIMENSION.height / 5);
 		
 		// Buttons
 		

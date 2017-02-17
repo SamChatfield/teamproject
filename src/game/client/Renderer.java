@@ -1,13 +1,11 @@
-package game;
+package game.client;
 
-import game.client.ClientGameStateInterface;
+import game.Bullet;
 import game.map.MapData;
 import game.map.Tile;
-import game.server.Timer;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.ArrayList;
 
 /**
  * Created by Sam on 20/01/2017.
@@ -30,8 +28,8 @@ public class Renderer {
         this.mapData = inter.getMapData();
         this.player = player;
 
-        this.gameH = Game.GAME_DIMENSION.height;
-        this.gameW = Game.GAME_DIMENSION.width;
+        this.gameH = Client.GAME_DIMENSION.height;
+        this.gameW = Client.GAME_DIMENSION.width;
     }
        
     
@@ -72,12 +70,12 @@ public class Renderer {
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
 		g2d.setColor(Color.GREEN);
-		Rectangle healthBarFill = new Rectangle(10, 10, 250 - (250/100) * -player.health, 20);
+		Rectangle healthBarFill = new Rectangle(10, 10, 250 - (250/100) * -player.getHealth(), 20);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 		Rectangle healthBar = new Rectangle(10,10,250,20);
 		g2d.draw(healthBar);
-		g2d.drawString("Health: " + player.health, 10, 40);
+		g2d.drawString("Health: " + player.getHealth(), 10, 40);
 		
 		
 		// Display time remaining
@@ -101,7 +99,7 @@ public class Renderer {
 
         // Clear the screen
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
+        g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
 
         // Apply text
         g2d.setColor(Color.RED);
@@ -109,7 +107,7 @@ public class Renderer {
 		g2d.setFont(title);
 		String text = "YOU DIED";
 		int twidth = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - twidth / 2, Game.GAME_DIMENSION.height / 5);
+		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - twidth / 2, Client.GAME_DIMENSION.height / 5);
 		
         // Clean up and flip the buffer
         g2d.dispose();
@@ -125,7 +123,7 @@ public class Renderer {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Tile here = map[x][y];
-                Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Game.TILE_SIZE, Game.TILE_SIZE);
+                Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Client.TILE_SIZE, Client.TILE_SIZE);
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }
         }

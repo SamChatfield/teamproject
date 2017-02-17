@@ -1,5 +1,7 @@
 package game;
 
+import game.client.Player;
+
 import java.util.ArrayList;
 
 /**

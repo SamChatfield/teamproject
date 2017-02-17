@@ -1,6 +1,5 @@
 package game.client;
 
-import game.Player;
 import game.Zombie;
 import game.map.MapData;
 import game.server.ServerGameState;
@@ -37,6 +36,10 @@ public class ClientGameStateInterface {
             }
         }
         return null; // player not found
+    }
+
+    public ArrayList<Zombie> getZombies(){
+        return state.getZombies();
     }
 
     public int getTimeRemaining(){

@@ -79,4 +79,8 @@ public class Entity {
         return facingAngle;
     }
 
+    public int getHealth(){
+        return health;
+    }
+
 }

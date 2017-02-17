@@ -1,5 +1,9 @@
-package game;
+package game.client;
 
+import game.Bullet;
+import game.Entity;
+import game.ResourceLoader;
+import game.client.Client;
 import game.map.MapData;
 
 import java.awt.*;
@@ -79,9 +83,9 @@ public class Player extends Entity {
     public Point relativeDrawPoint(float x, float y, int w, int h) {
         float px = this.x; // player x pos
         float py = this.y; // player y pos
-        float pvr = Game.VIEW_SIZE / 2.0f; // player view radius - 5.0
-        int swr = Game.GAME_DIMENSION.width / 2; // screen width radius
-        int shr = Game.GAME_DIMENSION.height / 2; // screen height radius
+        float pvr = Client.VIEW_SIZE / 2.0f; // player view radius - 5.0
+        int swr = Client.GAME_DIMENSION.width / 2; // screen width radius
+        int shr = Client.GAME_DIMENSION.height / 2; // screen height radius
 
         int drawX = swr + Math.round((x - px) / pvr * swr) - (w / 2); // 320 + ((2 - 6) / 5 * 320)
         int drawY = shr + Math.round((py - y) / pvr * shr) - (h / 2); // 320 + ((6 - 2) / 5 * 320) y is inverted because our coord system is traditional whereas awt origin is top-left
