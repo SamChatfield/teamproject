@@ -26,7 +26,6 @@ public class Game extends Canvas {
 	public static final int TILE_SIZE = 64;
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
-	private static final float RANGE = 2.0f;
     
     public Sound soundManager;
 	private JFrame container;
@@ -325,7 +324,7 @@ public class Game extends Canvas {
 		Random rand = new Random();
         for (Zombie zombie : zombies) {
             // Change the zombie's direction with given probability
-        	if(Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= RANGE){
+        	if(Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE){
         		zombie.followDirection(player);
         	}
         	else{
@@ -335,7 +334,6 @@ public class Game extends Canvas {
         	}
             zombie.move(delta);
             Collision.checkCollision(zombie, player, soundManager);
-            //Collision.checkZombieCollision(zombies);// check if this zombie has collided with another zombie
         }
 
         // Bullet movement
