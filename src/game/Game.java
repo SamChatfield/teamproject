@@ -32,18 +32,20 @@ public class Game extends Canvas {
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
-	private boolean menu, running;
+	private boolean running;
 	private MapData mapData;
 	private Player player;
 	private ArrayList<Zombie> zombies;
 	private Timer timer;
+	private Renderer renderer;
 
 
 	// Game state
 	private enum STATE {
 		START,
 		GAME,
-		END
+		END, 
+		EXIT
 	};
 	// Menu state
 	private enum MSTATE {
@@ -84,7 +86,6 @@ public class Game extends Canvas {
 		bufferStrategy = getBufferStrategy();
 
 		running = true;
-		menu = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
 
@@ -96,7 +97,6 @@ public class Game extends Canvas {
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
 		
 		init();
-		Renderer renderer = new Renderer(bufferStrategy, mapData, player, zombies);
 		long lastLoopTime = System.nanoTime();
 		//Timer timer = new Timer();
 		//timer.start();
@@ -161,6 +161,8 @@ public class Game extends Canvas {
 				gameOverUpdate(renderer);
 			}
 		}
+		
+		System.exit(0);
 	}
 	
 	private void gameOverUpdate(Renderer rend) {
@@ -185,8 +187,10 @@ public class Game extends Canvas {
 			if(my >= playY && my <= (playY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
 					System.out.println("MENU BUTTON CLICKED");
+					init();
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
+					
 					}
 			}
 		}
@@ -195,7 +199,8 @@ public class Game extends Canvas {
 			if(my >= exitY && my <= (exitY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
 					System.out.println("EXIT BUTTON CLICKED");
-					System.exit(0);
+					currentState = STATE.EXIT;
+					running = false;
 				}
 			}
 		}
@@ -426,6 +431,8 @@ public class Game extends Canvas {
             System.out.println("Uh oh. Player image failed to load. RIP");
             System.exit(1);
         }
+        
+		renderer = new Renderer(bufferStrategy, mapData, player, zombies);
     }
 
     public Player getPlayer() {
