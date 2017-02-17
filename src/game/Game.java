@@ -328,7 +328,7 @@ public class Game extends Canvas {
 				
 		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
 			System.out.println("Sound ON");
-			soundManager.musicPlayback = true;
+			//soundManager.musicPlayback = true;
 			soundManager.sfxPlayback = true;
 			soundManager.playMusic();
 		}

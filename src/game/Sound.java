@@ -24,7 +24,7 @@ public class Sound extends Thread{
     private Clip musicClip, gunClip;
     private static final float ZOMBIE_SOUND_PROBABILITY = 0.01f;
     Random rn, oneTwoOrThree;
-    public static boolean musicPlayback = true;
+    public static boolean musicPlayback = false;
     public static boolean sfxPlayback = true;
     
     /**
@@ -164,10 +164,12 @@ public class Sound extends Thread{
      */
     
     public void zombieSounds() {
-    	int fileNum = oneTwoOrThree.nextInt(3) + 1;
-    	String zombieS = zombieSound + fileNum + ".wav";
-    	Clip zombies = this.createClip(zombieS);
-    	zombies.start();
+    	if(sfxPlayback) {
+        	int fileNum = oneTwoOrThree.nextInt(3) + 1;
+        	String zombieS = zombieSound + fileNum + ".wav";
+        	Clip zombies = this.createClip(zombieS);
+        	zombies.start();
+    	}
     }
     
     /**
@@ -175,8 +177,11 @@ public class Sound extends Thread{
      */
     
     public void playMusic() {
-    	musicClip = this.createClip(music);
-    	musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+    	if(!musicPlayback) {
+    		musicPlayback = true;
+        	musicClip = this.createClip(music);
+        	musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+    	}
     }
     
     /**
