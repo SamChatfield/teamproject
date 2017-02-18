@@ -1,6 +1,6 @@
 package game.client;
 
-import game.GameState;
+import game.util.GameState;
 import game.Zombie;
 import game.map.MapData;
 

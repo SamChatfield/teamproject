@@ -1,5 +1,6 @@
-package game;
+package game.util;
 
+import game.Zombie;
 import game.client.EntityData;
 import game.map.MapData;
 
@@ -16,8 +17,6 @@ public class GameState implements Serializable {
     protected String mapImage;
     protected int timeRemaining;
     protected boolean inProgress; // is the game in progress?
-
-
 
     public String getMapImage() {
         return mapImage;

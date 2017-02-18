@@ -2,6 +2,7 @@ package game.client;
 
 import game.Bullet;
 import game.Collision;
+import game.ResourceLoader;
 import game.Zombie;
 import game.util.Vector;
 
@@ -67,7 +68,7 @@ public class Client extends Canvas {
 	private final int zombieCount = 70;
 
 	private Client(ClientGameStateInterface inter) {
-	    this.inter = inter;
+		this.inter = inter;
 		container = new JFrame(TITLE);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -97,6 +98,14 @@ public class Client extends Canvas {
 		menuState = MSTATE.MAIN;
 
         soundManager = new Sound();
+	}
+
+	private void init(){
+		try{
+			this.player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), inter.getMapData());
+		}catch(Exception e){
+
+		}
 	}
 
 	private void loop() {
@@ -255,6 +264,7 @@ public class Client extends Canvas {
 						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
+						init();
 						//inputHandler.setMouseClicked(false);
 						}
 				}

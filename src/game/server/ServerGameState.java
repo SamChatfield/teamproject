@@ -1,12 +1,9 @@
 package game.server;
 
-import game.GameState;
-import game.ResourceLoader;
+import game.util.GameState;
 import game.Zombie;
 import game.client.EntityData;
-import game.map.MapData;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 

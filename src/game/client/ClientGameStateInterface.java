@@ -54,7 +54,6 @@ public class ClientGameStateInterface {
         return state.getMapData();
     }
 
-
     public boolean inProgress() {
         return state.inProgress();
     }
