@@ -54,14 +54,13 @@ public class ServerGameState extends GameState {
             System.exit(0);
         }
 
-        // Lets start a new game
-       // Timer timer = new Timer(180);
-       // new Thread(timer).start();
+        // Start up a new game instance
+        GameInstance instance = new GameInstance(this);
+        instance.start();
+
     }
 
     public void updateTime(int time){
         timeRemaining = time;
     }
-
-
 }

@@ -408,15 +408,15 @@ public class Client extends Canvas {
 		Random rand = new Random();
         for (Zombie zombie : zombies) {
             // Change the zombie's direction with given probability
-        	if(Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE){
-        		zombie.followDirection(player);
-        	}
-        	else{
-        		if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-        			zombie.newMovingDir();
-        		}
-        	}
-            zombie.move(delta);
+        	//if(Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE){
+        	//	zombie.followDirection(player);
+        	//}
+        	//else{
+        	//	if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+        	//		zombie.newMovingDir();
+        	//	}
+        	//}
+            //zombie.move(delta);
             Collision.checkCollision(zombie, player, soundManager);
         }
 
