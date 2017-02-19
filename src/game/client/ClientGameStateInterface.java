@@ -29,6 +29,7 @@ public class ClientGameStateInterface {
 
         state.setZombies(zom);
         state.setPlayers(players);
+        state.setInProgress(true);
     }
 
     public EntityData getPlayer(String username){
@@ -56,5 +57,10 @@ public class ClientGameStateInterface {
 
     public boolean inProgress() {
         return state.inProgress();
+    }
+
+
+    public boolean isReady(){
+        return state.isReady();
     }
 }

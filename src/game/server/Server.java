@@ -66,9 +66,7 @@ public class Server {
                  server_receiver.start();
         		
                  // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
-
-                server_sender.sendGameState(); // force an update
-        	}
+            }
 
         } catch(Exception e) {
 			e.printStackTrace();

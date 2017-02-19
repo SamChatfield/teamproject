@@ -17,8 +17,10 @@ public class ClientGameState extends GameState {
     private ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
     private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
 
+
     public ClientGameState(){
         this.mapImage = null;
+        this.isReady = false;
     }
     /**
      * Secondary constructor used for copying this class for sending.
@@ -39,4 +41,6 @@ public class ClientGameState extends GameState {
     public MapData getMapData(){
         return mapData;
     }
+
+
 }

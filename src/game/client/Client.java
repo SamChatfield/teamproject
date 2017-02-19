@@ -43,6 +43,7 @@ public class Client extends Canvas {
 	private Player player;
 
 	private ClientGameStateInterface inter;
+	private ClientSender sender;
 
 	private Renderer renderer;
 
@@ -67,8 +68,9 @@ public class Client extends Canvas {
 	// Non final stuff, remove before release
 	private final int zombieCount = 70;
 
-	private Client(ClientGameStateInterface inter) {
+	private Client(ClientGameStateInterface inter, ClientSender sender) {
 		this.inter = inter;
+		this.sender = sender;
 		container = new JFrame(TITLE);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -133,6 +135,12 @@ public class Client extends Canvas {
 			}
 	
 			while (currentState == STATE.GAME) {
+
+				sender.sendObject("StartGame"); // send a message to the server to start the game.
+				while(!inter.isReady()){
+					//System.out.println("Waiting for server");
+				}
+				System.out.println("State from server received");
 	
 	
 				// Calculate how long since last update
@@ -482,7 +490,7 @@ public class Client extends Canvas {
         client_sender.start();
         client_receiver.start();
 
-        Client client = new Client(stateInt);
+        Client client = new Client(stateInt,client_sender);
 
         // Create and start the client loop over the loop method of the client object.
         // :: is a method reference since loop is an existing method,

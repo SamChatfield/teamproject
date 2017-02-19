@@ -29,7 +29,7 @@ public class ClientSender extends Thread {
 	 * Send an object up the ObjectOutputStream to the Server
 	 * @param obj Object to send
 	 */
-	private void sendObject(Object obj) {
+	public void sendObject(Object obj) {
 		try {
 			objOut.writeObject(obj);
 			objOut.flush();

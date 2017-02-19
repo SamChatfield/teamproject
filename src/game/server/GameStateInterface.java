@@ -28,4 +28,8 @@ public class GameStateInterface {
     public void startNewGame(){
         state.startNewGame();
     }
+
+    public boolean inProgress(){
+        return state.inProgress();
+    }
 }

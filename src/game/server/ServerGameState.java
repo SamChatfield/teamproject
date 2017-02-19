@@ -18,7 +18,6 @@ public class ServerGameState extends GameState {
     private ArrayList<EntityData> players;
 
     public ServerGameState(){
-        startNewGame();
     }
 
     /**
@@ -38,6 +37,7 @@ public class ServerGameState extends GameState {
     public void startNewGame(){
         // First we want to generate the map
         mapImage = "prototypemap.png";
+        this.inProgress = true;
         int zombieCount = 100;
         try{
             for (int i = 0; i < zombieCount; i++) {

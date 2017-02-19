@@ -32,13 +32,35 @@ public class ServerSender extends Thread {
 			System.exit(1);
 		}
 	}
-	
+
+	/**
+	 * Send an object up the ObjectOutputStream to the Client
+	 * @param obj Object to send
+	 */
+	public void sendObject(Object obj) {
+		try {
+			objOut.writeObject(obj);
+			objOut.flush();
+		} catch (IOException e) {
+			System.err.println("Communication Error! " + e.getMessage());
+			System.exit(1);
+		}
+		System.out.println("DEBUG: Object successfully sent");
+	}
+
+
 	// Main method to run when thread starts
 	public void run() {
 		while(true) {
             try {
 				Thread.sleep(1000);
-				sendGameState(); // send the game state
+				if (state.inProgress()) { // if there is a game in progress
+					sendObject("StartingGame");
+					System.out.println("Game started: Sending state");
+					sendGameState(); // send the game state
+				}else{
+					System.out.println("Game not ready yet");
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 

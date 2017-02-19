@@ -16,6 +16,8 @@ public class GameState implements Serializable {
     protected ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
     protected String mapImage;
     protected int timeRemaining;
+
+    protected boolean isReady;
     protected boolean inProgress; // is the game in progress?
 
     public String getMapImage() {
@@ -47,5 +49,17 @@ public class GameState implements Serializable {
 
     public boolean inProgress(){
         return inProgress;
+    }
+
+    /**
+     * Returns whether or not the interface has been initialised with values from the server
+     * @return true if the server has sent down the map data.
+     */
+    public boolean isReady(){
+        return isReady;
+    }
+
+    public void setInProgress(boolean bool){
+        inProgress = bool;
     }
 }

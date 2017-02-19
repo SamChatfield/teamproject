@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
  */
 public class ServerReceiver extends Thread {
 
-	private GameStateInterface state;
+	private GameStateInterface inter;
 	private ObjectInputStream objIn;
 	
 	/**
@@ -18,7 +18,7 @@ public class ServerReceiver extends Thread {
 	 */
 	public ServerReceiver(ObjectInputStream objIn, GameStateInterface inter) {
 		this.objIn = objIn;
-		this.state = inter;
+		this.inter = inter;
 	}
 	
 	// Main method to run when thread starts
@@ -26,8 +26,15 @@ public class ServerReceiver extends Thread {
 
 		while(true) {
 			try {
-				ServerGameState obj =  (ServerGameState) objIn.readObject();
-				System.out.println(obj.getPlayers().size());
+				Object obj = objIn.readObject();
+				if(obj.getClass() == String.class){
+					// If the player has requested to start the game...
+					if(obj.toString().equals("StartGame")){
+						inter.startNewGame();
+					}
+				}
+				//ServerGameState obj =  (ServerGameState) objIn.readObject();
+				//System.out.println(obj.getPlayers().size());
 				//state.updateGameState(obj);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

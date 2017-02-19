@@ -13,6 +13,7 @@ public class ClientReceiver extends Thread {
 	private String username;
 	private ObjectInputStream objIn;
 	private ClientGameStateInterface inter;
+	private boolean inProgress;
 
 	/**
 	 * Constructor
@@ -35,10 +36,20 @@ public class ClientReceiver extends Thread {
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
-				ServerGameState state = (ServerGameState) objIn.readObject();
-				//System.out.println(state.getMapImage());
-				//System.out.println("Got an array of players, size "+state.getPlayers().size());
-				inter.update(state); // update the clients view of the game state.
+				if(!inProgress){
+					String s = (String)objIn.readObject();
+					if(s.equals("StartingGame")){
+						inProgress = true;
+					}else if(s.equals("GameOver")){
+						inProgress = false;
+					}
+				}else{
+					System.out.println("Got state from server");
+					ServerGameState state = (ServerGameState) objIn.readObject();
+					System.out.println(state.getMapImage());
+					inter.update(state); // update the clients view of the game state.
+				}
+
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
