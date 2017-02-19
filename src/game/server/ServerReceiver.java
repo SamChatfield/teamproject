@@ -1,5 +1,7 @@
 package game.server;
 
+import game.client.EntityData;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
@@ -32,6 +34,8 @@ public class ServerReceiver extends Thread {
 					if(obj.toString().equals("StartGame")){
 						inter.startNewGame();
 					}
+				}else if(obj.getClass() == EntityData.class){
+					System.out.println("Received a player object");
 				}
 				//ServerGameState obj =  (ServerGameState) objIn.readObject();
 				//System.out.println(obj.getPlayers().size());

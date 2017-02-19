@@ -16,7 +16,7 @@ public class ClientGameState extends GameState {
     private ArrayList<Zombie> zombies;
     private ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
     private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
-
+    private Player player;
 
     public ClientGameState(){
         this.mapImage = null;
@@ -42,5 +42,12 @@ public class ClientGameState extends GameState {
         return mapData;
     }
 
+    public void setPlayer(Player p){
+        player = p;
+        isReady = true;
+    }
 
+    public Player getPlayer() {
+        return player;
+    }
 }

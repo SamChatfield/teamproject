@@ -7,7 +7,7 @@ public class EntityData {
 
     private int health;
     private String username;
-    private int x,y;
+    private float x,y;
 
     public int getHealth() {
         return health;
@@ -25,7 +25,7 @@ public class EntityData {
         this.username = username;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
@@ -33,7 +33,7 @@ public class EntityData {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -43,5 +43,11 @@ public class EntityData {
 
     public EntityData(){
 
+    }
+
+    public EntityData(Player p){
+        this.health = p.getHealth();
+        this.x = p.getX();
+        this.y = p.getY();
     }
 }

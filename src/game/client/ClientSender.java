@@ -49,8 +49,11 @@ public class ClientSender extends Thread {
 		while(true) {
 			try {
 				if(inter.inProgress() == true){
-					objOut.writeObject(inter.getPlayer(username));
-					objOut.flush();
+					System.out.println(inter.isReady());
+					if(inter.isReady()){
+						objOut.writeObject(inter.getPlayer());
+						objOut.flush();
+					}
 				}
 
 				Thread.sleep(3000);

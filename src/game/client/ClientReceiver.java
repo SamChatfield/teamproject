@@ -46,7 +46,6 @@ public class ClientReceiver extends Thread {
 				}else{
 					System.out.println("Got state from server");
 					ServerGameState state = (ServerGameState) objIn.readObject();
-					System.out.println(state.getMapImage());
 					inter.update(state); // update the clients view of the game state.
 				}
 

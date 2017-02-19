@@ -32,15 +32,10 @@ public class ClientGameStateInterface {
         state.setInProgress(true);
     }
 
-    public EntityData getPlayer(String username){
-        ArrayList<EntityData> plrs = state.getPlayers();
-        for(EntityData p:plrs){
-            if(p.getUsername().equals(username)){
-                return p;
-            }
-        }
-        return null; // player not found
+    public EntityData getPlayer(){
+        return new EntityData(state.getPlayer());
     }
+
 
     public ArrayList<Zombie> getZombies(){
         return state.getZombies();
@@ -62,5 +57,9 @@ public class ClientGameStateInterface {
 
     public boolean isReady(){
         return state.isReady();
+    }
+
+    public void setPlayer(Player p){
+        state.setPlayer(p);
     }
 }

@@ -102,13 +102,6 @@ public class Client extends Canvas {
         soundManager = new Sound();
 	}
 
-	private void init(){
-		try{
-			this.player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), inter.getMapData());
-		}catch(Exception e){
-
-		}
-	}
 
 	private void loop() {
 
@@ -141,8 +134,19 @@ public class Client extends Canvas {
 					//System.out.println("Waiting for server");
 				}
 				System.out.println("State from server received");
-	
-	
+
+				if(player == null){
+					System.out.println("Setting up player object");
+					try{
+						this.player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), inter.getMapData());
+						inter.setPlayer(player);
+					}catch(Exception e){
+						System.out.println(e.getMessage());
+					}
+				}
+
+
+
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
 				long now = System.nanoTime();
@@ -272,7 +276,6 @@ public class Client extends Canvas {
 						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
-						init();
 						//inputHandler.setMouseClicked(false);
 						}
 				}
