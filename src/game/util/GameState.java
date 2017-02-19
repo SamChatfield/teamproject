@@ -19,6 +19,7 @@ public class GameState implements Serializable {
 
     protected boolean isReady;
     protected boolean inProgress; // is the game in progress?
+    protected boolean isConnected;
 
     public String getMapImage() {
         return mapImage;
@@ -57,6 +58,10 @@ public class GameState implements Serializable {
      */
     public boolean isReady(){
         return isReady;
+    }
+
+    public boolean isConnected(){
+        return isConnected;
     }
 
     public void setInProgress(boolean bool){

@@ -36,6 +36,7 @@ public class ClientGameState extends GameState {
     public void setUpMapData(String mapImage){
         this.mapImage = mapImage;
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
+        isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
     }
 
     public MapData getMapData(){
@@ -45,9 +46,11 @@ public class ClientGameState extends GameState {
     public void setPlayer(Player p){
         player = p;
         isReady = true;
+        System.out.println("Set isReady to true");
     }
 
     public Player getPlayer() {
         return player;
     }
+
 }

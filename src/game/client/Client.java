@@ -130,8 +130,8 @@ public class Client extends Canvas {
 			while (currentState == STATE.GAME) {
 
 				sender.sendObject("StartGame"); // send a message to the server to start the game.
-				while(!inter.isReady()){
-					//System.out.println("Waiting for server");
+				while(!inter.isConnected()){
+					System.out.println("Waiting for server");
 				}
 				System.out.println("State from server received");
 

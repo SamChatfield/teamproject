@@ -42,12 +42,11 @@ public class EntityData {
     }
 
     public EntityData(){
-
     }
 
-    public EntityData(Player p){
-        this.health = p.getHealth();
-        this.x = p.getX();
-        this.y = p.getY();
+    public EntityData(int health, float x, float y){
+        this.health = health;
+        this.x = x;
+        this.y = y;
     }
 }

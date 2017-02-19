@@ -33,9 +33,9 @@ public class ClientGameStateInterface {
     }
 
     public EntityData getPlayer(){
-        return new EntityData(state.getPlayer());
+        Player p = state.getPlayer();
+        return new EntityData(p.getHealth(),p.getX(),p.getY());
     }
-
 
     public ArrayList<Zombie> getZombies(){
         return state.getZombies();
@@ -58,8 +58,11 @@ public class ClientGameStateInterface {
     public boolean isReady(){
         return state.isReady();
     }
-
     public void setPlayer(Player p){
         state.setPlayer(p);
+    }
+
+    public boolean isConnected(){
+        return state.isConnected();
     }
 }
