@@ -1,9 +1,11 @@
 package game.client;
 
+import java.io.Serializable;
+
 /**
  * Created by Daniel on 16/02/2017.
  */
-public class EntityData {
+public class EntityData implements Serializable {
 
     private int health;
     private String username;

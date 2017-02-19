@@ -50,6 +50,7 @@ public class ClientSender extends Thread {
 			try {
 				if(inter.inProgress() == true){
 					if(inter.isReady()){
+					    System.out.println("Sending player");
 						objOut.writeObject(inter.getPlayer());
 						objOut.flush();
 					}
