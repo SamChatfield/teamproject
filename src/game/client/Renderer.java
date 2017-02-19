@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
-    private MapData mapData;
     private Player player;
     private int gameH, gameW;
     private int maxHealth;
@@ -27,11 +26,10 @@ public class Renderer {
     public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
     public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
     
-    Renderer(BufferStrategy bufferStrategy, ClientGameStateInterface inter, Player player) {
+    Renderer(BufferStrategy bufferStrategy, ClientGameStateInterface inter) {
         this.bufferStrategy = bufferStrategy;
        // this.mapData = inter.getMapData();
         this.inter = inter;
-        this.player = player;
         this.gameH = Client.GAME_DIMENSION.height;
         this.gameW = Client.GAME_DIMENSION.width;
         
@@ -52,8 +50,11 @@ public class Renderer {
        
     
     public void render() {
-    	int timeRemaining = inter.getTimeRemaining();
+        this.player = inter.getPlayerObj(); // get the player object now (if render is called, the game definitely knows the state of the game)
+
+        int timeRemaining = inter.getTimeRemaining();
     	ArrayList<Zombie> zombies = inter.getZombies();
+    	MapData mapData = inter.getMapData();
 
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
@@ -165,6 +166,7 @@ public class Renderer {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Tile here = map[x][y];
+                System.out.println(here.getX());
                 Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Client.TILE_SIZE, Client.TILE_SIZE);
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }

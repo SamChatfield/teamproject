@@ -106,7 +106,7 @@ public class Client extends Canvas {
 	private void loop() {
 
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
-        renderer = new Renderer(bufferStrategy, inter, player);
+        renderer = new Renderer(bufferStrategy, inter);
 
         long lastLoopTime = System.nanoTime();
 
@@ -406,7 +406,7 @@ public class Client extends Canvas {
 
         // Move the zombies around randomly
 		Random rand = new Random();
-        for (Zombie zombie : zombies) {
+        //for (Zombie zombie : zombies) {
             // Change the zombie's direction with given probability
         	//if(Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE){
         	//	zombie.followDirection(player);
@@ -417,8 +417,8 @@ public class Client extends Canvas {
         	//	}
         	//}
             //zombie.move(delta);
-            Collision.checkCollision(zombie, player, soundManager);
-        }
+        //    Collision.checkCollision(zombie, player, soundManager);
+       // }
 
         // Bullet movement
 
@@ -433,7 +433,7 @@ public class Client extends Canvas {
             // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
         }
 
-
+/*
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
             if (zombies.get(i).getHealth() <= 0) {
@@ -445,7 +445,7 @@ public class Client extends Canvas {
             }
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
-
+*/
 		if(player.getHealth() <= 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");

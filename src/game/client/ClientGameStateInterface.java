@@ -37,6 +37,9 @@ public class ClientGameStateInterface {
         return new EntityData(p.getHealth(),p.getX(),p.getY());
     }
 
+    public Player getPlayerObj(){
+        return state.getPlayer();
+    }
     public ArrayList<Zombie> getZombies(){
         return state.getZombies();
     }
@@ -58,6 +61,7 @@ public class ClientGameStateInterface {
     public boolean isReady(){
         return state.isReady();
     }
+
     public void setPlayer(Player p){
         state.setPlayer(p);
     }
