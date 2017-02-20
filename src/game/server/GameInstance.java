@@ -15,7 +15,7 @@ public class GameInstance extends Thread {
 
     public GameInstance(ServerGameState state){
         this.state = state;
-        Timer timer = new Timer(180);
+        Timer timer = new Timer(180,state);
         new Thread(timer).start();
 
         state.updateTime(timer.getTimeRemaining());
@@ -27,6 +27,7 @@ public class GameInstance extends Thread {
         ArrayList<EntityData> players = state.getPlayers();
         // Move the zombies around randomly
         Random rand = new Random();
+/*
         for (Zombie zombie : zombies) {
             // Change the zombie's direction with given probability
             for (EntityData player : players) {
@@ -39,6 +40,9 @@ public class GameInstance extends Thread {
                 }
                 zombie.move(60);
             }
+
         }
-    }
+
+*/    }
+
 }

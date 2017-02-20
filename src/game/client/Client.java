@@ -135,17 +135,17 @@ public class Client extends Canvas {
 				}
 				System.out.println("State from server received");
 
-				if(player == null){
+				// The first time we run this loop, we'll need to make a new player object, and add it to our
+				// client game state so we can use it again later.
+				if(player == null) {
 					System.out.println("Setting up player object");
-					try{
+					try {
 						this.player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), inter.getMapData());
 						inter.setPlayer(player);
-					}catch(Exception e){
+					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
 				}
-
-
 
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate

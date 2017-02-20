@@ -9,17 +9,20 @@ import java.util.ArrayList;
 
 /**
  * Created by Daniel on 17/02/2017.
+ *
+ * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
+ * be called on both game states.
  */
 public class GameState implements Serializable {
 
     //protected ArrayList<Zombie> zombies;
     protected ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
-    protected String mapImage;
+    protected String mapImage; // the name of the file being used to create the image.
     protected int timeRemaining;
 
-    protected boolean isReady;
+    protected boolean isReady; // is the game set up on the client? Does the player object exist?
     protected boolean inProgress; // is the game in progress?
-    protected boolean isConnected;
+    protected boolean isConnected; // is the game connected to the server? If this is false, the server hasn't sent a state yet
 
     public String getMapImage() {
         return mapImage;

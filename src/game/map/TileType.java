@@ -1,8 +1,6 @@
 package game.map;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
 /**
  * Created by Sam on 10/02/2017.
