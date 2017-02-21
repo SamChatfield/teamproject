@@ -32,6 +32,10 @@ public class GameState implements Serializable {
         return timeRemaining;
     }
 
+    public void updateTime(int time){
+        timeRemaining = time;
+    }
+
     public ArrayList<Zombie> getZombies() {
         return null;
     }

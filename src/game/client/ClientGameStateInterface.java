@@ -30,6 +30,8 @@ public class ClientGameStateInterface {
         state.setZombies(zom);
         state.setPlayers(players);
         state.setInProgress(true);
+        state.updateTime(updatedState.getTimeRemaining());
+        System.out.println("Updated client side time "+state.getTimeRemaining());
     }
 
     public EntityData getPlayer(){

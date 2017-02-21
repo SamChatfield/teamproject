@@ -60,7 +60,4 @@ public class ServerGameState extends GameState {
 
     }
 
-    public void updateTime(int time){
-        timeRemaining = time;
-    }
 }

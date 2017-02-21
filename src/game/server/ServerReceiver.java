@@ -36,6 +36,7 @@ public class ServerReceiver extends Thread {
 					}
 				}else if(obj.getClass() == EntityData.class){
 					System.out.println("Received a player object");
+
 				}
 				//ServerGameState obj =  (ServerGameState) objIn.readObject();
 				//System.out.println(obj.getPlayers().size());
