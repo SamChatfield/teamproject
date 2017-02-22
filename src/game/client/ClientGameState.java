@@ -1,5 +1,9 @@
 package game.client;
 
+import com.sun.xml.internal.bind.v2.TODO;
+import game.Entity;
+import game.ResourceLoader;
+import game.server.ServerGameState;
 import game.util.GameState;
 import game.Zombie;
 import game.map.MapData;
@@ -14,7 +18,6 @@ import java.util.ArrayList;
 public class ClientGameState extends GameState {
 
     private ArrayList<Zombie> zombies;
-    private ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
     private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
     private Player player;
 
@@ -22,21 +25,23 @@ public class ClientGameState extends GameState {
         this.mapImage = null;
         this.isReady = false;
     }
-    /**
-     * Secondary constructor used for copying this class for sending.
-     * @param state State to create a copy of.
-     */
-    public ClientGameState(ClientGameState state){
-        this.zombies = state.getZombies();
-        this.players = state.getPlayers();
-        this.mapImage = state.getMapImage();
-        this.timeRemaining = state.getTimeRemaining();
+
+    public void updateClientState(ServerGameState updatedState){
+        setZombies(updatedState.getZombies());
+        setPlayers(players);
+        setInProgress(true);
+        updateTime(updatedState.getTimeRemaining());
+        System.out.println("Updated client side time "+getTimeRemaining());
+        if(getMapImage()==null){
+            setUpMapData(updatedState.getMapImage());
+            isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
+
+        }
     }
 
     public void setUpMapData(String mapImage){
         this.mapImage = mapImage;
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
-        isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
     }
 
     public MapData getMapData(){
@@ -53,4 +58,25 @@ public class ClientGameState extends GameState {
         return player;
     }
 
+    private void setZombies(ArrayList<EntityData> zomb){
+        this.zombies = convert(zomb);
+    }
+
+    public ArrayList<Zombie> convert(ArrayList<EntityData> zombieFrame){
+        ArrayList<Zombie> done = new ArrayList<>();
+        for(EntityData z:zombieFrame){
+            try{
+                Zombie converted = new Zombie(z.getX(),z.getY(),ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(),mapData);
+                converted.setHealth(z.getHealth());
+                done.add(converted);
+            }catch(Exception e) {
+                System.out.println("Failure: ResourceLoader could not load image \n" + e.getMessage());
+            }
+        }
+        return done;
+    }
+
+    public ArrayList<Zombie> getZombies(){
+        return zombies;
+    }
 }

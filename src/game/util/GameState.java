@@ -15,7 +15,6 @@ import java.util.ArrayList;
  */
 public class GameState implements Serializable {
 
-    //protected ArrayList<Zombie> zombies;
     protected ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
     protected String mapImage; // the name of the file being used to create the image.
     protected int timeRemaining;
@@ -36,15 +35,8 @@ public class GameState implements Serializable {
         timeRemaining = time;
     }
 
-    public ArrayList<Zombie> getZombies() {
-        return null;
-    }
-
     public ArrayList<EntityData> getPlayers() {
         return players;
-    }
-
-    public void setZombies(ArrayList<Zombie> zombies) {
     }
 
     public void setPlayers(ArrayList<EntityData> players) {

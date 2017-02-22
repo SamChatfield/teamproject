@@ -51,7 +51,6 @@ public class Renderer {
     
     public void render() {
         this.player = inter.getPlayerObj(); // get the player object now (if render is called, the game definitely knows the state of the game)
-        System.out.println(player.getHealth());
 
         int timeRemaining = inter.getTimeRemaining();
     	ArrayList<Zombie> zombies = inter.getZombies();
@@ -79,11 +78,11 @@ public class Renderer {
             	b.draw(g2d);
             }
         }
-/*
-        for (Zombie z : zombies) {
-            z.draw(g2d, player);
+
+       for (Zombie z : zombies) {
+           z.draw(g2d, player);
         }
- */
+
 		// Health bar
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
@@ -167,7 +166,6 @@ public class Renderer {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Tile here = map[x][y];
-                //System.out.println(here.getX());
                 Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Client.TILE_SIZE, Client.TILE_SIZE);
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }

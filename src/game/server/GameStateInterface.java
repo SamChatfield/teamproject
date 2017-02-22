@@ -1,10 +1,5 @@
 package game.server;
 
-import game.Zombie;
-import game.client.EntityData;
-
-import java.util.ArrayList;
-
 /**
  * Created by Daniel on 07/02/2017.
  * Used to interface with the game state that is held by the server.

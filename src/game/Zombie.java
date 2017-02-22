@@ -43,7 +43,6 @@ public class Zombie extends Entity {
     public float getDy() {
         return dy;
     }
-
     
     public float getX() {
         return x;
@@ -136,5 +135,7 @@ public class Zombie extends Entity {
         }
         g2d.setTransform(at);
     }
+
+
 
 }

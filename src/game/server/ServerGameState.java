@@ -1,8 +1,10 @@
 package game.server;
 
+import game.Entity;
 import game.util.GameState;
 import game.Zombie;
 import game.client.EntityData;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.EncloseType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,9 +16,8 @@ import java.util.Random;
  */
 public class ServerGameState extends GameState {
 
-    private ArrayList<Zombie> zombies;
-    private ArrayList<EntityData> players;
-
+    private ArrayList<EntityData> zombies;
+    private int threads =0;
     public ServerGameState(){
     }
 
@@ -39,25 +40,34 @@ public class ServerGameState extends GameState {
         mapImage = "prototypemap.png";
         this.inProgress = true;
         int zombieCount = 100;
+        ArrayList<EntityData> zombieFactory = new ArrayList<>();
         try{
+            threads++;
+            System.out.println("Currently there are "+threads+" threads");
             for (int i = 0; i < zombieCount; i++) {
+              //  System.out.println("Zombie");
+
                 // Daniel does some random stuff here... (like speaking in the third person)
                 Random rand = new Random();
-              //  float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
-               // float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
-                //zombies.add(new Zombie(x,y, ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(), mapData));
-
+                float x = (float) (0.5-rand.nextFloat())*50;
+                float y = (float) (0.5-rand.nextFloat())*50;
+                //System.out.println(x+" "+y);
+                zombieFactory.add(new EntityData(100,x,y, EntityData.Tag.ZOMBIE, EntityData.ZombieState.WILD));
                 //zombies.get(i).newMovingDir();
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
             System.exit(0);
         }
-
+        this.zombies = zombieFactory;
         // Start up a new game instance
         GameInstance instance = new GameInstance(this);
         instance.start();
 
+    }
+
+    public ArrayList<EntityData> getZombies(){
+        return zombies;
     }
 
 }

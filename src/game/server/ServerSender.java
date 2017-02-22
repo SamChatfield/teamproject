@@ -54,7 +54,7 @@ public class ServerSender extends Thread {
 	public void run() {
 		while(true) {
             try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 				if (state.inProgress()) { // if there is a game in progress
 					if(initial){
 						sendObject("StartingGame");

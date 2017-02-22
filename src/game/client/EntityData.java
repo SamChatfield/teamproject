@@ -7,9 +7,14 @@ import java.io.Serializable;
  */
 public class EntityData implements Serializable {
 
+    public enum Tag { PLAYER, ZOMBIE }
+    public enum ZombieState { WILD, PLAYER1, PLAYER2 }
+
     private int health;
     private String username;
     private float x,y;
+    private Tag tag;
+    private ZombieState state;
 
     public int getHealth() {
         return health;
@@ -46,9 +51,12 @@ public class EntityData implements Serializable {
     public EntityData(){
     }
 
-    public EntityData(int health, float x, float y){
+    public EntityData(int health, float x, float y, Tag tag, ZombieState state ){
         this.health = health;
         this.x = x;
         this.y = y;
+        this.tag = tag;
+        this.state = state;
+
     }
 }

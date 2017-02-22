@@ -21,22 +21,12 @@ public class ClientGameStateInterface {
     }
 
     public void update(ServerGameState updatedState){
-        if(state.getMapImage()==null){
-            state.setUpMapData(updatedState.getMapImage());
-        }
-        ArrayList<Zombie> zom = updatedState.getZombies();
-        ArrayList<EntityData> players = updatedState.getPlayers();
-
-        state.setZombies(zom);
-        state.setPlayers(players);
-        state.setInProgress(true);
-        state.updateTime(updatedState.getTimeRemaining());
-        System.out.println("Updated client side time "+state.getTimeRemaining());
+        state.updateClientState(updatedState);
     }
 
     public EntityData getPlayer(){
         Player p = state.getPlayer();
-        return new EntityData(p.getHealth(),p.getX(),p.getY());
+        return new EntityData(p.getHealth(),p.getX(),p.getY(), EntityData.Tag.PLAYER,null);
     }
 
     public Player getPlayerObj(){
