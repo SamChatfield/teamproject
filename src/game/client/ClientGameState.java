@@ -58,11 +58,7 @@ public class ClientGameState extends GameState {
         return player;
     }
 
-    private void setZombies(ArrayList<EntityData> zomb){
-        this.zombies = convert(zomb);
-    }
-
-    public ArrayList<Zombie> convert(ArrayList<EntityData> zombieFrame){
+    public void setZombies(ArrayList<EntityData> zombieFrame){
         ArrayList<Zombie> done = new ArrayList<>();
         for(EntityData z:zombieFrame){
             try{
@@ -73,7 +69,7 @@ public class ClientGameState extends GameState {
                 System.out.println("Failure: ResourceLoader could not load image \n" + e.getMessage());
             }
         }
-        return done;
+        this.zombies = done;
     }
 
     public ArrayList<Zombie> getZombies(){

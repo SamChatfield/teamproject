@@ -30,6 +30,7 @@ public class Server {
         // Create ServerSocket
         ServerSocket outSocket = null;
 
+        // this state should be shared between two connected clients. One made for each game.
         ServerGameState state = new ServerGameState();
         GameStateInterface inter = new GameStateInterface(state); // connect the state with its interface.
 

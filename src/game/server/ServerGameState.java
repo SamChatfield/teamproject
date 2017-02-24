@@ -38,7 +38,6 @@ public class ServerGameState extends GameState {
     public void startNewGame(){
         // First we want to generate the map
         mapImage = "prototypemap.png";
-        this.inProgress = true;
         int zombieCount = 100;
         ArrayList<EntityData> zombieFactory = new ArrayList<>();
         try{
@@ -63,6 +62,7 @@ public class ServerGameState extends GameState {
         // Start up a new game instance
         GameInstance instance = new GameInstance(this);
         instance.start();
+        this.inProgress = true;
 
     }
 

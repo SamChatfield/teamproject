@@ -29,7 +29,7 @@ public class Timer implements Runnable {
 	}
 	
 	public void run() {
-		for(time = 180; time>0; time--) {
+		for(time = 180; time>=0; time--) {
 			System.out.println("Time "+time);
 			try {
 				state.updateTime(time);
