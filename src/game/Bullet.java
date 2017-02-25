@@ -25,9 +25,10 @@ public class Bullet extends Entity {
     private Player player;
     private double distance;
     private static final double fadeDistance = 5;
+    private static final BufferedImage image = ResourceLoader.bulletImage();
     
-    public Bullet(Player player, float aimX, float aimY, BufferedImage image, MapData mapData) {
-        super(player.x(), player.y(), BULLET_SPEED, 0, image, mapData);
+    public Bullet(Player player, float aimX, float aimY, MapData mapData) {
+        super(player.x(), player.y(), BULLET_SPEED, 0, mapData);
 //        x = player.x();
 //        y = player.y();
 
@@ -96,6 +97,10 @@ public class Bullet extends Entity {
 
     public float getY() {
         return y;
+    }
+
+    public static BufferedImage getImage() {
+        return image;
     }
 
 }

@@ -8,7 +8,6 @@ import game.map.MapData;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +22,7 @@ public class Player extends Entity {
     public static final int HEALTH = 50;
     private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
     private static final float MOVE_SPEED = 0.1f;
+    private static final BufferedImage image = ResourceLoader.playerImage();
     
     private int numConvertedZombies;
 	public boolean conversionMode;
@@ -30,10 +30,10 @@ public class Player extends Entity {
 
     private ArrayList<Bullet> bullets;
 
-    public Player(float x, float y, BufferedImage image, MapData mapData) {
+    public Player(float x, float y, MapData mapData) {
 //        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
 //        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, image, mapData);
+        super(x, y, MOVE_SPEED, HEALTH, mapData);
         bullets = new ArrayList<>(20);
         conversionMode = false;
     }
@@ -43,13 +43,7 @@ public class Player extends Entity {
         long now = System.nanoTime();
         if (now - lastAttackTime > SHOOT_DELAY) {
             lastAttackTime = now;
-            try {
-                bullets.add(new Bullet(this, aimX, aimY, ResourceLoader.bulletImage(), mapData));
-            } catch (IOException e) {
-                System.out.println("Couldn't get bullet image. RIP");
-                e.printStackTrace();
-                System.exit(1);
-            }
+            bullets.add(new Bullet(this, aimX, aimY, mapData));
             return true;
         } else {
         	return false;
@@ -124,4 +118,9 @@ public class Player extends Entity {
     public int getNumConvertedZombies() {
     	return numConvertedZombies;
     }
+
+    public static BufferedImage getImage() {
+        return image;
+    }
+
 }

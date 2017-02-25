@@ -1,12 +1,9 @@
 package game.client;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import game.Entity;
-import game.ResourceLoader;
-import game.server.ServerGameState;
-import game.util.GameState;
 import game.Zombie;
 import game.map.MapData;
+import game.server.ServerGameState;
+import game.util.GameState;
 
 import java.util.ArrayList;
 
@@ -60,9 +57,9 @@ public class ClientGameState extends GameState {
 
     public void setZombies(ArrayList<EntityData> zombieFrame){
         ArrayList<Zombie> done = new ArrayList<>();
-        for(EntityData z:zombieFrame){
+        for(EntityData z : zombieFrame){
             try{
-                Zombie converted = new Zombie(z.getX(),z.getY(),ResourceLoader.zombieImage(), ResourceLoader.zombiePlayerImage(),mapData);
+                Zombie converted = new Zombie(z.getX(),z.getY(), mapData);
                 converted.setHealth(z.getHealth());
                 done.add(converted);
             }catch(Exception e) {
