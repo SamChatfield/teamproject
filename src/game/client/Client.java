@@ -142,7 +142,7 @@ public class Client extends Canvas {
 				if(player == null) {
 					System.out.println("Setting up player object");
 					try {
-						this.player = new Player(0.0f, 0.0f, ResourceLoader.playerImage(), inter.getMapData());
+						this.player = new Player(0.0f, 0.0f, inter.getMapData());
 						inter.setPlayer(player);
 					} catch (Exception e) {
 						System.out.println(e.getMessage());

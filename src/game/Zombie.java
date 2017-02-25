@@ -22,17 +22,16 @@ public class Zombie extends Entity {
     private static final int HEALTH = 25;
     private static final float MOVE_SPEED = 0.06f;
     public static final float AGGRO_RANGE = 4.0f;
-
-    private BufferedImage playerImage;
+    private static final BufferedImage image = ResourceLoader.zombieImage();
+    private static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
     
     public enum State {
         WILD, PLAYER, OPPONENT;
     }
 
-    public Zombie(float x, float y, BufferedImage image, BufferedImage imagePlayer, MapData mapData) {
+    public Zombie(float x, float y, MapData mapData) {
 //        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, image, mapData);
-    	this.playerImage = imagePlayer;
+        super(x, y, MOVE_SPEED, HEALTH, mapData);
         this.state = State.WILD;
     }
 
@@ -75,7 +74,7 @@ public class Zombie extends Entity {
             
             face((int) zdv.x(), (int) zdv.y());
     	}
-    }      
+    }
     
     public void newMovingDir() {
         Vector zdv = Vector.randomVector();
@@ -124,7 +123,7 @@ public class Zombie extends Entity {
         g2d.rotate(facingAngle, drawX + w / 2, drawY + h / 2);
 
         if(state == State.PLAYER) {
-        	g2d.drawImage(playerImage, drawX, drawY, null);
+        	g2d.drawImage(playerZombieImage, drawX, drawY, null);
         }
         else if(state == State.OPPONENT) {
         	// Change this later
@@ -136,6 +135,8 @@ public class Zombie extends Entity {
         g2d.setTransform(at);
     }
 
-
+    public static BufferedImage getImage() {
+        return image;
+    }
 
 }

@@ -2,7 +2,6 @@ package game;
 
 import game.map.MapData;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 /**
@@ -13,19 +12,18 @@ public class Entity implements Serializable {
     protected double facingAngle;
     protected float x, y; // x and y position of the centre of this entity in the game coord system
     protected float moveSpeed; // how fast can this entity move through the world (normal speed is 1.0f)
-    protected BufferedImage image;
     protected CollisionBox collisionBox;
     protected boolean showCollBox;
     protected int health;
     protected long lastAttackTime;
     protected MapData mapData;
+    protected int imageWidth, imageHeight;
 
 //    public Entity(float x, float y, float moveSpeed, int health, CollisionBox collisionBox, BufferedImage image) {
-    public Entity(float x, float y, float moveSpeed, int health, BufferedImage image, MapData mapData) {
+    public Entity(float x, float y, float moveSpeed, int health, MapData mapData) {
         this.x = x;
         this.y = y;
         this.moveSpeed = moveSpeed;
-        this.image = image;
         showCollBox = false;
         this.health = health;
         lastAttackTime = 0L;
@@ -33,8 +31,6 @@ public class Entity implements Serializable {
         this.mapData = mapData;
         collisionBox = new CollisionBox(this);
     }
-
-    
     
     public float x() {
         return x;
