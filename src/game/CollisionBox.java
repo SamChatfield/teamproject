@@ -5,11 +5,12 @@ import game.client.Player;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  * Created by Sam on 31/01/2017.
  */
-public class CollisionBox {
+public class CollisionBox implements Serializable {
 
     private Entity owner;
     private float width, height; // width and height of the box in the game coord system

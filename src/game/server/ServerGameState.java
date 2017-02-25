@@ -1,6 +1,8 @@
 package game.server;
 
 import game.Entity;
+import game.map.MapData;
+import game.map.MapParser;
 import game.util.GameState;
 import game.Zombie;
 import game.client.EntityData;
@@ -16,8 +18,8 @@ import java.util.Random;
  */
 public class ServerGameState extends GameState {
 
-    private ArrayList<EntityData> zombies;
-    private int threads =0;
+    //private transient MapData mapData;
+
     public ServerGameState(){
     }
 
@@ -38,11 +40,10 @@ public class ServerGameState extends GameState {
     public void startNewGame(){
         // First we want to generate the map
         mapImage = "prototypemap.png";
+        //mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
         int zombieCount = 100;
-        ArrayList<EntityData> zombieFactory = new ArrayList<>();
+        ArrayList<Zombie> zombieFactory = new ArrayList<>();
         try{
-            threads++;
-            System.out.println("Currently there are "+threads+" threads");
             for (int i = 0; i < zombieCount; i++) {
               //  System.out.println("Zombie");
 
@@ -51,7 +52,7 @@ public class ServerGameState extends GameState {
                 float x = (float) (0.5-rand.nextFloat())*50;
                 float y = (float) (0.5-rand.nextFloat())*50;
                 //System.out.println(x+" "+y);
-                zombieFactory.add(new EntityData(100,x,y, EntityData.Tag.ZOMBIE, EntityData.ZombieState.WILD));
+                zombieFactory.add(new Zombie(x,y,null));
                 //zombies.get(i).newMovingDir();
             }
         }catch(Exception e){
@@ -64,10 +65,6 @@ public class ServerGameState extends GameState {
         instance.start();
         this.inProgress = true;
 
-    }
-
-    public ArrayList<EntityData> getZombies(){
-        return zombies;
     }
 
 }

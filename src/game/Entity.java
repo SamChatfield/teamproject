@@ -84,7 +84,7 @@ public class Entity implements Serializable {
     }
 
     public void setHealth(int newHealth){
-        this.health = newHealth;
+        this.health = health;
     }
 
 }

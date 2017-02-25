@@ -23,7 +23,7 @@ public class GameInstance extends Thread {
 
     @Override
     public void run() {
-        ArrayList<EntityData> zombies = state.getZombies();
+        ArrayList<Zombie> zombies = state.getZombies();
         ArrayList<EntityData> players = state.getPlayers();
         // Move the zombies around randomly
         Random rand = new Random();
@@ -33,7 +33,7 @@ public class GameInstance extends Thread {
         }catch(Exception e){
 
         }
-        for (EntityData zombie : zombies) {
+        for (Zombie zombie : zombies) {
             // Change the zombie's direction with given probability
             for (EntityData player : players) {
                 if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {

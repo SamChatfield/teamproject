@@ -14,7 +14,6 @@ import java.util.ArrayList;
  */
 public class ClientGameState extends GameState {
 
-    private ArrayList<Zombie> zombies;
     private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
     private Player player;
 
@@ -24,7 +23,7 @@ public class ClientGameState extends GameState {
     }
 
     public void updateClientState(ServerGameState updatedState){
-        setZombies(updatedState.getZombies());
+        this.zombies = updatedState.getZombies();
         setPlayers(players);
         setInProgress(true);
         updateTime(updatedState.getTimeRemaining());
@@ -53,23 +52,5 @@ public class ClientGameState extends GameState {
 
     public Player getPlayer() {
         return player;
-    }
-
-    public void setZombies(ArrayList<EntityData> zombieFrame){
-        ArrayList<Zombie> done = new ArrayList<>();
-        for(EntityData z : zombieFrame){
-            try{
-                Zombie converted = new Zombie(z.getX(),z.getY(), mapData);
-                converted.setHealth(z.getHealth());
-                done.add(converted);
-            }catch(Exception e) {
-                System.out.println("Failure: ResourceLoader could not load image \n" + e.getMessage());
-            }
-        }
-        this.zombies = done;
-    }
-
-    public ArrayList<Zombie> getZombies(){
-        return zombies;
     }
 }
