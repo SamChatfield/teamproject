@@ -1,6 +1,7 @@
 package game.client;
 
 import game.server.ServerGameState;
+import game.util.SendableState;
 
 import java.io.ObjectInputStream;
 
@@ -45,7 +46,7 @@ public class ClientReceiver extends Thread {
 					}
 				}else{
 					System.out.println("Got state from server");
-					ServerGameState state = (ServerGameState) objIn.readObject();
+					SendableState state = (SendableState) objIn.readObject();
 					inter.update(state); // update the clients view of the game state.
 				}
 

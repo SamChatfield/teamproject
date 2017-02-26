@@ -2,6 +2,7 @@ package game;
 
 import game.client.Player;
 import game.map.MapData;
+import game.util.DataPacket;
 import game.util.Vector;
 
 import java.awt.*;
@@ -28,7 +29,7 @@ public class Bullet extends Entity {
     private static final BufferedImage image = ResourceLoader.bulletImage();
     
     public Bullet(Player player, float aimX, float aimY, MapData mapData) {
-        super(player.x(), player.y(), BULLET_SPEED, 0, mapData);
+        super(player.x(), player.y(), BULLET_SPEED, 0, mapData, DataPacket.Tag.BULLET);
 //        x = player.x();
 //        y = player.y();
 
@@ -46,8 +47,8 @@ public class Bullet extends Entity {
     public void move(double delta) {
     	float deltX = (float) (dx * BULLET_SPEED * delta);
     	float deltY = (float) (dy * BULLET_SPEED * delta);
-        x += dx * BULLET_SPEED * delta;
-        y += dy * BULLET_SPEED * delta;
+        setX( x()+ dx * BULLET_SPEED * (float) delta);
+        setY( y()+ dy * BULLET_SPEED * (float) delta);
         distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
         
         if(distance > fadeDistance) {
@@ -55,22 +56,6 @@ public class Bullet extends Entity {
         }
     }
 
-    public void draw(Graphics2D g2d) {
-        int w = image.getWidth();
-        int h = image.getHeight();
-
-//        int drawX = Math.round(x - (width / 2.0f));
-//        int drawY = Math.round(y - (height / 2.0f));
-
-        Point drawPoint = player.relativeDrawPoint(x, y, w, h);
-        int drawX = drawPoint.x;
-        int drawY = drawPoint.y;
-
-        AffineTransform at = g2d.getTransform();
-        g2d.rotate(facingAngle, drawX, drawY);
-        g2d.drawImage(image, drawX, drawY, null);
-        g2d.setTransform(at);
-    }
 
     public void damage(Entity entity, int damageDone, boolean conversionMode) {
     	Zombie zom = (Zombie) entity;
@@ -81,7 +66,7 @@ public class Bullet extends Entity {
         	}
         	else {
         		// TODO: Add in so converted zombies won't damage player
-                entity.health -= damageDone/1.5;
+                entity.setHealth(entity.getHealth() - damageDone);
                 active = false;
         	}
         }
@@ -92,11 +77,11 @@ public class Bullet extends Entity {
     }
 
     public float getX() {
-        return x;
+        return x();
     }
 
     public float getY() {
-        return y;
+        return y();
     }
 
     public static BufferedImage getImage() {

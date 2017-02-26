@@ -40,10 +40,10 @@ public class GameInstance extends Thread {
                     //zombie.followDirection(player);
                 } else {
                     if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                       // zombie.newMovingDir();
+                        zombie.newMovingDir();
                     }
                 }
-                //zombie.move(60);
+                zombie.move(60);
             }
 
         }

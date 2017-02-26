@@ -4,6 +4,7 @@ import game.Bullet;
 import game.Entity;
 import game.ResourceLoader;
 import game.map.MapData;
+import game.util.DataPacket;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -33,7 +34,7 @@ public class Player extends Entity {
     public Player(float x, float y, MapData mapData) {
 //        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
 //        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, mapData);
+        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Tag.PLAYER);
         bullets = new ArrayList<>(20);
         conversionMode = false;
     }
@@ -50,31 +51,14 @@ public class Player extends Entity {
         }
     }
 
-    public void draw(Graphics2D g2d) {
-        // Width and height of the entity sprite
-        int w = image.getWidth();
-        int h = image.getHeight();
-
-        if (showCollBox) {
-            g2d.setColor(Color.RED);
-            g2d.draw(collisionBox.getDrawRect(this));
-            g2d.setColor(Color.BLACK);
-        }
-
-        AffineTransform at = g2d.getTransform();
-        g2d.rotate(facingAngle, 320, 320);
-
-        g2d.drawImage(image, 320 - w / 2, 320 - h / 2, null);
-        g2d.setTransform(at);
-    }
     
     
     public float getX() {
-        return x;
+        return x();
     }
     
     public float getY() {
-        return y;
+        return y();
     }
 
     /**
@@ -86,8 +70,8 @@ public class Player extends Entity {
      * @return the screen point at which to draw the entity
      */
     public Point relativeDrawPoint(float x, float y, int w, int h) {
-        float px = this.x; // player x pos
-        float py = this.y; // player y pos
+        float px = x(); // player x pos
+        float py = y(); // player y pos
         float pvr = Client.VIEW_SIZE / 2.0f; // player view radius - 5.0
         int swr = Client.GAME_DIMENSION.width / 2; // screen width radius
         int shr = Client.GAME_DIMENSION.height / 2; // screen height radius

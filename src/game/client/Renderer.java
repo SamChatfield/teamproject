@@ -4,6 +4,7 @@ import game.Bullet;
 import game.Zombie;
 import game.map.MapData;
 import game.map.Tile;
+import game.util.DataPacket;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -53,7 +54,7 @@ public class Renderer {
         this.player = inter.getPlayerObj(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
         int timeRemaining = inter.getTimeRemaining();
-    	ArrayList<Zombie> zombies = inter.getZombies();
+    	ArrayList<DataPacket> zombies = inter.getZombies();
     	MapData mapData = inter.getMapData();
 
         // Set up the graphics instance for the current back buffer
@@ -79,7 +80,7 @@ public class Renderer {
             }
         }
 
-       for (Zombie z : zombies) {
+       for (DataPacket z : zombies) {
            z.draw(g2d, player);
         }
 
