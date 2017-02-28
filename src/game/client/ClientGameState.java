@@ -3,11 +3,8 @@ package game.client;
 import game.Zombie;
 import game.map.MapData;
 import game.server.ServerGameState;
-import game.util.DataPacket;
 import game.util.GameState;
-import game.util.SendableState;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +15,6 @@ import java.util.ArrayList;
 public class ClientGameState extends GameState {
 
     private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
-    private ArrayList<DataPacket> zombies;
     private Player player;
 
     public ClientGameState(){
@@ -26,7 +22,7 @@ public class ClientGameState extends GameState {
         this.isReady = false;
     }
 
-    public void updateClientState(SendableState updatedState){
+    public void updateClientState(ServerGameState updatedState){
         this.zombies = updatedState.getZombies();
         setPlayers(players);
         setInProgress(true);
@@ -35,6 +31,7 @@ public class ClientGameState extends GameState {
         if(getMapImage()==null){
             setUpMapData(updatedState.getMapImage());
             isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
+
         }
     }
 
@@ -51,10 +48,6 @@ public class ClientGameState extends GameState {
         player = p;
         isReady = true;
         System.out.println("Set isReady to true");
-    }
-
-    public ArrayList<DataPacket> getZombies() {
-        return zombies;
     }
 
     public Player getPlayer() {

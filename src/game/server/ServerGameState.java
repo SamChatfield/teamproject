@@ -3,7 +3,6 @@ package game.server;
 import game.Entity;
 import game.map.MapData;
 import game.map.MapParser;
-import game.util.DataPacket;
 import game.util.GameState;
 import game.Zombie;
 import game.client.EntityData;
@@ -19,29 +18,29 @@ import java.util.Random;
  */
 public class ServerGameState extends GameState {
 
-    protected ArrayList<Zombie> zombies;
+    //private transient MapData mapData;
 
     public ServerGameState(){
     }
 
-    public ArrayList<DataPacket> getZombieData(){
-        ArrayList<DataPacket> packagedZombies = new ArrayList<>();
-        for(Zombie z:zombies){
-            packagedZombies.add(z.getData());
-        }
-        return packagedZombies;
+    /**
+     * Secondary constructor used for copying this class for sending.
+     * The main game state is passed into here as a parameter, and then this object is sendable.
+     *
+     * @param state State to create a copy of.
+     */
+    public ServerGameState(ServerGameState state){
+        this.zombies = state.getZombies();
+        this.players = state.getPlayers();
+        this.mapImage = state.getMapImage();
+        this.timeRemaining = state.getTimeRemaining();
     }
-
-    public ArrayList<Zombie> getZombies() {
-        return zombies;
-    }
-
 
     // TODO: Stop this from terminating the program
     public void startNewGame(){
         // First we want to generate the map
         mapImage = "prototypemap.png";
-        mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
+        //mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
         int zombieCount = 100;
         ArrayList<Zombie> zombieFactory = new ArrayList<>();
         try{
@@ -53,7 +52,7 @@ public class ServerGameState extends GameState {
                 float x = (float) (0.5-rand.nextFloat())*50;
                 float y = (float) (0.5-rand.nextFloat())*50;
                 //System.out.println(x+" "+y);
-                zombieFactory.add(new Zombie(x,y,mapData));
+                zombieFactory.add(new Zombie(x,y,null));
                 //zombies.get(i).newMovingDir();
             }
         }catch(Exception e){

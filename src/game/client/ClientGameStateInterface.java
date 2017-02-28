@@ -3,9 +3,6 @@ package game.client;
 import game.Zombie;
 import game.map.MapData;
 import game.server.ServerGameState;
-import game.util.DataPacket;
-import game.util.SendableState;
-
 import java.util.ArrayList;
 
 /**
@@ -23,7 +20,7 @@ public class ClientGameStateInterface {
         this.sender = sender;
     }
 
-    public void update(SendableState updatedState){
+    public void update(ServerGameState updatedState){
         state.updateClientState(updatedState);
     }
 
@@ -35,8 +32,7 @@ public class ClientGameStateInterface {
     public Player getPlayerObj(){
         return state.getPlayer();
     }
-    
-    public ArrayList<DataPacket> getZombies(){
+    public ArrayList<Zombie> getZombies(){
         return state.getZombies();
     }
 

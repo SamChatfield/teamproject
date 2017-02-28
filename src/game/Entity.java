@@ -1,9 +1,7 @@
 package game;
 
 import game.map.MapData;
-import game.util.DataPacket;
 
-import javax.xml.crypto.Data;
 import java.io.Serializable;
 
 /**
@@ -11,63 +9,57 @@ import java.io.Serializable;
  */
 public class Entity implements Serializable {
 
+    protected double facingAngle;
+    protected float x, y; // x and y position of the centre of this entity in the game coord system
     protected float moveSpeed; // how fast can this entity move through the world (normal speed is 1.0f)
     protected CollisionBox collisionBox;
     protected boolean showCollBox;
+    protected int health;
     protected long lastAttackTime;
     protected MapData mapData;
     protected int imageWidth, imageHeight;
 
-    // A lot of data is then wrapped up in here:
-    private DataPacket data;
-
-
-    //    public Entity(float x, float y, float moveSpeed, int health, CollisionBox collisionBox, BufferedImage image) {
-    public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Tag tag) {
-        this.data = new DataPacket(health,x,y,0.0d,tag);
-
+//    public Entity(float x, float y, float moveSpeed, int health, CollisionBox collisionBox, BufferedImage image) {
+    public Entity(float x, float y, float moveSpeed, int health, MapData mapData) {
+        this.x = x;
+        this.y = y;
         this.moveSpeed = moveSpeed;
         showCollBox = false;
+        this.health = health;
         lastAttackTime = 0L;
+        facingAngle = 0.0d;
         this.mapData = mapData;
         collisionBox = new CollisionBox(this);
     }
     
     public float x() {
-        return data.getX();
+        return x;
     }
 
     public float y() {
-        return data.getY();
+        return y;
     }
 
-    public void setX(float x){
-        data.setX(x);
-    }
-
-    public void setY(float y){
-        data.setY(y);
-    }
     public float getMoveSpeed() {
         return moveSpeed;
     }
 
     public void move(float dx, float dy) {
-        float nx = y() + dx;
-        float ny = x() + dy;
+        float nx = x + dx;
+        float ny = y + dy;
 
         if (mapData.isEntityMoveValid(nx, ny, this)) {
-            setX(nx);
-            setY(ny);
-        } else if (mapData.isEntityMoveValid(nx, y(), this)) {
-            setX(nx);
-        } else if (mapData.isEntityMoveValid(x(), ny, this)) {
-            setY(ny);
+            x = nx;
+            y = ny;
+        } else if (mapData.isEntityMoveValid(nx, y, this)) {
+            x = nx;
+        } else if (mapData.isEntityMoveValid(x, ny, this)) {
+            y = ny;
         }
     }
 
     public void face(float fx, float fy) {
-        data.setFacingDirection(Math.atan2(fx, fy) - Math.PI / 2);
+        facingAngle = Math.atan2(fx, fy) - Math.PI / 2;
 //        System.out.println("fx: " + fx + " fy: " + fy + " = " + facingAngle);
     }
 
@@ -84,19 +76,15 @@ public class Entity implements Serializable {
     }
 
     public double getFacingAngle() {
-        return data.getFacingDirection();
+        return facingAngle;
     }
 
     public int getHealth(){
-        return data.getHealth();
+        return health;
     }
 
     public void setHealth(int newHealth){
-        data.setHealth(newHealth);
-    }
-
-    public DataPacket getData(){
-        return data;
+        this.health = health;
     }
 
 }
