@@ -42,7 +42,7 @@ public class Client extends Canvas {
 	private boolean running;
 	private Player player;
 
-	private ClientGameStateInterface inter;
+	private ClientGameState state;
 	private ClientSender sender;
 
 	private Renderer renderer;
@@ -68,8 +68,8 @@ public class Client extends Canvas {
 	// Non final stuff, remove before release
 	private final int zombieCount = 70;
 
-	private Client(ClientGameStateInterface inter, ClientSender sender) {
-		this.inter = inter;
+	private Client(ClientGameState state, ClientSender sender) {
+		this.state = state;
 		this.sender = sender;
 		container = new JFrame(TITLE);
 		JPanel panel = (JPanel) container.getContentPane();
@@ -106,7 +106,7 @@ public class Client extends Canvas {
 	private void loop() {
 
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
-        renderer = new Renderer(bufferStrategy, inter);
+        renderer = new Renderer(bufferStrategy, state);
 
         long lastLoopTime = System.nanoTime();
 
@@ -129,10 +129,10 @@ public class Client extends Canvas {
 	
 			while (currentState == STATE.GAME) {
 
-				if (!inter.isConnected()){
+				if (!state.isConnected()){
 					sender.sendObject("StartGame"); // send a message to the server to start the game.
-					while (!inter.isConnected()) {
-						System.out.println("Waiting for server");
+					while (!state.isConnected()) {
+						//System.out.println("Waiting for server");
 					}
 					System.out.println("State from server received");
 				}
@@ -142,13 +142,19 @@ public class Client extends Canvas {
 				if(player == null) {
 					System.out.println("Setting up player object");
 					try {
-						this.player = new Player(0.0f, 0.0f, inter.getMapData());
-						inter.setPlayer(player);
+						this.player = new Player(0.0f, 0.0f, state.getMapData());
+						state.setPlayer(player);
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
+
 					}
 				}
 
+				while(!state.isReady()){
+					System.out.println("Player not initialised yet");
+
+				}
+				System.out.println(state.getPlayer().getX());
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
 				long now = System.nanoTime();
@@ -174,11 +180,11 @@ public class Client extends Canvas {
 						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-						System.out.println("Client loop interrupted exception");
+						System.out.println("Client loop staterupted exception");
 					}
 				}
 	
-				if(inter.getTimeRemaining() <= 0) {
+				if(state.getTimeRemaining() <= 0) {
 					currentState = STATE.END;
 					break;
 				}
@@ -311,7 +317,7 @@ public class Client extends Canvas {
      */
 	private void update(double delta) {
 
-	    ArrayList<Zombie> zombies = inter.getZombies();
+	    ArrayList<Zombie> zombies = state.getZombies();
 		// Player movement
 		float pMoveSpeed = player.getMoveSpeed();
 
@@ -389,7 +395,7 @@ public class Client extends Canvas {
 		float pdy = pnv.y() * pMoveSpeed * ((float) delta); // Actual change in y this update
 		player.move(pdx, pdy);
 
-		// Face the player in the direction of the mouse pointer
+		// Face the player in the direction of the mouse postate
 		Point mousePos = inputHandler.getMousePos();
 		if (inputHandler.isMouseInside() && mousePos != null) {
 //			player.face(mousePos.x - 320, mousePos.y - 320);
@@ -426,7 +432,7 @@ public class Client extends Canvas {
 
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
-            if ((!inter.getMapData().isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
+            if ((!state.getMapData().isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
                 player.getBullets().remove(i);
                 continue;
             }
@@ -448,7 +454,7 @@ public class Client extends Canvas {
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
 */
-		if(player.getHealth() <= 0) {
+		if(player.getHealth() < 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}
@@ -486,16 +492,15 @@ public class Client extends Canvas {
 
         // Then create a client state for the client
         ClientGameState state = new ClientGameState();
-        ClientGameStateInterface stateInt = new ClientGameStateInterface(state,client_receiver,client_sender); // set up an interface to that state.
-        client_receiver.addInterface(stateInt); //must be called before starting the thread.
-        client_sender.addInterface(stateInt);
-        // If this method didn't exist, interface would need to be added above, but interface relies on receiver.
+        client_receiver.addState(state); //must be called before starting the thread.
+        client_sender.addState(state);
+        // If this method didn't exist, stateface would need to be added above, but stateface relies on receiver.
 
         // Starting threads
         client_sender.start();
         client_receiver.start();
 
-        Client client = new Client(stateInt,client_sender);
+        Client client = new Client(state,client_sender);
 
         // Create and start the client loop over the loop method of the client object.
         // :: is a method reference since loop is an existing method,

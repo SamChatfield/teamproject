@@ -3,6 +3,7 @@ package game.server;
 import game.Entity;
 import game.map.MapData;
 import game.map.MapParser;
+import game.util.DataPacket;
 import game.util.GameState;
 import game.Zombie;
 import game.client.EntityData;
@@ -17,8 +18,6 @@ import java.util.Random;
  * The game state of the server at any one time.
  */
 public class ServerGameState extends GameState {
-
-    //private transient MapData mapData;
 
     public ServerGameState(){
     }
@@ -40,7 +39,7 @@ public class ServerGameState extends GameState {
     public void startNewGame(){
         // First we want to generate the map
         mapImage = "prototypemap.png";
-        //mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
+        mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
         int zombieCount = 100;
         ArrayList<Zombie> zombieFactory = new ArrayList<>();
         try{
@@ -52,7 +51,7 @@ public class ServerGameState extends GameState {
                 float x = (float) (0.5-rand.nextFloat())*50;
                 float y = (float) (0.5-rand.nextFloat())*50;
                 //System.out.println(x+" "+y);
-                zombieFactory.add(new Zombie(x,y,null));
+                zombieFactory.add(new Zombie(x,y,mapData));
                 //zombies.get(i).newMovingDir();
             }
         }catch(Exception e){
@@ -65,6 +64,14 @@ public class ServerGameState extends GameState {
         instance.start();
         this.inProgress = true;
 
+    }
+
+    public ArrayList<DataPacket> getSendableZombies(){
+        ArrayList<DataPacket> data = new ArrayList<DataPacket>();
+        for(Zombie z:zombies){
+            data.add(z.getData());
+        }
+        return data;
     }
 
 }

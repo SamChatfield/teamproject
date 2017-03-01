@@ -2,6 +2,7 @@ package game;
 
 import game.client.Player;
 import game.map.MapData;
+import game.util.DataPacket;
 import game.util.Vector;
 
 import java.awt.*;
@@ -29,6 +30,10 @@ public class Zombie extends Entity {
         WILD, PLAYER, OPPONENT;
     }
 
+    public void updateData(DataPacket data){
+        this.data = data;
+    }
+
     public Zombie(float x, float y, MapData mapData) {
 //        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
         super(x, y, MOVE_SPEED, HEALTH, mapData);
@@ -42,14 +47,7 @@ public class Zombie extends Entity {
     public float getDy() {
         return dy;
     }
-    
-    public float getX() {
-        return x;
-    }
-    
-    public float getY() {
-        return y;
-    }
+
     
     public State getState() {
     	return state;
@@ -60,13 +58,13 @@ public class Zombie extends Entity {
     }
 
     public void move(double delta) {
-        super.move(dx * moveSpeed * (float) delta, dy * moveSpeed * (float) delta);
+        super.move(dx * getMoveSpeed() * (float) delta, dy * getMoveSpeed() * (float) delta);
     }
 
     // Zombie vector changed to follow player, if wild.
     public void followDirection(Player player) {
     	if (state == State.WILD) {
-        	Vector zdv = ArtInt.followPlayer(x, y, player);
+        	Vector zdv = ArtInt.followPlayer(getX(), getY(), player);
         	Vector znv = zdv.normalised();
         	
             dx = znv.x();
@@ -94,7 +92,7 @@ public class Zombie extends Entity {
         else {
             if (now - lastAttackTime > 1000000000L) {
                 lastAttackTime = now;
-                entity.health -= damageDone;
+                entity.setHealth(entity.getHealth() - damageDone);
             }
         }
     }
@@ -104,12 +102,12 @@ public class Zombie extends Entity {
         int w = image.getWidth();
         int h = image.getHeight();
 
-        Point drawPoint = player.relativeDrawPoint(x, y, w, h);
+        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
         
         g2d.setColor(Color.GREEN);
-        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, this.health, 2);
+        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, this.getHealth(), 2);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 
@@ -120,7 +118,7 @@ public class Zombie extends Entity {
         }
 
         AffineTransform at = g2d.getTransform();
-        g2d.rotate(facingAngle, drawX + w / 2, drawY + h / 2);
+        g2d.rotate(data.getFacingAngle(), drawX + w / 2, drawY + h / 2);
 
         if(state == State.PLAYER) {
         	g2d.drawImage(playerZombieImage, drawX, drawY, null);

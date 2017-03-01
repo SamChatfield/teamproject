@@ -21,31 +21,34 @@ public class GameInstance extends Thread {
         state.updateTime(timer.getTimeRemaining());
     }
 
-    @Override
     public void run() {
-        ArrayList<Zombie> zombies = state.getZombies();
-        ArrayList<EntityData> players = state.getPlayers();
-        // Move the zombies around randomly
-        Random rand = new Random();
+        while(true) {
+            ArrayList<Zombie> zombies = state.getZombies();
+            ArrayList<EntityData> players = state.getPlayers();
+            // Move the zombies around randomly
+            Random rand = new Random();
 
-        try{
-            Thread.sleep(100);
-        }catch(Exception e){
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
 
-        }
-        for (Zombie zombie : zombies) {
-            // Change the zombie's direction with given probability
-            for (EntityData player : players) {
-                if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
-                    //zombie.followDirection(player);
-                } else {
-                    if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                       // zombie.newMovingDir();
+            }
+            for (Zombie zombie : zombies) {
+                // Change the zombie's direction with given probability
+                /*
+                for (EntityData player : players) {
+                    if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
+                        //zombie.followDirection(player);
+                    } else {
+                        if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                           // zombie.newMovingDir();
+                        }
                     }
                 }
-                //zombie.move(60);
-            }
+                */
+                zombie.move(60);
 
+            }
         }
 
     }

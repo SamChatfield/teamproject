@@ -18,7 +18,6 @@ public class Bullet extends Entity {
 //    private float x, y; // the x and y coord of the middle of the bullet
     private float dx, dy; // the change in x and y of the bullet each update before delta
 //    private float width, height;
-    private double facingAngle;
 //    private CollisionBox collisionBox;
 //    private Rectangle2D.Float shape;
     public boolean active;
@@ -28,7 +27,7 @@ public class Bullet extends Entity {
     private static final BufferedImage image = ResourceLoader.bulletImage();
     
     public Bullet(Player player, float aimX, float aimY, MapData mapData) {
-        super(player.x(), player.y(), BULLET_SPEED, 0, mapData);
+        super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData);
 //        x = player.x();
 //        y = player.y();
 
@@ -36,7 +35,7 @@ public class Bullet extends Entity {
         dx = normalDir.x();
         dy = normalDir.y();
 
-        facingAngle = player.getFacingAngle(); // TODO check the efficiency of this
+        data.setFacingAngle(player.getFacingAngle()); // TODO check the efficiency of this
 //        collisionBox = new CollisionBox(this, width, height);
 //        shape = new Rectangle2D.Float(x, y, image.getWidth(), image.getHeight());
         active = true;
@@ -46,8 +45,12 @@ public class Bullet extends Entity {
     public void move(double delta) {
     	float deltX = (float) (dx * BULLET_SPEED * delta);
     	float deltY = (float) (dy * BULLET_SPEED * delta);
-        x += dx * BULLET_SPEED * delta;
-        y += dy * BULLET_SPEED * delta;
+    	float incX = (float) (dx * BULLET_SPEED * delta);
+        float incY = (float) (dy * BULLET_SPEED * delta);
+
+        data.setX(getX() + incX);
+        data.setY(getY() + incY);
+
         distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
         
         if(distance > fadeDistance) {
@@ -62,12 +65,12 @@ public class Bullet extends Entity {
 //        int drawX = Math.round(x - (width / 2.0f));
 //        int drawY = Math.round(y - (height / 2.0f));
 
-        Point drawPoint = player.relativeDrawPoint(x, y, w, h);
+        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
 
         AffineTransform at = g2d.getTransform();
-        g2d.rotate(facingAngle, drawX, drawY);
+        g2d.rotate(data.getFacingAngle(), drawX, drawY);
         g2d.drawImage(image, drawX, drawY, null);
         g2d.setTransform(at);
     }
@@ -81,7 +84,7 @@ public class Bullet extends Entity {
         	}
         	else {
         		// TODO: Add in so converted zombies won't damage player
-                entity.health -= damageDone/1.5;
+                entity.setHealth(entity.getHealth() - damageDone);
                 active = false;
         	}
         }
@@ -91,16 +94,11 @@ public class Bullet extends Entity {
         return collisionBox;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
 
     public static BufferedImage getImage() {
         return image;
     }
+
+
 
 }

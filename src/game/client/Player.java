@@ -62,20 +62,12 @@ public class Player extends Entity {
         }
 
         AffineTransform at = g2d.getTransform();
-        g2d.rotate(facingAngle, 320, 320);
+        g2d.rotate(data.getFacingAngle(), 320, 320);
 
         g2d.drawImage(image, 320 - w / 2, 320 - h / 2, null);
         g2d.setTransform(at);
     }
-    
-    
-    public float getX() {
-        return x;
-    }
-    
-    public float getY() {
-        return y;
-    }
+
 
     /**
      * Calculate the point relative to the player at which the given entity will be drawn
@@ -86,8 +78,8 @@ public class Player extends Entity {
      * @return the screen point at which to draw the entity
      */
     public Point relativeDrawPoint(float x, float y, int w, int h) {
-        float px = this.x; // player x pos
-        float py = this.y; // player y pos
+        float px = getX(); // player x pos
+        float py = getY(); // player y pos
         float pvr = Client.VIEW_SIZE / 2.0f; // player view radius - 5.0
         int swr = Client.GAME_DIMENSION.width / 2; // screen width radius
         int shr = Client.GAME_DIMENSION.height / 2; // screen height radius

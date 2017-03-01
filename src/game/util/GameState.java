@@ -19,6 +19,11 @@ public class GameState implements Serializable {
     protected ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
     protected String mapImage; // the name of the file being used to create the image.
     protected int timeRemaining;
+    protected MapData mapData;
+
+    public MapData getMapData() {
+        return mapData;
+    }
 
     protected boolean isReady; // is the game set up on the client? Does the player object exist?
     protected boolean inProgress; // is the game in progress?

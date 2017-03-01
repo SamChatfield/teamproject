@@ -3,8 +3,11 @@ package game.client;
 import game.Zombie;
 import game.map.MapData;
 import game.server.ServerGameState;
+import game.util.DataPacket;
 import game.util.GameState;
+import game.util.SendableState;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 /**
@@ -14,34 +17,48 @@ import java.util.ArrayList;
  */
 public class ClientGameState extends GameState {
 
-    private MapData mapData; // we can keep this here, because we won't be sending it back to the server.
     private Player player;
+
 
     public ClientGameState(){
         this.mapImage = null;
         this.isReady = false;
+        this.isConnected = false;
+        this.zombies = new ArrayList<Zombie>();
+
     }
 
-    public void updateClientState(ServerGameState updatedState){
-        this.zombies = updatedState.getZombies();
+    public void updateClientState(SendableState updatedState){
+
+        if(!isConnected){
+            setUpMapData(updatedState.getMapImage());
+            for(int i = 0; i<100; i++){
+                zombies.add(new Zombie(10,10,mapData));
+            }
+            isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
+        }
+
+
         setPlayers(players);
         setInProgress(true);
-        updateTime(updatedState.getTimeRemaining());
-        System.out.println("Updated client side time "+getTimeRemaining());
-        if(getMapImage()==null){
-            setUpMapData(updatedState.getMapImage());
-            isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
 
+        ArrayList<DataPacket> sentZombies = updatedState.getZombies();
+        for(int i = 0; i<100; i++){
+            zombies.get(i).updateData(sentZombies.get(i));
         }
+        updateTime(updatedState.getTimeRemaining());
+        //System.out.println("Updated client side time "+getTimeRemaining());
+
+    }
+
+    public EntityData getPlayerEntity(){
+        return new EntityData(player.getHealth(),player.getX(),player.getY(), EntityData.Tag.PLAYER,null);
     }
 
     public void setUpMapData(String mapImage){
         this.mapImage = mapImage;
+        System.out.println("updated the mapImage");
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
-    }
-
-    public MapData getMapData(){
-        return mapData;
     }
 
     public void setPlayer(Player p){

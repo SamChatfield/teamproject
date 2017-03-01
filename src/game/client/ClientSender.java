@@ -11,7 +11,7 @@ public class ClientSender extends Thread {
 
 	private String username;
 	private ObjectOutputStream objOut;
-	private ClientGameStateInterface inter;
+	private ClientGameState inter;
 
 
 	/**
@@ -19,7 +19,7 @@ public class ClientSender extends Thread {
 	 * @param username Name of user
 	 * @param objOut ObjectOutputStream
 	 */
-	ClientSender(String username, ObjectOutputStream objOut, ClientGameStateInterface inter) {
+	ClientSender(String username, ObjectOutputStream objOut, ClientGameState inter) {
 		this.username = username;
 		this.objOut = objOut;
 		this.inter = inter;
@@ -51,7 +51,7 @@ public class ClientSender extends Thread {
 				if(inter.inProgress() == true){
 					if(inter.isReady()){
 					    System.out.println("Sending player");
-						objOut.writeObject(inter.getPlayer());
+						objOut.writeObject(inter.getPlayerEntity());
 						objOut.flush();
 					}
 				}
@@ -63,7 +63,7 @@ public class ClientSender extends Thread {
 		}
 	}
 
-	public void addInterface(ClientGameStateInterface inter){
+	public void addState(ClientGameState inter){
 	    this.inter = inter;
     }
 }

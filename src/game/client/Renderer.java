@@ -21,15 +21,15 @@ public class Renderer {
     private int gameH, gameW;
     private int maxHealth;
     private Font tradeWinds;
-    private ClientGameStateInterface inter;
+    private ClientGameState inter;
     
     public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
     public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
     
-    Renderer(BufferStrategy bufferStrategy, ClientGameStateInterface inter) {
+    Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
         this.bufferStrategy = bufferStrategy;
        // this.mapData = inter.getMapData();
-        this.inter = inter;
+        this.inter = state;
         this.gameH = Client.GAME_DIMENSION.height;
         this.gameW = Client.GAME_DIMENSION.width;
         
@@ -50,7 +50,7 @@ public class Renderer {
        
     
     public void render() {
-        this.player = inter.getPlayerObj(); // get the player object now (if render is called, the game definitely knows the state of the game)
+        this.player = inter.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
         int timeRemaining = inter.getTimeRemaining();
     	ArrayList<Zombie> zombies = inter.getZombies();

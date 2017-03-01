@@ -1,6 +1,7 @@
 package game.client;
 
 import game.server.ServerGameState;
+import game.util.SendableState;
 
 import java.io.ObjectInputStream;
 
@@ -12,7 +13,7 @@ public class ClientReceiver extends Thread {
 
 	private String username;
 	private ObjectInputStream objIn;
-	private ClientGameStateInterface inter;
+	private ClientGameState inter;
 	private boolean inProgress;
 
 	/**
@@ -26,7 +27,7 @@ public class ClientReceiver extends Thread {
 	}
 
 
-	public void addInterface(ClientGameStateInterface inter){
+	public void addState(ClientGameState inter){
 		this.inter = inter;
 	}
 
@@ -36,17 +37,20 @@ public class ClientReceiver extends Thread {
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
+				Thread.sleep(500);
 				if(!inProgress){
 					String s = (String)objIn.readObject();
 					if(s.equals("StartingGame")){
+						System.out.println("starting");
 						inProgress = true;
 					}else if(s.equals("GameOver")){
 						inProgress = false;
 					}
 				}else{
 					System.out.println("Got state from server");
-					ServerGameState state = (ServerGameState) objIn.readObject();
-					inter.update(state); // update the clients view of the game state.
+					SendableState state = (SendableState) objIn.readObject();
+					inter.updateClientState(state); // update the clients view of the game state.
+					System.out.println("Update complete");
 				}
 
 			}
