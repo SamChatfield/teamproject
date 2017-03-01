@@ -132,12 +132,11 @@ public class Client extends Canvas {
 				if (!state.isConnected()){
 					sender.sendObject("StartGame"); // send a message to the server to start the game.
 					while (!state.isConnected()) {
-					//	System.out.println("Waiting for game to begin");
+						try{Thread.sleep(1);}catch(Exception e){} // without this, this loop breaks on some machines.
 					}
 				}
 
 				this.player = state.getPlayer();
-
 
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
