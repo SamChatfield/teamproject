@@ -25,7 +25,6 @@ public class GameState implements Serializable {
         return mapData;
     }
 
-    protected boolean isReady; // is the game set up on the client? Does the player object exist?
     protected boolean inProgress; // is the game in progress?
     protected boolean isConnected; // is the game connected to the server? If this is false, the server hasn't sent a state yet
 
@@ -59,14 +58,6 @@ public class GameState implements Serializable {
 
     public boolean inProgress(){
         return inProgress;
-    }
-
-    /**
-     * Returns whether or not the interface has been initialised with values from the server
-     * @return true if the server has sent down the map data.
-     */
-    public boolean isReady(){
-        return isReady;
     }
 
     public boolean isConnected(){

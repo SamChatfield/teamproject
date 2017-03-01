@@ -22,7 +22,6 @@ public class ClientGameState extends GameState {
 
     public ClientGameState(){
         this.mapImage = null;
-        this.isReady = false;
         this.isConnected = false;
         this.zombies = new ArrayList<Zombie>();
 
@@ -31,16 +30,11 @@ public class ClientGameState extends GameState {
     public void updateClientState(SendableState updatedState){
 
         if(!isConnected){
-            setUpMapData(updatedState.getMapImage());
-            for(int i = 0; i<100; i++){
-                zombies.add(new Zombie(10,10,mapData));
-            }
-            isConnected = true; // we've got our first state send from the server. We are now connected and ready to set up the player objects.
+            this.mapImage = updatedState.getMapImage();
+            setUpGame();
         }
 
-
         setPlayers(players);
-        setInProgress(true);
 
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
         for(int i = 0; i<100; i++){
@@ -49,6 +43,26 @@ public class ClientGameState extends GameState {
         updateTime(updatedState.getTimeRemaining());
         //System.out.println("Updated client side time "+getTimeRemaining());
 
+    }
+
+    private void setUpGame(){
+        // The first time we run update we'll need to make a new player object, and add it to our
+        // client game state so we can use it again later.
+        if(player == null) {
+            System.out.println("Setting up player object");
+            try {
+                this.player = new Player(0.0f, 0.0f, mapData);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+
+        setUpMapData(mapImage);
+        for(int i = 0; i<100; i++){
+            zombies.add(new Zombie(10,10,mapData));
+        }
+        isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }
 
     public EntityData getPlayerEntity(){
@@ -63,8 +77,8 @@ public class ClientGameState extends GameState {
 
     public void setPlayer(Player p){
         player = p;
-        isReady = true;
         System.out.println("Set isReady to true");
+        isConnected = true;
     }
 
     public Player getPlayer() {

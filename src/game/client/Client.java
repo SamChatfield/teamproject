@@ -132,29 +132,14 @@ public class Client extends Canvas {
 				if (!state.isConnected()){
 					sender.sendObject("StartGame"); // send a message to the server to start the game.
 					while (!state.isConnected()) {
-						//System.out.println("Waiting for server");
-					}
-					System.out.println("State from server received");
-				}
-
-				// The first time we run this loop, we'll need to make a new player object, and add it to our
-				// client game state so we can use it again later.
-				if(player == null) {
-					System.out.println("Setting up player object");
-					try {
-						this.player = new Player(0.0f, 0.0f, state.getMapData());
-						state.setPlayer(player);
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-
+					//	System.out.println("Waiting for game to begin");
 					}
 				}
 
-				while(!state.isReady()){
-					System.out.println("Player not initialised yet");
+				this.player = state.getPlayer();
+				System.out.println(player.getX());
 
-				}
-				System.out.println(state.getPlayer().getX());
+
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
 				long now = System.nanoTime();
@@ -492,6 +477,7 @@ public class Client extends Canvas {
 
         // Then create a client state for the client
         ClientGameState state = new ClientGameState();
+
         client_receiver.addState(state); //must be called before starting the thread.
         client_sender.addState(state);
         // If this method didn't exist, stateface would need to be added above, but stateface relies on receiver.

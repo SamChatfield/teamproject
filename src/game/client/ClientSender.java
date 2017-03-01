@@ -11,7 +11,7 @@ public class ClientSender extends Thread {
 
 	private String username;
 	private ObjectOutputStream objOut;
-	private ClientGameState inter;
+	private ClientGameState state;
 
 
 	/**
@@ -19,10 +19,10 @@ public class ClientSender extends Thread {
 	 * @param username Name of user
 	 * @param objOut ObjectOutputStream
 	 */
-	ClientSender(String username, ObjectOutputStream objOut, ClientGameState inter) {
+	ClientSender(String username, ObjectOutputStream objOut, ClientGameState state) {
 		this.username = username;
 		this.objOut = objOut;
-		this.inter = inter;
+		this.state = state;
 	}
 
 	/**
@@ -48,14 +48,12 @@ public class ClientSender extends Thread {
 		// Keep running, sending the player object from the client game state every so often.
 		while(true) {
 			try {
-				if(inter.inProgress() == true){
-					if(inter.isReady()){
-					    System.out.println("Sending player");
-						objOut.writeObject(inter.getPlayerEntity());
-						objOut.flush();
-					}
-				}
+				if(state.isConnected()){ // if the game is connected, start running.
+					System.out.println("Sending player");
+					objOut.writeObject(state.getPlayerEntity());
+					objOut.flush();
 
+				}
 				Thread.sleep(3000);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -63,7 +61,7 @@ public class ClientSender extends Thread {
 		}
 	}
 
-	public void addState(ClientGameState inter){
-	    this.inter = inter;
+	public void addState(ClientGameState state){
+	    this.state = state;
     }
 }
