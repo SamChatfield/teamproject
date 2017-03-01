@@ -21,7 +21,7 @@ public class Renderer {
     private int gameH, gameW;
     private int maxHealth;
     private Font tradeWinds;
-    private ClientGameState inter;
+    private ClientGameState state;
     
     public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
     public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
@@ -29,7 +29,7 @@ public class Renderer {
     Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
         this.bufferStrategy = bufferStrategy;
        // this.mapData = inter.getMapData();
-        this.inter = state;
+        this.state = state;
         this.gameH = Client.GAME_DIMENSION.height;
         this.gameW = Client.GAME_DIMENSION.width;
         
@@ -50,11 +50,12 @@ public class Renderer {
        
     
     public void render() {
-        this.player = inter.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
+        this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
-        int timeRemaining = inter.getTimeRemaining();
-    	ArrayList<Zombie> zombies = inter.getZombies();
-    	MapData mapData = inter.getMapData();
+        int timeRemaining = state.getTimeRemaining();
+    	ArrayList<Zombie> zombies = state.getZombies();
+        System.out.println(zombies.get(1).getX());
+        MapData mapData = state.getMapData();
 
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();

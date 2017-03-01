@@ -68,9 +68,12 @@ public class ServerGameState extends GameState {
 
     public ArrayList<DataPacket> getSendableZombies(){
         ArrayList<DataPacket> data = new ArrayList<DataPacket>();
+
         for(Zombie z:zombies){
             data.add(z.getData());
         }
+        System.out.println("Zom1"+data.get(1).getX());
+
         return data;
     }
 

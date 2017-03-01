@@ -49,6 +49,7 @@ public class GameInstance extends Thread {
                 zombie.move(60);
 
             }
+
         }
 
     }

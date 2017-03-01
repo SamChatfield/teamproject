@@ -46,6 +46,10 @@ public class ClientGameState extends GameState {
     }
 
     private void setUpGame(){
+        setUpMapData(mapImage);
+        for(int i = 0; i<100; i++){
+            zombies.add(new Zombie(10,10,mapData));
+        }
         // The first time we run update we'll need to make a new player object, and add it to our
         // client game state so we can use it again later.
         if(player == null) {
@@ -56,11 +60,6 @@ public class ClientGameState extends GameState {
                 System.out.println(e.getMessage());
 
             }
-        }
-
-        setUpMapData(mapImage);
-        for(int i = 0; i<100; i++){
-            zombies.add(new Zombie(10,10,mapData));
         }
         isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }
