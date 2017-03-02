@@ -41,6 +41,7 @@ public class ServerSender extends Thread {
 		try {
 			objOut.writeObject(send);
 			objOut.flush();
+			objOut.reset();
 		} catch (IOException e) {
 			System.err.println("Communication Error! " + e.getMessage());
 			System.exit(1);
