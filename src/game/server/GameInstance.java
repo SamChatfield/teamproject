@@ -46,7 +46,12 @@ public class GameInstance extends Thread {
                     }
                 }
                 */
+                zombie.newMovingDir();
+               // System.out.println("BEFORE: "+zombie.getX());
                 zombie.move(60);
+                //System.out.println("AFTER: "+zombie.getX());
+
+
 
             }
 

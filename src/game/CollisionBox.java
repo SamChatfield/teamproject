@@ -42,7 +42,7 @@ public class CollisionBox implements Serializable {
     }
 
     public Rectangle2D.Float getRect() {
-        return new Rectangle2D.Float(owner.x() - width / 2, owner.y() - height / 2, width, height);
+        return new Rectangle2D.Float(owner.getX() - width / 2, owner.getY() - height / 2, width, height);
     }
 
     /**
@@ -51,8 +51,8 @@ public class CollisionBox implements Serializable {
      * @return rectangle to draw to the screen for this box
      */
     public Rectangle2D.Float getDrawRect(Player p) {
-        float px = p.x();
-        float py = p.y();
+        float px = p.getX();
+        float py = p.getY();
 
         Rectangle2D.Float drawRect;
 
@@ -60,7 +60,7 @@ public class CollisionBox implements Serializable {
         if (owner instanceof Player && getX() == px && getY() == py) {
             drawRect = new Rectangle2D.Float(320.0f - iwidth / 2, 320.0f - iheight / 2, iwidth, iheight);
         } else {
-            Point drawPoint = p.relativeDrawPoint(owner.x(), owner.y(), iwidth, iheight);
+            Point drawPoint = p.relativeDrawPoint(owner.getX(), owner.getY(), iwidth, iheight);
             drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
         }
 
@@ -68,11 +68,11 @@ public class CollisionBox implements Serializable {
     }
 
     public float getX() {
-        return owner.x();
+        return owner.getX();
     }
 
     public float getY() {
-        return owner.y();
+        return owner.getY();
     }
 
     public float getWidth() {

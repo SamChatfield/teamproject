@@ -79,14 +79,6 @@ public class Entity {
     public DataPacket getData() {return data;
     }
 
-    public float x(){
-        return data.getX();
-    }
-
-    public float y(){
-        return data.getY();
-    }
-
     public float getMoveSpeed(){
         return data.getMoveSpeed();
     }

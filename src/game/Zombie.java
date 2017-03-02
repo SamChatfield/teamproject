@@ -59,7 +59,10 @@ public class Zombie extends Entity {
     }
 
     public void move(double delta) {
-        super.move(dx * getMoveSpeed() * (float) delta, dy * getMoveSpeed() * (float) delta);
+        float moveX = dx * getMoveSpeed() * (float) delta;
+        float moveY = dy * getMoveSpeed() * (float) delta;
+        System.out.println("Move: "+moveX+" , "+moveY+" , Move Speed: "+getMoveSpeed()+" DX: "+dx+" DY: "+dy);
+        super.move(moveX,moveY);
     }
 
     // Zombie vector changed to follow player, if wild.

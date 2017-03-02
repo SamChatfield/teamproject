@@ -345,7 +345,7 @@ public class Client extends Canvas {
 		}
 		// Print the player's position
 		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
-			System.out.println("Player: (" + player.x() + ", " + player.y() + ")");
+			System.out.println("Player: (" + player.getX() + ", " + player.getY() + ")");
 		}
 				
 		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
@@ -399,7 +399,7 @@ public class Client extends Canvas {
 
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);
-            if ((!state.getMapData().isEntityMoveValid(b.x(), b.y(), b)) || !b.active) {
+            if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
                 player.getBullets().remove(i);
                 continue;
             }
