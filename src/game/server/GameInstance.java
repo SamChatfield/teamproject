@@ -46,7 +46,10 @@ public class GameInstance extends Thread {
                     }
                 }
                 */
-                zombie.newMovingDir();
+
+                if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                    zombie.newMovingDir();
+                }
                // System.out.println("BEFORE: "+zombie.getX());
                 zombie.move(60);
                 //System.out.println("AFTER: "+zombie.getX());
