@@ -30,8 +30,9 @@ public class Zombie extends Entity {
         WILD, PLAYER, OPPONENT;
     }
 
-    public void updateData(DataPacket data){
-        this.data = data;
+    // This is called with outdated data.
+    public void updateData(DataPacket data2){
+        this.data = data2;
     }
 
     public Zombie(float x, float y, MapData mapData) {
@@ -107,7 +108,7 @@ public class Zombie extends Entity {
         int drawY = drawPoint.y;
         
         g2d.setColor(Color.GREEN);
-        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, this.getHealth(), 2);
+        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, getHealth(), 2);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 

@@ -54,7 +54,7 @@ public class Renderer {
 
         int timeRemaining = state.getTimeRemaining();
     	ArrayList<Zombie> zombies = state.getZombies();
-        System.out.println(zombies.get(1).getX());
+       /// System.out.println("Renderer: "+zombies.get(1).getX());
         MapData mapData = state.getMapData();
 
         // Set up the graphics instance for the current back buffer

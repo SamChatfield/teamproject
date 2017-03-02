@@ -32,7 +32,6 @@ public class Server {
 
         // this state should be shared between two connected clients. One made for each game.
         ServerGameState state = new ServerGameState();
-        GameStateInterface inter = new GameStateInterface(state); // connect the state with its interface.
 
         try {
         	outSocket = new ServerSocket(port);
@@ -61,9 +60,9 @@ public class Server {
                  clientTable.addToTable(clientName);
                  
                  // Start threads
-                 ServerSender server_sender = new ServerSender(objOut,inter);
+                 ServerSender server_sender = new ServerSender(objOut,state);
                  server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn,inter);
+                 ServerReceiver server_receiver = new ServerReceiver(objIn,state);
                  server_receiver.start();
         		
                  // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER

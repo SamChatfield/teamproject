@@ -1,9 +1,11 @@
 package game.client;
 
 import game.server.ServerGameState;
+import game.util.DataPacket;
 import game.util.SendableState;
 
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 /**
  * @author georgesabourin, Daniel Tonks
@@ -13,7 +15,7 @@ public class ClientReceiver extends Thread {
 
 	private String username;
 	private ObjectInputStream objIn;
-	private ClientGameState inter;
+	private ClientGameState state;
 	private boolean inProgress;
 
 	/**
@@ -27,8 +29,8 @@ public class ClientReceiver extends Thread {
 	}
 
 
-	public void addState(ClientGameState inter){
-		this.inter = inter;
+	public void addState(ClientGameState state){
+		this.state = state;
 	}
 
 
@@ -48,8 +50,15 @@ public class ClientReceiver extends Thread {
 					}
 				}else{
 					System.out.println("Got state from server");
-					SendableState state = (SendableState) objIn.readObject();
-					inter.updateClientState(state); // update the clients view of the game state.
+					SendableState updatedState = (SendableState) objIn.readObject();
+
+					// This is printing out the health of the zombies already known to the client.
+					ArrayList<DataPacket> zomb = updatedState.getZombies();
+					for(DataPacket z:zomb){
+						System.out.println("REC: "+z.getHealth());
+					}
+
+					state.updateClientState(updatedState); // update the clients view of the game state.
 					System.out.println("Update complete");
 				}
 

@@ -1,7 +1,12 @@
 package game.server;
 
+import game.util.DataPacket;
+import game.util.SendableState;
+
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 /**
  * @author georgesabourin, Daniel Tonks
@@ -9,7 +14,7 @@ import java.io.ObjectOutputStream;
  */
 public class ServerSender extends Thread {
 
-	private GameStateInterface state;
+	private ServerGameState state;
 	private ObjectOutputStream objOut;
 	private boolean initial;
 	
@@ -17,16 +22,24 @@ public class ServerSender extends Thread {
 	 * Constructor method
 	 * @param objOut The ObjectOutputStream
 	 */
-	public ServerSender(ObjectOutputStream objOut, GameStateInterface inter) {
-		this.objOut = objOut; this.state = inter; this.initial = true;
+	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
+		this.objOut = objOut; this.state = state; this.initial = true;
 	}
 
 	/**
 	 * Send an object down the ObjectOutputStream to the client
 	 */
 	public void sendGameState() {
+		SendableState send = state.getPackagedState();
+
+
+		//ArrayList<DataPacket> data = send.getZombies();
+		//for(DataPacket d:data){
+		//	System.out.println("SENDING: "+d.getHealth());
+		//}
+
 		try {
-			objOut.writeObject(state.getPackagedState());
+			objOut.writeObject(send);
 			objOut.flush();
 		} catch (IOException e) {
 			System.err.println("Communication Error! " + e.getMessage());

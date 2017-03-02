@@ -11,16 +11,16 @@ import java.io.ObjectInputStream;
  */
 public class ServerReceiver extends Thread {
 
-	private GameStateInterface inter;
+	private ServerGameState state;
 	private ObjectInputStream objIn;
 	
 	/**
 	 * Constructor method
 	 * @param objIn The ObjectInputStream
 	 */
-	public ServerReceiver(ObjectInputStream objIn, GameStateInterface inter) {
+	public ServerReceiver(ObjectInputStream objIn, ServerGameState state) {
 		this.objIn = objIn;
-		this.inter = inter;
+		this.state = state;
 	}
 	
 	// Main method to run when thread starts
@@ -32,7 +32,7 @@ public class ServerReceiver extends Thread {
 				if(obj.getClass() == String.class){
 					// If the player has requested to start the game...
 					if(obj.toString().equals("StartGame")){
-						inter.startNewGame();
+						state.startNewGame();
 					}
 				}else if(obj.getClass() == EntityData.class){
 					System.out.println("Received a player object");

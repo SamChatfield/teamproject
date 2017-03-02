@@ -76,8 +76,7 @@ public class Entity {
         return data.getHealth();
     }
 
-    public DataPacket getData() {
-        return data;
+    public DataPacket getData() {return data;
     }
 
     public float x(){
@@ -95,5 +94,6 @@ public class Entity {
     public void setHealth(int newHealth){
         data.setHealth(newHealth);
     }
+
 
 }

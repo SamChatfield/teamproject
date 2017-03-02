@@ -7,6 +7,7 @@ import game.util.DataPacket;
 import game.util.GameState;
 import game.Zombie;
 import game.client.EntityData;
+import game.util.SendableState;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.EncloseType;
 
 import java.util.ArrayList;
@@ -68,13 +69,16 @@ public class ServerGameState extends GameState {
 
     public ArrayList<DataPacket> getSendableZombies(){
         ArrayList<DataPacket> data = new ArrayList<DataPacket>();
-
         for(Zombie z:zombies){
             data.add(z.getData());
         }
         System.out.println("Zom1"+data.get(1).getX());
-
         return data;
+    }
+
+    public SendableState getPackagedState(){
+        SendableState copyOf = new SendableState(this); // create a copy of the state.
+        return copyOf; // return this so that it can be sent.
     }
 
 }
