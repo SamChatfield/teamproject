@@ -55,7 +55,6 @@ public class Player extends Entity {
      * @return if the player can shoot.
      */
     public boolean canShoot(){
-        System.out.println(getLastAttackTime());
         long now = System.nanoTime();
         if (now - getLastAttackTime() > SHOOT_DELAY) {
             return true;

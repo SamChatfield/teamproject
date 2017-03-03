@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class ClientGameState extends GameState {
 
     private String username;
+    private String otherPlayerName;
 
     public ClientGameState(String username){
         this.username = username;
@@ -28,16 +29,24 @@ public class ClientGameState extends GameState {
 
     }
 
+
     public void updateClientState(SendableState updatedState){
 
         if(!isConnected){
             this.mapImage = updatedState.getMapImage();
             setUpGame();
-            player2.setUsername(updatedState.getPlayer2().getUsername()); // we now know the username of the other player.
+
+            // We need to figure out if the server thinks we are player 1 or 2.
+            if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
+                otherPlayerName = updatedState.getPlayer2().getUsername();
+            }else{
+                otherPlayerName = updatedState.getPlayer1().getUsername();
+            }
         }
 
-        player1.updateData(updatedState.getPlayer1());
-        player2.updateData(updatedState.getPlayer2());
+        // We can reliably update each player locally without knowing which order they were sent in by the server.
+        player1.updateData(updatedState.getPlayer(username));
+        player2.updateData(updatedState.getPlayer(otherPlayerName));
 
 
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
@@ -79,6 +88,19 @@ public class ClientGameState extends GameState {
         }else if(player2.getUsername().equals(username)) {
 
             return player2;
+        }
+        return null;
+    }
+
+    /**
+     * Finds the other player
+     * @return The other player
+     */
+    public Player getOtherPlayer() {
+        if(player1.getUsername().equals(username)){
+            return player2;
+        }else if(player2.getUsername().equals(username)) {
+            return player1;
         }
         return null;
     }

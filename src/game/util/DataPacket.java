@@ -12,7 +12,6 @@ public class DataPacket implements Serializable{
     private double facingAngle;
     private float moveSpeed;
     protected long lastAttackTime;
-
     private String username;
 
     public String getUsername() {

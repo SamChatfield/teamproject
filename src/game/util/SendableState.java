@@ -29,11 +29,21 @@ public class SendableState implements Serializable {
         return zombies;
     }
 
-    public DataPacket getPlayer1() {
+    public DataPacket getPlayer(String username){
+        if(username.equals(player1.getUsername())){
+            return player1;
+        }else if (username.equals(player2.getUsername())){
+            return player2;
+        }else{
+            return null;
+        }
+    }
+
+    public DataPacket getPlayer1(){
         return player1;
     }
 
-    public DataPacket getPlayer2() {
+    public DataPacket getPlayer2(){
         return player2;
     }
 
