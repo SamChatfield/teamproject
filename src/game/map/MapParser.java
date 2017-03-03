@@ -1,6 +1,6 @@
 package game.map;
 
-import game.client.Client;
+import game.Game;
 import game.ResourceLoader;
 
 import javax.imageio.ImageIO;
@@ -32,7 +32,7 @@ public class MapParser {
             Color colour = Color.decode(a[1]);
             int sheetX = Integer.parseInt(a[2]);
             int sheetY = Integer.parseInt(a[3]);
-            int tileSize = Client.TILE_SIZE;
+            int tileSize = Game.TILE_SIZE;
             BufferedImage image = tilesheet.getSubimage(sheetX * tileSize, sheetY * tileSize, tileSize, tileSize);
             boolean obstacle = Boolean.parseBoolean(a[4]);
 

@@ -16,49 +16,21 @@ public class ResourceLoader {
         return ImageIO.read(new File(RES_PATH + image));
     }
 
-    public static BufferedImage playerImage() {
-        BufferedImage image = null;
-        try {
-            image = imageFromResPath("player.png");
-        } catch (IOException e) {
-            System.out.println("RIP. Player image not found");
-            System.exit(0);
-        }
-        return image;
+    public static BufferedImage playerImage() throws IOException {
+        return imageFromResPath("player.png");
     }
 
     // TODO streamline this and player loading since they will do pretty much the same thing
-    public static BufferedImage zombieImage() {
-        BufferedImage image = null;
-        try {
-            image =  imageFromResPath("zombie.png");
-        } catch (IOException e) {
-            System.out.println("RIP. Zombie image not found");
-            System.exit(0);
-        }
-        return image;
+    public static BufferedImage zombieImage() throws IOException {
+        return imageFromResPath("zombie.png");
     }
     
-    public static BufferedImage zombiePlayerImage() {
-        BufferedImage image = null;
-        try {
-            image = imageFromResPath("zombieBlue.png");
-        } catch (IOException e) {
-            System.out.println("RIP. Zombie player image not found");
-            System.exit(0);
-        }
-        return image;
+    public static BufferedImage zombiePlayerImage() throws IOException {
+    	return imageFromResPath("zombieBlue.png");
     }
 
-    public static BufferedImage bulletImage() {
-        BufferedImage image = null;
-        try {
-            return imageFromResPath("bullet.png");
-        } catch (IOException e) {
-            System.out.println("RIP. Bullet image not found");
-            System.exit(0);
-        }
-        return image;
+    public static BufferedImage bulletImage() throws IOException {
+        return imageFromResPath("bullet.png");
     }
 
 }

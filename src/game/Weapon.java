@@ -11,6 +11,7 @@ public class Weapon {
 	int xv = 10000000;
 	int yv = 10000000;
 	int direction = 0;
+	private Game game;
 
 	public Weapon(int direction, int x, int y, int xv, int yv) {
 

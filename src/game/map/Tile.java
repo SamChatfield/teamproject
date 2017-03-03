@@ -1,7 +1,5 @@
 package game.map;
 
-import java.io.Serializable;
-
 /**
  * Created by Sam on 10/02/2017.
  */

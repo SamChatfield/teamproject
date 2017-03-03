@@ -1,8 +1,9 @@
-package game.server;
+package game.networking;
 
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,9 +31,7 @@ public class Server {
         // Create ServerSocket
         ServerSocket outSocket = null;
 
-        // this state should be shared between two connected clients. One made for each game.
-        ServerGameState state = new ServerGameState();
-
+        GameStateInterface inter = new GameStateInterface();
         try {
         	outSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -43,14 +42,13 @@ public class Server {
         System.out.println("Success! Server successfully started");
 
         try {
+        	
         	while(true) {
         		 Socket clientSocket = outSocket.accept();
-
-        		 // Someone connected, for debug we'll now generate the game state
         		 System.out.println("DEBUG: Accepting socket connection");
         		 
         		 ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
-        		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
+        		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream());
                  System.out.println("DEBUG: I/O streams created");
                  
                  // Get name from client -- sort out duplicates later
@@ -60,19 +58,17 @@ public class Server {
                  clientTable.addToTable(clientName);
                  
                  // Start threads
-                 ServerSender server_sender = new ServerSender(objOut,state);
+                 ServerSender server_sender = new ServerSender(objOut,inter);
                  server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn,state);
+                 ServerReceiver server_receiver = new ServerReceiver(objIn,inter);
                  server_receiver.start();
         		
                  // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
-            }
+        	}
 
         } catch(Exception e) {
-			e.printStackTrace();
+			System.err.println("Error! -- " + e.getMessage());
 			System.exit(1); 
         }
     }
-
-
 }

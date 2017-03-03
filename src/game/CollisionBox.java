@@ -1,48 +1,25 @@
 package game;
 
-import game.client.Client;
-import game.client.Player;
-
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 
 /**
  * Created by Sam on 31/01/2017.
  */
-public class CollisionBox implements Serializable {
+public class CollisionBox {
 
     private Entity owner;
     private float width, height; // width and height of the box in the game coord system
-    private int iwidth, iheight;
 
-    public CollisionBox(Entity owner) {
+//    public CollisionBox(Entity owner, float width, float height) {
+public CollisionBox(Entity owner) {
         this.owner = owner;
-//        width = (float) owner.image.getWidth() / (float) Client.TILE_SIZE;
-//        height = (float) owner.image.getHeight() / (float) Client.TILE_SIZE;
-        if (owner instanceof Player) {
-            width = (float) Player.getImage().getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Player.getImage().getHeight() / (float) Client.TILE_SIZE;
-
-            iwidth = Player.getImage().getWidth();
-            iheight = Player.getImage().getHeight();
-        } else if (owner instanceof Zombie){
-            width = (float) Zombie.getImage().getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Zombie.getImage().getHeight() / (float) Client.TILE_SIZE;
-
-            iwidth = Zombie.getImage().getWidth();
-            iheight = Zombie.getImage().getHeight();
-        } else {
-            width = (float) Bullet.getImage().getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Bullet.getImage().getHeight() / (float) Client.TILE_SIZE;
-
-            iwidth = Bullet.getImage().getWidth();
-            iheight = Bullet.getImage().getHeight();
-        }
+        width = (float) owner.image.getWidth() / (float) Game.TILE_SIZE;
+        height = (float) owner.image.getHeight() / (float) Game.TILE_SIZE;
     }
 
     public Rectangle2D.Float getRect() {
-        return new Rectangle2D.Float(owner.getX() - width / 2, owner.getY() - height / 2, width, height);
+        return new Rectangle2D.Float(owner.x() - width / 2, owner.y() - height / 2, width, height);
     }
 
     /**
@@ -51,16 +28,19 @@ public class CollisionBox implements Serializable {
      * @return rectangle to draw to the screen for this box
      */
     public Rectangle2D.Float getDrawRect(Player p) {
-        float px = p.getX();
-        float py = p.getY();
+        float px = p.x();
+        float py = p.y();
 
         Rectangle2D.Float drawRect;
+
+        int iwidth = owner.image.getWidth(); // width of the image of the box
+        int iheight = owner.image.getHeight(); // height of the image of the box
 
         // This is the player's collision box if true
         if (owner instanceof Player && getX() == px && getY() == py) {
             drawRect = new Rectangle2D.Float(320.0f - iwidth / 2, 320.0f - iheight / 2, iwidth, iheight);
         } else {
-            Point drawPoint = p.relativeDrawPoint(owner.getX(), owner.getY(), iwidth, iheight);
+            Point drawPoint = p.relativeDrawPoint(owner.x(), owner.y(), iwidth, iheight);
             drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
         }
 
@@ -68,11 +48,11 @@ public class CollisionBox implements Serializable {
     }
 
     public float getX() {
-        return owner.getX();
+        return owner.x();
     }
 
     public float getY() {
-        return owner.getY();
+        return owner.y();
     }
 
     public float getWidth() {

@@ -1,4 +1,4 @@
-package game.client;
+package game;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,13 +14,13 @@ public class InputHandler implements KeyListener, MouseListener {
     private boolean[] keyArray, mouseButtonArray;
     private boolean mouseInside;
     private boolean clicked;
-    private Client client;
+    private Game game;
 
-    public InputHandler(Client client) {
+    public InputHandler(Game game) {
         keyArray = new boolean[256];
         mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
         mouseInside = false;
-        this.client = client;
+        this.game = game;
     }
     
     public boolean wasMouseClicked() {
@@ -36,7 +36,7 @@ public class InputHandler implements KeyListener, MouseListener {
     }
 
     public Point getMousePos() {
-        return client.getMousePosition();
+        return game.getMousePosition();
     }
 
     public boolean isMouseButtonDown(int button) {

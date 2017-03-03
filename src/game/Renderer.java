@@ -1,14 +1,10 @@
-package game.client;
+package game;
 
-import game.Bullet;
-import game.Zombie;
 import game.map.MapData;
 import game.map.Tile;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,23 +15,23 @@ import java.util.ArrayList;
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
+    private MapData mapData;
     private Player player;
+    private ArrayList<Zombie> zombies;
     private int gameH, gameW;
     private int maxHealth;
     private Font tradeWinds;
-    private ClientGameState state;
-
-    private BufferedImage lighting;
     
-    public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
-    public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
+    public Rectangle menuButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 4, 150, 50);
+    public Rectangle exitButton = new Rectangle((Game.GAME_DIMENSION.width / 2) - 75, (Game.GAME_DIMENSION.height/10) * 6, 150, 50);
     
-    Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
+    Renderer(BufferStrategy bufferStrategy, MapData mapData, Player player, ArrayList<Zombie> zombies) {
         this.bufferStrategy = bufferStrategy;
-       // this.mapData = inter.getMapData();
-        this.state = state;
-        this.gameH = Client.GAME_DIMENSION.height;
-        this.gameW = Client.GAME_DIMENSION.width;
+        this.mapData = mapData;
+        this.player = player;
+        this.zombies = zombies;
+        this.gameH = Game.GAME_DIMENSION.height;
+        this.gameW = Game.GAME_DIMENSION.width;
         
         //Breaking DRY. Could be put in a separate class
 		File font_file = new File("src/game/res/tradewinds.ttf");
@@ -53,14 +49,9 @@ public class Renderer {
     }
        
     
-    public void render() {
-        this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
-
-        int timeRemaining = state.getTimeRemaining();
-    	ArrayList<Zombie> zombies = state.getZombies();
-       /// System.out.println("Renderer: "+zombies.get(1).getX());
-        MapData mapData = state.getMapData();
-
+    public void render(Timer timer) {
+    	int timeRemaining = timer.getTimeRemaining();
+    	
         // Set up the graphics instance for the current back buffer
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -83,14 +74,12 @@ public class Renderer {
             	b.draw(g2d);
             }
         }
+       
 
-       for (Zombie z : zombies) {
-           z.draw(g2d, player);
+        for (Zombie z : zombies) {
+            z.draw(g2d, player);
         }
-
-        //lighting
-		drawLighting(g2d);
-
+        
 		// Health bar
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
@@ -102,8 +91,8 @@ public class Renderer {
 		g2d.setColor(Color.GREEN);
 		//System.out.println(player.health);
 		//System.out.println(percentage);
-		float percentage = player.getHealth() / 50.0f;
-		Rectangle healthBarFill = new Rectangle(10, 10, player.getHealth() * 4, 20);
+		float percentage = player.health / 50.0f;
+		Rectangle healthBarFill = new Rectangle(10, 10, player.health * 4, 20);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 		Rectangle healthBar = new Rectangle(10,10,200,20);
@@ -115,13 +104,13 @@ public class Renderer {
 		// Display time remaining
 		Font hud = new Font("Arial", Font.BOLD, 15);
 		g2d.setFont(hud);
-		g2d.setColor(new Color(255, 255, 255, 200));
+		g2d.setColor(new Color(0, 0, 0, 200));
 		//g2d.setColor(Color.WHITE);
 		String remainingTime = String.format("Time Remaining - %d:%02d", (timeRemaining/60), (timeRemaining % 60));
 		g2d.drawString(remainingTime, gameW - 170, 20);
 		
 		// Display number of converted zombies
-//		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombies.size() , 450, 630);
+		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombies.size() , 450, 630);
 		
         // Clean up and flip the buffer
         g2d.dispose();
@@ -136,15 +125,15 @@ public class Renderer {
 
         // Clear the screen
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
+        g2d.fillRect(0, 0, Game.GAME_DIMENSION.width, Game.GAME_DIMENSION.height);
 
         // Apply text
         g2d.setColor(Color.RED);
 		g2d.setFont(tradeWinds.deriveFont(50f));
 		String text = "GAME OVER";
 		int twidth = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - twidth / 2, Client.GAME_DIMENSION.height / 5);
-
+		g2d.drawString(text, (Game.GAME_DIMENSION.width / 2) - twidth / 2, Game.GAME_DIMENSION.height / 5);
+		
 		g2d.setFont(tradeWinds.deriveFont(30f));
 		
 		// Play Button
@@ -166,15 +155,6 @@ public class Renderer {
     	
     }
 
-    public void drawLighting(Graphics2D g2d) {
-		try {
-			lighting = ImageIO.read(new File("src/game/res/spotlight.png"));
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-    	g2d.drawImage(lighting, 0, 0, null);
-	}
-
     public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
         Tile[][] map = mapData.getMap();
         int width = mapData.getWidth();
@@ -183,12 +163,10 @@ public class Renderer {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Tile here = map[x][y];
-                Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Client.TILE_SIZE, Client.TILE_SIZE);
+                Point drawPoint = player.relativeDrawPoint(here.getX(), here.getY(), Game.TILE_SIZE, Game.TILE_SIZE);
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }
         }
-
-
     }
 
 }

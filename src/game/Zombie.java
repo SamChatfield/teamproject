@@ -1,8 +1,6 @@
 package game;
 
-import game.client.Player;
 import game.map.MapData;
-import game.util.DataPacket;
 import game.util.Vector;
 
 import java.awt.*;
@@ -23,21 +21,17 @@ public class Zombie extends Entity {
     private static final int HEALTH = 25;
     private static final float MOVE_SPEED = 0.06f;
     public static final float AGGRO_RANGE = 4.0f;
-    private static final BufferedImage image = ResourceLoader.zombieImage();
-    private static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
+
+    private BufferedImage playerImage;
     
     public enum State {
         WILD, PLAYER, OPPONENT;
     }
 
-    // This is called with outdated data.
-    public void updateData(DataPacket data2){
-        this.data = data2;
-    }
-
-    public Zombie(float x, float y, MapData mapData) {
+    public Zombie(float x, float y, BufferedImage image, BufferedImage imagePlayer, MapData mapData) {
 //        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, mapData);
+        super(x, y, MOVE_SPEED, HEALTH, image, mapData);
+    	this.playerImage = imagePlayer;
         this.state = State.WILD;
     }
 
@@ -50,6 +44,14 @@ public class Zombie extends Entity {
     }
 
     
+    public float getX() {
+        return x;
+    }
+    
+    public float getY() {
+        return y;
+    }
+    
     public State getState() {
     	return state;
     }
@@ -59,16 +61,13 @@ public class Zombie extends Entity {
     }
 
     public void move(double delta) {
-        float moveX = dx * getMoveSpeed() * (float) delta;
-        float moveY = dy * getMoveSpeed() * (float) delta;
-        System.out.println("Move: "+moveX+" , "+moveY+" , Move Speed: "+getMoveSpeed()+" DX: "+dx+" DY: "+dy);
-        super.move(moveX,moveY);
+        super.move(dx * moveSpeed * (float) delta, dy * moveSpeed * (float) delta);
     }
 
     // Zombie vector changed to follow player, if wild.
     public void followDirection(Player player) {
     	if (state == State.WILD) {
-        	Vector zdv = ArtInt.followPlayer(getX(), getY(), player);
+        	Vector zdv = ArtInt.followPlayer(x, y, player);
         	Vector znv = zdv.normalised();
         	
             dx = znv.x();
@@ -76,7 +75,7 @@ public class Zombie extends Entity {
             
             face((int) zdv.x(), (int) zdv.y());
     	}
-    }
+    }      
     
     public void newMovingDir() {
         Vector zdv = Vector.randomVector();
@@ -96,7 +95,7 @@ public class Zombie extends Entity {
         else {
             if (now - lastAttackTime > 1000000000L) {
                 lastAttackTime = now;
-                entity.setHealth(entity.getHealth() - damageDone);
+                entity.health -= damageDone;
             }
         }
     }
@@ -106,12 +105,12 @@ public class Zombie extends Entity {
         int w = image.getWidth();
         int h = image.getHeight();
 
-        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
+        Point drawPoint = player.relativeDrawPoint(x, y, w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
         
         g2d.setColor(Color.GREEN);
-        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, getHealth(), 2);
+        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, this.health, 2);
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 
@@ -122,10 +121,10 @@ public class Zombie extends Entity {
         }
 
         AffineTransform at = g2d.getTransform();
-        g2d.rotate(data.getFacingAngle(), drawX + w / 2, drawY + h / 2);
+        g2d.rotate(facingAngle, drawX + w / 2, drawY + h / 2);
 
         if(state == State.PLAYER) {
-        	g2d.drawImage(playerZombieImage, drawX, drawY, null);
+        	g2d.drawImage(playerImage, drawX, drawY, null);
         }
         else if(state == State.OPPONENT) {
         	// Change this later
@@ -135,10 +134,6 @@ public class Zombie extends Entity {
         	g2d.drawImage(image, drawX, drawY, null);
         }
         g2d.setTransform(at);
-    }
-
-    public static BufferedImage getImage() {
-        return image;
     }
 
 }

@@ -1,4 +1,4 @@
-package game.server;
+package game.networking;
 
 /**
  * @author georgesabourin

@@ -6,7 +6,6 @@ import game.ResourceLoader;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -19,7 +18,6 @@ public class MapData {
     private Tile[][] map;
 
     public MapData(String mapPath, String tilesheet, String tileData) {
-        System.out.println("Generating MapData");
         // Create the set of different types of tile
         try {
             tileTypes = MapParser.parseTileTypes(tilesheet, tileData);
