@@ -37,7 +37,7 @@ public class ClientSender extends Thread {
 			System.err.println("Communication Error! " + e.getMessage());
 			System.exit(1);
 		}
-		System.out.println("DEBUG: Object successfully sent");
+		//System.out.println("DEBUG: Object successfully sent");
 	}
 
 	// Main method to run when thread starts

@@ -41,12 +41,26 @@ public class Player extends Entity {
     public boolean shoot(float aimX, float aimY) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
-        if (now - lastAttackTime > SHOOT_DELAY) {
-            lastAttackTime = now;
+        if (now - getLastAttackTime() > SHOOT_DELAY) {
+            setLastAttackTime(now);
             bullets.add(new Bullet(this, aimX, aimY, mapData));
             return true;
         } else {
         	return false;
+        }
+    }
+
+    /**
+     * Smaller method than above, used on the client so it knows if it can shoot on the server
+     * @return if the player can shoot.
+     */
+    public boolean canShoot(){
+        System.out.println(getLastAttackTime());
+        long now = System.nanoTime();
+        if (now - getLastAttackTime() > SHOOT_DELAY) {
+            return true;
+        } else {
+            return false;
         }
     }
 

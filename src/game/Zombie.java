@@ -88,8 +88,8 @@ public class Zombie extends Entity {
         	// Currently, do nothing
         }
         else {
-            if (now - lastAttackTime > 1000000000L) {
-                lastAttackTime = now;
+            if (now - getLastAttackTime() > 1000000000L) {
+                setLastAttackTime(now);
                 entity.setHealth(entity.getHealth() - damageDone);
             }
         }

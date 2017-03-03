@@ -13,19 +13,24 @@ public class Entity {
 
     protected CollisionBox collisionBox;
     protected boolean showCollBox;
-    protected long lastAttackTime;
     protected MapData mapData;
     protected int imageWidth, imageHeight;
 
     protected DataPacket data;
 
     public Entity(float x, float y, float moveSpeed, int health, MapData mapData) {
-        this.data = new DataPacket(x,y,moveSpeed,health);
-
+        this.data = new DataPacket(x,y,moveSpeed,health, 0L);
         showCollBox = false;
-        lastAttackTime = 0L;
         this.mapData = mapData;
         collisionBox = new CollisionBox(this);
+    }
+
+    public long getLastAttackTime(){
+        return data.getLastAttackTime();
+    }
+
+    public void setLastAttackTime(long newTime){
+        data.setLastAttackTime(newTime);
     }
 
     public void move(float dx, float dy) {

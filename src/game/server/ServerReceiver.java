@@ -37,7 +37,7 @@ public class ServerReceiver extends Thread {
 						state.startNewGame();
 					}
 				}else if(obj.getClass() == PlayerUpdatePacket.class){
-					System.out.println("Received a player object");
+				//	System.out.println("Received a player object");
 					PlayerUpdatePacket plr = (PlayerUpdatePacket) obj;
 					state.updatePlayer(plr.getData().getUsername(),plr);
 				}

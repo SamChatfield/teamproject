@@ -86,7 +86,6 @@ public class ServerGameState extends GameState {
 
         for(String s:moves) {
             switch(s){
-
                 case "VK_1":
                     toModify.setMoveSpeed(toModify.getMoveSpeed() - 0.01f);
                     break;
@@ -105,8 +104,27 @@ public class ServerGameState extends GameState {
                 case "VK_S":
                     pdv.add(new Vector(0.0f, -1.0f));
                     break;
+                case "VK_Z":
+                    toModify.conversionMode = true;
+                    break;
+                case "VK_X":
+                    toModify.conversionMode = false;
+                    break;
+                case "BUTTON1":
+                    // game coord x and y position of the aim
+                    double playerAngle = toModify.getFacingAngle();
+                    float aimX = (float) Math.cos(playerAngle);
+                    float aimY = (float) -Math.sin(playerAngle);
+                    toModify.shoot(aimX, aimY);
+                    break;
             }
         }
+        if(packet.getfX() == -100 || packet.getfY() == -100 ){
+            // Don't do anything
+        }else{
+            toModify.face(packet.getfX(), packet.getfY());
+        }
+
         Vector pnv = pdv.normalised(); // Player normal direction vector for this update
         float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
         float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update

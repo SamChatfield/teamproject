@@ -342,65 +342,6 @@ public class Client extends Canvas {
             System.out.println("Disabled conversion mode!");
         }
 
-        sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-
-
-		// Change the player movement speed with 1 and 2
-		if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
-			player.setMoveSpeed(pMoveSpeed -= 0.01f);
-		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
-			player.setMoveSpeed(pMoveSpeed += 0.01f);
-		}
-
-		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
-
-		// Handle player keyboard input to move
-		if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
-			pdv.add(new Vector(0.0f, 1.0f));
-		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
-			pdv.add(new Vector(-1.0f, 0.0f));
-		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
-			pdv.add(new Vector(1.0f, 0.0f));
-		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
-			pdv.add(new Vector(0.0f, -1.0f));
-		}
-
-		*/
-
 		// Other debugging key bindings
 		// Display collision boxes
 		if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
@@ -434,42 +375,29 @@ public class Client extends Canvas {
 			soundManager.stopMusic();
 		}
 		
-		/*
-		// Toggle conversion mode
-		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
-			player.conversionMode = true;
-			System.out.println("Enabled conversion mode!");
-		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
-			player.conversionMode = false;
-			System.out.println("Disabled conversion mode!");
-		}
 
-		// Move the player by the correct amount accounting for movement speed, delta, and normalisation of the vector
-		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
-		float pdx = pnv.x() * pMoveSpeed * ((float) delta); // Actual change in x this update
-		float pdy = pnv.y() * pMoveSpeed * ((float) delta); // Actual change in y this update
-		player.move(pdx, pdy);
-*/
 
 		// Face the player in the direction of the mouse postate
 		Point mousePos = inputHandler.getMousePos();
+		Vector fv = null;
 		if (inputHandler.isMouseInside() && mousePos != null) {
-//			player.face(mousePos.x - 320, mousePos.y - 320);
-			Vector fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
-			player.face(fv.x(), fv.y());
-            // Player shooting
+			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-                // game coord x and y position of the aim
-                double playerAngle = player.getFacingAngle();
-                float aimX = (float) Math.cos(playerAngle);
-                float aimY = (float) -Math.sin(playerAngle);
-                boolean playerShot = player.shoot(aimX, aimY);
-                soundManager.bulletSound(playerShot);
+            	keyPresses.add("BUTTON1");
+				soundManager.bulletSound(player.canShoot());
             }
         }
 
-        // Bullet movement
+		// We need to do this in case fv is null
+        float x = -100;
+		float y = -100;
+		if(fv!=null){
+			x = fv.x();
+			y = fv.y();
+		}
+		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
+
+		// Bullet movement
 
         for (int i = 0; i < player.getBullets().size(); i++) {
             Bullet b = player.getBullets().get(i);

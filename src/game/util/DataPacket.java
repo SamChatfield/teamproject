@@ -11,6 +11,8 @@ public class DataPacket implements Serializable{
     private int health;
     private double facingAngle;
     private float moveSpeed;
+    protected long lastAttackTime;
+
     private String username;
 
     public String getUsername() {
@@ -37,7 +39,17 @@ public class DataPacket implements Serializable{
         this.moveSpeed = moveSpeed;
     }
 
-    public DataPacket(float x, float y,float moveSpeed, int health) {
+    public long getLastAttackTime() {
+        return lastAttackTime;
+    }
+
+    public void setLastAttackTime(long lastAttackTime) {
+        this.lastAttackTime = lastAttackTime;
+    }
+
+    public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime) {
+        this.lastAttackTime = lastAttackTime;
+
         this.x = x;
         this.y = y;
         this.moveSpeed = moveSpeed;
