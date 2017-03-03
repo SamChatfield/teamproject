@@ -1,4 +1,4 @@
-package game;
+package game.server;
 
 /**
  * @author georgesabourin
@@ -8,13 +8,16 @@ package game;
 public class Timer implements Runnable {
 	
 	private int time;
+	private ServerGameState state;
 	
 	/**
 	 * Constructor to set the timer duration
 	 * @param duration Number of seconds for the game to last
 	 */
-	public Timer(int duration) {
+	public Timer(int duration,ServerGameState state)
+	{
 		int time = duration;
+		this.state = state;
 	}
 	
 	/**
@@ -26,9 +29,10 @@ public class Timer implements Runnable {
 	}
 	
 	public void run() {
-		
-		for(time = 180; time>0; time--) {
+		for(time = 180; time>=0; time--) {
+			System.out.println("Time "+time);
 			try {
+				state.updateTime(time);
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				System.err.println("Thread Error in Timer! " + e.getMessage());

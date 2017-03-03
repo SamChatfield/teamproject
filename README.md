@@ -1,5 +1,5 @@
 # D2 Team Project
-Drawing the game - Daniel & Sam
+Drawing the client - Daniel & Sam
 
 Handling the collisions - Ryan and Becca
 
