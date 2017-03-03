@@ -13,7 +13,7 @@ public class Collision {
     public static void checkCollision(Zombie zombie, Player player, Sound sound) {
         if (zombie.getCollisionBox().intersects(player.getCollisionBox())) {
             zombie.attack(player, 5);
-            //sound.playerHurt();
+            sound.playerHurt();
         }
     }
     public static void checkBulletCollision(int bulletIndex, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies, Player player, Sound sound) {
