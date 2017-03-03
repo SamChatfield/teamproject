@@ -4,11 +4,9 @@ import game.Entity;
 import game.client.Player;
 import game.map.MapData;
 import game.map.MapParser;
-import game.util.DataPacket;
-import game.util.GameState;
+import game.util.*;
 import game.Zombie;
 import game.client.EntityData;
-import game.util.SendableState;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.EncloseType;
 
 import java.util.ArrayList;
@@ -75,6 +73,44 @@ public class ServerGameState extends GameState {
             data.add(z.getData());
         }
         return data;
+    }
+
+    public void updatePlayer(String username, PlayerUpdatePacket packet){
+        Player toModify = null;
+        // First we need to get the player we want based on their username:
+        if(player1Username.equals(username)){  toModify = player1; }else if(player2Username.equals(username)){ toModify = player2; }
+
+        ArrayList<String> moves = packet.getKeyPresses();
+        double delta = packet.getDelta();
+        Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
+
+        for(String s:moves) {
+            switch(s){
+
+                case "VK_1":
+                    toModify.setMoveSpeed(toModify.getMoveSpeed() - 0.01f);
+                    break;
+                case "VK_2":
+                    toModify.setMoveSpeed(toModify.getMoveSpeed() + 0.01f);
+                    break;
+                case "VK_W":
+                    pdv.add(new Vector(0.0f, 1.0f));
+                    break;
+                case "VK_A":
+                    pdv.add(new Vector(-1.0f, 0.0f));
+                    break;
+                case "VK_D":
+                    pdv.add(new Vector(1.0f, 0.0f));
+                    break;
+                case "VK_S":
+                    pdv.add(new Vector(0.0f, -1.0f));
+                    break;
+            }
+        }
+        Vector pnv = pdv.normalised(); // Player normal direction vector for this update
+        float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
+        float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update
+        toModify.move(pdx, pdy);
     }
 
     public SendableState getPackagedState(){

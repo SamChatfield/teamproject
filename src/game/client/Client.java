@@ -4,6 +4,7 @@ import game.Bullet;
 import game.Collision;
 import game.ResourceLoader;
 import game.Zombie;
+import game.util.PlayerUpdatePacket;
 import game.util.Vector;
 
 import javax.swing.*;
@@ -305,6 +306,75 @@ public class Client extends Canvas {
 		// Player movement
 		float pMoveSpeed = player.getMoveSpeed();
 
+		// Lets store every keypress we see this tick
+
+
+		ArrayList<String> keyPresses = new ArrayList<>();
+// Change the player movement speed with 1 and 2
+        if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
+            keyPresses.add("VK_1");
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
+            keyPresses.add("VK_2");
+        }
+
+
+        // Handle player keyboard input to move
+        if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
+            keyPresses.add("VK_W");
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
+            keyPresses.add("VK_A");
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
+            keyPresses.add("VK_D");
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
+            keyPresses.add("VK_S");
+        }
+        // Toggle conversion mode
+        if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
+            keyPresses.add("VK_Z");
+            System.out.println("Enabled conversion mode!");
+        }
+        if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
+            keyPresses.add("VK_X");
+            System.out.println("Disabled conversion mode!");
+        }
+
+        sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+
+
 		// Change the player movement speed with 1 and 2
 		if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
 			player.setMoveSpeed(pMoveSpeed -= 0.01f);
@@ -328,6 +398,8 @@ public class Client extends Canvas {
 		if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
 			pdv.add(new Vector(0.0f, -1.0f));
 		}
+
+		*/
 
 		// Other debugging key bindings
 		// Display collision boxes
@@ -362,7 +434,7 @@ public class Client extends Canvas {
 			soundManager.stopMusic();
 		}
 		
-		
+		/*
 		// Toggle conversion mode
 		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
 			player.conversionMode = true;
@@ -378,6 +450,7 @@ public class Client extends Canvas {
 		float pdx = pnv.x() * pMoveSpeed * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * pMoveSpeed * ((float) delta); // Actual change in y this update
 		player.move(pdx, pdy);
+*/
 
 		// Face the player in the direction of the mouse postate
 		Point mousePos = inputHandler.getMousePos();

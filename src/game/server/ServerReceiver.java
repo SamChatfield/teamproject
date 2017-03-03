@@ -2,6 +2,7 @@ package game.server;
 
 import game.client.EntityData;
 import game.util.DataPacket;
+import game.util.PlayerUpdatePacket;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,10 +36,10 @@ public class ServerReceiver extends Thread {
 					if(obj.toString().equals("StartGame")){
 						state.startNewGame();
 					}
-				}else if(obj.getClass() == DataPacket.class){
+				}else if(obj.getClass() == PlayerUpdatePacket.class){
 					System.out.println("Received a player object");
-					EntityData plr = (EntityData) obj;
-					System.out.println("DEBUG, Player.x = "+plr.getX());
+					PlayerUpdatePacket plr = (PlayerUpdatePacket) obj;
+					state.updatePlayer(plr.getData().getUsername(),plr);
 				}
 				//ServerGameState obj =  (ServerGameState) objIn.readObject();
 				//System.out.println(obj.getPlayers().size());

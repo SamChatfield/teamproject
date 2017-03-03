@@ -8,31 +8,26 @@ import java.util.ArrayList;
  */
 public class PlayerUpdatePacket implements Serializable {
 
-    private String username;
-    private float x,y;
+    private DataPacket data;
+    private double delta;
     private ArrayList<String> keyPresses;
 
+    public double getDelta() {
+        return delta;
+    }
 
-    public PlayerUpdatePacket(String username, float x, float y, ArrayList<String> keyPresses) {
-        this.username = username;
-        this.x = x;
-        this.y = y;
+    public PlayerUpdatePacket(DataPacket data, ArrayList<String> keyPresses, double delta) {
+        this.data = data;
+        this.delta = delta;
+
         this.keyPresses = keyPresses;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
     }
 
     public ArrayList<String> getKeyPresses() {
         return keyPresses;
+    }
+
+    public DataPacket getData(){
+        return data;
     }
 }
