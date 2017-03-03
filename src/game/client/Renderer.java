@@ -5,8 +5,10 @@ import game.Zombie;
 import game.map.MapData;
 import game.map.Tile;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class Renderer {
     private int maxHealth;
     private Font tradeWinds;
     private ClientGameState state;
+
+    private BufferedImage lighting;
     
     public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
     public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
@@ -84,6 +88,9 @@ public class Renderer {
            z.draw(g2d, player);
         }
 
+        //lighting
+		drawLighting(g2d);
+
 		// Health bar
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
@@ -108,7 +115,7 @@ public class Renderer {
 		// Display time remaining
 		Font hud = new Font("Arial", Font.BOLD, 15);
 		g2d.setFont(hud);
-		g2d.setColor(new Color(0, 0, 0, 200));
+		g2d.setColor(new Color(255, 255, 255, 200));
 		//g2d.setColor(Color.WHITE);
 		String remainingTime = String.format("Time Remaining - %d:%02d", (timeRemaining/60), (timeRemaining % 60));
 		g2d.drawString(remainingTime, gameW - 170, 20);
@@ -159,6 +166,15 @@ public class Renderer {
     	
     }
 
+    public void drawLighting(Graphics2D g2d) {
+		try {
+			lighting = ImageIO.read(new File("src/game/res/spotlight.png"));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+    	g2d.drawImage(lighting, 0, 0, null);
+	}
+
     public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
         Tile[][] map = mapData.getMap();
         int width = mapData.getWidth();
@@ -171,6 +187,8 @@ public class Renderer {
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }
         }
+
+
     }
 
 }
