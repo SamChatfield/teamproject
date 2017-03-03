@@ -138,6 +138,7 @@ public class Client extends Canvas {
 
 				this.player = state.getPlayer();
 
+
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
 				long now = System.nanoTime();
