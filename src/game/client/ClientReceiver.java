@@ -49,7 +49,7 @@ public class ClientReceiver extends Thread {
 						inProgress = false;
 					}
 				}else{
-					System.out.println("Got state from server");
+					//System.out.println("Got state from server");
 					SendableState updatedState = (SendableState) objIn.readObject();
 					// This is printing out the health of the zombies already known to the client.
 				//	ArrayList<DataPacket> zomb = updatedState.getZombies();
@@ -58,7 +58,7 @@ public class ClientReceiver extends Thread {
 				//	}
 
 					state.updateClientState(updatedState); // update the clients view of the game state.
-					System.out.println("Update complete");
+					//System.out.println("Update complete");
 				}
 
 			}

@@ -1,5 +1,6 @@
 package game.client;
 
+import game.Entity;
 import game.Zombie;
 import game.map.MapData;
 import game.server.ServerGameState;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
  */
 public class ClientGameState extends GameState {
 
-    private Player player;
+    private String username;
 
-
-    public ClientGameState(){
+    public ClientGameState(String username){
+        this.username = username;
         this.mapImage = null;
         this.isConnected = false;
         this.zombies = new ArrayList<Zombie>();
@@ -32,9 +33,12 @@ public class ClientGameState extends GameState {
         if(!isConnected){
             this.mapImage = updatedState.getMapImage();
             setUpGame();
+            player2.setUsername(updatedState.getPlayer2().getUsername()); // we now know the username of the other player.
         }
 
-        setPlayers(players);
+        player1.updateData(updatedState.getPlayer1());
+        player2.updateData(updatedState.getPlayer2());
+
 
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
         for(int i = 0; i<100; i++){
@@ -47,39 +51,35 @@ public class ClientGameState extends GameState {
 
     private void setUpGame(){
         setUpMapData(mapImage);
+
+        // Set up two player objects that we can update later.
+        this.player1 = new Player(0,0,mapData,username);
+        this.player2 = new Player(0,0,mapData,null); // We'll set this later
+
         for(int i = 0; i<100; i++){
             zombies.add(new Zombie(10,10,mapData));
-        }
-        // The first time we run update we'll need to make a new player object, and add it to our
-        // client game state so we can use it again later.
-        if(player == null) {
-            System.out.println("Setting up player object");
-            try {
-                this.player = new Player(0.0f, 0.0f, mapData);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-            }
         }
         isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }
 
-    public DataPacket getPlayerEntity(){
-        return player.getData();
-    }
 
     public void setUpMapData(String mapImage){
         this.mapImage = mapImage;
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
     }
 
-    public void setPlayer(Player p){
-        player = p;
-        System.out.println("Set isReady to true");
-        isConnected = true;
-    }
 
+    /**
+     * Finds the player that this state is local to.
+     * @return The local player
+     */
     public Player getPlayer() {
-        return player;
+        if(player1.getUsername().equals(username)){
+            return player1;
+        }else if(player2.getUsername().equals(username)) {
+
+            return player2;
+        }
+        return null;
     }
 }

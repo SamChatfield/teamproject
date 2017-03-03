@@ -31,7 +31,7 @@ public class Server {
         ServerSocket outSocket = null;
 
         // this state should be shared between two connected clients. One made for each game.
-        ServerGameState state = new ServerGameState();
+        ServerGameState state = new ServerGameState("a","b");
 
         try {
         	outSocket = new ServerSocket(port);

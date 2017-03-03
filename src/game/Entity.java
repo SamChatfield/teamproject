@@ -59,6 +59,9 @@ public class Entity {
     }
 
 
+    public void updateData(DataPacket data2){
+        this.data = data2;
+    }
 
     public void setShowCollBox(boolean showCollBox) {
         this.showCollBox = showCollBox;
@@ -77,6 +80,14 @@ public class Entity {
     }
 
     public DataPacket getData() {return data;
+    }
+
+    public void setUsername(String username){
+        data.setUsername(username);
+    }
+
+    public String getUsername(){
+        return data.getUsername();
     }
 
     public float getMoveSpeed(){

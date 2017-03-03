@@ -1,6 +1,7 @@
 package game.server;
 
 import game.Entity;
+import game.client.Player;
 import game.map.MapData;
 import game.map.MapParser;
 import game.util.DataPacket;
@@ -20,27 +21,25 @@ import java.util.Random;
  */
 public class ServerGameState extends GameState {
 
-    public ServerGameState(){
+    private String player1Username;
+    private String player2Username;
+
+    public ServerGameState(String player1Username, String player2Username){
+        this.player1Username = player1Username;
+        this.player2Username = player2Username;
     }
 
-    /**
-     * Secondary constructor used for copying this class for sending.
-     * The main game state is passed into here as a parameter, and then this object is sendable.
-     *
-     * @param state State to create a copy of.
-     */
-    public ServerGameState(ServerGameState state){
-        this.zombies = state.getZombies();
-        this.players = state.getPlayers();
-        this.mapImage = state.getMapImage();
-        this.timeRemaining = state.getTimeRemaining();
-    }
 
     // TODO: Stop this from terminating the program
     public void startNewGame(){
         // First we want to generate the map
         mapImage = "prototypemap.png";
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
+
+        // Set up two player objects that we can update later.
+        this.player1 = new Player(0,0,mapData,player1Username);
+        this.player2 = new Player(0,0,mapData,player2Username);
+
         int zombieCount = 100;
         ArrayList<Zombie> zombieFactory = new ArrayList<>();
         try{
@@ -75,7 +74,6 @@ public class ServerGameState extends GameState {
         for(Zombie z:zombies){
             data.add(z.getData());
         }
-        System.out.println("Zom1"+data.get(1).getX());
         return data;
     }
 

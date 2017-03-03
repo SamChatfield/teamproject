@@ -459,7 +459,7 @@ public class Client extends Canvas {
         ClientReceiver client_receiver = new ClientReceiver(username, objIn);
 
         // Then create a client state for the client
-        ClientGameState state = new ClientGameState();
+        ClientGameState state = new ClientGameState(username);
 
         client_receiver.addState(state); //must be called before starting the thread.
         client_sender.addState(state);

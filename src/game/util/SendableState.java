@@ -14,7 +14,8 @@ public class SendableState implements Serializable {
     private int timeRemaining;
     private String mapImage;
     private ArrayList<DataPacket> zombies;
-    private ArrayList<EntityData> players;
+    private DataPacket player1;
+    private DataPacket player2;
 
     public int getTimeRemaining() {
         return timeRemaining;
@@ -28,12 +29,18 @@ public class SendableState implements Serializable {
         return zombies;
     }
 
-    public ArrayList<EntityData> getPlayers() {
-        return players;
+    public DataPacket getPlayer1() {
+        return player1;
+    }
+
+    public DataPacket getPlayer2() {
+        return player2;
     }
 
     public SendableState(ServerGameState state){
-        this.players = state.getPlayers();
+        this.player1 = state.getPlayer1().getData();
+        this.player2 = state.getPlayer2().getData();
+
         this.zombies = state.getSendableZombies();
         this.timeRemaining = state.getTimeRemaining();
         this.mapImage = state.getMapImage();

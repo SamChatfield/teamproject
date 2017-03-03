@@ -50,7 +50,7 @@ public class ClientSender extends Thread {
 			try {
 				if(state.isConnected()){ // if the game is connected, start running.
 					System.out.println("Sending player");
-					objOut.writeObject(state.getPlayerEntity());
+					//objOut.writeObject(state.getPlayer().getData());
 					objOut.flush();
 
 				}

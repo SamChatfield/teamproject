@@ -27,14 +27,14 @@ public class Player extends Entity {
     private int numConvertedZombies;
 	public boolean conversionMode;
 
-
     private ArrayList<Bullet> bullets;
 
-    public Player(float x, float y, MapData mapData) {
+    public Player(float x, float y, MapData mapData, String username) {
 //        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
 //        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
         super(x, y, MOVE_SPEED, HEALTH, mapData);
         bullets = new ArrayList<>(20);
+        setUsername(username);
         conversionMode = false;
     }
 

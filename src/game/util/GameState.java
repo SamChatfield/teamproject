@@ -2,6 +2,7 @@ package game.util;
 
 import game.Zombie;
 import game.client.EntityData;
+import game.client.Player;
 import game.map.MapData;
 
 import java.io.Serializable;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 public class GameState implements Serializable {
 
     protected ArrayList<Zombie> zombies;
-    protected ArrayList<EntityData> players; // we only need to store a lightweight version of the player.
+    protected Player player1;
+    protected Player player2;
     protected String mapImage; // the name of the file being used to create the image.
     protected int timeRemaining;
     protected MapData mapData;
@@ -44,16 +46,12 @@ public class GameState implements Serializable {
         return zombies;
     }
 
-    public ArrayList<EntityData> getPlayers() {
-        return players;
+    public Player getPlayer1() {
+        return player1;
     }
 
-    public void setPlayers(ArrayList<EntityData> players) {
-        this.players = players;
-    }
-
-    public void clearGameState(){
-        this.players = null;
+    public Player getPlayer2() {
+        return player2;
     }
 
     public boolean inProgress(){

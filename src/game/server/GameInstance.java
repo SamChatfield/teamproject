@@ -2,6 +2,7 @@ package game.server;
 
 import game.Zombie;
 import game.client.EntityData;
+import game.client.Player;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -43,7 +44,7 @@ public class GameInstance extends Thread {
                     Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.out.println("Client loop staterupted exception");
+                    System.out.println("Client loop interrupted exception");
                 }
             }
         }
@@ -52,7 +53,9 @@ public class GameInstance extends Thread {
 
     private void update(double delta) {
         ArrayList<Zombie> zombies = state.getZombies();
-        ArrayList<EntityData> players = state.getPlayers();
+        Player player1 = state.getPlayer1();
+        Player player2 = state.getPlayer2();
+
         // Move the zombies around randomly
         Random rand = new Random();
 

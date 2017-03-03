@@ -30,10 +30,6 @@ public class Zombie extends Entity {
         WILD, PLAYER, OPPONENT;
     }
 
-    // This is called with outdated data.
-    public void updateData(DataPacket data2){
-        this.data = data2;
-    }
 
     public Zombie(float x, float y, MapData mapData) {
 //      super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
@@ -60,7 +56,6 @@ public class Zombie extends Entity {
     public void move(double delta) {
         float moveX = dx * getMoveSpeed() * (float) delta;
         float moveY = dy * getMoveSpeed() * (float) delta;
-        System.out.println("Move: "+moveX+" , "+moveY+" , Move Speed: "+getMoveSpeed()+" DX: "+dx+" DY: "+dy);
         super.move(moveX,moveY);
     }
 

@@ -15,4 +15,6 @@ public class ClientTable {
 		System.out.println("Added user to queue");
 		// TODO: Expand on this
 	}
+
+
 }
