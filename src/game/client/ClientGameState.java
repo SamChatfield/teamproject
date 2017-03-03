@@ -64,13 +64,12 @@ public class ClientGameState extends GameState {
         isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }
 
-    public EntityData getPlayerEntity(){
-        return new EntityData(player.getHealth(),player.getX(),player.getY(), EntityData.Tag.PLAYER,null);
+    public DataPacket getPlayerEntity(){
+        return player.getData();
     }
 
     public void setUpMapData(String mapImage){
         this.mapImage = mapImage;
-        System.out.println("updated the mapImage");
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
     }
 

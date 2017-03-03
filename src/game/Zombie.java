@@ -36,7 +36,7 @@ public class Zombie extends Entity {
     }
 
     public Zombie(float x, float y, MapData mapData) {
-//        super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
+//      super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
         super(x, y, MOVE_SPEED, HEALTH, mapData);
         this.state = State.WILD;
     }
@@ -48,7 +48,6 @@ public class Zombie extends Entity {
     public float getDy() {
         return dy;
     }
-
     
     public State getState() {
     	return state;

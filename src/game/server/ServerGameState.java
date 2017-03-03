@@ -49,11 +49,14 @@ public class ServerGameState extends GameState {
 
                 // Daniel does some random stuff here... (like speaking in the third person)
                 Random rand = new Random();
-                float x = (float) (0.5-rand.nextFloat())*50;
-                float y = (float) (0.5-rand.nextFloat())*50;
-                //System.out.println(x+" "+y);
+                float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+                float y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+
+                while(mapData.tileTypeAt(x,y).isObstacle()){
+                    x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
+                    y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
+                }
                 zombieFactory.add(new Zombie(x,y,mapData));
-                //zombies.get(i).newMovingDir();
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
