@@ -303,22 +303,15 @@ public class Client extends Canvas {
 	private void update(double delta) {
 
 	    ArrayList<Zombie> zombies = state.getZombies();
-		// Player movement
-		float pMoveSpeed = player.getMoveSpeed();
 
-		// Lets store every keypress we see this tick
-
-
-		ArrayList<String> keyPresses = new ArrayList<>();
-// Change the player movement speed with 1 and 2
+		ArrayList<String> keyPresses = new ArrayList<>();		// Lets store every keypress we see this tick
+		// Change the player movement speed with 1 and 2
         if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
             keyPresses.add("VK_1");
         }
         if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
             keyPresses.add("VK_2");
         }
-
-
         // Handle player keyboard input to move
         if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
             keyPresses.add("VK_W");

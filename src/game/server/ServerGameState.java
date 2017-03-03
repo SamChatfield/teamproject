@@ -135,5 +135,4 @@ public class ServerGameState extends GameState {
         SendableState copyOf = new SendableState(this); // create a copy of the state.
         return copyOf; // return this so that it can be sent.
     }
-
 }
