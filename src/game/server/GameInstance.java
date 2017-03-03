@@ -11,7 +11,10 @@ import java.util.Random;
  */
 public class GameInstance extends Thread {
 
+    private static final long OPTIMAL_TIME_DIFF = 1000000000L / 60;
+
     private ServerGameState state;
+    private boolean running;
 
     public GameInstance(ServerGameState state){
         this.state = state;
@@ -19,22 +22,42 @@ public class GameInstance extends Thread {
         new Thread(timer).start();
 
         state.updateTime(timer.getTimeRemaining());
+        running = true;
     }
 
     public void run() {
-        while(true) {
-            ArrayList<Zombie> zombies = state.getZombies();
-            ArrayList<EntityData> players = state.getPlayers();
-            // Move the zombies around randomly
-            Random rand = new Random();
 
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
+        long lastLoopTime = System.nanoTime();
 
+        while (running) {
+            long now = System.nanoTime();
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            double delta = updateLength / ((double) 1000000000L / 60);
+
+            update(delta);
+
+            now = System.nanoTime();
+            if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
+                try {
+                    Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.out.println("Client loop staterupted exception");
+                }
             }
-            for (Zombie zombie : zombies) {
-                // Change the zombie's direction with given probability
+        }
+
+    }
+
+    private void update(double delta) {
+        ArrayList<Zombie> zombies = state.getZombies();
+        ArrayList<EntityData> players = state.getPlayers();
+        // Move the zombies around randomly
+        Random rand = new Random();
+
+        for (Zombie zombie : zombies) {
+            // Change the zombie's direction with given probability
                 /*
                 for (EntityData player : players) {
                     if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
@@ -47,19 +70,13 @@ public class GameInstance extends Thread {
                 }
                 */
 
-                if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                    zombie.newMovingDir();
-                }
-               // System.out.println("BEFORE: "+zombie.getX());
-                zombie.move(60);
-                //System.out.println("AFTER: "+zombie.getX());
-
-
-
+            if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                zombie.newMovingDir();
             }
-
+            // System.out.println("BEFORE: "+zombie.getX());
+            zombie.move(delta);
+            //System.out.println("AFTER: "+zombie.getX());
         }
-
     }
 
 }
