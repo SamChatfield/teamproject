@@ -21,7 +21,7 @@ public class Zombie extends Entity {
     private static final float COLL_BOX_WIDTH = 25.0f;
     private static final float COLL_BOX_HEIGHT = 25.0f;
     private static final int HEALTH = 25;
-    private static final float MOVE_SPEED = 0.03f;
+    private static final float MOVE_SPEED = 0.05f;
     public static final float AGGRO_RANGE = 4.0f;
     private static final BufferedImage image = ResourceLoader.zombieImage();
     private static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
@@ -30,10 +30,8 @@ public class Zombie extends Entity {
         WILD, PLAYER, OPPONENT;
     }
 
-
     public Zombie(float x, float y, MapData mapData) {
-//      super(x, y, 1.5f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, mapData);
+        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.ZOMBIE);
         this.state = State.WILD;
     }
 

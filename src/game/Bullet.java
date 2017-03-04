@@ -2,6 +2,7 @@ package game;
 
 import game.client.Player;
 import game.map.MapData;
+import game.util.DataPacket;
 import game.util.Vector;
 
 import java.awt.*;
@@ -24,8 +25,9 @@ public class Bullet extends Entity {
     private static final BufferedImage image = ResourceLoader.bulletImage();
     
     public Bullet(Player player, float aimX, float aimY, MapData mapData) {
-        super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData);
+        super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData, DataPacket.Type.BULLET);
 
+        setUsername(player.getUsername());
 
         Vector normalDir = new Vector(aimX, aimY).normalised();
         dx = normalDir.x();
@@ -72,7 +74,7 @@ public class Bullet extends Entity {
         if (active) {
         	if(conversionMode) {
         		zom.convert();
-        		//System.out.println("Successfully converted zombie!");
+        		System.out.println("Successfully converted zombie!");
         	}
         	else {
         		// TODO: Add in so converted zombies won't damage player

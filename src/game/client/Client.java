@@ -48,7 +48,6 @@ public class Client extends Canvas {
 
 	private Renderer renderer;
 
-
 	// Client state
 	private enum STATE {
 		START,
@@ -115,30 +114,30 @@ public class Client extends Canvas {
 		
 		while(running) {
 
-			while(currentState == STATE.START) {
-				if(menuState == MSTATE.MAIN) {
+			while (currentState == STATE.START) {
+				if (menuState == MSTATE.MAIN) {
 					menu.renderMenu();
-				}
-				else if(menuState == MSTATE.HELP) {
+				} else if (menuState == MSTATE.HELP) {
 					menu.renderHelp();
-				}
-				else if(menuState == MSTATE.OPTIONS) {
+				} else if (menuState == MSTATE.OPTIONS) {
 					menu.renderOptions();
 				}
 				menuUpdate(menu);
 			}
-	
+
 			while (currentState == STATE.GAME) {
 
-				if (!state.isConnected()){
+				if (!state.isConnected()) {
 					sender.sendObject("StartGame"); // send a message to the server to start the game.
 					while (!state.isConnected()) {
-						try{Thread.sleep(1);}catch(Exception e){} // without this, this loop breaks on some machines.
+						try {
+							Thread.sleep(1);
+						} catch (Exception e) {
+						} // without this, this loop breaks on some machines.
 					}
 				}
 
 				this.player = state.getPlayer();
-
 
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
@@ -146,15 +145,15 @@ public class Client extends Canvas {
 				long updateLength = now - lastLoopTime;
 				lastLoopTime = now;
 				double delta = updateLength / ((double) OPTIMAL_TIME_DIFF);
-	
+
 				// FPS counter stuff would go here TODO Add an option for this
-	
+
 				// Update game with the delta
 				update(delta);
-	
+
 				// Render
 				renderer.render();
-	
+
 				// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
 				// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
 				// next loop) is less than this optimal time then we need to sleep the thread for the remaining time to fix
@@ -168,19 +167,18 @@ public class Client extends Canvas {
 						System.out.println("Client loop staterupted exception");
 					}
 				}
-	
-				if(state.getTimeRemaining() <= 0) {
+
+				if (state.getTimeRemaining() <= 0) {
 					currentState = STATE.END;
 					break;
 				}
 			}
-			
-			while(currentState == STATE.END) {
+
+			while (currentState == STATE.END) {
 				renderer.renderGameOver();
 				gameOverUpdate(renderer);
 			}
 		}
-		
 		System.exit(0);
 	}
 	
@@ -250,8 +248,7 @@ public class Client extends Canvas {
 						System.out.println("RETURN BUTTON CLICKED");
 					}
 				}
-			};
-
+			}
 		}
 		else if(menuState == MSTATE.MAIN) {
 
@@ -367,8 +364,6 @@ public class Client extends Canvas {
 			soundManager.sfxPlayback = false;
 			soundManager.stopMusic();
 		}
-		
-
 
 		// Face the player in the direction of the mouse postate
 		Point mousePos = inputHandler.getMousePos();

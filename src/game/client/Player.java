@@ -4,6 +4,7 @@ import game.Bullet;
 import game.Entity;
 import game.ResourceLoader;
 import game.map.MapData;
+import game.util.DataPacket;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -32,7 +33,9 @@ public class Player extends Entity {
     public Player(float x, float y, MapData mapData, String username) {
 //        super(x, y, 2.0f, new Rectangle2D.Float((x - COLL_BOX_WIDTH), (y - COLL_BOX_HEIGHT), COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
 //        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
-        super(x, y, MOVE_SPEED, HEALTH, mapData);
+        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER);
+
+
         bullets = new ArrayList<>(20);
         setUsername(username);
         conversionMode = false;

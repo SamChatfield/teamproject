@@ -13,6 +13,16 @@ public class DataPacket implements Serializable{
     private float moveSpeed;
     protected long lastAttackTime;
     private String username;
+    private Type type;
+
+    public enum Type{
+        ZOMBIE,PLAYER,BULLET
+    }
+
+    public Type getType(){
+        return type;
+    }
+
 
     public String getUsername() {
         return username;
@@ -46,13 +56,14 @@ public class DataPacket implements Serializable{
         this.lastAttackTime = lastAttackTime;
     }
 
-    public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime) {
+    public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t) {
         this.lastAttackTime = lastAttackTime;
 
         this.x = x;
         this.y = y;
         this.moveSpeed = moveSpeed;
         this.health = health;
+        this.type = t;
     }
 
     public float getX() {

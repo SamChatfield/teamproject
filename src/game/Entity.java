@@ -18,12 +18,17 @@ public class Entity {
 
     protected DataPacket data;
 
-    public Entity(float x, float y, float moveSpeed, int health, MapData mapData) {
-        this.data = new DataPacket(x,y,moveSpeed,health, 0L);
+    public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t) {
+        this.data = new DataPacket(x,y,moveSpeed,health, 0L,t);
         showCollBox = false;
         this.mapData = mapData;
         collisionBox = new CollisionBox(this);
     }
+
+    public DataPacket.Type getType(){
+        return getType();
+    }
+
 
     public long getLastAttackTime(){
         return data.getLastAttackTime();

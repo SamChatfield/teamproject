@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
+ * A class that runs whilst the game is running. It primarily updates zombie positions.
+ *
  * Created by Daniel on 19/02/2017.
  */
 public class GameInstance extends Thread {
