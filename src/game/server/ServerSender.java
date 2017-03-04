@@ -32,12 +32,6 @@ public class ServerSender extends Thread {
 	public void sendGameState() {
 		SendableState send = state.getPackagedState();
 
-
-		//ArrayList<DataPacket> data = send.getZombies();
-		//for(DataPacket d:data){
-		//	System.out.println("SENDING: "+d.getHealth());
-		//}
-
 		try {
 			objOut.writeObject(send);
 			objOut.flush();
@@ -74,7 +68,7 @@ public class ServerSender extends Thread {
 						sendObject("StartingGame");
 						initial = false;
 					}
-					System.out.println("Game started: Sending state");
+					//System.out.println("Game started: Sending state");
 					sendGameState(); // send the game state
 				}else{
 					System.out.println("Game not ready yet");

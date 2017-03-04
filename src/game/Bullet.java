@@ -8,11 +8,12 @@ import game.util.Vector;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 /**
  * Created by Sam on 31/01/2017.
  */
-public class Bullet extends Entity {
+public class Bullet extends Entity implements Serializable {
 
     public static final float BULLET_SPEED = 0.15f;
 
@@ -73,7 +74,7 @@ public class Bullet extends Entity {
     	Zombie zom = (Zombie) entity;
         if (active) {
         	if(conversionMode) {
-        		zom.convert();
+        		zom.convert(player.getUsername()); // pass the shooting player to the zombie.
         		System.out.println("Successfully converted zombie!");
         	}
         	else {
@@ -88,11 +89,7 @@ public class Bullet extends Entity {
         return collisionBox;
     }
 
-
     public static BufferedImage getImage() {
         return image;
     }
-
-
-
 }

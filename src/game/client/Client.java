@@ -386,18 +386,8 @@ public class Client extends Canvas {
 		}
 		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
-		// Bullet movement
 
-        for (int i = 0; i < player.getBullets().size(); i++) {
-            Bullet b = player.getBullets().get(i);
-            if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
-                player.getBullets().remove(i);
-                continue;
-            }
-            Collision.checkBulletCollision(i, player.getBullets(), zombies, player, soundManager);
-            b.move(delta);
-            // System.out.println("bullet " + i + " at " + b.getX() + ", " + b.getY());
-        }
+
 
 /*
         int newNumConvertedZombies = 0;

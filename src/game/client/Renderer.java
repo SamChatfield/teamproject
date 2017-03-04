@@ -75,10 +75,9 @@ public class Renderer {
         drawMap(g2d, mapData, player);
 
         player.draw(g2d);
-        
-        ArrayList<Bullet> deleteBullets = new ArrayList<Bullet>();
 
-        for (Bullet b : player.getBullets()) {
+        System.out.println(state.getBullets().size());
+        for (Bullet b : state.getBullets()) {
             if(b.active) {
             	b.draw(g2d);
             }

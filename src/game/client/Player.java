@@ -9,6 +9,7 @@ import game.util.DataPacket;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -41,15 +42,14 @@ public class Player extends Entity {
         conversionMode = false;
     }
 
-    public boolean shoot(float aimX, float aimY) {
+    public Bullet shoot(float aimX, float aimY) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
         if (now - getLastAttackTime() > SHOOT_DELAY) {
             setLastAttackTime(now);
-            bullets.add(new Bullet(this, aimX, aimY, mapData));
-            return true;
+            return new Bullet(this, aimX, aimY, mapData);
         } else {
-        	return false;
+        	return null;
         }
     }
 

@@ -1,6 +1,6 @@
 package game.util;
 
-import game.client.EntityData;
+import game.Bullet;
 import game.server.ServerGameState;
 
 import java.io.Serializable;
@@ -14,8 +14,14 @@ public class SendableState implements Serializable {
     private int timeRemaining;
     private String mapImage;
     private ArrayList<DataPacket> zombies;
+    private ArrayList<Bullet> bullets;
+
     private DataPacket player1;
     private DataPacket player2;
+
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
 
     public int getTimeRemaining() {
         return timeRemaining;
@@ -54,5 +60,6 @@ public class SendableState implements Serializable {
         this.zombies = state.getSendableZombies();
         this.timeRemaining = state.getTimeRemaining();
         this.mapImage = state.getMapImage();
+        //this.bullets = state.getBullets();
     }
 }

@@ -1,5 +1,6 @@
 package game.util;
 
+import game.Bullet;
 import game.Zombie;
 import game.client.EntityData;
 import game.client.Player;
@@ -17,18 +18,26 @@ import java.util.ArrayList;
 public class GameState implements Serializable {
 
     protected ArrayList<Zombie> zombies;
+    protected ArrayList<Bullet> bullets;
     protected Player player1;
     protected Player player2;
     protected String mapImage; // the name of the file being used to create the image.
     protected int timeRemaining;
     protected MapData mapData;
+    protected boolean inProgress; // is the game in progress?
+    protected boolean isConnected; // is the game connected to the server? If this is false, the server hasn't sent a state yet
+
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public void setBullets(ArrayList<Bullet> bullets) {
+        this.bullets = bullets;
+    }
 
     public MapData getMapData() {
         return mapData;
     }
-
-    protected boolean inProgress; // is the game in progress?
-    protected boolean isConnected; // is the game connected to the server? If this is false, the server hasn't sent a state yet
 
     public String getMapImage() {
         return mapImage;

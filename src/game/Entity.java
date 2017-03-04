@@ -9,11 +9,12 @@ import java.io.Serializable;
 /**
  * Created by Sam on 20/01/2017.
  */
-public class Entity {
+public class Entity implements Serializable{
 
     protected CollisionBox collisionBox;
     protected boolean showCollBox;
-    protected MapData mapData;
+    protected transient MapData mapData;
+
     protected int imageWidth, imageHeight;
 
     protected DataPacket data;
@@ -36,6 +37,14 @@ public class Entity {
 
     public void setLastAttackTime(long newTime){
         data.setLastAttackTime(newTime);
+    }
+
+    public void setState(DataPacket.State state){
+        data.setState(state);
+    }
+
+    public DataPacket.State getState(){
+        return data.getState();
     }
 
     public void move(float dx, float dy) {

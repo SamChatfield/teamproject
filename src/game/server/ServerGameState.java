@@ -1,5 +1,6 @@
 package game.server;
 
+import game.Bullet;
 import game.Entity;
 import game.client.Player;
 import game.map.MapData;
@@ -25,8 +26,18 @@ public class ServerGameState extends GameState {
     public ServerGameState(String player1Username, String player2Username){
         this.player1Username = player1Username;
         this.player2Username = player2Username;
+        this.bullets = new ArrayList<>();
     }
 
+    public Player getPlayer(String username){
+        if(username.equals(player1Username)){
+            return player1;
+        }else if (username.equals(player2Username)){
+            return player2;
+        }else{
+            return null;
+        }
+    }
 
     // TODO: Stop this from terminating the program
     public void startNewGame(){
@@ -75,6 +86,7 @@ public class ServerGameState extends GameState {
 
     public void updatePlayer(String username, PlayerUpdatePacket packet){
         Player toModify = null;
+
         // First we need to get the player we want based on their username:
         if(player1Username.equals(username)){  toModify = player1; }else if(player2Username.equals(username)){ toModify = player2; }
 
@@ -113,7 +125,10 @@ public class ServerGameState extends GameState {
                     double playerAngle = toModify.getFacingAngle();
                     float aimX = (float) Math.cos(playerAngle);
                     float aimY = (float) -Math.sin(playerAngle);
-                    toModify.shoot(aimX, aimY);
+                    Bullet b = toModify.shoot(aimX, aimY);
+                    if(b != null){ // this could happen if they have already shot recently.
+                        bullets.add(b);
+                    }
                     break;
             }
         }

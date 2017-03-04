@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
  */
 public class Zombie extends Entity {
 
-    private State state;
     private float dx, dy; // Which direction is the zombie moving in every tick?
 
     public static final float DIRECTION_CHANGE_PROBABILITY = 0.01f;
@@ -25,14 +24,13 @@ public class Zombie extends Entity {
     public static final float AGGRO_RANGE = 4.0f;
     private static final BufferedImage image = ResourceLoader.zombieImage();
     private static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
-    
-    public enum State {
-        WILD, PLAYER, OPPONENT;
-    }
+
+
 
     public Zombie(float x, float y, MapData mapData) {
         super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.ZOMBIE);
-        this.state = State.WILD;
+        setState(DataPacket.State.WILD);
+        setUsername("None");
     }
 
     public float getDx() {
@@ -42,13 +40,10 @@ public class Zombie extends Entity {
     public float getDy() {
         return dy;
     }
-    
-    public State getState() {
-    	return state;
-    }
 
-    public void convert() {
-        state = State.PLAYER;
+    public void convert(String username) {
+        setUsername(username); // change the owner of the zombie to the new player
+        setState(DataPacket.State.PLAYER);
     }
 
     public void move(double delta) {
@@ -59,7 +54,7 @@ public class Zombie extends Entity {
 
     // Zombie vector changed to follow player, if wild.
     public void followDirection(Player player) {
-    	if (state == State.WILD) {
+    	if (getState() == DataPacket.State.WILD) {
         	Vector zdv = ArtInt.followPlayer(getX(), getY(), player);
         	Vector znv = zdv.normalised();
         	
@@ -81,8 +76,9 @@ public class Zombie extends Entity {
 
     public void attack(Entity entity, int damageDone) {
         long now = System.nanoTime();
-        
-        if(this.state == State.PLAYER) {
+
+
+        if(getState() == DataPacket.State.PLAYER && entity.getUsername().equals(getUsername())) {
         	// Currently, do nothing
         }
         else {
@@ -116,10 +112,10 @@ public class Zombie extends Entity {
         AffineTransform at = g2d.getTransform();
         g2d.rotate(data.getFacingAngle(), drawX + w / 2, drawY + h / 2);
 
-        if(state == State.PLAYER) {
+        if(getState() == DataPacket.State.PLAYER && player.getUsername().equals(getUsername())) {
         	g2d.drawImage(playerZombieImage, drawX, drawY, null);
         }
-        else if(state == State.OPPONENT) {
+        else if(getState() == DataPacket.State.PLAYER) {
         	// Change this later
         	g2d.drawImage(image, drawX, drawY, null);
         }

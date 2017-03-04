@@ -1,5 +1,6 @@
 package game.client;
 
+import game.Bullet;
 import game.Entity;
 import game.Zombie;
 import game.map.MapData;
@@ -27,6 +28,7 @@ public class ClientGameState extends GameState {
         this.mapImage = null;
         this.isConnected = false;
         this.zombies = new ArrayList<Zombie>();
+        this.bullets = new ArrayList<Bullet>();
     }
 
     public void addSoundManager(Sound sound){
@@ -48,6 +50,9 @@ public class ClientGameState extends GameState {
             }
         }
 
+
+        //this.bullets = updatedState.getBullets();
+
         if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
             soundManager.playerHurt();
         }
@@ -63,7 +68,6 @@ public class ClientGameState extends GameState {
         }
         updateTime(updatedState.getTimeRemaining());
         //System.out.println("Updated client side time "+getTimeRemaining());
-
     }
 
     private void setUpGame(){

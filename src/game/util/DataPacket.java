@@ -19,6 +19,20 @@ public class DataPacket implements Serializable{
         ZOMBIE,PLAYER,BULLET
     }
 
+    // These are used for Zombies
+    private State state;
+    public enum State {
+        WILD, PLAYER
+    }
+
+    public State getState(){
+        return state;
+    }
+
+    public void setState(State state){
+        this.state = state;
+    }
+
     public Type getType(){
         return type;
     }
