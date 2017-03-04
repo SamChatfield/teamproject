@@ -100,6 +100,7 @@ public class Client extends Canvas {
 		menuState = MSTATE.MAIN;
 
         soundManager = new Sound();
+        state.addSoundManager(soundManager);
 	}
 
 

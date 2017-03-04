@@ -20,13 +20,17 @@ public class ClientGameState extends GameState {
 
     private String username;
     private String otherPlayerName;
+    private Sound soundManager;
 
     public ClientGameState(String username){
         this.username = username;
         this.mapImage = null;
         this.isConnected = false;
         this.zombies = new ArrayList<Zombie>();
+    }
 
+    public void addSoundManager(Sound sound){
+        this.soundManager = sound;
     }
 
 
@@ -42,6 +46,10 @@ public class ClientGameState extends GameState {
             }else{
                 otherPlayerName = updatedState.getPlayer1().getUsername();
             }
+        }
+
+        if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
+            soundManager.playerHurt();
         }
 
         // We can reliably update each player locally without knowing which order they were sent in by the server.

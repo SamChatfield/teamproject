@@ -1,5 +1,6 @@
 package game.server;
 
+import game.Collision;
 import game.Zombie;
 import game.client.EntityData;
 import game.client.Player;
@@ -75,6 +76,8 @@ public class GameInstance extends Thread {
                             zombie.newMovingDir();
                         }
                     }
+                    Collision.checkCollision(zombie, player);
+
                 }
             zombie.move(delta);
         }

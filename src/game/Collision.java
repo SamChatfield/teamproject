@@ -10,10 +10,9 @@ import java.util.ArrayList;
  */
 public class Collision {
 
-    public static void checkCollision(Zombie zombie, Player player, Sound sound) {
+    public static void checkCollision(Zombie zombie, Player player) {
         if (zombie.getCollisionBox().intersects(player.getCollisionBox())) {
             zombie.attack(player, 5);
-            sound.playerHurt();
         }
     }
     public static void checkBulletCollision(int bulletIndex, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies, Player player, Sound sound) {
