@@ -42,8 +42,6 @@ public class ServerGameState extends GameState {
         ArrayList<Zombie> zombieFactory = new ArrayList<>();
         try{
             for (int i = 0; i < zombieCount; i++) {
-              //  System.out.println("Zombie");
-
                 // Daniel does some random stuff here... (like speaking in the third person)
                 Random rand = new Random();
                 float x = (float) (0.5-rand.nextFloat())*mapData.getWidth();

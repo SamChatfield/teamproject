@@ -56,29 +56,25 @@ public class GameInstance extends Thread {
         Player player1 = state.getPlayer1();
         Player player2 = state.getPlayer2();
 
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+
         // Move the zombies around randomly
         Random rand = new Random();
 
         for (Zombie zombie : zombies) {
             // Change the zombie's direction with given probability
-                /*
-                for (EntityData player : players) {
+                for (Player player : players) {
                     if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
-                        //zombie.followDirection(player);
+                        zombie.followDirection(player);
                     } else {
                         if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                           // zombie.newMovingDir();
+                            zombie.newMovingDir();
                         }
                     }
                 }
-                */
-
-            if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                zombie.newMovingDir();
-            }
-            // System.out.println("BEFORE: "+zombie.getX());
             zombie.move(delta);
-            //System.out.println("AFTER: "+zombie.getX());
         }
     }
 

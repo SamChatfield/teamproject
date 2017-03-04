@@ -15,11 +15,8 @@ public class Bullet extends Entity {
 
     public static final float BULLET_SPEED = 0.15f;
 
-//    private float x, y; // the x and y coord of the middle of the bullet
     private float dx, dy; // the change in x and y of the bullet each update before delta
-//    private float width, height;
-//    private CollisionBox collisionBox;
-//    private Rectangle2D.Float shape;
+
     public boolean active;
     private Player player;
     private double distance;
@@ -28,16 +25,14 @@ public class Bullet extends Entity {
     
     public Bullet(Player player, float aimX, float aimY, MapData mapData) {
         super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData);
-//        x = player.x();
-//        y = player.y();
+
 
         Vector normalDir = new Vector(aimX, aimY).normalised();
         dx = normalDir.x();
         dy = normalDir.y();
 
         data.setFacingAngle(player.getFacingAngle()); // TODO check the efficiency of this
-//        collisionBox = new CollisionBox(this, width, height);
-//        shape = new Rectangle2D.Float(x, y, image.getWidth(), image.getHeight());
+
         active = true;
         this.player = player;
     }
@@ -62,9 +57,6 @@ public class Bullet extends Entity {
         int w = image.getWidth();
         int h = image.getHeight();
 
-//        int drawX = Math.round(x - (width / 2.0f));
-//        int drawY = Math.round(y - (height / 2.0f));
-
         Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
@@ -80,7 +72,7 @@ public class Bullet extends Entity {
         if (active) {
         	if(conversionMode) {
         		zom.convert();
-        		System.out.println("Successfully converted zombie!");
+        		//System.out.println("Successfully converted zombie!");
         	}
         	else {
         		// TODO: Add in so converted zombies won't damage player
