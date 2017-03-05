@@ -91,7 +91,7 @@ public class GameInstance extends Thread {
             while (bullets.hasNext()) {
                 Bullet b = bullets.next();
                 if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
-                   // state.getBullets().remove(b);
+                    bullets.remove();
                     continue;
                 }
                 Player owner = state.getPlayer(b.getUsername());

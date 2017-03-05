@@ -76,7 +76,7 @@ public class Renderer {
 
         player.draw(g2d);
 
-        System.out.println(state.getBullets().size());
+        //System.out.println(state.getBullets().size());
         for (Bullet b : state.getBullets()) {
             if(b.active) {
             	b.draw(g2d);

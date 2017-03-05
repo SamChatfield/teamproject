@@ -20,7 +20,7 @@ public class Collision {
             if (b.getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {
             	//sound.zombieDeath();
                 b.damage(zombies.get(i), 25, player.conversionMode);
-                bullets.remove(b);
+             //   bullets.remove(b);
                 break;
             }
         }
