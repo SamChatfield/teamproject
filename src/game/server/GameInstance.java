@@ -8,6 +8,7 @@ import game.client.Player;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -86,7 +87,9 @@ public class GameInstance extends Thread {
 
         // Move all of the bullets
         try{
-            for (Bullet b: state.getBullets()) {
+            Iterator<Bullet> bullets = state.getBullets().iterator();
+            while (bullets.hasNext()) {
+                Bullet b = bullets.next();
                 if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
                    // state.getBullets().remove(b);
                     continue;
@@ -94,7 +97,6 @@ public class GameInstance extends Thread {
                 Player owner = state.getPlayer(b.getUsername());
                 Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
                 b.move(delta);
-                System.out.println("bullet  at " + b.getX() + ", " + b.getY());
             }
         }catch(ConcurrentModificationException e){
             System.out.println("Error, this shouldn't happen");

@@ -60,6 +60,6 @@ public class SendableState implements Serializable {
         this.zombies = state.getSendableZombies();
         this.timeRemaining = state.getTimeRemaining();
         this.mapImage = state.getMapImage();
-        //this.bullets = state.getBullets();
+        this.bullets = state.getBullets();
     }
 }

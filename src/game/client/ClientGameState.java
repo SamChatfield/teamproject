@@ -51,7 +51,7 @@ public class ClientGameState extends GameState {
         }
 
 
-        //this.bullets = updatedState.getBullets();
+        this.bullets = updatedState.getBullets();
 
         if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
             soundManager.playerHurt();
