@@ -63,11 +63,10 @@ public class ClientGameState extends GameState {
 
 
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
-        for(int i = 0; i<100; i++){
+        for(int i = 0; i<updatedState.getZombies().size(); i++){
             zombies.get(i).updateData(sentZombies.get(i));
         }
         updateTime(updatedState.getTimeRemaining());
-        //System.out.println("Updated client side time "+getTimeRemaining());
     }
 
     private void setUpGame(){
