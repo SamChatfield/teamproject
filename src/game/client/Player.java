@@ -85,6 +85,33 @@ public class Player extends Entity {
         g2d.setTransform(at);
     }
 
+    public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player) {
+        // Width and height of the entity sprite
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        g2d.setColor(Color.GREEN);
+        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, getHealth(), 2);
+        g2d.fill(healthBarFill);
+        g2d.setColor(Color.BLACK);
+
+        if (showCollBox) {
+            g2d.setColor(Color.BLUE);
+            g2d.draw(collisionBox.getDrawRect(player));
+            g2d.setColor(Color.BLACK);
+        }
+
+        AffineTransform at = g2d.getTransform();
+        g2d.rotate(data.getFacingAngle(), drawX + w / 2, drawY + h / 2);
+
+        g2d.drawImage(image, drawX, drawY, null);
+        g2d.setTransform(at);
+    }
+
 
     /**
      * Calculate the point relative to the player at which the given entity will be drawn

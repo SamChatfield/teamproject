@@ -77,7 +77,7 @@ public class Renderer {
         player.draw(g2d);
 
         if(state.getOtherPlayer() != null){
-            state.getOtherPlayer().draw(g2d);
+            state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
         }
         //System.out.println(state.getBullets().size());
         for (Bullet b : state.getBullets()) {
