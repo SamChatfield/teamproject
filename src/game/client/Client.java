@@ -386,22 +386,18 @@ public class Client extends Canvas {
 		}
 		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
-
-
-
-/*
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
             if (zombies.get(i).getHealth() <= 0) {
                 zombies.remove(i);
                 i--;
             }
-            else if(zombies.get(i).getState() == Zombie.State.PLAYER) {;
+            else if(zombies.get(i).getUsername().equals(player.getUsername())) {;
             	newNumConvertedZombies += 1;
             }
         }
         player.setNumConvertedZombies(newNumConvertedZombies);
-*/
+
 		if(player.getHealth() < 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");

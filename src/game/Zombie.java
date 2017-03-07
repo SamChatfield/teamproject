@@ -25,8 +25,6 @@ public class Zombie extends Entity {
     private static final BufferedImage image = ResourceLoader.zombieImage();
     private static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
 
-
-
     public Zombie(float x, float y, MapData mapData) {
         super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.ZOMBIE);
         setState(DataPacket.State.WILD);
@@ -124,9 +122,7 @@ public class Zombie extends Entity {
         }
         g2d.setTransform(at);
     }
-
     public static BufferedImage getImage() {
         return image;
     }
-
 }

@@ -120,7 +120,7 @@ public class Renderer {
 		g2d.drawString(remainingTime, gameW - 170, 20);
 		
 		// Display number of converted zombies
-//		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombies.size() , 450, 630);
+		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombies.size() , 450, 630);
 		
         // Clean up and flip the buffer
         g2d.dispose();

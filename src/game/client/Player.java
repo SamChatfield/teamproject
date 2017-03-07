@@ -25,8 +25,9 @@ public class Player extends Entity {
     private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
     private static final float MOVE_SPEED = 0.1f;
     private static final BufferedImage image = ResourceLoader.playerImage();
-    
+
     private int numConvertedZombies;
+
 	public boolean conversionMode;
 
     private ArrayList<Bullet> bullets;
@@ -110,22 +111,23 @@ public class Player extends Entity {
     public ArrayList<Bullet> getBullets() {
         return bullets;
     }
-    
+
     /**
      * Set the number of converted zombies the player has
      * @param newNum New number to set
      */
     public void setNumConvertedZombies(int newNum) {
-    	this.numConvertedZombies = newNum;
+        numConvertedZombies = newNum;
     }
-    
+
     /**
      * Get the number of converted zombies the player has
      * @return Number of converted zombies on player's team
      */
     public int getNumConvertedZombies() {
-    	return numConvertedZombies;
+        return numConvertedZombies;
     }
+
 
     public static BufferedImage getImage() {
         return image;

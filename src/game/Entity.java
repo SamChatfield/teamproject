@@ -77,7 +77,6 @@ public class Entity implements Serializable{
         return data.getY();
     }
 
-
     public void updateData(DataPacket data2){
         this.data = data2;
     }
