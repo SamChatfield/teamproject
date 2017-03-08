@@ -386,6 +386,8 @@ public class Client extends Canvas {
 		}
 		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
+		updateLocalPlayer(keyPresses,delta,fv);
+
         int newNumConvertedZombies = 0;
         for (int i = 0; i < zombies.size(); i++) {
             if (zombies.get(i).getHealth() <= 0) {
@@ -404,7 +406,51 @@ public class Client extends Canvas {
 		}
 	}
 
-    public Player getPlayer() {
+	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {
+		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
+		for(String s:keyPresses) {
+			switch(s){
+				case "VK_1":
+					player.setMoveSpeed(player.getMoveSpeed() - 0.01f);
+					break;
+				case "VK_2":
+					player.setMoveSpeed(player.getMoveSpeed() + 0.01f);
+					break;
+				case "VK_W":
+					pdv.add(new Vector(0.0f, 1.0f));
+					break;
+				case "VK_A":
+					pdv.add(new Vector(-1.0f, 0.0f));
+					break;
+				case "VK_D":
+					pdv.add(new Vector(1.0f, 0.0f));
+					break;
+				case "VK_S":
+					pdv.add(new Vector(0.0f, -1.0f));
+					break;
+				case "VK_Z":
+					player.conversionMode = true;
+					break;
+				case "VK_X":
+					player.conversionMode = false;
+					break;
+				case "BUTTON1":
+					// this should still happen on the server
+					break;
+			}
+		}
+		if(fv != null){
+			player.face(fv.x(),fv.y());
+		}
+
+
+		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
+		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual change in x this update
+		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual change in y this update
+		player.move(pdx, pdy);
+	}
+
+	public Player getPlayer() {
         return player;
     }
 
