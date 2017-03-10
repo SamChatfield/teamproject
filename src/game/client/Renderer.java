@@ -1,12 +1,14 @@
 package game.client;
 
 import game.Bullet;
-import game.Zombie;
+import game.CollisionBox;
 import game.map.MapData;
 import game.map.Tile;
+import game.util.DataPacket;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,6 +26,7 @@ public class Renderer {
     private int maxHealth;
     private Font tradeWinds;
     private ClientGameState state;
+    private boolean showCollBox = false;
 
     private BufferedImage lighting;
     
@@ -57,7 +60,8 @@ public class Renderer {
         this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
         int timeRemaining = state.getTimeRemaining();
-    	ArrayList<Zombie> zombies = state.getZombies();
+//    	ArrayList<Zombie> zombies = state.getZombies();
+        ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
        /// System.out.println("Renderer: "+zombies.get(1).getX());
         MapData mapData = state.getMapData();
 
@@ -86,8 +90,12 @@ public class Renderer {
             }
         }
 
-       for (Zombie z : zombies) {
-           z.draw(g2d, player);
+        // TODO this has changed
+//       for (Zombie z : zombies) {
+//           z.draw(g2d, player);
+//        }
+        for (DataPacket z : zombiePackets) {
+            drawZombie(g2d, player, z);
         }
 
         //lighting
@@ -123,7 +131,7 @@ public class Renderer {
 		g2d.drawString(remainingTime, gameW - 170, 20);
 		
 		// Display number of converted zombies
-		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombies.size() , 450, 630);
+		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombiePackets.size() , 450, 630);
 		
         // Clean up and flip the buffer
         g2d.dispose();
@@ -191,6 +199,47 @@ public class Renderer {
         }
 
 
+    }
+
+    private void drawZombie(Graphics2D g2d, Player player, DataPacket z) {
+        // Width and height of the entity sprite
+        int w = Client.zombieImage.getWidth();
+        int h = Client.zombieImage.getHeight();
+
+        Point drawPoint = player.relativeDrawPoint(z.getX(), z.getY(), w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        g2d.setColor(Color.GREEN);
+        Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, z.getHealth(), 2);
+        g2d.fill(healthBarFill);
+        g2d.setColor(Color.BLACK);
+
+        if (showCollBox) {
+            g2d.setColor(Color.BLUE);
+            g2d.draw(CollisionBox.collBoxRectFromData(z, player));
+            g2d.setColor(Color.BLACK);
+        }
+
+        AffineTransform at = g2d.getTransform();
+        g2d.rotate(z.getFacingAngle(), drawX + w / 2, drawY + h / 2);
+
+        if(z.getState() == DataPacket.State.PLAYER && player.getUsername().equals(z.getUsername())) {
+            g2d.drawImage(Client.playerZombieImage, drawX, drawY, null);
+        }
+        else if(z.getState() == DataPacket.State.PLAYER) {
+            // Change this later
+            g2d.drawImage(Client.zombieImage, drawX, drawY, null);
+        }
+        else {
+            g2d.drawImage(Client.zombieImage, drawX, drawY, null);
+        }
+        g2d.setTransform(at);
+    }
+
+    public void setShowCollBox(boolean showCollBox) {
+        this.showCollBox = showCollBox;
+        player.setShowCollBox(showCollBox);
     }
 
 }

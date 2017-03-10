@@ -2,6 +2,7 @@ package game;
 
 import game.client.Client;
 import game.client.Player;
+import game.util.DataPacket;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -27,11 +28,11 @@ public class CollisionBox implements Serializable {
             iwidth = Player.getImage().getWidth();
             iheight = Player.getImage().getHeight();
         } else if (owner instanceof Zombie){
-            width = (float) Zombie.getImage().getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Zombie.getImage().getHeight() / (float) Client.TILE_SIZE;
+            width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
+            height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-            iwidth = Zombie.getImage().getWidth();
-            iheight = Zombie.getImage().getHeight();
+            iwidth = Client.zombieImage.getWidth();
+            iheight = Client.zombieImage.getHeight();
         } else {
             width = (float) Bullet.getImage().getWidth() / (float) Client.TILE_SIZE;
             height = (float) Bullet.getImage().getHeight() / (float) Client.TILE_SIZE;
@@ -85,6 +86,21 @@ public class CollisionBox implements Serializable {
 
     public boolean intersects(CollisionBox otherBox) {
         return getRect().intersects(otherBox.getRect());
+    }
+
+    public static Rectangle2D.Float collBoxRectFromData(DataPacket z, Player p) {
+        Rectangle2D.Float drawRect;
+
+        float width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
+        float height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
+
+        int iwidth = Client.zombieImage.getWidth();
+        int iheight = Client.zombieImage.getHeight();
+
+        Point drawPoint = p.relativeDrawPoint(z.getX(), z.getY(), iwidth, iheight);
+        drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
+
+        return drawRect;
     }
 
 }

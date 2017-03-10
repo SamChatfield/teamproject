@@ -3,7 +3,6 @@ package game;
 import game.map.MapData;
 import game.util.DataPacket;
 
-import javax.xml.crypto.Data;
 import java.io.Serializable;
 
 /**
@@ -12,7 +11,7 @@ import java.io.Serializable;
 public class Entity implements Serializable{
 
     protected CollisionBox collisionBox;
-    protected boolean showCollBox;
+//    protected boolean showCollBox;
     protected transient MapData mapData;
 
     protected int imageWidth, imageHeight;
@@ -21,7 +20,7 @@ public class Entity implements Serializable{
 
     public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t) {
         this.data = new DataPacket(x,y,moveSpeed,health, 0L,t);
-        showCollBox = false;
+//        showCollBox = false;
         this.mapData = mapData;
         collisionBox = new CollisionBox(this);
     }
@@ -81,9 +80,9 @@ public class Entity implements Serializable{
         this.data = data2;
     }
 
-    public void setShowCollBox(boolean showCollBox) {
-        this.showCollBox = showCollBox;
-    }
+//    public void setShowCollBox(boolean showCollBox) {
+//        this.showCollBox = showCollBox;
+//    }
 
     public CollisionBox getCollisionBox() {
         return collisionBox;

@@ -1,9 +1,6 @@
 package game.client;
 
-import game.Bullet;
-import game.Collision;
 import game.ResourceLoader;
-import game.Zombie;
 import game.util.PlayerUpdatePacket;
 import game.util.Vector;
 
@@ -12,11 +9,11 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 /**
@@ -35,6 +32,9 @@ public class Client extends Canvas {
 	public static final int TILE_SIZE = 64;
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
+
+	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
+	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
     
     public Sound soundManager;
 	private JFrame container;
@@ -300,8 +300,6 @@ public class Client extends Canvas {
      */
 	private void update(double delta) {
 
-	    ArrayList<Zombie> zombies = state.getZombies();
-
 		ArrayList<String> keyPresses = new ArrayList<>();		// Lets store every keypress we see this tick
 		// Change the player movement speed with 1 and 2
         if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
@@ -336,17 +334,11 @@ public class Client extends Canvas {
 		// Other debugging key bindings
 		// Display collision boxes
 		if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
-			player.setShowCollBox(true);
-			for (Zombie z : zombies) {
-				z.setShowCollBox(true);
-			}
+			renderer.setShowCollBox(true);
 		}
 		// Hide collision boxes
 		if (inputHandler.isKeyDown(KeyEvent.VK_L)){
-			player.setShowCollBox(false);
-			for (Zombie z : zombies) {
-				z.setShowCollBox(false);
-			}
+			renderer.setShowCollBox(false);
 		}
 		// Print the player's position
 		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
@@ -389,15 +381,11 @@ public class Client extends Canvas {
 		updateLocalPlayer(keyPresses,delta,fv);
 
         int newNumConvertedZombies = 0;
-        for (int i = 0; i < zombies.size(); i++) {
-            if (zombies.get(i).getHealth() <= 0) {
-                zombies.remove(i);
-                i--;
-            }
-            else if(zombies.get(i).getUsername().equals(player.getUsername())) {;
-            	newNumConvertedZombies += 1;
-            }
-        }
+		for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
+			if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
+				newNumConvertedZombies += 1;
+			}
+		}
         player.setNumConvertedZombies(newNumConvertedZombies);
 
 		if(player.getHealth() < 0) {

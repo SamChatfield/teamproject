@@ -9,7 +9,6 @@ import game.util.DataPacket;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +26,7 @@ public class Player extends Entity {
     private static final BufferedImage image = ResourceLoader.playerImage();
 
     private int numConvertedZombies;
+    private boolean showCollBox;
 
 	public boolean conversionMode;
 
@@ -37,7 +37,7 @@ public class Player extends Entity {
 //        super(x, y, 2.0f, HEALTH, new CollisionBox(x, y, COLL_BOX_WIDTH, COLL_BOX_HEIGHT), image);
         super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER);
 
-
+        showCollBox = false;
         bullets = new ArrayList<>(20);
         setUsername(username);
         conversionMode = false;
@@ -158,6 +158,10 @@ public class Player extends Entity {
 
     public static BufferedImage getImage() {
         return image;
+    }
+
+    public void setShowCollBox(boolean showCollBox) {
+        this.showCollBox = showCollBox;
     }
 
 }

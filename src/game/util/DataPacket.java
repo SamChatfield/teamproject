@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Daniel on 28/02/2017.
  */
-public class DataPacket implements Serializable{
+public class DataPacket implements Serializable {
 
     private float x,y;
     private int health;
