@@ -76,6 +76,7 @@ public class Client extends Canvas {
 		panel.setPreferredSize(GAME_DIMENSION);
 		panel.setLayout(null);
 
+
 		setBounds(0, 0, GAME_DIMENSION.width, GAME_DIMENSION.height);
 		panel.add(this);
 

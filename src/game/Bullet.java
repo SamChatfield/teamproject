@@ -79,9 +79,14 @@ public class Bullet extends Entity implements Serializable {
         	}
         	else {
         		// TODO: Add in so converted zombies won't damage player
-                entity.setHealth(entity.getHealth() - damageDone);
+                if(entity.getHealth() <= damageDone){
+                    System.out.println("Critically injured");
+                    entity.setHealth(0);
+                }else{
+                    entity.setHealth(entity.getHealth() - damageDone);
+                }
                 active = false;
-        	}
+            }
         }
     }
 
