@@ -69,8 +69,13 @@ public class GameInstance extends Thread {
         // Move the zombies around randomly
         Random rand = new Random();
 
-        for (Zombie zombie : zombies) {
+        Iterator<Zombie> zombs = state.getZombies().iterator();
+        while (zombs.hasNext()) {
+             Zombie zombie = zombs.next();
             // Change the zombie's direction with given probability
+                if(zombie.getHealth() == 0){
+                    zombs.remove();
+                }
                 for (Player player : players) {
                     if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
                         zombie.followDirection(player);
