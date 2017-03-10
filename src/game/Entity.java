@@ -80,6 +80,11 @@ public class Entity implements Serializable{
         this.data = data2;
     }
 
+    public void updateLocalPlayerData(DataPacket data2){
+        setLastAttackTime(data2.getLastAttackTime());
+        setHealth(data2.getHealth());
+    }
+
 //    public void setShowCollBox(boolean showCollBox) {
 //        this.showCollBox = showCollBox;
 //    }

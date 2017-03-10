@@ -60,9 +60,7 @@ public class Renderer {
         this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
         int timeRemaining = state.getTimeRemaining();
-//    	ArrayList<Zombie> zombies = state.getZombies();
         ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
-       /// System.out.println("Renderer: "+zombies.get(1).getX());
         MapData mapData = state.getMapData();
 
         // Set up the graphics instance for the current back buffer
@@ -90,10 +88,7 @@ public class Renderer {
             }
         }
 
-        // TODO this has changed
-//       for (Zombie z : zombies) {
-//           z.draw(g2d, player);
-//        }
+        // Draw the zombies
         for (DataPacket z : zombiePackets) {
             drawZombie(g2d, player, z);
         }

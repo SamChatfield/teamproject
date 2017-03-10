@@ -55,7 +55,7 @@ public class ClientGameState extends GameState {
         }
 
         // We can reliably update each player locally without knowing which order they were sent in by the server.
-        //player1.updateData(updatedState.getPlayer(username));
+        player1.updateLocalPlayerData(updatedState.getPlayer(username));
         player2.updateData(updatedState.getPlayer(otherPlayerName));
 
         // TODO changed

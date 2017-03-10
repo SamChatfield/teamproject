@@ -142,6 +142,7 @@ public class ServerGameState extends GameState {
         float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
         float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update
         toModify.move(pdx, pdy);
+        System.out.println("Player "+toModify.getUsername()+" pos: "+toModify.getX()+","+toModify.getY());
     }
 
     public SendableState getPackagedState(){

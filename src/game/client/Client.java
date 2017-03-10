@@ -395,6 +395,7 @@ public class Client extends Canvas {
 	}
 
 	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {
+
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 		for(String s:keyPresses) {
 			switch(s){
@@ -430,12 +431,11 @@ public class Client extends Canvas {
 		if(fv != null){
 			player.face(fv.x(),fv.y());
 		}
-
-
 		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
 		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual change in y this update
 		player.move(pdx, pdy);
+
 	}
 
 	public Player getPlayer() {
