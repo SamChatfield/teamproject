@@ -2,7 +2,6 @@ package game.util;
 
 import game.Bullet;
 import game.Zombie;
-import game.client.EntityData;
 import game.client.Player;
 import game.map.MapData;
 
@@ -19,6 +18,8 @@ public class GameState implements Serializable {
 
     protected ArrayList<Zombie> zombies;
     protected ArrayList<Bullet> bullets;
+    // TODO added
+    protected ArrayList<DataPacket> zombieDataPackets;
     protected Player player1;
     protected Player player2;
     protected String mapImage; // the name of the file being used to create the image.
@@ -53,6 +54,10 @@ public class GameState implements Serializable {
 
     public ArrayList<Zombie> getZombies() {
         return zombies;
+    }
+
+    public ArrayList<DataPacket> getZombieDataPackets() {
+        return zombieDataPackets;
     }
 
     public Player getPlayer1() {

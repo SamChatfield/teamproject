@@ -1,15 +1,11 @@
 package game.client;
 
 import game.Bullet;
-import game.Entity;
-import game.Zombie;
 import game.map.MapData;
-import game.server.ServerGameState;
 import game.util.DataPacket;
 import game.util.GameState;
 import game.util.SendableState;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 /**
@@ -27,8 +23,9 @@ public class ClientGameState extends GameState {
         this.username = username;
         this.mapImage = null;
         this.isConnected = false;
-        this.zombies = new ArrayList<Zombie>();
         this.bullets = new ArrayList<Bullet>();
+        // TODO addded
+        this.zombieDataPackets = new ArrayList<>();
     }
 
     public void addSoundManager(Sound sound){
@@ -61,11 +58,9 @@ public class ClientGameState extends GameState {
         //player1.updateData(updatedState.getPlayer(username));
         player2.updateData(updatedState.getPlayer(otherPlayerName));
 
-
+        // TODO changed
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
-        for(int i = 0; i<updatedState.getZombies().size(); i++){
-            zombies.get(i).updateData(sentZombies.get(i));
-        }
+        this.zombieDataPackets = sentZombies;
         updateTime(updatedState.getTimeRemaining());
     }
 
@@ -76,9 +71,6 @@ public class ClientGameState extends GameState {
         this.player1 = new Player(0,0,mapData,username);
         this.player2 = new Player(0,0,mapData,null); // We'll set this later
 
-        for(int i = 0; i<100; i++){
-            zombies.add(new Zombie(10,10,mapData));
-        }
         isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }
 
