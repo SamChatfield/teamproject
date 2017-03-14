@@ -1,15 +1,11 @@
 package game.server;
 
-import game.util.DataPacket;
-import game.util.SendableState;
-
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+
+import game.util.SendableState;
 
 /**
- * @author georgesabourin, Daniel Tonks
  * Class for managing sending from the server to the specified client
  */
 public class ServerSender extends Thread {
@@ -17,10 +13,10 @@ public class ServerSender extends Thread {
 	private ServerGameState state;
 	private ObjectOutputStream objOut;
 	private boolean initial;
-	
+
 	/**
 	 * Constructor method
-	 * @param objOut The ObjectOutputStream
+	 * @param (ObjectOutputStream) objOut - The ObjectOutputStream
 	 */
 	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
 		this.objOut = objOut; this.state = state; this.initial = true;
@@ -44,7 +40,7 @@ public class ServerSender extends Thread {
 
 	/**
 	 * Send an object up the ObjectOutputStream to the Client
-	 * @param obj Object to send
+	 * @param (Object) obj - Object to send
 	 */
 	public void sendObject(Object obj) {
 		try {
@@ -57,20 +53,18 @@ public class ServerSender extends Thread {
 		System.out.println("DEBUG: Object successfully sent");
 	}
 
-
 	// Main method to run when thread starts
 	public void run() {
 		while(true) {
-            try {
+			try {
 				Thread.sleep(1000/30);
-				if (state.inProgress()) { // if there is a game in progress
+				if (state.inProgress()) { // If there is a game in progress
 					if(initial){
 						sendObject("StartingGame");
 						initial = false;
 					}
-					//System.out.println("Game started: Sending state");
-					sendGameState(); // send the game state
-				}else{
+					sendGameState(); // Send the game state
+				} else{
 					System.out.println("Game not ready yet");
 				}
 			} catch (InterruptedException e) {

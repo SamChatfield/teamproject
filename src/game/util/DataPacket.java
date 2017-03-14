@@ -3,104 +3,183 @@ package game.util;
 import java.io.Serializable;
 
 /**
- * Created by Daniel on 28/02/2017.
+ * Data packet that is sent from client -> server
  */
 public class DataPacket implements Serializable {
 
-    private float x,y;
-    private int health;
-    private double facingAngle;
-    private float moveSpeed;
-    protected long lastAttackTime;
-    private String username;
-    private Type type;
+	private float x,y;
+	private int health;
+	private double facingAngle;
+	private float moveSpeed;
+	protected long lastAttackTime;
+	private String username;
+	private Type type;
 
-    public enum Type{
-        ZOMBIE,PLAYER,BULLET
-    }
+	/**
+	 * Object that the data packet refers to
+	 */
+	public enum Type{
+		ZOMBIE,PLAYER,BULLET
+	}
 
-    // These are used for Zombies
-    private State state;
-    public enum State {
-        WILD, PLAYER
-    }
+	// These are used for Zombies
+	private State state;
+	public enum State {
+		WILD, PLAYER
+	}
 
-    public State getState(){
-        return state;
-    }
+	/**
+	 * Get the current state of the DataPacket
+	 * @return (State) State of DataPacket
+	 */
+	public State getState(){
+		return state;
+	}
 
-    public void setState(State state){
-        this.state = state;
-    }
+	/**
+	 * Set the state of the DataPacket
+	 * @param (State) state - New state of the DataPacket
+	 */
+	public void setState(State state){
+		this.state = state;
+	}
 
-    public Type getType(){
-        return type;
-    }
+	/**
+	 * Get the type of the DataPacket
+	 * @return (Type) Type of data packet
+	 */
+	public Type getType(){
+		return type;
+	}
 
+	/**
+	 * Get the username - mainy used to refer to Player
+	 * @return (String) Username
+	 */
+	public String getUsername() {
+		return username;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	/**
+	 * Set the username
+	 * @param (String) username - Username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	/**
+	 * Get the facing angle of the object
+	 * @return (double) Facing angle
+	 */
+	public double getFacingAngle() {
+		return facingAngle;
+	}
 
-    public double getFacingAngle() {
-        return facingAngle;
-    }
+	/**
+	 * Set facing angle of object
+	 * @param (double) facingAngle - New facing angle to set
+	 */
+	public void setFacingAngle(double facingAngle) {
+		this.facingAngle = facingAngle;
+	}
 
-    public void setFacingAngle(double facingAngle) {
-        this.facingAngle = facingAngle;
-    }
+	/**
+	 * Get current move speed of the object
+	 * @return (float) Current move speed
+	 */
+	public float getMoveSpeed() {
+		return moveSpeed;
+	}
 
-    public float getMoveSpeed() {
-        return moveSpeed;
-    }
+	/**
+	 * Set move speed
+	 * @param (float) moveSpeed - New movespeed to set
+	 */
+	public void setMoveSpeed(float moveSpeed) {
+		this.moveSpeed = moveSpeed;
+	}
 
-    public void setMoveSpeed(float moveSpeed) {
-        this.moveSpeed = moveSpeed;
-    }
+	/**
+	 * Get the last attack time
+	 * @return (long) - Time of the last attack of the object
+	 */
+	public long getLastAttackTime() {
+		return lastAttackTime;
+	}
 
-    public long getLastAttackTime() {
-        return lastAttackTime;
-    }
+	/**
+	 * Set the last attack time
+	 * @param (long) lastAttackTime - Time to set
+	 */
+	public void setLastAttackTime(long lastAttackTime) {
+		this.lastAttackTime = lastAttackTime;
+	}
 
-    public void setLastAttackTime(long lastAttackTime) {
-        this.lastAttackTime = lastAttackTime;
-    }
+	/**
+	 * Get X coordinate of object
+	 * @return (int) X coordinate of object
+	 */
+	public float getX() {
+		return x;
+	}
 
-    public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t) {
-        this.lastAttackTime = lastAttackTime;
+	/**
+	 * Set X coordinate of object
+	 * @param (float) x - X coordinate to set 
+	 */
+	public void setX(float x) {
+		this.x = x;
+	}
 
-        this.x = x;
-        this.y = y;
-        this.moveSpeed = moveSpeed;
-        this.health = health;
-        this.type = t;
-    }
+	/**
+	 * Get Y coordinate of object
+	 * @return (int) Y coordinate of object
+	 */
+	public float getY() {
+		return y;
+	}
 
-    public float getX() {
-        return x;
-    }
+	/**
+	 * Set Y coordinate of object
+	 * @param (float) y - Y coordinate to set 
+	 */
+	public void setY(float y) {
+		this.y = y;
+	}
 
-    public void setX(float x) {
-        this.x = x;
-    }
+	/**
+	 * Get the health of the object
+	 * @return (int) health of object
+	 */
+	public int getHealth() {
+		return health;
+	}
 
-    public float getY() {
-        return y;
-    }
+	/**
+	 * Set the health of the object
+	 * @param (int) health - New health of object to set
+	 */
+	public void setHealth(int health) {
+		this.health = health;
+	}
 
-    public void setY(float y) {
-        this.y = y;
-    }
+	/**
+	 * Constructor to create a new DataPacket
+	 * @param (float) x - X coordinate
+	 * @param (float) y - Y coordinate
+	 * @param (float)  moveSpeed - Set move speed
+	 * @param (int) health - Current health
+	 * @param (long) lastAttackTime - Last attack time
+	 * @param (Type) t - Type of object that the DataPacket is based on
+	 */
+	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t) {
+		this.lastAttackTime = lastAttackTime;
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
+		this.x = x;
+		this.y = y;
+		this.moveSpeed = moveSpeed;
+		this.health = health;
+		this.type = t;
+	}
 }

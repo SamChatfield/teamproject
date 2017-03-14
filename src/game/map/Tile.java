@@ -1,36 +1,51 @@
 package game.map;
 
-import java.io.Serializable;
-
 /**
- * Created by Sam on 10/02/2017.
+ * Class that represents individual tiles in the game, each with an X, Y coordinate and a types
  */
 public class Tile {
 
-    private float x, y;
-    private TileType type;
+	private float x, y;
+	private TileType type;
 
-    public Tile(float x, float y, TileType type) {
-        this.x = x;
-        this.y = y;
-        this.type = type;
-    }
+	/**
+	 * Constructor to create a new tile
+	 * @param (float) x - X coordinate of tile
+	 * @param (float) y - Y coordinate of tile
+	 * @param (TileType) type - Type of tile to create
+	 */
+	public Tile(float x, float y, TileType type) {
+		this.x = x;
+		this.y = y;
+		this.type = type;
+	}
 
-    public float getX() {
-        return x;
-    }
+	/**
+	 * Get X coordinate of tile
+	 * @return (float) X coordinate of tile
+	 */
+	public float getX() {
+		return x;
+	}
 
-    public float getY() {
-        return y;
-    }
+	/**
+	 * Get Y coordinate of tile
+	 * @return (float) Y coordinate of tile
+	 */
+	public float getY() {
+		return y;
+	}
 
-    public TileType getType() {
-        return type;
-    }
+	/**
+	 * Get the type of the tile
+	 * @return (TileType) Type of tile
+	 */
+	public TileType getType() {
+		return type;
+	}
 
-    @Override
-    public String toString() {
-        return "(" + x + ", " + y + ") - " + type;
-    }
-
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ") - " + type;
+	}
 }
