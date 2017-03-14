@@ -46,9 +46,9 @@ public class Zombie extends Entity {
         super.move(moveX,moveY);
     }
 
-    // Zombie vector changed to follow player, if wild.
+    // Zombie vector changed to follow player, if wild or if it is an opposing player
     public void followDirection(Player player) {
-    	if (getState() == DataPacket.State.WILD) {
+    	if (getState() == DataPacket.State.WILD || player.getUsername() != getUsername()) {
         	Vector zdv = ArtInt.followPlayer(getX(), getY(), player);
         	Vector znv = zdv.normalised();
         	
