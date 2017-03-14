@@ -71,7 +71,6 @@ public class Zombie extends Entity {
     public void attack(Entity entity, int damageDone) {
         long now = System.nanoTime();
 
-
         if(getState() == DataPacket.State.PLAYER && entity.getUsername().equals(getUsername())) {
         	// Currently, do nothing
         }
