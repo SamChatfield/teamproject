@@ -3,6 +3,9 @@ package game;
 import game.client.Player;
 import game.util.Vector;
 
+/**
+ *
+ */
 public class ArtInt {
 
 	// Makes new zombie vector in direction of player.
