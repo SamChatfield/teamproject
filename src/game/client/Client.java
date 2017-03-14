@@ -155,6 +155,17 @@ public class Client extends Canvas {
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
 
+				if(!state.playersReady()) {
+					while(!state.playersReady()) {
+						renderer.renderWaitingForOpponent();
+						try {
+							Thread.sleep(100);
+						} catch(Exception e) {
+
+						}
+					}
+				}
+
 				if (!state.isConnected()) {
 					sender.sendObject("StartGame"); // Send a message to the server to start the game.
 					while (!state.isConnected()) {

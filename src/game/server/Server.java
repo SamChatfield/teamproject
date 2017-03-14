@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Main server class that spins up the ServerReceiver and ServerSender threads for each connected client
@@ -46,33 +47,32 @@ public class Server {
 			while(true) {
 				Socket clientSocket = outSocket.accept();
 
-				// Someone connected, for debug we'll now generate the game state
-				System.out.println("Server: Accepting socket connection");
+        		 // Someone connected, for debug we'll now generate the game state
+        		 System.out.println("DEBUG: Accepting socket connection");
+        		 
+        		 ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
+        		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
+                 System.out.println("DEBUG: I/O streams created");
+                 
+                 // Get name from client -- sort out duplicates later
+                 String clientName = (String)objIn.readObject();
+                 System.out.println("DEBUG: Read client name");
+                 System.out.println("New user connected: " + clientName);
+                 clientTable.addToTable(clientName);
 
-				ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
-				ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
-				System.out.println("Server: I/O streams created");
+                 ArrayList<String> players = clientTable.checkAvailable();
+				 System.out.println(players.size());
+                 if(players.size() % 2 == 0) {
+                 	System.out.println("We have enough players now");
+                 	state.setReady(true);
+				 }
 
-				// Get name from client -- h
-				String clientName = (String)objIn.readObject();
-				System.out.println("Server: Read client name");
-				System.out.println("New user connected: " + clientName);
-				
-				String username = clientName;
-				int counter = 1;
-				while(clientTable.userExists(username))
-					if(clientTable.userExists(username)) {
-						username = clientName + counter;
-						counter++;
-					}
-				clientName = username;
-				clientTable.addToTable(clientName);
 
-				// Start threads
-				ServerSender server_sender = new ServerSender(objOut,state);
-				server_sender.start();
-				ServerReceiver server_receiver = new ServerReceiver(objIn,state);
-				server_receiver.start();
+                 // Start threads
+                 ServerSender server_sender = new ServerSender(objOut,state);
+                 server_sender.start();
+                 ServerReceiver server_receiver = new ServerReceiver(objIn,state);
+                 server_receiver.start();
 
 				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
 			}
@@ -80,7 +80,6 @@ public class Server {
 		} catch(Exception e) {
 			System.err.println("Exception in Server: " + e.getMessage());
 			e.printStackTrace();
-			System.exit(1); 
-		}
+        }
 	}
 }

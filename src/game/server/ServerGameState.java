@@ -19,11 +19,12 @@ public class ServerGameState extends GameState {
 	private String player2Username;
 	private int zombieCount = 5;
 
-	public ServerGameState(String player1Username, String player2Username){
-		this.player1Username = player1Username;
-		this.player2Username = player2Username;
-		this.bullets = new ArrayList<>();
-	}
+    public ServerGameState(String player1Username, String player2Username){
+        this.player1Username = player1Username;
+        this.player2Username = player2Username;
+        this.bullets = new ArrayList<>();
+        this.playersConnected = false;
+    }
 
 	/**
 	 * Get a player

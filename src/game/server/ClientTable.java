@@ -11,7 +11,7 @@ public class ClientTable {
 	HashMap<String, playerStatus> clientTable;
 	ArrayList<String> availablePlayers;
 	public enum playerStatus {NOT_PLAYING, WAITING, IN_GAME }
-	
+
 	/**
 	 * Constructor creates a hashmap: the key is the username, the value is a bool
 	 * False means that the user is not in a game, true means they are.
@@ -19,7 +19,7 @@ public class ClientTable {
 	ClientTable() {
 		clientTable = new HashMap<String, playerStatus>();
 	}
-	
+
 	/**
 	 * Add a user to the table
 	 * @param username Username to add
@@ -27,9 +27,9 @@ public class ClientTable {
 	public void addToTable(String username) {
 		clientTable.put(username, playerStatus.NOT_PLAYING);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param username
 	 * @return
 	 */
@@ -44,7 +44,7 @@ public class ClientTable {
 		}
 		return exists;
 	}
-	
+
 	/**
 	 * Check available users
 	 * @return ArrayList of available users
@@ -61,7 +61,7 @@ public class ClientTable {
 		}
 		return availablePlayers;
 	}
-	
+
 	/**
 	 * Change player status
 	 * @param username Username of player to change

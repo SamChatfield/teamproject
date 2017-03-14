@@ -27,6 +27,7 @@ public class GameState implements Serializable {
 	protected boolean isConnected; // Is the game connected to the server? If this is false, the server hasn't sent a state yet
 	protected EndState endState;
 	protected boolean hasFinished;
+	protected boolean playersConnected;
 
 	/**
 	 * Get EndState of game
@@ -134,7 +135,7 @@ public class GameState implements Serializable {
     }
 
 	/**
-	 * Get the player object for player 1 
+	 * Get the player object for player 1
 	 * @return Player 1 object
 	 */
 	public Player getPlayer1() {
@@ -142,7 +143,7 @@ public class GameState implements Serializable {
 	}
 
 	/**
-	 * Get the player object for player 2 
+	 * Get the player object for player 2
 	 * @return Player 2 object
 	 */
 	public Player getPlayer2() {
@@ -165,11 +166,18 @@ public class GameState implements Serializable {
 		return isConnected;
 	}
 
+    public boolean playersReady() { return playersConnected; }
+
+    public void setReady(boolean bool) {
+        playersConnected = bool;
+    }
+
 	/**
 	 * Set whether a new is in progress
 	 * @param bool Whether game in progress
 	 */
-	public void setInProgress(boolean bool){
-		inProgress = bool;
-	}
+
+    public void setInProgress(boolean bool){
+        inProgress = bool;
+    }
 }

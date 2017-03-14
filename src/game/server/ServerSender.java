@@ -13,14 +13,15 @@ public class ServerSender extends Thread {
 
 	private ServerGameState state;
 	private ObjectOutputStream objOut;
-	private boolean initial;
-
+	private boolean initial, playersReadyInitial;
+	
 	/**
 	 * Constructor method
 	 * @param objOut The ObjectOutputStream
 	 */
 	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
 		this.objOut = objOut; this.state = state; this.initial = true;
+		this.playersReadyInitial = true;
 	}
 
 	/**
@@ -77,9 +78,16 @@ public class ServerSender extends Thread {
 	public void run() {
 		boolean finalStateSent = false;
 		while(true) {
-			try {
+            try {
 				Thread.sleep(1000/60);
-				if (state.inProgress()) { // If there is a game in progress
+				if(state.playersReady()) {
+					if(playersReadyInitial) {
+						sendObject("PlayersReady");
+						System.out.println("Sent out playersReady");
+						playersReadyInitial = false;
+					}
+				}
+				if (state.inProgress()) { // if there is a game in progress
 					if(initial){
 						sendObject("StartingGame");
 						initial = false;
