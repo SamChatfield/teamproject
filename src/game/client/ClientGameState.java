@@ -54,8 +54,7 @@ public class ClientGameState extends GameState {
         if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
             soundManager.playerHurt();
         }
-
-        // We can reliably update each player locally without knowing which order they were sent in by the server.
+        
         player1.updateLocalPlayerData(updatedState.getPlayer(username));
         player2.updateData(updatedState.getPlayer(otherPlayerName));
 
@@ -74,6 +73,14 @@ public class ClientGameState extends GameState {
         // Set up two player objects that we can update later.
         this.player1 = new Player(0,0,mapData,username);
         this.player2 = new Player(0,0,mapData,null); // We'll set this later
+        
+        // We can reliably update each player locally without knowing which order they were sent in by the server.
+        player1.updateData(p1);
+        player2.updateData(p2);
+        
+        System.out.println(player1.getX());
+        System.out.println(player1.getY());
+        
 
         // We can reliably update each player locally without knowing which order they were sent in by the server.
         player1.updateData(p1);

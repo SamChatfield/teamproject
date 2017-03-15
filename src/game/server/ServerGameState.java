@@ -35,6 +35,17 @@ public class ServerGameState extends GameState {
             return null;
         }
     }
+    
+    
+    public Player getOtherPlayer(String username){
+        if(username.equals(player1Username)){
+            return player2;
+        }else if (username.equals(player2Username)){
+            return player1;
+        }else{
+            return null;
+        }
+    }
 
     public Player getOtherPlayer(String username){
         if(username.equals(player1Username)){
@@ -169,4 +180,8 @@ public class ServerGameState extends GameState {
         SendableState copyOf = new SendableState(this); // create a copy of the state.
         return copyOf; // return this so that it can be sent.
     }
+    
+    
+    
+    
 }
