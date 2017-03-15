@@ -68,6 +68,9 @@ public class Client extends Canvas {
 
 	// Non final stuff, remove before release
 	private final int zombieCount = 70;
+	
+	private static String username;
+	private static String ipAddress;
 
 	private Client(ClientGameState state, ClientSender sender) {
 		this.state = state;
@@ -440,6 +443,28 @@ public class Client extends Canvas {
 
 	}
 
+	public static void loginPrompt() {
+		JFrame dialogue = new JFrame(TITLE);
+
+		JTextField usernameEntry = new JTextField();
+		JTextField ipaddyEntry = new JTextField();
+		Object[] message = {
+				"Username:", usernameEntry,
+				"Server IP:", ipaddyEntry
+		};
+
+		int option = JOptionPane.showConfirmDialog(null, message, "Login to game", JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION) {
+			System.out.println(usernameEntry.getText());
+			username = usernameEntry.getText();
+			System.out.println(ipaddyEntry.getText());
+			ipAddress = ipaddyEntry.getText();
+		} else {
+			System.out.println("Game login cancelled");
+			System.exit(0);
+		}
+	}
+	
 	public Player getPlayer() {
         return player;
     }
@@ -449,6 +474,8 @@ public class Client extends Canvas {
             System.out.println("Usage: java Client <username> <host> <port>");
             System.exit(0);
         }
+        
+        loginPrompt();
 
         String username = args[0];
         String host = args[1];
@@ -457,14 +484,16 @@ public class Client extends Canvas {
         // Initialise
         ObjectOutputStream objOut = null;
         ObjectInputStream objIn = null;
-
         Socket outSocket = null;
+        
         try{
             outSocket = new Socket(host,port);
             objOut = new ObjectOutputStream(outSocket.getOutputStream());
             objIn = new ObjectInputStream(outSocket.getInputStream());
         }catch(Exception e){
-            System.out.println(e.getMessage());
+        	System.out.println("WTF");
+			JOptionPane.showMessageDialog(null, "Server not started!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
         }
 
         ClientSender client_sender = new ClientSender(username, objOut,null);
