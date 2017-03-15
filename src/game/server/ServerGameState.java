@@ -38,6 +38,17 @@ public class ServerGameState extends GameState {
             return null;
         }
     }
+    
+    
+    public Player getOtherPlayer(String username){
+        if(username.equals(player1Username)){
+            return player2;
+        }else if (username.equals(player2Username)){
+            return player1;
+        }else{
+            return null;
+        }
+    }
 
     // TODO: Stop this from terminating the program
     public void startNewGame(){
@@ -46,8 +57,8 @@ public class ServerGameState extends GameState {
         mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
 
         // Set up two player objects that we can update later.
-        this.player1 = new Player(0,0,mapData,player1Username);
-        this.player2 = new Player(0,0,mapData,player2Username);
+        this.player1 = new Player(-15,0 ,mapData, player1Username);
+        this.player2 = new Player(15 ,0 ,mapData, player2Username);
 
         int zombieCount = 10;
         ArrayList<Zombie> zombieFactory = new ArrayList<>();
@@ -148,4 +159,8 @@ public class ServerGameState extends GameState {
         SendableState copyOf = new SendableState(this); // create a copy of the state.
         return copyOf; // return this so that it can be sent.
     }
+    
+    
+    
+    
 }

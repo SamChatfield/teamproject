@@ -37,14 +37,16 @@ public class ClientGameState extends GameState {
 
         if(!isConnected){
             this.mapImage = updatedState.getMapImage();
-            setUpGame();
-
-            // We need to figure out if the server thinks we are player 1 or 2.
+            
+         // We need to figure out if the server thinks we are player 1 or 2.
             if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
                 otherPlayerName = updatedState.getPlayer2().getUsername();
             }else{
                 otherPlayerName = updatedState.getPlayer1().getUsername();
             }
+            
+            setUpGame(updatedState.getPlayer(username),updatedState.getPlayer(otherPlayerName));
+     
         }
 
 
@@ -53,8 +55,7 @@ public class ClientGameState extends GameState {
         if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
             soundManager.playerHurt();
         }
-
-        // We can reliably update each player locally without knowing which order they were sent in by the server.
+        
         player1.updateLocalPlayerData(updatedState.getPlayer(username));
         player2.updateData(updatedState.getPlayer(otherPlayerName));
 
@@ -64,12 +65,20 @@ public class ClientGameState extends GameState {
         updateTime(updatedState.getTimeRemaining());
     }
 
-    private void setUpGame(){
+    private void setUpGame(DataPacket p1, DataPacket p2){
         setUpMapData(mapImage);
 
         // Set up two player objects that we can update later.
         this.player1 = new Player(0,0,mapData,username);
         this.player2 = new Player(0,0,mapData,null); // We'll set this later
+        
+        // We can reliably update each player locally without knowing which order they were sent in by the server.
+        player1.updateData(p1);
+        player2.updateData(p2);
+        
+        System.out.println(player1.getX());
+        System.out.println(player1.getY());
+        
 
         isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }
