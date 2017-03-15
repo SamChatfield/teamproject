@@ -36,6 +36,7 @@ public class Client extends Canvas {
 	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
+	public static final BufferedImage lightingImage = ResourceLoader.lightingImage();
     
     public Sound soundManager;
 	private JFrame container;
@@ -55,7 +56,7 @@ public class Client extends Canvas {
 		GAME,
 		END, 
 		EXIT
-	};
+	}
 	// Menu state
 	private enum MSTATE {
 		MAIN,
@@ -428,7 +429,7 @@ public class Client extends Canvas {
 					player.conversionMode = false;
 					break;
 				case "BUTTON1":
-					// this should still happen on the server
+
 					break;
 			}
 		}

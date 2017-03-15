@@ -21,11 +21,6 @@ public class Entity implements Serializable {
         collisionBox = new CollisionBox(this);
     }
 
-    public DataPacket.Type getType(){
-        return getType();
-    }
-
-
     public long getLastAttackTime(){
         return data.getLastAttackTime();
     }

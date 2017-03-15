@@ -52,20 +52,6 @@ public class Bullet extends Entity implements Serializable {
         }
     }
 
-//    public void draw(Graphics2D g2d) {
-//        int w = image.getWidth();
-//        int h = image.getHeight();
-//
-//        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
-//        int drawX = drawPoint.x;
-//        int drawY = drawPoint.y;
-//
-//        AffineTransform at = g2d.getTransform();
-//        g2d.rotate(data.getFacingAngle(), drawX, drawY);
-//        g2d.drawImage(image, drawX, drawY, null);
-//        g2d.setTransform(at);
-//    }
-
     public void damage(Entity entity, int damageDone, boolean conversionMode) {
     	Zombie zom = (Zombie) entity;
         if (active) {

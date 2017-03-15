@@ -74,18 +74,24 @@ public class ServerGameState extends GameState {
     }
 
     public ArrayList<DataPacket> getSendableZombies(){
+//        long now = System.nanoTime();
         ArrayList<DataPacket> data = new ArrayList<>();
         for(Zombie z:zombies){
             data.add(z.getData());
         }
+//        long dt = System.nanoTime() - now;
+//        System.out.println("zombie time: " + dt / 1000000f);
         return data;
     }
 
     public ArrayList<DataPacket> getSendableBullets() {
+//        long now = System.nanoTime();
         ArrayList<DataPacket> data = new ArrayList<>();
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             data.add(it.next().getData());
         }
+//        long dt = System.nanoTime() - now;
+//        System.out.println("bullet time: " + dt / 1000000f);
         return data;
     }
 

@@ -5,7 +5,6 @@ import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
@@ -178,12 +177,7 @@ public class Renderer {
     }
 
     public void drawLighting(Graphics2D g2d) {
-		try {
-			lighting = ImageIO.read(new File("src/game/res/spotlight.png"));
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-    	g2d.drawImage(lighting, 0, 0, null);
+    	g2d.drawImage(Client.lightingImage, 0, 0, null);
 	}
 
     public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
@@ -198,8 +192,6 @@ public class Renderer {
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }
         }
-
-
     }
 
     private void drawZombie(Graphics2D g2d, Player player, DataPacket z) {
