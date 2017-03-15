@@ -84,8 +84,12 @@ public class Renderer {
         //System.out.println(state.getBullets().size());
         for (Bullet b : state.getBullets()) {
             if(b.active) {
-            	//b.draw(g2d);
-            	drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
+                if(b.getUsername().equals(player.getUsername())){
+                    b.draw(g2d);
+                }else{
+                    drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
+
+                }
             }
         }
 

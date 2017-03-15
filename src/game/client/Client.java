@@ -367,6 +367,7 @@ public class Client extends Canvas {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
             	keyPresses.add("BUTTON1");
+
 				soundManager.bulletSound(player.canShoot());
             }
         }
