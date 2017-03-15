@@ -469,16 +469,9 @@ public class Client extends Canvas {
     }
 
     public static void main(String[] args) {
-        if(args.length != 3){
-            System.out.println("Usage: java Client <username> <host> <port>");
-            System.exit(0);
-        }
+        
         
         loginPrompt();
-
-        String username = args[0];
-        String host = args[1];
-        int port = Integer.parseInt(args[2]);
 
         // Initialise
         ObjectOutputStream objOut = null;
@@ -486,7 +479,7 @@ public class Client extends Canvas {
         Socket outSocket = null;
         
         try{
-            outSocket = new Socket(host,port);
+            outSocket = new Socket("localhost",4444);
             objOut = new ObjectOutputStream(outSocket.getOutputStream());
             objIn = new ObjectInputStream(outSocket.getInputStream());
         }catch(Exception e){
