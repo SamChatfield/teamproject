@@ -85,7 +85,6 @@ public class ServerGameState extends GameState {
         ArrayList<DataPacket> data = new ArrayList<>();
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             data.add(it.next().getData());
-            data.add(b.getData());
         }
         return data;
     }
