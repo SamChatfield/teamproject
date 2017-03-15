@@ -1,6 +1,5 @@
 package game.client;
 
-import game.Bullet;
 import game.CollisionBox;
 import game.map.MapData;
 import game.map.Tile;
@@ -61,6 +60,7 @@ public class Renderer {
 
         int timeRemaining = state.getTimeRemaining();
         ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
+        ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
         MapData mapData = state.getMapData();
 
         // Set up the graphics instance for the current back buffer
@@ -81,11 +81,17 @@ public class Renderer {
         if(state.getOtherPlayer() != null){
             state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
         }
-        //System.out.println(state.getBullets().size());
-        for (Bullet b : state.getBullets()) {
-            if(b.active) {
-            	b.draw(g2d);
-            }
+
+//        for (Bullet b : state.getBullets()) {
+//            if(b.active) {
+//            	b.draw(g2d);
+//            }
+//        }
+
+        // Draw the bullets
+        for (DataPacket b : bulletPackets) {
+            drawBullet(g2d, player, b);
+            System.out.println("b at: (" + b.getX() + ", " + b.getY() + ")");
         }
 
         // Draw the zombies
@@ -132,7 +138,7 @@ public class Renderer {
         g2d.dispose();
         bufferStrategy.show();
     }
-    
+
     public void renderGameOver() {
     	
     	// Set up the graphics instance for the current back buffer
@@ -229,6 +235,20 @@ public class Renderer {
         else {
             g2d.drawImage(Client.zombieImage, drawX, drawY, null);
         }
+        g2d.setTransform(at);
+    }
+
+    private void drawBullet(Graphics2D g2d, Player player, DataPacket b) {
+        int w = Client.bulletImage.getWidth();
+        int h = Client.bulletImage.getHeight();
+
+        Point drawPoint = player.relativeDrawPoint(b.getX(), b.getY(), w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        AffineTransform at = g2d.getTransform();
+        g2d.rotate(b.getFacingAngle(), drawX, drawY);
+        g2d.drawImage(Client.bulletImage, drawX, drawY, null);
         g2d.setTransform(at);
     }
 

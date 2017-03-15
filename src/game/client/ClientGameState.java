@@ -1,6 +1,5 @@
 package game.client;
 
-import game.Bullet;
 import game.map.MapData;
 import game.util.DataPacket;
 import game.util.GameState;
@@ -23,9 +22,9 @@ public class ClientGameState extends GameState {
         this.username = username;
         this.mapImage = null;
         this.isConnected = false;
-        this.bullets = new ArrayList<Bullet>();
         // TODO addded
         this.zombieDataPackets = new ArrayList<>();
+        this.bulletDataPackets = new ArrayList<>();
     }
 
     public void addSoundManager(Sound sound){
@@ -48,7 +47,7 @@ public class ClientGameState extends GameState {
         }
 
 
-        this.bullets = updatedState.getBullets();
+//        this.bullets = updatedState.getBullets();
 
         if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
             soundManager.playerHurt();
@@ -61,6 +60,9 @@ public class ClientGameState extends GameState {
         // TODO changed
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
         this.zombieDataPackets = sentZombies;
+        ArrayList<DataPacket> sentBullets = updatedState.getBullets();
+        this.bulletDataPackets = sentBullets;
+
         updateTime(updatedState.getTimeRemaining());
     }
 

@@ -1,10 +1,9 @@
 package game.util;
 
+import game.server.ServerGameState;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import game.Bullet;
-import game.server.ServerGameState;
 
 /**
  * Sendable state that is sent to the server to handle status of the game
@@ -14,12 +13,12 @@ public class SendableState implements Serializable {
 	private int timeRemaining;
 	private String mapImage;
 	private ArrayList<DataPacket> zombies;
-	private ArrayList<Bullet> bullets;
+	private ArrayList<DataPacket> bullets;
 
 	private DataPacket player1;
 	private DataPacket player2;
 
-	public ArrayList<Bullet> getBullets() {
+	public ArrayList<DataPacket> getBullets() {
 		return bullets;
 	}
 
@@ -49,7 +48,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket of a specific player
-	 * @param (String) username - Username of player to get
+	 * @param username - Username of player to get
 	 * @return (DataPacket) DataPacket for specific player
 	 */
 	public DataPacket getPlayer(String username){
@@ -64,7 +63,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket object for the 1st player
-	 * @return (DataPacket) DataPacket of Player 1
+	 * @return DataPacket of Player 1
 	 */
 	public DataPacket getPlayer1(){
 		return player1;
@@ -72,7 +71,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket object for the 2nd player
-	 * @return (DataPacket) DataPacket of Player 2
+	 * @return DataPacket of Player 2
 	 */
 	public DataPacket getPlayer2(){
 		return player2;
@@ -80,7 +79,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Constructor to create new sendable state
-	 * @param (ServerGameState) state - Current state of Server
+	 * @param state - Current state of Server
 	 */
 	public SendableState(ServerGameState state){
 		this.player1 = state.getPlayer1().getData();
@@ -89,6 +88,6 @@ public class SendableState implements Serializable {
 		this.zombies = state.getSendableZombies();
 		this.timeRemaining = state.getTimeRemaining();
 		this.mapImage = state.getMapImage();
-		this.bullets = state.getBullets();
+		this.bullets = state.getSendableBullets();
 	}
 }

@@ -8,19 +8,15 @@ import java.io.Serializable;
 /**
  * Created by Sam on 20/01/2017.
  */
-public class Entity implements Serializable{
+public class Entity implements Serializable {
 
     protected CollisionBox collisionBox;
-//    protected boolean showCollBox;
     protected transient MapData mapData;
-
-    protected int imageWidth, imageHeight;
 
     protected DataPacket data;
 
     public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t) {
         this.data = new DataPacket(x,y,moveSpeed,health, 0L,t);
-//        showCollBox = false;
         this.mapData = mapData;
         collisionBox = new CollisionBox(this);
     }
@@ -84,10 +80,6 @@ public class Entity implements Serializable{
         setLastAttackTime(data2.getLastAttackTime());
         setHealth(data2.getHealth());
     }
-
-//    public void setShowCollBox(boolean showCollBox) {
-//        this.showCollBox = showCollBox;
-//    }
 
     public CollisionBox getCollisionBox() {
         return collisionBox;

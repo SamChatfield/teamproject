@@ -38,7 +38,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the state of the DataPacket
-	 * @param (State) state - New state of the DataPacket
+	 * @param state - New state of the DataPacket
 	 */
 	public void setState(State state){
 		this.state = state;
@@ -62,7 +62,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the username
-	 * @param (String) username - Username to set
+	 * @param username - Username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -78,7 +78,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set facing angle of object
-	 * @param (double) facingAngle - New facing angle to set
+	 * @param facingAngle - New facing angle to set
 	 */
 	public void setFacingAngle(double facingAngle) {
 		this.facingAngle = facingAngle;
@@ -94,7 +94,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set move speed
-	 * @param (float) moveSpeed - New movespeed to set
+	 * @param moveSpeed - New movespeed to set
 	 */
 	public void setMoveSpeed(float moveSpeed) {
 		this.moveSpeed = moveSpeed;
@@ -110,7 +110,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the last attack time
-	 * @param (long) lastAttackTime - Time to set
+	 * @param lastAttackTime - Time to set
 	 */
 	public void setLastAttackTime(long lastAttackTime) {
 		this.lastAttackTime = lastAttackTime;
@@ -126,7 +126,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set X coordinate of object
-	 * @param (float) x - X coordinate to set 
+	 * @param x - X coordinate to set
 	 */
 	public void setX(float x) {
 		this.x = x;
@@ -142,7 +142,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set Y coordinate of object
-	 * @param (float) y - Y coordinate to set 
+	 * @param y - Y coordinate to set
 	 */
 	public void setY(float y) {
 		this.y = y;
@@ -158,7 +158,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the health of the object
-	 * @param (int) health - New health of object to set
+	 * @param health - New health of object to set
 	 */
 	public void setHealth(int health) {
 		this.health = health;
@@ -166,12 +166,12 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Constructor to create a new DataPacket
-	 * @param (float) x - X coordinate
-	 * @param (float) y - Y coordinate
-	 * @param (float)  moveSpeed - Set move speed
-	 * @param (int) health - Current health
-	 * @param (long) lastAttackTime - Last attack time
-	 * @param (Type) t - Type of object that the DataPacket is based on
+	 * @param x - X coordinate
+	 * @param y - Y coordinate
+	 * @param moveSpeed - Set move speed
+	 * @param health - Current health
+	 * @param lastAttackTime - Last attack time
+	 * @param t - Type of object that the DataPacket is based on
 	 */
 	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t) {
 		this.lastAttackTime = lastAttackTime;

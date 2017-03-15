@@ -1,14 +1,10 @@
 package game.server;
 
 import game.Bullet;
-import game.Entity;
+import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
-import game.map.MapParser;
 import game.util.*;
-import game.Zombie;
-import game.client.EntityData;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.EncloseType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -77,9 +73,18 @@ public class ServerGameState extends GameState {
     }
 
     public ArrayList<DataPacket> getSendableZombies(){
-        ArrayList<DataPacket> data = new ArrayList<DataPacket>();
+        ArrayList<DataPacket> data = new ArrayList<>();
         for(Zombie z:zombies){
             data.add(z.getData());
+        }
+        return data;
+    }
+
+    public ArrayList<DataPacket> getSendableBullets() {
+        ArrayList<DataPacket> data = new ArrayList<>();
+        for (Bullet b : bullets) {
+            data.add(b.getData());
+            System.out.println("bullet at: (" + b.getX() + ", " + b.getY() + ")");
         }
         return data;
     }
