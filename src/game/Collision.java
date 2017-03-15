@@ -15,6 +15,15 @@ public class Collision {
             zombie.attack(player, 1);
         }
     }
+
+    public static void checkPlayerCollision(Bullet b, ArrayList<Bullet> bullets, Player player1, Player toDamage) {
+        if (b.getCollisionBox().intersects(toDamage.getCollisionBox())) {
+            // sound.zombieDeath();
+            b.damagePlayer(toDamage, 25);
+            bullets.remove(b);
+        }
+    }
+
     public static void checkBulletCollision(Bullet b, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies, Player player) {
         for (int i = 0; i < zombies.size(); i++) {
             if (b.getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {

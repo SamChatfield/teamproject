@@ -72,6 +72,18 @@ public class Bullet extends Entity implements Serializable {
         }
     }
 
+    public void damagePlayer(Player player, int damageDone) {
+        if (active) {
+            if (player.getHealth() <= damageDone) {
+                System.out.println("Critically injured");
+                player.setHealth(0);
+            } else {
+                player.setHealth(player.getHealth() - damageDone);
+            }
+            active = false;
+        }
+    }
+
     public CollisionBox getCollisionBox() {
         return collisionBox;
     }
