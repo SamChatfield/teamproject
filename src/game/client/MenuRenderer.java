@@ -8,8 +8,11 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class MenuRenderer {
 
@@ -123,18 +126,30 @@ public class MenuRenderer {
     }
 
     public void renderMenu() {
+    	
+    	BufferedImage background = null;
+    	try {
+			background = ImageIO.read(new File("src/game/res/background.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
 
         // Create Graphics 2D Object
         Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Fill background
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
+       g2d.setColor(Color.BLACK);
+       g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
 
+        g2d.drawImage(background, 0, 0, this.gameH, this.gameW, null);
+        
         // Set font
         g2d.setFont(tradeWinds.deriveFont(60f));
-        String gameName = "Capture the Zom.biz";
+        String gameName = "Outbreak";
         int width = g2d.getFontMetrics().stringWidth(gameName);
 
         // Display game name
