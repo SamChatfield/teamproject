@@ -35,6 +35,7 @@ public class Client extends Canvas {
 
 	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
+	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
     
     public Sound soundManager;
 	private JFrame container;
@@ -366,7 +367,9 @@ public class Client extends Canvas {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
             	keyPresses.add("BUTTON1");
-				soundManager.bulletSound(player.canShoot());
+				long now = System.nanoTime();
+            	boolean canShoot = now - state.getPlayer().getLastAttackTime() > Player.SHOOT_DELAY;
+				soundManager.bulletSound(canShoot);
             }
         }
 

@@ -5,9 +5,6 @@ import game.map.MapData;
 import game.util.DataPacket;
 import game.util.Vector;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 /**
@@ -23,7 +20,6 @@ public class Bullet extends Entity implements Serializable {
     private Player player;
     private double distance;
     private static final double fadeDistance = 5;
-    private static final BufferedImage image = ResourceLoader.bulletImage();
     
     public Bullet(Player player, float aimX, float aimY, MapData mapData) {
         super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData, DataPacket.Type.BULLET);
@@ -56,19 +52,19 @@ public class Bullet extends Entity implements Serializable {
         }
     }
 
-    public void draw(Graphics2D g2d) {
-        int w = image.getWidth();
-        int h = image.getHeight();
-
-        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
-        int drawX = drawPoint.x;
-        int drawY = drawPoint.y;
-
-        AffineTransform at = g2d.getTransform();
-        g2d.rotate(data.getFacingAngle(), drawX, drawY);
-        g2d.drawImage(image, drawX, drawY, null);
-        g2d.setTransform(at);
-    }
+//    public void draw(Graphics2D g2d) {
+//        int w = image.getWidth();
+//        int h = image.getHeight();
+//
+//        Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
+//        int drawX = drawPoint.x;
+//        int drawY = drawPoint.y;
+//
+//        AffineTransform at = g2d.getTransform();
+//        g2d.rotate(data.getFacingAngle(), drawX, drawY);
+//        g2d.drawImage(image, drawX, drawY, null);
+//        g2d.setTransform(at);
+//    }
 
     public void damage(Entity entity, int damageDone, boolean conversionMode) {
     	Zombie zom = (Zombie) entity;
@@ -94,7 +90,4 @@ public class Bullet extends Entity implements Serializable {
         return collisionBox;
     }
 
-    public static BufferedImage getImage() {
-        return image;
-    }
 }

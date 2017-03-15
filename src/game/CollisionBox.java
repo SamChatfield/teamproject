@@ -34,11 +34,11 @@ public class CollisionBox implements Serializable {
             iwidth = Client.zombieImage.getWidth();
             iheight = Client.zombieImage.getHeight();
         } else {
-            width = (float) Bullet.getImage().getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Bullet.getImage().getHeight() / (float) Client.TILE_SIZE;
+            width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
+            height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-            iwidth = Bullet.getImage().getWidth();
-            iheight = Bullet.getImage().getHeight();
+            iwidth = Client.zombieImage.getWidth();
+            iheight = Client.zombieImage.getHeight();
         }
     }
 
