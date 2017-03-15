@@ -81,16 +81,9 @@ public class Renderer {
             state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
         }
 
-//        for (Bullet b : state.getBullets()) {
-//            if(b.active) {
-//            	b.draw(g2d);
-//            }
-//        }
-
         // Draw the bullets
         for (DataPacket b : bulletPackets) {
             drawBullet(g2d, player, b);
-            System.out.println("b at: (" + b.getX() + ", " + b.getY() + ")");
         }
 
         // Draw the zombies
