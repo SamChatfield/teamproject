@@ -47,15 +47,6 @@ public class ServerGameState extends GameState {
         }
     }
 
-    public Player getOtherPlayer(String username){
-        if(username.equals(player1Username)){
-            return player2;
-        }else if (username.equals(player2Username)){
-            return player1;
-        }else{
-            return null;
-        }
-    }
 
     // TODO: Stop this from terminating the program
     public void startNewGame(){
