@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class Client extends Canvas {
 
-	private static final String TITLE = "Capture the Zom.biz";
+	private static final String TITLE = "Outbreak";
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
 	static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
 	public static final int VIEW_SIZE = 10; // how many tiles can be seen in the game window e.g. 10 => 10x10 view

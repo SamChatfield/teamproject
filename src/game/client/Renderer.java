@@ -102,7 +102,7 @@ public class Renderer {
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
 		
-		g2d.setColor(new Color(32, 99, 9));
+		g2d.setColor(Color.BLACK);
 		Rectangle healthBar2 = new Rectangle(10, 10, 200, 20);
 		g2d.fill(healthBar2);
 		
@@ -119,22 +119,23 @@ public class Renderer {
 		String healthFormat = String.format("%.2f", percentage * 100);
 		g2d.drawString("Health: " + healthFormat + "%", 15, 25);
 		
-		g2d.setColor(Color.WHITE);
-		Rectangle itemsBox = new Rectangle(10, 600, 200, 30);
-		g2d.draw(itemsBox);
-		Rectangle itemBox1 = new Rectangle(10, 600, 30, 30);
-		g2d.draw(itemBox1);
-		Rectangle itemBox2 = new Rectangle(40, 600, 30, 30);
-		g2d.draw(itemBox2);
+		g2d.setColor(new Color(255, 255, 255, 200));
+		
+		int xCoord = 10;
+		for(int i = 0; i < 5; i++) {
+			Rectangle itemsBox = new Rectangle(xCoord, 590, 40, 40);
+			xCoord+= 40;
+			g2d.draw(itemsBox);
+		}
 		
 		
 		// Display time remaining
-		Font hud = new Font("Arial", Font.BOLD, 15);
+		Font hud = new Font("Agency FB", Font.BOLD, 14);
 		g2d.setFont(hud);
 		g2d.setColor(new Color(255, 255, 255, 200));
 		//g2d.setColor(Color.WHITE);
 		String remainingTime = String.format("Time Remaining - %d:%02d", (timeRemaining/60), (timeRemaining % 60));
-		g2d.drawString(remainingTime, gameW - 170, 20);
+		g2d.drawString(remainingTime, gameW - 180, 20);
 		
 		// Display number of converted zombies
 		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombiePackets.size() , 450, 630);
