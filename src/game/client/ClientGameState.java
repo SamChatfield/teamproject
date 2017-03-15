@@ -1,6 +1,5 @@
 package game.client;
 
-import game.Bullet;
 import game.map.MapData;
 import game.util.DataPacket;
 import game.util.GameState;
@@ -23,9 +22,9 @@ public class ClientGameState extends GameState {
         this.username = username;
         this.mapImage = null;
         this.isConnected = false;
-        this.bullets = new ArrayList<Bullet>();
         // TODO addded
         this.zombieDataPackets = new ArrayList<>();
+        this.bulletDataPackets = new ArrayList<>();
     }
 
     public void addSoundManager(Sound sound){
@@ -37,20 +36,20 @@ public class ClientGameState extends GameState {
 
         if(!isConnected){
             this.mapImage = updatedState.getMapImage();
-            
-         // We need to figure out if the server thinks we are player 1 or 2.
+
+            // We need to figure out if the server thinks we are player 1 or 2.
             if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
                 otherPlayerName = updatedState.getPlayer2().getUsername();
             }else{
                 otherPlayerName = updatedState.getPlayer1().getUsername();
             }
-            
+
             setUpGame(updatedState.getPlayer(username),updatedState.getPlayer(otherPlayerName));
-     
+
         }
 
 
-        this.bullets = updatedState.getBullets();
+//        this.bullets = updatedState.getBullets();
 
         if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
             soundManager.playerHurt();
@@ -62,6 +61,9 @@ public class ClientGameState extends GameState {
         // TODO changed
         ArrayList<DataPacket> sentZombies = updatedState.getZombies();
         this.zombieDataPackets = sentZombies;
+        ArrayList<DataPacket> sentBullets = updatedState.getBullets();
+        this.bulletDataPackets = sentBullets;
+
         updateTime(updatedState.getTimeRemaining());
     }
 
@@ -79,6 +81,13 @@ public class ClientGameState extends GameState {
         System.out.println(player1.getX());
         System.out.println(player1.getY());
         
+
+        // We can reliably update each player locally without knowing which order they were sent in by the server.
+        player1.updateData(p1);
+        player2.updateData(p2);
+
+        System.out.println(player1.getX());
+        System.out.println(player1.getY());
 
         isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
     }

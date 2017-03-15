@@ -18,8 +18,8 @@ public class GameState implements Serializable {
 
     protected ArrayList<Zombie> zombies;
     protected ArrayList<Bullet> bullets;
-    // TODO added
     protected ArrayList<DataPacket> zombieDataPackets;
+    protected ArrayList<DataPacket> bulletDataPackets;
     protected Player player1;
     protected Player player2;
     protected String mapImage; // the name of the file being used to create the image.
@@ -58,6 +58,10 @@ public class GameState implements Serializable {
 
     public ArrayList<DataPacket> getZombieDataPackets() {
         return zombieDataPackets;
+    }
+
+    public ArrayList<DataPacket> getBulletDataPackets() {
+        return bulletDataPackets;
     }
 
     public Player getPlayer1() {

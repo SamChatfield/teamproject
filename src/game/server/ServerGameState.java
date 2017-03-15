@@ -1,16 +1,13 @@
 package game.server;
 
 import game.Bullet;
-import game.Entity;
+import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
-import game.map.MapParser;
 import game.util.*;
-import game.Zombie;
-import game.client.EntityData;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.EncloseType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -40,6 +37,16 @@ public class ServerGameState extends GameState {
     }
     
     
+    public Player getOtherPlayer(String username){
+        if(username.equals(player1Username)){
+            return player2;
+        }else if (username.equals(player2Username)){
+            return player1;
+        }else{
+            return null;
+        }
+    }
+
     public Player getOtherPlayer(String username){
         if(username.equals(player1Username)){
             return player2;
@@ -88,10 +95,24 @@ public class ServerGameState extends GameState {
     }
 
     public ArrayList<DataPacket> getSendableZombies(){
-        ArrayList<DataPacket> data = new ArrayList<DataPacket>();
+//        long now = System.nanoTime();
+        ArrayList<DataPacket> data = new ArrayList<>();
         for(Zombie z:zombies){
             data.add(z.getData());
         }
+//        long dt = System.nanoTime() - now;
+//        System.out.println("zombie time: " + dt / 1000000f);
+        return data;
+    }
+
+    public ArrayList<DataPacket> getSendableBullets() {
+//        long now = System.nanoTime();
+        ArrayList<DataPacket> data = new ArrayList<>();
+        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
+            data.add(it.next().getData());
+        }
+//        long dt = System.nanoTime() - now;
+//        System.out.println("bullet time: " + dt / 1000000f);
         return data;
     }
 

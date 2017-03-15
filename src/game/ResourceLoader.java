@@ -22,7 +22,7 @@ public class ResourceLoader {
             image = imageFromResPath("player.png");
         } catch (IOException e) {
             System.out.println("RIP. Player image not found");
-            System.exit(0);
+            System.exit(1);
         }
         return image;
     }
@@ -34,7 +34,7 @@ public class ResourceLoader {
             image =  imageFromResPath("zombie.png");
         } catch (IOException e) {
             System.out.println("RIP. Zombie image not found");
-            System.exit(0);
+            System.exit(1);
         }
         return image;
     }
@@ -45,7 +45,7 @@ public class ResourceLoader {
             image = imageFromResPath("zombieBlue.png");
         } catch (IOException e) {
             System.out.println("RIP. Zombie player image not found");
-            System.exit(0);
+            System.exit(1);
         }
         return image;
     }
@@ -53,12 +53,22 @@ public class ResourceLoader {
     public static BufferedImage bulletImage() {
         BufferedImage image = null;
         try {
-            return imageFromResPath("bullet.png");
+            image = imageFromResPath("bullet.png");
         } catch (IOException e) {
             System.out.println("RIP. Bullet image not found");
-            System.exit(0);
+            System.exit(1);
         }
         return image;
     }
 
+    public static BufferedImage lightingImage() {
+        BufferedImage lighting = null;
+        try {
+            lighting = imageFromResPath("spotlight.png");
+        } catch (IOException ex) {
+            System.out.println("RIP. Lighting image not found");
+            System.exit(1);
+        }
+        return lighting;
+    }
 }

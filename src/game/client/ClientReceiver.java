@@ -1,11 +1,8 @@
 package game.client;
 
-import game.server.ServerGameState;
-import game.util.DataPacket;
 import game.util.SendableState;
 
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
 
 /**
  * @author georgesabourin, Daniel Tonks
@@ -39,7 +36,7 @@ public class ClientReceiver extends Thread {
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
-				Thread.sleep(1000/60);
+				Thread.sleep(1000/120);
 				if(!inProgress){
 					String s = (String)objIn.readObject();
 					if(s.equals("StartingGame")){
