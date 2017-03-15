@@ -7,6 +7,7 @@ import game.map.MapData;
 import game.util.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -82,9 +83,8 @@ public class ServerGameState extends GameState {
 
     public ArrayList<DataPacket> getSendableBullets() {
         ArrayList<DataPacket> data = new ArrayList<>();
-        for (Bullet b : bullets) {
-            data.add(b.getData());
-            System.out.println("bullet at: (" + b.getX() + ", " + b.getY() + ")");
+        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
+            data.add(it.next().getData());
         }
         return data;
     }

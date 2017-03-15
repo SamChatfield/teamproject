@@ -1,14 +1,14 @@
 package game.server;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Random;
-
 import game.Bullet;
 import game.Collision;
 import game.Zombie;
 import game.client.Player;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie positions.
@@ -22,7 +22,7 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Constructor to create a new game instance
-	 * @param (ServerGameState) state - The state of the server
+	 * @param state - The state of the server
 	 */
 	public GameInstance(ServerGameState state){
 		this.state = state;
@@ -59,7 +59,7 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Update the game instance
-	 * @param (double) delta - Interpolation 
+	 * @param delta - Interpolation
 	 */
 	private void update(double delta) {
 		ArrayList<Zombie> zombies = state.getZombies();
