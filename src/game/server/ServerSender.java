@@ -20,7 +20,9 @@ public class ServerSender extends Thread {
 	 * @param objOut The ObjectOutputStream
 	 */
 	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
-		this.objOut = objOut; this.state = state; this.initial = true;
+		this.objOut = objOut;
+		this.state = state;
+		this.initial = true;
 		this.playersReadyInitial = true;
 	}
 

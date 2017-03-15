@@ -168,9 +168,7 @@ public class GameState implements Serializable {
 
     public boolean playersReady() { return playersConnected; }
 
-    public void setReady(boolean bool) {
-        playersConnected = bool;
-    }
+    public void setReady(boolean bool) { playersConnected = bool; }
 
 	/**
 	 * Set whether a new is in progress

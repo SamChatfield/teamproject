@@ -62,16 +62,17 @@ public class Server {
 
                  ArrayList<String> players = clientTable.checkAvailable();
 				 System.out.println(players.size());
-                 if(players.size() % 2 == 0) {
+                 if((players.size() % 2 == 0) && !(players.size() == 0)) {
                  	System.out.println("We have enough players now");
                  	state.setReady(true);
+                 	clientTable.changePlayerStatus(clientName, ClientTable.playerStatus.IN_GAME);
 				 }
 
 
                  // Start threads
                  ServerSender server_sender = new ServerSender(objOut,state);
                  server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn,state);
+                 ServerReceiver server_receiver = new ServerReceiver(objIn,state, clientName, clientTable);
                  server_receiver.start();
 
 				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
