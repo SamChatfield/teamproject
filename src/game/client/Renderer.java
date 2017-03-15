@@ -97,15 +97,16 @@ public class Renderer {
         //lighting
 		drawLighting(g2d);
 
+		
 		// Health bar
 		Font health = new Font("Arial", Font.BOLD, 10);
 		g2d.setFont(health);
 		
-		g2d.setColor(new Color(0, 0, 0, 120));
+		g2d.setColor(new Color(32, 99, 9));
 		Rectangle healthBar2 = new Rectangle(10, 10, 200, 20);
 		g2d.fill(healthBar2);
 		
-		g2d.setColor(Color.GREEN);
+		g2d.setColor(new Color(32, 99, 9));
 		//System.out.println(player.health);
 		//System.out.println(percentage);
 		float percentage = player.getHealth() / 50.0f;
@@ -118,6 +119,15 @@ public class Renderer {
 		String healthFormat = String.format("%.2f", percentage * 100);
 		g2d.drawString("Health: " + healthFormat + "%", 15, 25);
 		
+		g2d.setColor(Color.WHITE);
+		Rectangle itemsBox = new Rectangle(10, 600, 200, 30);
+		g2d.draw(itemsBox);
+		Rectangle itemBox1 = new Rectangle(10, 600, 30, 30);
+		g2d.draw(itemBox1);
+		Rectangle itemBox2 = new Rectangle(40, 600, 30, 30);
+		g2d.draw(itemBox2);
+		
+		
 		// Display time remaining
 		Font hud = new Font("Arial", Font.BOLD, 15);
 		g2d.setFont(hud);
@@ -128,6 +138,8 @@ public class Renderer {
 		
 		// Display number of converted zombies
 		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombiePackets.size() , 450, 630);
+		
+		
 		
         // Clean up and flip the buffer
         g2d.dispose();
