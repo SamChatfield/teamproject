@@ -39,7 +39,7 @@ public class ClientReceiver extends Thread {
 		System.out.println("DEBUG: ClientReceiver started");
 		try {
 			while(true) {
-				Thread.sleep(1000/30);
+				Thread.sleep(1000/60);
 				if(!inProgress){
 					String s = (String)objIn.readObject();
 					if(s.equals("StartingGame")){

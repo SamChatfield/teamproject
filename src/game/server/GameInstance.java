@@ -107,6 +107,7 @@ public class GameInstance extends Thread {
 				}
 				Player owner = state.getPlayer(b.getUsername());
 				Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
+				Collision.checkPlayerCollision(b, state.getBullets(), owner, state.getOtherPlayer(owner.getUsername()));
 				b.move(delta);
 			}
 		} catch(ConcurrentModificationException e){

@@ -35,6 +35,7 @@ public class Client extends Canvas {
 
 	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
+	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
     
     public Sound soundManager;
 	private JFrame container;

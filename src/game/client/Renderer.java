@@ -84,7 +84,8 @@ public class Renderer {
         //System.out.println(state.getBullets().size());
         for (Bullet b : state.getBullets()) {
             if(b.active) {
-            	b.draw(g2d);
+            	//b.draw(g2d);
+            	drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
             }
         }
 
@@ -248,5 +249,24 @@ public class Renderer {
         this.showCollBox = showCollBox;
         player.setShowCollBox(showCollBox);
     }
+    
+    
+    
+    private void drawBullet(Graphics2D g2d, Player player, float x, float y, double facingAngle) {
+        int w = Client.bulletImage.getWidth();
+        int h = Client.bulletImage.getHeight();
+
+        Point drawPoint = player.relativeDrawPoint(x, y, w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        AffineTransform at = g2d.getTransform();
+        g2d.rotate(facingAngle, drawX, drawY);
+        g2d.drawImage(Client.bulletImage, drawX, drawY, null);
+        g2d.setTransform(at);
+    }
+    
+    
+    
 
 }
