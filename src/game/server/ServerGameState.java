@@ -116,6 +116,7 @@ public class ServerGameState extends GameState {
         ArrayList<String> moves = packet.getKeyPresses();
         double delta = packet.getDelta();
         Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
+        boolean shootNow = false;
 
         for(String s:moves) {
             switch(s){
@@ -144,14 +145,15 @@ public class ServerGameState extends GameState {
                     toModify.conversionMode = false;
                     break;
                 case "BUTTON1":
-                    // game coord x and y position of the aim
-                    double playerAngle = toModify.getFacingAngle();
-                    float aimX = (float) Math.cos(playerAngle);
-                    float aimY = (float) -Math.sin(playerAngle);
-                    Bullet b = toModify.shoot(aimX, aimY);
-                    if(b != null){ // this could happen if they have already shot recently.
-                        bullets.add(b);
-                    }
+//                    // game coord x and y position of the aim
+//                    double playerAngle = toModify.getFacingAngle();
+//                    float aimX = (float) Math.cos(playerAngle);
+//                    float aimY = (float) -Math.sin(playerAngle);
+//                    Bullet b = toModify.shoot(aimX, aimY, pdv.x(), pdv.y());
+//                    if(b != null){ // this could happen if they have already shot recently.
+//                        bullets.add(b);
+//                    }
+                    shootNow = true;
                     break;
             }
         }
@@ -165,6 +167,17 @@ public class ServerGameState extends GameState {
         float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
         float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update
         toModify.move(pdx, pdy);
+
+        if (shootNow) {
+            // game coord x and y position of the aim
+            double playerAngle = toModify.getFacingAngle();
+            float aimX = (float) Math.cos(playerAngle);
+            float aimY = (float) -Math.sin(playerAngle);
+            Bullet b = toModify.shoot(aimX, aimY, pdx, pdy);
+            if(b != null){ // this could happen if they have already shot recently.
+                bullets.add(b);
+            }
+        }
     }
 
     public SendableState getPackagedState(){

@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class Bullet extends Entity implements Serializable {
 
-	public static final float BULLET_SPEED = 0.15f;
+	public static final float BULLET_SPEED = 0.3f;
 
 	private float dx, dy; // the change in x and y of the bullet each update before delta
 
@@ -21,14 +21,15 @@ public class Bullet extends Entity implements Serializable {
 	private double distance;
 	private static final double fadeDistance = 5;
 
-	public Bullet(Player player, float aimX, float aimY, MapData mapData) {
+	public Bullet(Player player, float aimX, float aimY, float pdx, float pdy, MapData mapData) {
 		super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData, DataPacket.Type.BULLET);
 
 		setUsername(player.getUsername());
 
 		Vector normalDir = new Vector(aimX, aimY).normalised();
-		dx = normalDir.x();
-		dy = normalDir.y();
+
+		dx = normalDir.x() * BULLET_SPEED + pdx;
+		dy = normalDir.y() * BULLET_SPEED + pdy;
 
 		data.setFacingAngle(player.getFacingAngle()); // TODO check the efficiency of this
 
@@ -37,13 +38,11 @@ public class Bullet extends Entity implements Serializable {
 	}
 
 	public void move(double delta) {
-		float deltX = (float) (dx * BULLET_SPEED * delta);
-		float deltY = (float) (dy * BULLET_SPEED * delta);
-		float incX = (float) (dx * BULLET_SPEED * delta);
-		float incY = (float) (dy * BULLET_SPEED * delta);
+		float deltX = (float) (dx * delta);
+		float deltY = (float) (dy * delta);
 
-		data.setX(getX() + incX);
-		data.setY(getY() + incY);
+		data.setX(getX() + deltX);
+		data.setY(getY() + deltY);
 
 		distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
 
