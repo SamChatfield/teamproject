@@ -42,8 +42,8 @@ public class Renderer {
 
 	/**
 	 * Create a new Renderer
-	 * @param bufferStrategy - Bufferer Strategy to use to draw in a buffer
-	 * @param state - The current ClientGameState
+	 * @param bufferStrategy Strategy to use to draw in a buffer
+	 * @param state The current ClientGameState
 	 */
 	Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
 		this.bufferStrategy = bufferStrategy;
@@ -56,6 +56,7 @@ public class Renderer {
 
 	/**
 	 * Run the render loop to render everything
+<<<<<<< HEAD
 	 */
 	public void render() {
 		this.player = state.getPlayer(); // Get the player object now (if render is called, the game definitely knows the state of the game)
@@ -100,9 +101,8 @@ public class Renderer {
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
 
-		Font health = new Font("Agency FB", Font.BOLD, 10);
-		g2d.setFont(health);
-
+		g2d.setFont(tradeWinds.deriveFont(15f));
+		
 		g2d.setColor(new Color(128, 128, 128, 50));
 		Rectangle healthBarBackground = new Rectangle(10, 10, 200, 20);
 		g2d.fill(healthBarBackground);
@@ -118,10 +118,10 @@ public class Renderer {
 		// Health bar text display
 		g2d.setColor(Color.GRAY);
 		String healthFormat = String.format("%.2f", healthPercentage);
-		g2d.drawString("Health: " + healthFormat + "%", 15, 23);
+		g2d.drawString("Health: " + healthFormat + "%", 15, (int) (healthBarBackground.getY() + healthBarBackground.getHeight() + 20));
 
 		// Items box
-		g2d.setColor(new Color(255, 255, 255, 200));
+		g2d.setColor(new Color(255, 255, 255, 150));
 
 		int xCoord = 10;
 		for(int i = 0; i < 5; i++) {
@@ -133,28 +133,56 @@ public class Renderer {
 		}
 
 		// Display time remaining
-		Font hud = new Font("Agency FB", Font.BOLD, 14);
-		g2d.setFont(hud);
+		g2d.setFont(tradeWinds.deriveFont(35f));
 		g2d.setColor(new Color(255, 255, 255, 170));
-		String remainingTime = String.format("Time Remaining - %d:%02d", (timeRemaining/60), (timeRemaining % 60));
-		g2d.drawString(remainingTime, gameW - 180, 20);
+		String remainingTime = String.format("Time: %d:%02d", (timeRemaining/60), (timeRemaining % 60));
+		g2d.drawString(remainingTime, gameW - (g2d.getFontMetrics().stringWidth(remainingTime) + 20), 40);
 
 		// Display number of converted zombies
-		int convertedZombies = player.getNumConvertedZombies();
-		int opponentConvertedZombies = state.getOtherPlayer().getNumConvertedZombies();
+		int playerZombies = player.getNumConvertedZombies();
+		int opponentZombies = state.getOtherPlayer().getNumConvertedZombies();
 		int totalZombies = zombiePackets.size();
+		System.out.println(playerZombies + "/" + totalZombies);
 		
-		g2d.setColor(new Color(120, 0, 0, 150));
-		Rectangle playerZombies = new Rectangle(450, 580, 30, 30);
-		g2d.fill(playerZombies);
-		g2d.setColor(new Color(0, 120, 0, 150));
-		Rectangle opponentZombies = new Rectangle(500, 580, 30, 30);
-		g2d.fill(opponentZombies);
+		// Zombie counts
+		ArrayList<Integer> zombieCounts = new ArrayList<Integer>();
+		zombieCounts.add(totalZombies - (opponentZombies + playerZombies));
+		zombieCounts.add(playerZombies);
+		zombieCounts.add(opponentZombies);
 		
-		g2d.setColor(Color.WHITE);
-		g2d.drawString("" + convertedZombies, 450, 600);
-		g2d.drawString("Opponent: " + opponentConvertedZombies, 450, 530);
+		// Zombie count box labels
+		ArrayList<String> zombieCountLabels = new ArrayList<String>();
+		zombieCountLabels.add("Wild");
+		zombieCountLabels.add("You");
+		zombieCountLabels.add("Opponent");
 		
+		// Colours for zombie count boxes
+		ArrayList<Color> zombieCountColours = new ArrayList<Color>();
+		zombieCountColours.add(new Color(0, 76, 153, 100));
+		zombieCountColours.add(new Color(0, 102, 0, 100));
+		zombieCountColours.add(new Color(100, 0, 0, 100));
+		
+		g2d.setColor(new Color(255, 255, 255, 100));
+		g2d.setFont(tradeWinds.deriveFont(10f));
+		g2d.drawString("Zombie Counts: ", 535, 520);
+		
+		int counter = 0;
+		int countsY = 530;
+		for(int count : zombieCounts) {
+			Rectangle zombieCountBox = new Rectangle(580, countsY, 30, 30);
+			g2d.setColor(zombieCountColours.get(counter));
+			g2d.fill(zombieCountBox);
+			
+			g2d.setColor(new Color(255, 255, 255, 100));
+			g2d.setFont(tradeWinds.deriveFont(20f));
+			g2d.drawString("" + count, (int) (zombieCountBox.getX() + 8),(int) (zombieCountBox.getY() + (zombieCountBox.getHeight() / 2) + 7));
+			
+			g2d.setFont(tradeWinds.deriveFont(10f));
+			g2d.drawString(zombieCountLabels.get(counter), (int)(zombieCountBox.getX() - (g2d.getFontMetrics().stringWidth(zombieCountLabels.get(counter)) + 5)), (int) (3 +  zombieCountBox.getY() + (zombieCountBox.getHeight() / 2)));
+			countsY += 30;
+			counter++;
+		}
+
 		// Clean up and flip the buffer
 		g2d.dispose();
 		bufferStrategy.show();
