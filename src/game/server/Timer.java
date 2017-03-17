@@ -33,6 +33,10 @@ public class Timer implements Runnable {
 	public void run() {
 		for(time = 180; time>=0; time--) {
 			// System.out.println("Time "+time);
+
+			if (state.HasFinished()) {
+				Thread.currentThread().interrupt(); // close this thread if the game is now done.
+			}
 			try {
 				state.updateTime(time);
 				Thread.sleep(1000);
