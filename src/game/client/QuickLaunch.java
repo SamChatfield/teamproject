@@ -2,8 +2,10 @@ package game.client;
 
 import game.server.Server;
 
+/**
+* Quick launcher to launch both game and server whilst debugging
+ */
 public class QuickLaunch {
-	
 	
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -31,16 +33,5 @@ public class QuickLaunch {
 		thread2.join();
 
 		// Continue the execution...
-		
-
-		
-		
-		
-		
-		
-
-		
 	}
-
-
 }

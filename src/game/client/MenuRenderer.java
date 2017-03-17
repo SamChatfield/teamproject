@@ -15,6 +15,9 @@ import javax.imageio.ImageIO;
 
 import game.ResourceLoader;
 
+/**
+ * Renders the game menus on screen (main menu and options/help screen)
+ */
 public class MenuRenderer {
 
 	private BufferStrategy bufferStrategy;
