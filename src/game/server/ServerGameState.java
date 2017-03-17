@@ -59,7 +59,7 @@ public class ServerGameState extends GameState {
         this.player1 = new Player(-15,0 ,mapData, player1Username);
         this.player2 = new Player(15 ,0 ,mapData, player2Username);
 
-        int zombieCount = 100;
+        int zombieCount = 5;
         ArrayList<Zombie> zombieFactory = new ArrayList<>();
         try{
             for (int i = 0; i < zombieCount; i++) {
