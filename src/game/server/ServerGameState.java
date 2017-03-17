@@ -22,11 +22,20 @@ public class ServerGameState extends GameState {
 
     private String player1Username;
     private String player2Username;
+    private boolean hasFinished;
 
     public ServerGameState(String player1Username, String player2Username){
         this.player1Username = player1Username;
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
+    }
+
+    public boolean HasFinished() {
+        return hasFinished;
+    }
+
+    public void setHasFinished(boolean hasFinished) {
+        this.hasFinished = hasFinished;
     }
 
     public Player getPlayer(String username){
