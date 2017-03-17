@@ -31,11 +31,15 @@ public class Timer implements Runnable {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
+		boolean running = true;
 		for(time = 180; time>=0; time--) {
+			if(!running){
+				break;
+			}
 			// System.out.println("Time "+time);
 
 			if (state.HasFinished()) {
-				Thread.currentThread().interrupt(); // close this thread if the game is now done.
+				running = false; // stop the countdown
 			}
 			try {
 				state.updateTime(time);

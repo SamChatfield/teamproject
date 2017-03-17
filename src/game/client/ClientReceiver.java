@@ -49,8 +49,14 @@ public class ClientReceiver extends Thread {
 						inProgress = false;
 					}
 				}else{
-					SendableState updatedState = (SendableState) objIn.readObject();
-					state.updateClientState(updatedState); // update the clients view of the game state.
+					Object obj = objIn.readObject();
+					if(obj.getClass() == SendableState.class){
+						SendableState updatedState = (SendableState) objIn.readObject();
+						state.updateClientState(updatedState); // update the clients view of the game state.
+					}else{
+						System.out.println("The game ended apparently");
+					}
+
 				}
 
 			}

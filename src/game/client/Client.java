@@ -170,14 +170,10 @@ public class Client extends Canvas {
 						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-						System.out.println("Client loop staterupted exception");
+						System.out.println("Client loop interrupted exception");
 					}
 				}
 
-				if (state.getTimeRemaining() <= 0) {
-					currentState = STATE.END;
-					break;
-				}
 			}
 
 			while (currentState == STATE.END) {
@@ -386,18 +382,12 @@ public class Client extends Canvas {
 
 		updateLocalPlayer(keyPresses,delta,fv);
 
-        int newNumConvertedZombies = 0;
-		for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
-			if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
-				newNumConvertedZombies += 1;
-			}
-		}
-        player.setNumConvertedZombies(newNumConvertedZombies);
-
+		/*
 		if(player.getHealth() < 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}
+		 */
 	}
 
 	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {

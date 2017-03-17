@@ -139,23 +139,6 @@ public class Player extends Entity {
         return bullets;
     }
 
-    /**
-     * Set the number of converted zombies the player has
-     * @param newNum New number to set
-     */
-    public void setNumConvertedZombies(int newNum) {
-        numConvertedZombies = newNum;
-    }
-
-    /**
-     * Get the number of converted zombies the player has
-     * @return Number of converted zombies on player's team
-     */
-    public int getNumConvertedZombies() {
-        return numConvertedZombies;
-    }
-
-
     public static BufferedImage getImage() {
         return image;
     }

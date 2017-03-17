@@ -83,6 +83,15 @@ public class Entity implements Serializable{
     public void updateLocalPlayerData(DataPacket data2){
         setLastAttackTime(data2.getLastAttackTime());
         setHealth(data2.getHealth());
+        setNumConvertedZombies(data2.getNumConvertedZombies());
+    }
+
+    public void setNumConvertedZombies(int num){
+        data.setNumConvertedZombies(num);
+    }
+
+    public int getNumConvertedZombies(){
+        return data.getNumConvertedZombies();
     }
 
 //    public void setShowCollBox(boolean showCollBox) {
