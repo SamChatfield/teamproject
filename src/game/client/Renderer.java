@@ -55,45 +55,50 @@ public class Renderer {
 
 	/**
 	 * Run the render loop to render everything
-	 */
-	public void render() {
-		this.player = state.getPlayer(); // Get the player object now (if render is called, the game definitely knows the state of the game)
+	 */    
+    public void render() {
+        this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
-		int timeRemaining = state.getTimeRemaining();
-		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
-		MapData mapData = state.getMapData();
+        int timeRemaining = state.getTimeRemaining();
+        ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
+        MapData mapData = state.getMapData();
 
-		// Set up the graphics instance for the current back buffer
-		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // Set up the graphics instance for the current back buffer
+        Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// Clear the screen
-		g2d.setColor(g2d.getBackground());
-		g2d.fillRect(0, 0, gameH, gameW);
+        // Clear the screen
+        g2d.setColor(g2d.getBackground());
+        g2d.fillRect(0, 0, gameH, gameW);
 
-		g2d.setColor(Color.BLACK);
+        g2d.setColor(Color.BLACK);
 
-		// Draw the map
-		drawMap(g2d, mapData, player);
+        // Draw the map
+        drawMap(g2d, mapData, player);
 
-		// Draw the player
-		player.draw(g2d);
+        player.draw(g2d);
 
-		if(state.getOtherPlayer() != null){
-			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
-		}
-		for (Bullet b : state.getBullets()) {
-			if(b.active) {
-				drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
-			}
-		}
+        if(state.getOtherPlayer() != null){
+            state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
+        }
+        //System.out.println(state.getBullets().size());
+        for (Bullet b : state.getBullets()) {
+            if(b.active) {
+                if(b.getUsername().equals(player.getUsername())){
+                    b.draw(g2d);
+                }else{
+                    drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
 
-		// Draw the zombies
-		for (DataPacket z : zombiePackets) {
-			drawZombie(g2d, player, z);
-		}
+                }
+            }
+        }
 
-		// Draw lighting
+        // Draw the zombies
+        for (DataPacket z : zombiePackets) {
+            drawZombie(g2d, player, z);
+        }
+
+        //lighting
 		drawLighting(g2d);
 
 		// Health bar

@@ -2,6 +2,7 @@ package game.client;
 
 import game.server.ServerGameState;
 import game.util.DataPacket;
+import game.util.EndState;
 import game.util.SendableState;
 
 import java.io.ObjectInputStream;
@@ -49,8 +50,14 @@ public class ClientReceiver extends Thread {
 						inProgress = false;
 					}
 				}else{
-					SendableState updatedState = (SendableState) objIn.readObject();
-					state.updateClientState(updatedState); // update the clients view of the game state.
+					Object obj = objIn.readObject();
+					if(obj.getClass() == SendableState.class){
+						SendableState updatedState = (SendableState) obj;
+						state.updateClientState(updatedState); // update the clients view of the game state.
+					}else if(obj.getClass() == EndState.class){
+						EndState end = (EndState) objIn.readObject();
+						state.setEndState(end);
+					}
 				}
 
 			}

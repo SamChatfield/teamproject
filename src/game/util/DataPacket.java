@@ -14,6 +14,15 @@ public class DataPacket implements Serializable {
 	protected long lastAttackTime;
 	private String username;
 	private Type type;
+	private int numConvertedZombies;
+
+	public int getNumConvertedZombies() {
+		return numConvertedZombies;
+	}
+
+	public void setNumConvertedZombies(int numConvertedZombies) {
+		this.numConvertedZombies = numConvertedZombies;
+	}
 
 	/**
 	 * Object that the data packet refers to

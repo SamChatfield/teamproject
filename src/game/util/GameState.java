@@ -27,6 +27,26 @@ public class GameState implements Serializable {
     protected MapData mapData;
     protected boolean inProgress; // is the game in progress?
     protected boolean isConnected; // is the game connected to the server? If this is false, the server hasn't sent a state yet
+    protected EndState endState;
+    protected boolean hasFinished;
+
+    public EndState getEndState() {
+        return endState;
+    }
+
+    public void setEndState(EndState endState) {
+        this.endState = endState;
+    }
+
+    public boolean HasFinished() {
+        return hasFinished;
+    }
+
+    public void setHasFinished(boolean hasFinished) {
+        this.hasFinished = hasFinished;
+    }
+
+
 
     public ArrayList<Bullet> getBullets() {
         return bullets;

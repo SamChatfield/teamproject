@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import game.ResourceLoader;
+import game.util.EndState;
 import game.util.PlayerUpdatePacket;
 import game.util.Vector;
 
@@ -114,7 +115,7 @@ public class Client extends Canvas {
 		running = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
-		
+
 		// Setup sound
 		soundManager = new Sound();
 		state.addSoundManager(soundManager);
@@ -174,6 +175,8 @@ public class Client extends Canvas {
 				// Update game with the delta
 				update(delta);
 
+
+
 				// Render
 				renderer.render();
 
@@ -186,29 +189,27 @@ public class Client extends Canvas {
 					try {
 						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 					} catch (InterruptedException e) {
-						System.err.println("Client loop staterupted exception: " + e.getMessage());
+						System.err.println("Client loop state interupted exception: " + e.getMessage());
 					}
 				}
 
-				if (state.getTimeRemaining() <= 0) {
+				// Is the game over?
+				if(state.HasFinished()){
 					currentState = STATE.END;
-					break;
 				}
+
 			}
 
+			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
 				renderer.renderGameOver();
-				gameOverUpdate(renderer);
+				gameOverUpdate(renderer,state.getEndState());
 			}
 		}
 		System.exit(0);
 	}
 
-	/**
-	 * Display game over screen
-	 * @param rend Renderer object
-	 */
-	private void gameOverUpdate(Renderer rend) {
+	private void gameOverUpdate(Renderer rend, EndState state) {
 		double mx, my;
 		try {
 			mx = inputHandler.getMousePos().getX();
@@ -409,35 +410,43 @@ public class Client extends Canvas {
 		Vector fv = null;
 		if (inputHandler.isMouseInside() && mousePos != null) {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
+
 			if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
 				keyPresses.add("BUTTON1");
-				soundManager.bulletSound(player.canShoot());
+
+				if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+					keyPresses.add("BUTTON1");
+
+					soundManager.bulletSound(player.canShoot());
+				}
 			}
-		}
 
-		// We need to do this in case fv is null
-		float x = -100;
-		float y = -100;
-		if(fv!=null){
-			x = fv.x();
-			y = fv.y();
-		}
-		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
-
-		updateLocalPlayer(keyPresses,delta,fv);
-
-		int newNumConvertedZombies = 0;
-		for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
-			if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
-				newNumConvertedZombies += 1;
+			// We need to do this in case fv is null
+			float x = -100;
+			float y = -100;
+			if(fv!=null){
+				x = fv.x();
+				y = fv.y();
 			}
-		}
-		player.setNumConvertedZombies(newNumConvertedZombies);
+			sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
+			updateLocalPlayer(keyPresses,delta,fv);
+
+			int newNumConvertedZombies = 0;
+			for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
+				if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
+					newNumConvertedZombies += 1;
+				}
+			}
+			player.setNumConvertedZombies(newNumConvertedZombies);
+		}
+
+		/*
 		if(player.getHealth() < 0) {
 			currentState = STATE.END;
 			System.out.println("GAME OVER");
 		}
+		 */
 	}
 
 	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {

@@ -16,7 +16,7 @@ public class ServerSender extends Thread {
 
 	/**
 	 * Constructor method
-	 * @param (ObjectOutputStream) objOut - The ObjectOutputStream
+	 * @param objOut - The ObjectOutputStream
 	 */
 	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
 		this.objOut = objOut; this.state = state; this.initial = true;
@@ -38,9 +38,22 @@ public class ServerSender extends Thread {
 		}
 	}
 
+
+	public void sendEndState() {
+
+		try {
+			objOut.writeObject(state.getEndState());
+			objOut.flush();
+			objOut.reset();
+		} catch (IOException e) {
+			System.err.println("Communication Error! " + e.getMessage());
+			System.exit(1);
+		}
+	}
+
 	/**
 	 * Send an object up the ObjectOutputStream to the Client
-	 * @param (Object) obj - Object to send
+	 * @param obj - Object to send
 	 */
 	public void sendObject(Object obj) {
 		try {
@@ -63,7 +76,12 @@ public class ServerSender extends Thread {
 						sendObject("StartingGame");
 						initial = false;
 					}
-					sendGameState(); // Send the game state
+					if(state.HasFinished()){
+						sendGameState(); // send a final update (so players don't finish with 50% health because they didnt get the final update.
+						sendEndState();
+					}else{
+						sendGameState(); // Send the game state
+					}
 				} else{
 					//System.out.println("Game not ready yet");
 				}

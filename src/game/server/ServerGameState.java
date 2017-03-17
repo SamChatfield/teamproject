@@ -38,8 +38,7 @@ public class ServerGameState extends GameState {
             return null;
         }
     }
-    
-    
+
     public Player getOtherPlayer(String username){
         if(username.equals(player1Username)){
             return player2;
