@@ -23,7 +23,7 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Constructor to create a new game instance
-	 * @param (ServerGameState) state - The state of the server
+	 * @param state - The state of the server
 	 */
 	public GameInstance(ServerGameState state){
 		this.state = state;
@@ -48,8 +48,10 @@ public class GameInstance extends Thread {
 			update(delta);
 			EndState end = checkForEnd();
 			if(end.hasFinished()){
+				System.out.println("Game ended");
+				state.setEndState(end); // give the game state the end state.
 				state.setHasFinished(true); // will cause the timer thread to close too
-				Thread.currentThread().interrupt(); // close the thread
+				running = false;
 			}
 
 			now = System.nanoTime();
@@ -57,8 +59,8 @@ public class GameInstance extends Thread {
 				try {
 					Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
-					System.out.println("Client loop interrupted exception");
+					//e.printStackTrace();
+					//System.out.println("Client loop interrupted exception");
 				}
 			}
 		}
@@ -120,6 +122,21 @@ public class GameInstance extends Thread {
 		} catch(ConcurrentModificationException e){
 			System.out.println("Error, this shouldn't happen");
 		}
+
+		//Player1 converted zombies
+		int play1Converted = 0;
+		int play2Converted = 0;
+
+		for (int i = 0; i < state.getZombies().size(); i++) {
+			if (state.getZombies().get(i).getUsername().equals(state.getPlayer1().getUsername())) {
+				play1Converted += 1;
+			}else if (state.getZombies().get(i).getUsername().equals(state.getPlayer2().getUsername())){
+				play2Converted += 1 ;
+			}
+		}
+		state.getPlayer1().setNumConvertedZombies(play1Converted);
+		state.getPlayer2().setNumConvertedZombies(play2Converted);
+
 	}
 
 	/**
@@ -148,9 +165,7 @@ public class GameInstance extends Thread {
 				return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.TIME_EXPIRED);
 
 			}else{
-				winner = null;
 				return new EndState(true,"Tie",state.getPlayer1(),state.getPlayer2(), EndState.EndReason.TIME_EXPIRED);
-
 			}
 
 		}else{
