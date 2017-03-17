@@ -140,8 +140,21 @@ public class Renderer {
 		g2d.drawString(remainingTime, gameW - 180, 20);
 
 		// Display number of converted zombies
-		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombiePackets.size() , 450, 630);
-
+		int convertedZombies = player.getNumConvertedZombies();
+		int opponentConvertedZombies = state.getOtherPlayer().getNumConvertedZombies();
+		int totalZombies = zombiePackets.size();
+		
+		g2d.setColor(new Color(120, 0, 0, 150));
+		Rectangle playerZombies = new Rectangle(450, 580, 30, 30);
+		g2d.fill(playerZombies);
+		g2d.setColor(new Color(0, 120, 0, 150));
+		Rectangle opponentZombies = new Rectangle(500, 580, 30, 30);
+		g2d.fill(opponentZombies);
+		
+		g2d.setColor(Color.WHITE);
+		g2d.drawString("" + convertedZombies, 450, 600);
+		g2d.drawString("Opponent: " + opponentConvertedZombies, 450, 530);
+		
 		// Clean up and flip the buffer
 		g2d.dispose();
 		bufferStrategy.show();
