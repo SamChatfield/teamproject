@@ -1,11 +1,8 @@
 package game.client;
 
-import game.ResourceLoader;
-import game.util.PlayerUpdatePacket;
-import game.util.Vector;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
@@ -15,16 +12,23 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+import game.ResourceLoader;
+import game.util.PlayerUpdatePacket;
+import game.util.Vector;
 
 /**
- * Created by Sam on 20/01/2017.
- * Modified extensively by Daniel.
- *
  * This class is the one that the player will run when they want to start the game.
  * When they click "play" in the menu, it will create a new 'Client' thread that will control input and data send/receive.
  */
 public class Client extends Canvas {
 
+	// Game settings
 	private static final String TITLE = "Outbreak";
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
 	static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
@@ -36,8 +40,8 @@ public class Client extends Canvas {
 	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
-    
-    public Sound soundManager;
+
+	public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
 	private InputHandler inputHandler;
@@ -67,10 +71,15 @@ public class Client extends Canvas {
 
 	// Non final stuff, remove before release
 	private final int zombieCount = 70;
-	
+
 	private static String username;
 	private static String ipAddress;
 
+	/**
+	 * Create a new Client object
+	 * @param state CurrentSlientState object
+	 * @param sender ClientSender object
+	 */
 	private Client(ClientGameState state, ClientSender sender) {
 		this.state = state;
 		this.sender = sender;
@@ -78,7 +87,6 @@ public class Client extends Canvas {
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
 		panel.setLayout(null);
-
 
 		setBounds(0, 0, GAME_DIMENSION.width, GAME_DIMENSION.height);
 		panel.add(this);
@@ -90,35 +98,46 @@ public class Client extends Canvas {
 		container.setVisible(true);
 		container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		// Handle input
 		inputHandler = new InputHandler(this);
 		addMouseListener(inputHandler);
 		addKeyListener(inputHandler);
 
+		// Request focus
 		requestFocus();
 
+		// Set up buffer
 		createBufferStrategy(2);
 		bufferStrategy = getBufferStrategy();
 
+		// Menu is the first thing to be loaded
 		running = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
-
-        soundManager = new Sound();
-        state.addSoundManager(soundManager);
+		
+		// Setup sound
+		soundManager = new Sound();
+		state.addSoundManager(soundManager);
 	}
 
-
+	/**
+	 * Main game loop that handles updating and drawing
+	 */
 	private void loop() {
 
+		// Renders the menu
 		MenuRenderer menu = new MenuRenderer(bufferStrategy);
-        renderer = new Renderer(bufferStrategy, state);
+		renderer = new Renderer(bufferStrategy, state);
 
-        long lastLoopTime = System.nanoTime();
+		// System time
+		long lastLoopTime = System.nanoTime();
 
+		// Starts sound playing
 		soundManager.start();
-		
+
 		while(running) {
 
+			// Displays the menu or options screen
 			while (currentState == STATE.START) {
 				if (menuState == MSTATE.MAIN) {
 					menu.renderMenu();
@@ -128,18 +147,21 @@ public class Client extends Canvas {
 				menuUpdate(menu);
 			}
 
+			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
 
 				if (!state.isConnected()) {
-					sender.sendObject("StartGame"); // send a message to the server to start the game.
+					sender.sendObject("StartGame"); // Send a message to the server to start the game.
 					while (!state.isConnected()) {
 						try {
 							Thread.sleep(1);
 						} catch (Exception e) {
-						} // without this, this loop breaks on some machines.
+							System.err.println("Error in starting game: " + e.getMessage());
+						} // Without this, this loop breaks on some machines.
 					}
 				}
 
+				// Get current state of player
 				this.player = state.getPlayer();
 
 				// Calculate how long since last update
@@ -148,8 +170,6 @@ public class Client extends Canvas {
 				long updateLength = now - lastLoopTime;
 				lastLoopTime = now;
 				double delta = updateLength / ((double) OPTIMAL_TIME_DIFF);
-
-				// FPS counter stuff would go here TODO Add an option for this
 
 				// Update game with the delta
 				update(delta);
@@ -166,8 +186,7 @@ public class Client extends Canvas {
 					try {
 						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
-						System.out.println("Client loop staterupted exception");
+						System.err.println("Client loop staterupted exception: " + e.getMessage());
 					}
 				}
 
@@ -184,7 +203,11 @@ public class Client extends Canvas {
 		}
 		System.exit(0);
 	}
-	
+
+	/**
+	 * Display game over screen
+	 * @param rend Renderer object
+	 */
 	private void gameOverUpdate(Renderer rend) {
 		double mx, my;
 		try {
@@ -196,28 +219,26 @@ public class Client extends Canvas {
 		}
 		int buttonWidth = (int)rend.menuButton.getWidth();
 		int buttonHeight = (int)rend.menuButton.getHeight();
-		
-		int playX = (int)rend.menuButton.getX();
-		int playY = (int) rend.menuButton.getY();
+
+		int menuX = (int)rend.menuButton.getX();
+		int menuY = (int) rend.menuButton.getY();
 		int exitX = (int)rend.exitButton.getX();
 		int exitY = (int)rend.exitButton.getY();
 
-
-		if(mx >= playX && mx <= (playX + buttonWidth)) {
-			if(my >= playY && my <= (playY + buttonHeight)) {
+		// If return to menu button clicked
+		if(mx >= menuX && mx <= (menuX + buttonWidth)) {
+			if(my >= menuY && my <= (menuY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
-					System.out.println("MENU BUTTON CLICKED");
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
-					
-					}
+				}
 			}
 		}
 
+		// If exit button clicked
 		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
 			if(my >= exitY && my <= (exitY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
-					System.out.println("EXIT BUTTON CLICKED");
 					currentState = STATE.EXIT;
 					running = false;
 				}
@@ -225,9 +246,10 @@ public class Client extends Canvas {
 		}
 	}
 
+	// Update the menu
 	private void menuUpdate(MenuRenderer menu) {
 		double mx, my;
-		
+
 		// Get location of mouse pointer
 		try {
 			mx = inputHandler.getMousePos().getX();
@@ -237,10 +259,10 @@ public class Client extends Canvas {
 			mx = 0; // Default position for mouse
 			my = 0;
 		}
-		
+
 		// Help menu
 		if(menuState == MSTATE.HOPTIONS) {
-			
+
 			// Position of return button
 			int returnX = (int)menu.returnButton.getX();
 			int returnY = (int)menu.returnButton.getY();
@@ -254,11 +276,11 @@ public class Client extends Canvas {
 					}
 				}
 			}
-			
+
 			// Position of SFX Button
 			int sfxX = (int)menu.sfxButton.getX();
 			int sfxY = (int)menu.sfxButton.getY();
-			
+
 			if(mx >= sfxX && mx <= (sfxX + menu.sfxButton.getWidth())) {
 				if(my >= sfxY && my <= (sfxY + menu.sfxButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
@@ -271,11 +293,11 @@ public class Client extends Canvas {
 					}
 				}
 			}
-			
+
 			// Position of music button
 			int musicX = (int)menu.musicButton.getX();
 			int musicY = (int)menu.musicButton.getY();
-			
+
 			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
 				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
@@ -291,11 +313,12 @@ public class Client extends Canvas {
 		}
 		else if(menuState == MSTATE.MAIN) {
 
+			// Buttons on the main menu
 			int playX = (int)menu.playButton.getX();
 			int playY = (int) menu.playButton.getY();
 			int helpOptionsX = (int)menu.helpOptionsButton.getX();
 			int helpOptionsY = (int)menu.helpOptionsButton.getY();
-			
+
 			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
 				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
@@ -305,7 +328,6 @@ public class Client extends Canvas {
 					}
 				}
 			}
-
 			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
 				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
@@ -317,44 +339,36 @@ public class Client extends Canvas {
 		}
 	}
 
-    /**
-     * Runs during the game to update the displayed game state.
-     * @param delta
-     */
+	/**
+	 * Runs during the game to update the displayed game state.
+	 * @param delta
+	 */
 	private void update(double delta) {
 
-		ArrayList<String> keyPresses = new ArrayList<>();		// Lets store every keypress we see this tick
+		// Lets store every keypress we see this tick
+		ArrayList<String> keyPresses = new ArrayList<>();		
 		// Change the player movement speed with 1 and 2
-        if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
-            keyPresses.add("VK_1");
-        }
-        if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
-            keyPresses.add("VK_2");
-        }
-        // Handle player keyboard input to move
-        if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
-            keyPresses.add("VK_W");
-        }
-        if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
-            keyPresses.add("VK_A");
-        }
-        if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
-            keyPresses.add("VK_D");
-        }
-        if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
-            keyPresses.add("VK_S");
-        }
-        // Toggle conversion mode
-        if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
-            keyPresses.add("VK_Z");
-            System.out.println("Enabled conversion mode!");
-        }
-        if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
-            keyPresses.add("VK_X");
-            System.out.println("Disabled conversion mode!");
-        }
+		if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
+			keyPresses.add("VK_1");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
+			keyPresses.add("VK_2");
+		}
+		// Handle player keyboard input to move
+		if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
+			keyPresses.add("VK_W");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
+			keyPresses.add("VK_A");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
+			keyPresses.add("VK_D");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
+			keyPresses.add("VK_S");
+		}
 
-		// Other debugging key bindings
+		////// DEBUGGING Key bindings
 		// Display collision boxes
 		if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
 			renderer.setShowCollBox(true);
@@ -367,17 +381,26 @@ public class Client extends Canvas {
 		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
 			System.out.println("Player: (" + player.getX() + ", " + player.getY() + ")");
 		}
-				
+		// Toggle conversion mode
+		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
+			keyPresses.add("VK_Z");
+			System.out.println("Enabled conversion mode!");
+		}
+		if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
+			keyPresses.add("VK_X");
+			System.out.println("Disabled conversion mode!");
+		}
+		// Turn all sound on
 		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
 			System.out.println("Sound ON");
-			//soundManager.musicPlayback = true;
-			soundManager.sfxPlayback = true;
+			Sound.sfxPlayback = true;
 			soundManager.playMusic();
 		}
+		// Turn all sound off
 		if(inputHandler.isKeyDown(KeyEvent.VK_M)) {
 			System.out.println("Sound OFF");
-			soundManager.musicPlayback = false;
-			soundManager.sfxPlayback = false;
+			Sound.musicPlayback = false;
+			Sound.sfxPlayback = false;
 			soundManager.stopMusic();
 		}
 
@@ -386,14 +409,14 @@ public class Client extends Canvas {
 		Vector fv = null;
 		if (inputHandler.isMouseInside() && mousePos != null) {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
-            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-            	keyPresses.add("BUTTON1");
+			if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+				keyPresses.add("BUTTON1");
 				soundManager.bulletSound(player.canShoot());
-            }
-        }
+			}
+		}
 
 		// We need to do this in case fv is null
-        float x = -100;
+		float x = -100;
 		float y = -100;
 		if(fv!=null){
 			x = fv.x();
@@ -403,13 +426,13 @@ public class Client extends Canvas {
 
 		updateLocalPlayer(keyPresses,delta,fv);
 
-        int newNumConvertedZombies = 0;
+		int newNumConvertedZombies = 0;
 		for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
 			if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
 				newNumConvertedZombies += 1;
 			}
 		}
-        player.setNumConvertedZombies(newNumConvertedZombies);
+		player.setNumConvertedZombies(newNumConvertedZombies);
 
 		if(player.getHealth() < 0) {
 			currentState = STATE.END;
@@ -422,33 +445,33 @@ public class Client extends Canvas {
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 		for(String s:keyPresses) {
 			switch(s){
-				case "VK_1":
-					player.setMoveSpeed(player.getMoveSpeed() - 0.01f);
-					break;
-				case "VK_2":
-					player.setMoveSpeed(player.getMoveSpeed() + 0.01f);
-					break;
-				case "VK_W":
-					pdv.add(new Vector(0.0f, 1.0f));
-					break;
-				case "VK_A":
-					pdv.add(new Vector(-1.0f, 0.0f));
-					break;
-				case "VK_D":
-					pdv.add(new Vector(1.0f, 0.0f));
-					break;
-				case "VK_S":
-					pdv.add(new Vector(0.0f, -1.0f));
-					break;
-				case "VK_Z":
-					player.conversionMode = true;
-					break;
-				case "VK_X":
-					player.conversionMode = false;
-					break;
-				case "BUTTON1":
-					// this should still happen on the server
-					break;
+			case "VK_1":
+				player.setMoveSpeed(player.getMoveSpeed() - 0.01f);
+				break;
+			case "VK_2":
+				player.setMoveSpeed(player.getMoveSpeed() + 0.01f);
+				break;
+			case "VK_W":
+				pdv.add(new Vector(0.0f, 1.0f));
+				break;
+			case "VK_A":
+				pdv.add(new Vector(-1.0f, 0.0f));
+				break;
+			case "VK_D":
+				pdv.add(new Vector(1.0f, 0.0f));
+				break;
+			case "VK_S":
+				pdv.add(new Vector(0.0f, -1.0f));
+				break;
+			case "VK_Z":
+				player.conversionMode = true;
+				break;
+			case "VK_X":
+				player.conversionMode = false;
+				break;
+			case "BUTTON1":
+				// this should still happen on the server
+				break;
 			}
 		}
 		if(fv != null){
@@ -486,51 +509,51 @@ public class Client extends Canvas {
 			System.exit(0);
 		}
 	}
-	
+
 	public Player getPlayer() {
-        return player;
-    }
+		return player;
+	}
 
-    public static void main(String[] args) {
-        
-        
-        loginPrompt();
+	public static void main(String[] args) {
 
-        // Initialise
-        ObjectOutputStream objOut = null;
-        ObjectInputStream objIn = null;
-        Socket outSocket = null;
-        
-        try{
-            outSocket = new Socket("localhost",4444);
-            objOut = new ObjectOutputStream(outSocket.getOutputStream());
-            objIn = new ObjectInputStream(outSocket.getInputStream());
-        }catch(Exception e){
-        	System.out.println("WTF");
+
+		loginPrompt();
+
+		// Initialise
+		ObjectOutputStream objOut = null;
+		ObjectInputStream objIn = null;
+		Socket outSocket = null;
+
+		try{
+			outSocket = new Socket("localhost",4444);
+			objOut = new ObjectOutputStream(outSocket.getOutputStream());
+			objIn = new ObjectInputStream(outSocket.getInputStream());
+		}catch(Exception e){
+			System.out.println("WTF");
 			JOptionPane.showMessageDialog(null, "Server offline!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
-        }
+		}
 
-        ClientSender client_sender = new ClientSender(username, objOut,null);
-        ClientReceiver client_receiver = new ClientReceiver(username, objIn);
+		ClientSender client_sender = new ClientSender(username, objOut,null);
+		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
 
-        // Then create a client state for the client
-        ClientGameState state = new ClientGameState(username);
+		// Then create a client state for the client
+		ClientGameState state = new ClientGameState(username);
 
-        client_receiver.addState(state); //must be called before starting the thread.
-        client_sender.addState(state);
-        // If this method didn't exist, stateface would need to be added above, but stateface relies on receiver.
+		client_receiver.addState(state); //must be called before starting the thread.
+		client_sender.addState(state);
+		// If this method didn't exist, stateface would need to be added above, but stateface relies on receiver.
 
-        // Starting threads
-        client_sender.start();
-        client_receiver.start();
+		// Starting threads
+		client_sender.start();
+		client_receiver.start();
 
-        Client client = new Client(state,client_sender);
+		Client client = new Client(state,client_sender);
 
-        // Create and start the client loop over the loop method of the client object.
-        // :: is a method reference since loop is an existing method,
-        // semantically the same as () -> client.loop() lambda expression.
-        Thread gameThread = new Thread(client::loop);
-        gameThread.start();
-    }
+		// Create and start the client loop over the loop method of the client object.
+		// :: is a method reference since loop is an existing method,
+		// semantically the same as () -> client.loop() lambda expression.
+		Thread gameThread = new Thread(client::loop);
+		gameThread.start();
+	}
 }
