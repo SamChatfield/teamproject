@@ -49,7 +49,9 @@ public class ServerReceiver extends Thread {
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("End");
+				System.exit(1);
+				//e.printStackTrace();
 			}
 			
 		}

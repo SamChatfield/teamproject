@@ -82,7 +82,7 @@ public class ServerSender extends Thread {
 						sendGameState(); // Send the game state
 					}
 				} else{
-					System.out.println("Game not ready yet");
+					//System.out.println("Game not ready yet");
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

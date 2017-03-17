@@ -1,7 +1,9 @@
 package game.client;
 
+import game.ArtInt;
 import game.Bullet;
 import game.CollisionBox;
+import game.ResourceLoader;
 import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
@@ -16,14 +18,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by Sam on 20/01/2017.
+ * Renders the game on screen
  */
 public class Renderer {
 
     private BufferStrategy bufferStrategy;
     private Player player;
     private int gameH, gameW;
-    private int maxHealth;
     private Font tradeWinds;
     private ClientGameState state;
     private boolean showCollBox = false;
@@ -33,26 +34,18 @@ public class Renderer {
     public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
     public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
     
+    /**
+     * Create a new Renderer
+     * @param bufferStrategy - Bufferer Strategy to use to draw in a buffer
+     * @param state - The current ClientGameState
+     */
     Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
         this.bufferStrategy = bufferStrategy;
-       // this.mapData = inter.getMapData();
         this.state = state;
         this.gameH = Client.GAME_DIMENSION.height;
         this.gameW = Client.GAME_DIMENSION.width;
         
-        //Breaking DRY. Could be put in a separate class
-		File font_file = new File("src/game/res/tradewinds.ttf");
-		try {
-			tradeWinds = Font.createFont(Font.TRUETYPE_FONT, font_file);
-			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			genv.registerFont(tradeWinds);
-		} catch (FontFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        tradeWinds = ResourceLoader.getTradewindsFont();
     }
        
     
@@ -198,6 +191,12 @@ public class Renderer {
     	g2d.drawImage(lighting, 0, 0, null);
 	}
 
+    /**
+     * Draw the map
+     * @param g2d - Graphics2D object
+     * @param mapData - MapData to draw
+     * @param player - Player object
+     */
     public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
         Tile[][] map = mapData.getMap();
         int width = mapData.getWidth();
@@ -210,12 +209,17 @@ public class Renderer {
                 g2d.drawImage(here.getType().getImage(), drawPoint.x, drawPoint.y, null);
             }
         }
-
-
     }
 
+    /**
+     * Draw zombies on the screen
+     * @param g2d - Graphics2D object
+     * @param player - Player object
+     * @param z - Zombies DataPacket
+     */
     private void drawZombie(Graphics2D g2d, Player player, DataPacket z) {
-        // Width and height of the entity sprite
+        
+    	// Width and height of the entity sprite
         int w = Client.zombieImage.getWidth();
         int h = Client.zombieImage.getHeight();
 
@@ -241,7 +245,6 @@ public class Renderer {
             g2d.drawImage(Client.playerZombieImage, drawX, drawY, null);
         }
         else if(z.getState() == DataPacket.State.PLAYER) {
-            // Change this later
             g2d.drawImage(Client.zombieImage, drawX, drawY, null);
         }
         else {
@@ -250,13 +253,23 @@ public class Renderer {
         g2d.setTransform(at);
     }
 
+    /**
+     * DEBUG METHOD: Set whether to show collision boxes
+     * @param showCollBox - Boolean to set
+     */
     public void setShowCollBox(boolean showCollBox) {
         this.showCollBox = showCollBox;
         player.setShowCollBox(showCollBox);
     }
     
-    
-    
+    /**
+     * Draw bullets on the screen
+     * @param g2d - Graphics2D object
+     * @param player - Player object
+     * @param x - X coordinate of bullet
+     * @param y - Y coordinate of bullet 
+     * @param facingAngle - Angle the bullet is facing
+     */
     private void drawBullet(Graphics2D g2d, Player player, float x, float y, double facingAngle) {
         int w = Client.bulletImage.getWidth();
         int h = Client.bulletImage.getHeight();
@@ -270,8 +283,4 @@ public class Renderer {
         g2d.drawImage(Client.bulletImage, drawX, drawY, null);
         g2d.setTransform(at);
     }
-    
-    
-    
-
 }

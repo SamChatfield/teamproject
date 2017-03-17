@@ -59,8 +59,7 @@ public class Client extends Canvas {
 	// Menu state
 	private enum MSTATE {
 		MAIN,
-		HELP,
-		OPTIONS,
+		HOPTIONS,
 		NONE
 	}
 	private STATE currentState;
@@ -123,11 +122,9 @@ public class Client extends Canvas {
 			while (currentState == STATE.START) {
 				if (menuState == MSTATE.MAIN) {
 					menu.renderMenu();
-				} else if (menuState == MSTATE.HELP) {
-					menu.renderHelp();
-				} else if (menuState == MSTATE.OPTIONS) {
-					menu.renderOptions();
-				}
+				} else if (menuState == MSTATE.HOPTIONS) {
+					menu.renderHelpOptions();
+				} 
 				menuUpdate(menu);
 			}
 
@@ -226,28 +223,64 @@ public class Client extends Canvas {
 
 	private void menuUpdate(MenuRenderer menu) {
 		double mx, my;
+		
+		// Get location of mouse pointer
 		try {
 			mx = inputHandler.getMousePos().getX();
 			my = inputHandler.getMousePos().getY();
 		}
 		catch(NullPointerException e) {
-			mx = 0;
+			mx = 0; // Default position for mouse
 			my = 0;
 		}
-
-		int buttonWidth = (int)menu.playButton.getWidth();
-		int buttonHeight = (int)menu.playButton.getHeight();
-
-		if(menuState == MSTATE.HELP || menuState == MSTATE.OPTIONS) {;
+		
+		// Help menu
+		if(menuState == MSTATE.HOPTIONS) {
+			
+			// Position of return button
 			int returnX = (int)menu.returnButton.getX();
 			int returnY = (int)menu.returnButton.getY();
 
-			if(mx >= returnX && mx <= (returnX + buttonWidth)) {
-				if(my >= returnY && my <= (returnY + buttonHeight)) {
+			// Handle clicks on the return button
+			if(mx >= returnX && mx <= (returnX + menu.returnButton.getWidth())) {
+				if(my >= returnY && my <= (returnY + menu.returnButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
 						menuState = MSTATE.MAIN;
 						inputHandler.setMouseClicked(false);
-						System.out.println("RETURN BUTTON CLICKED");
+					}
+				}
+			}
+			
+			// Position of SFX Button
+			int sfxX = (int)menu.sfxButton.getX();
+			int sfxY = (int)menu.sfxButton.getY();
+			
+			if(mx >= sfxX && mx <= (sfxX + menu.sfxButton.getWidth())) {
+				if(my >= sfxY && my <= (sfxY + menu.sfxButton.getHeight())) {
+					if(inputHandler.wasMouseClicked()) {
+						if(Sound.sfxPlayback) {
+							Sound.sfxPlayback = false;
+						} else {
+							Sound.sfxPlayback = true;
+						}
+						inputHandler.setMouseClicked(false);
+					}
+				}
+			}
+			
+			// Position of music button
+			int musicX = (int)menu.musicButton.getX();
+			int musicY = (int)menu.musicButton.getY();
+			
+			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
+				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
+					if(inputHandler.wasMouseClicked()) {
+						if(Sound.musicPlayback) {
+							Sound.musicPlayback = false;
+						} else {
+							Sound.musicPlayback = true;
+						}
+						inputHandler.setMouseClicked(false);
 					}
 				}
 			}
@@ -256,39 +289,24 @@ public class Client extends Canvas {
 
 			int playX = (int)menu.playButton.getX();
 			int playY = (int) menu.playButton.getY();
-			int optionsX = (int)menu.optionsButton.getX();
-			int optionsY = (int)menu.optionsButton.getY();
-			int helpX = (int)menu.helpButton.getX();
-			int helpY = (int)menu.helpButton.getY();
-
-
-			if(mx >= playX && mx <= (playX + buttonWidth)) {
-				if(my >= playY && my <= (playY + buttonHeight)) {
+			int helpOptionsX = (int)menu.helpOptionsButton.getX();
+			int helpOptionsY = (int)menu.helpOptionsButton.getY();
+			
+			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
+				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
-						System.out.println("PLAY BUTTON CLICKED");
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
-						//inputHandler.setMouseClicked(false);
-						}
-				}
-			}
-
-			if(mx >= helpX && mx <= (helpX + buttonWidth)) {
-				if(my >= helpY && my <= (helpY + buttonHeight)) {
-					if(inputHandler.wasMouseClicked()) {
-						System.out.println("HELP BUTTON CLICKED");
-						menuState = MSTATE.HELP;
-						//inputHandler.setMouseClicked(false);
+						inputHandler.setMouseClicked(false);
 					}
 				}
 			}
 
-			if(mx >= optionsX && mx <= (optionsX + buttonWidth)) {
-				if(my >= optionsY && my <= (optionsY + buttonHeight)) {
+			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
+				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
-						System.out.println("OPTIONS BUTTON CLICKED");
-						menuState = MSTATE.OPTIONS;
-						//inputHandler.setMouseClicked(false);
+						menuState = MSTATE.HOPTIONS;
+						inputHandler.setMouseClicked(false);
 					}
 				}
 			}
@@ -441,15 +459,19 @@ public class Client extends Canvas {
 		JTextField ipaddyEntry = new JTextField();
 		Object[] message = {
 				"Username:", usernameEntry,
-				"Server IP:", ipaddyEntry
+				"Server IP Address:", ipaddyEntry
 		};
 
-		int option = JOptionPane.showConfirmDialog(null, message, "Login to game", JOptionPane.OK_CANCEL_OPTION);
+		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE);
 		if (option == JOptionPane.OK_OPTION) {
-			System.out.println(usernameEntry.getText());
 			username = usernameEntry.getText();
-			System.out.println(ipaddyEntry.getText());
+			if(username.equals("")) {
+				username = "a";
+			};
 			ipAddress = ipaddyEntry.getText();
+			if(ipAddress.equals("")) {
+				ipAddress = "localhost";
+			}
 		} else {
 			System.out.println("Game login cancelled");
 			System.exit(0);
@@ -476,7 +498,7 @@ public class Client extends Canvas {
             objIn = new ObjectInputStream(outSocket.getInputStream());
         }catch(Exception e){
         	System.out.println("WTF");
-			JOptionPane.showMessageDialog(null, "Server not started!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Server offline!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
         }
 
