@@ -77,6 +77,8 @@ public class ServerSender extends Thread {
 						initial = false;
 					}
 					if(state.HasFinished()){
+						sendGameState();
+						Thread.sleep(10);
 						sendEndState();
 					}else{
 						sendGameState(); // Send the game state
