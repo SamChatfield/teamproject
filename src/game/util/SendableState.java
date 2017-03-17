@@ -16,6 +16,8 @@ public class SendableState implements Serializable {
 	private ArrayList<DataPacket> zombies;
 	private ArrayList<Bullet> bullets;
 
+	private boolean hasFinished;
+
 	private DataPacket player1;
 	private DataPacket player2;
 
@@ -78,6 +80,10 @@ public class SendableState implements Serializable {
 		return player2;
 	}
 
+	public boolean HasFinished() {
+		return hasFinished;
+	}
+
 	/**
 	 * Constructor to create new sendable state
 	 * @param (ServerGameState) state - Current state of Server
@@ -90,5 +96,8 @@ public class SendableState implements Serializable {
 		this.timeRemaining = state.getTimeRemaining();
 		this.mapImage = state.getMapImage();
 		this.bullets = state.getBullets();
+
+		this.hasFinished = state.HasFinished();
+
 	}
 }

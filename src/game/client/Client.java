@@ -1,6 +1,7 @@
 package game.client;
 
 import game.ResourceLoader;
+import game.util.EndState;
 import game.util.PlayerUpdatePacket;
 import game.util.Vector;
 
@@ -154,6 +155,8 @@ public class Client extends Canvas {
 				// Update game with the delta
 				update(delta);
 
+
+
 				// Render
 				renderer.render();
 
@@ -171,17 +174,23 @@ public class Client extends Canvas {
 					}
 				}
 
+				// Is the game over?
+				if(state.HasFinished()){
+					currentState = STATE.END;
+				}
+
 			}
 
+			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
 				renderer.renderGameOver();
-				gameOverUpdate(renderer);
+				gameOverUpdate(renderer,state.getEndState());
 			}
 		}
 		System.exit(0);
 	}
 	
-	private void gameOverUpdate(Renderer rend) {
+	private void gameOverUpdate(Renderer rend, EndState state) {
 		double mx, my;
 		try {
 			mx = inputHandler.getMousePos().getX();
