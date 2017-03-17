@@ -77,9 +77,6 @@ public class Client extends Canvas {
 	private STATE currentState;
 	private MSTATE menuState;
 
-	// Non final stuff, remove before release
-	private final int zombieCount = 70;
-
 	private static String username;
 	private static String ipAddress;
 
@@ -211,20 +208,19 @@ public class Client extends Canvas {
 
 			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
-				renderer.renderGameOver();
-				//gameOverUpdate(renderer,state.getEndState());
-				gameOverUpdate(renderer);
+				renderer.renderGameOver(state.getEndState());
+				gameOverUpdate(renderer,state.getEndState());
 			}
 		}
 		System.exit(0);
 	}
-	
+
 
 	/**
 	 * Display game over screen
 	 * @param rend Renderer object
 	 */
-	private void gameOverUpdate(Renderer rend) {
+	private void gameOverUpdate(Renderer rend, EndState state) {
 		double mx, my;
 		try {
 			mx = inputHandler.getMousePos().getX();
@@ -427,7 +423,6 @@ public class Client extends Canvas {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
             	keyPresses.add("BUTTON1");
-
 				soundManager.bulletSound(player.canShoot());
 			}
 		}
