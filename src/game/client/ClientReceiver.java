@@ -2,6 +2,7 @@ package game.client;
 
 import game.server.ServerGameState;
 import game.util.DataPacket;
+import game.util.EndState;
 import game.util.SendableState;
 
 import java.io.ObjectInputStream;
@@ -54,7 +55,9 @@ public class ClientReceiver extends Thread {
 						SendableState updatedState = (SendableState) objIn.readObject();
 						state.updateClientState(updatedState); // update the clients view of the game state.
 					}else{
-						System.out.println("The game ended apparently");
+						EndState end = (EndState) objIn.readObject();
+
+						System.out.println(end.getWinnerName());
 					}
 
 				}
