@@ -77,8 +77,7 @@ public class ServerSender extends Thread {
 						initial = false;
 					}
 					if(state.HasFinished()){
-						sendGameState();
-						Thread.sleep(10);
+						sendGameState(); // send a final update (so players don't finish with 50% health because they didnt get the final update.
 						sendEndState();
 					}else{
 						sendGameState(); // Send the game state
