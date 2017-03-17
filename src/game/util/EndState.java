@@ -36,7 +36,7 @@ public class EndState implements Serializable {
     private Player player1;
     private Player player2;
     private EndReason reason;
-
+    
     public enum EndReason{
         MORE_ZOMBIES, PLAYER_DIED, TIME_EXPIRED
     }

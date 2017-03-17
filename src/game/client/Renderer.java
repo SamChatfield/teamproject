@@ -21,6 +21,7 @@ import game.ResourceLoader;
 import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
+import game.util.EndState;
 
 /**
  * Renders the game on screen
@@ -36,8 +37,8 @@ public class Renderer {
 
 	private BufferedImage lighting;
 
-	public Rectangle menuButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 4, 150, 50);
-	public Rectangle exitButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 6, 150, 50);
+	public Rectangle menuButton;
+	public Rectangle exitButton;
 
 	/**
 	 * Create a new Renderer
@@ -154,8 +155,8 @@ public class Renderer {
 	/**
 	 * Display game over screen
 	 */
-	public void renderGameOver() {
-
+	public void renderGameOver(EndState endState) {
+		
 		// Set up the graphics instance for the current back buffer
 		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -163,28 +164,74 @@ public class Renderer {
 		// Clear the screen
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
+		
+		// Strings for game over screen
+		ArrayList<String> gameOverStrings = new ArrayList<String>();
+		String gameWinner = "......";
+		String gameOverReason = "......";
+		
+		try {
+			gameWinner = endState.getWinnerName();
+			if(endState.getReason() == endState.getReason().PLAYER_DIED) {
+				gameOverReason = "Player died";
+			}
+			else if(endState.getReason() == endState.getReason().TIME_EXPIRED) {
+				gameOverReason = "Time over";
+			}
+		}
+		catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		gameOverStrings.add("Winner of game: " + gameWinner);
+		gameOverStrings.add("Reason: " + gameOverReason);
+		
+		// Display strings on screen
+		g2d.setColor(Color.RED);
+		g2d.setFont(tradeWinds.deriveFont(25f));
+		int y = 250;
+		for(String gameOverString : gameOverStrings) {
+			int stringWidth = g2d.getFontMetrics().stringWidth(gameOverString);
+			g2d.drawString(gameOverString, (this.gameW /2) - (stringWidth /2), y);
+			y+= 50;
+		} 
 
 		// Apply text
-		g2d.setColor(Color.RED);
-		g2d.setFont(tradeWinds.deriveFont(50f));
-		String text = "GAME OVER";
-		int twidth = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - twidth / 2, Client.GAME_DIMENSION.height / 5);
+		g2d.setColor(new Color(102, 0, 0));
+		g2d.setFont(tradeWinds.deriveFont(60f));
+		String gameOver = "GAME OVER";
+		int gameOverWidth = g2d.getFontMetrics().stringWidth(gameOver);
+		g2d.drawString(gameOver, (this.gameW / 2) - gameOverWidth / 2, this.gameH / 5);
+	
+		// Create buttons and display them and text on screen
+		g2d.setFont(tradeWinds.deriveFont(25f));
+		
+		ArrayList<Rectangle> gameOverButtons = new ArrayList<Rectangle>();
+		menuButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/10) * 6, 220, 50);
+		exitButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/10) * 8, 220, 50);
+		gameOverButtons.add(menuButton);
+		gameOverButtons.add(exitButton);
+		
+		ArrayList<String> gameOverButtonStrings = new ArrayList<String>();
+		gameOverButtonStrings.add("Return to menu");
+		gameOverButtonStrings.add("Exit");
+		
+		int counter = 0;
+		for(String gameOverButtonString : gameOverButtonStrings) {
+			Rectangle button = gameOverButtons.get(counter);
 
-		g2d.setFont(tradeWinds.deriveFont(30f));
+			g2d.setColor(new Color(102, 0, 0));
+			g2d.fill(button);
 
-		// Play Button
-		int width_menu = g2d.getFontMetrics().stringWidth("Menu");
-		int cenw_menu = (int) ((menuButton.getWidth() - width_menu) / 2);
-		int cenh_menu = (int) ((menuButton.getHeight() / 2));
-		g2d.drawString("Menu", menuButton.x + cenw_menu, menuButton.y + 5 + cenh_menu);
-		g2d.draw(menuButton);
+			int width_button = g2d.getFontMetrics().stringWidth(gameOverButtonString);
+			int cenw_button = (int) ((button.getWidth() - width_button) / 2);
+			int cenh_button = (int) ((button.getHeight() / 2));
 
-		int width_exit = g2d.getFontMetrics().stringWidth("Exit");
-		int cenw_exit = (int) ((exitButton.getWidth() - width_exit) /2);
-		int cenh_exit = (int) ((exitButton.getHeight() /2));
-		g2d.drawString("Exit", exitButton.x + cenw_exit, exitButton.y + 5 + cenh_exit);
-		g2d.draw(exitButton);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(gameOverButtonString, button.x + cenw_button, button.y + 5 + cenh_button);
+
+			counter++;
+		}
 
 		// Clean up and flip the buffer
 		g2d.dispose();

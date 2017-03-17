@@ -70,9 +70,6 @@ public class Client extends Canvas {
 	private STATE currentState;
 	private MSTATE menuState;
 
-	// Non final stuff, remove before release
-	private final int zombieCount = 70;
-
 	private static String username;
 	private static String ipAddress;
 
@@ -115,7 +112,7 @@ public class Client extends Canvas {
 		running = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
-
+		
 		// Setup sound
 		soundManager = new Sound();
 		state.addSoundManager(soundManager);
@@ -202,13 +199,13 @@ public class Client extends Canvas {
 
 			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
-				renderer.renderGameOver();
+				renderer.renderGameOver(state.getEndState());
 				gameOverUpdate(renderer,state.getEndState());
 			}
 		}
 		System.exit(0);
 	}
-
+	
 	private void gameOverUpdate(Renderer rend, EndState state) {
 		double mx, my;
 		try {
@@ -414,31 +411,31 @@ public class Client extends Canvas {
 			if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
 				keyPresses.add("BUTTON1");
 
-				if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
-					keyPresses.add("BUTTON1");
+            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+            	keyPresses.add("BUTTON1");
 
-					soundManager.bulletSound(player.canShoot());
-				}
+				soundManager.bulletSound(player.canShoot());
 			}
+		}
 
-			// We need to do this in case fv is null
-			float x = -100;
-			float y = -100;
-			if(fv!=null){
-				x = fv.x();
-				y = fv.y();
+		// We need to do this in case fv is null
+		float x = -100;
+		float y = -100;
+		if(fv!=null){
+			x = fv.x();
+			y = fv.y();
+		}
+		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
+
+		updateLocalPlayer(keyPresses,delta,fv);
+
+		int newNumConvertedZombies = 0;
+		for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
+			if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
+				newNumConvertedZombies += 1;
 			}
-			sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
-
-			updateLocalPlayer(keyPresses,delta,fv);
-
-			int newNumConvertedZombies = 0;
-			for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
-				if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
-					newNumConvertedZombies += 1;
-				}
-			}
-			player.setNumConvertedZombies(newNumConvertedZombies);
+		}
+		player.setNumConvertedZombies(newNumConvertedZombies);
 		}
 
 		/*
