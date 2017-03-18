@@ -39,8 +39,9 @@ public class Client extends Canvas {
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
 	// Load main iamges into the game
-	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
+	public static final BufferedImage wildZombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
+	public static final BufferedImage opponentZombieImage = ResourceLoader.zombieOpponentImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
 
 	public Sound soundManager;
