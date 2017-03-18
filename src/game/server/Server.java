@@ -51,12 +51,21 @@ public class Server {
 
 				ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
 				ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
-				System.out.println("DEBUG: I/O streams created");
+				System.out.println("Server: I/O streams created");
 
 				// Get name from client -- h
 				String clientName = (String)objIn.readObject();
-				System.out.println("DEBUG: Read client name");
+				System.out.println("Server: Read client name");
 				System.out.println("New user connected: " + clientName);
+				
+				String username = clientName;
+				int counter = 1;
+				while(clientTable.userExists(username))
+					if(clientTable.userExists(username)) {
+						username = clientName + counter;
+						counter++;
+					}
+				clientName = username;
 				clientTable.addToTable(clientName);
 
 				// Start threads
