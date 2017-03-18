@@ -21,7 +21,7 @@ public class Player extends Entity {
 
 	private static final float COLL_BOX_WIDTH = 25.0f;
 	private static final float COLL_BOX_HEIGHT = 25.0f;
-	public static final int HEALTH = 0;
+	public static final int HEALTH = 50;
 	private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
 	private static final float MOVE_SPEED = 0.1f;
 	private static final BufferedImage image = ResourceLoader.playerImage();

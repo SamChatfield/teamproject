@@ -216,7 +216,7 @@ public class Client extends Canvas {
 			mx = inputHandler.getMousePos().getX();
 			my = inputHandler.getMousePos().getY();
 		} catch(NullPointerException e) {
-			// Defauflt mouse pointer position
+			// Default mouse pointer position
 			mx = 0;
 			my = 0;
 		}
@@ -504,13 +504,14 @@ public class Client extends Canvas {
 	 */
 	public static void loginPrompt() {
 
-		JTextField usernameEntry = new JTextField();
-		JTextField ipaddyEntry = new JTextField();
+		JTextField usernameEntry = new JTextField("a");
+		JTextField ipaddyEntry = new JTextField("127.0.0.1");
 		Object[] message = {
 				"Username:", usernameEntry,
 				"Server IP Address:", ipaddyEntry
 		};
 
+		String regex = "([0-9]+)[.]([0-9])+[.]([0-9])+[.][0-9]+";
 		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE);
 		if (option == JOptionPane.OK_OPTION) {
 			username = usernameEntry.getText();
@@ -519,6 +520,13 @@ public class Client extends Canvas {
 				username = "a";
 			};
 			ipAddress = ipaddyEntry.getText();
+			
+			// Pattern mattern correct format for IP address
+			/// XXX.XXX.XXX.XXX
+			if(!ipAddress.matches(regex)) {
+				JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX", "Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
+				Client.main(new String[0]);
+			}
 			if(ipAddress.equals("")) {
 				// Default value if no server address entered
 				ipAddress = "localhost";
@@ -549,7 +557,7 @@ public class Client extends Canvas {
 
 		try {
 			// Hardcoded port
-			outSocket = new Socket("localhost",4444);
+			outSocket = new Socket(ipAddress,4444);
 			objOut = new ObjectOutputStream(outSocket.getOutputStream());
 			objIn = new ObjectInputStream(outSocket.getInputStream());
 		} catch(Exception e){
