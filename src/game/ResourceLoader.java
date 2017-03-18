@@ -60,6 +60,14 @@ public class ResourceLoader {
 	public static BufferedImage zombiePlayerImage() {
 		return getImage("zombieBlue.png");
 	}
+	
+	/**
+	 * Load converted zombie image into the game
+	 * @return BufferedImage of a converted zombie
+	 */
+	public static BufferedImage zombieOpponentImage() {
+		return getImage("zombieRed.png");
+	}
 
 	/**
 	 * Load image for bullets into the game

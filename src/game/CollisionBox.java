@@ -32,11 +32,11 @@ public class CollisionBox implements Serializable {
 			iheight = Player.getImage().getHeight();
 
 		} else if (owner instanceof Zombie){
-			width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
-			height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
+			width = (float) Client.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Client.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-			iwidth = Client.zombieImage.getWidth();
-			iheight = Client.zombieImage.getHeight();
+			iwidth = Client.wildZombieImage.getWidth();
+			iheight = Client.wildZombieImage.getHeight();
 
 		} else {
 			width = (float) Bullet.getImage().getWidth() / (float) Client.TILE_SIZE;
@@ -127,11 +127,11 @@ public class CollisionBox implements Serializable {
 	public static Rectangle2D.Float collBoxRectFromData(DataPacket z, Player p) {
 		Rectangle2D.Float drawRect;
 
-		float width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
-		float height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
+		float width = (float) Client.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
+		float height = (float) Client.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-		int iwidth = Client.zombieImage.getWidth();
-		int iheight = Client.zombieImage.getHeight();
+		int iwidth = Client.wildZombieImage.getWidth();
+		int iheight = Client.wildZombieImage.getHeight();
 
 		Point drawPoint = p.relativeDrawPoint(z.getX(), z.getY(), iwidth, iheight);
 		drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);

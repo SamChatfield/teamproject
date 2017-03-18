@@ -39,6 +39,8 @@ public class Renderer {
 
 	public Rectangle menuButton;
 	public Rectangle exitButton;
+	
+	private Color fadedWhite = new Color(255,255,255,190);
 
 	/**
 	 * Create a new Renderer
@@ -124,12 +126,12 @@ public class Renderer {
 		g2d.fill(healthBarFill);
 
 		// Health bar text display
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(new Color(255,255,255, 200));
 		String healthFormat = String.format("%.2f", healthPercentage);
 		g2d.drawString("Health: " + healthFormat + "%", 15, (int) (healthBarBackground.getY() + healthBarBackground.getHeight() + 20));
 
 		// Items box
-		g2d.setColor(new Color(255, 255, 255, 150));
+		g2d.setColor(fadedWhite);
 
 		int xCoord = 10;
 		for(int i = 0; i < 5; i++) {
@@ -142,7 +144,7 @@ public class Renderer {
 
 		// Display time remaining
 		g2d.setFont(tradeWinds.deriveFont(35f));
-		g2d.setColor(new Color(255, 255, 255, 170));
+		g2d.setColor(fadedWhite);
 		String remainingTime = String.format("Time: %d:%02d", (timeRemaining/60), (timeRemaining % 60));
 		g2d.drawString(remainingTime, gameW - (g2d.getFontMetrics().stringWidth(remainingTime) + 20), 40);
 
@@ -166,24 +168,25 @@ public class Renderer {
 
 		// Colours for zombie count boxes
 		ArrayList<Color> zombieCountColours = new ArrayList<Color>();
-		zombieCountColours.add(new Color(0, 76, 153, 100));
-		zombieCountColours.add(new Color(0, 102, 0, 100));
-		zombieCountColours.add(new Color(100, 0, 0, 100));
+		zombieCountColours.add(new Color(191, 90, 30, 120));
+		zombieCountColours.add(new Color(3, 49, 134, 120));
+		zombieCountColours.add(new Color(196, 0, 5, 120));
 
-		g2d.setColor(new Color(255, 255, 255, 100));
+		g2d.setColor(fadedWhite);
 		g2d.setFont(tradeWinds.deriveFont(10f));
 		g2d.drawString("Zombie Counts: ", 535, 520);
 
 		int counter = 0;
 		int countsY = 530;
 		for(int count : zombieCounts) {
-			Rectangle zombieCountBox = new Rectangle(580, countsY, 30, 30);
+			Rectangle zombieCountBox = new Rectangle(580, countsY, 40, 30);
 			g2d.setColor(zombieCountColours.get(counter));
 			g2d.fill(zombieCountBox);
 
-			g2d.setColor(new Color(255, 255, 255, 100));
-			g2d.setFont(tradeWinds.deriveFont(20f));
-			g2d.drawString("" + count, (int) (zombieCountBox.getX() + 8),(int) (zombieCountBox.getY() + (zombieCountBox.getHeight() / 2) + 7));
+			g2d.setColor(fadedWhite);
+			g2d.setFont(tradeWinds.deriveFont(18f));
+			String zombieCount = "" + count;
+			g2d.drawString(zombieCount, (int) (zombieCountBox.getX() + (g2d.getFontMetrics().stringWidth(zombieCount) / 2)),(int) (zombieCountBox.getY() + (zombieCountBox.getHeight() / 2) + 7));
 
 			g2d.setFont(tradeWinds.deriveFont(10f));
 			g2d.drawString(zombieCountLabels.get(counter), (int)(zombieCountBox.getX() - (g2d.getFontMetrics().stringWidth(zombieCountLabels.get(counter)) + 5)), (int) (3 +  zombieCountBox.getY() + (zombieCountBox.getHeight() / 2)));
@@ -324,8 +327,8 @@ public class Renderer {
 	private void drawZombie(Graphics2D g2d, Player player, DataPacket z) {
 
 		// Width and height of the entity sprite
-		int w = Client.zombieImage.getWidth();
-		int h = Client.zombieImage.getHeight();
+		int w = Client.wildZombieImage.getWidth();
+		int h = Client.wildZombieImage.getHeight();
 
 		Point drawPoint = player.relativeDrawPoint(z.getX(), z.getY(), w, h);
 		int drawX = drawPoint.x;
@@ -349,10 +352,10 @@ public class Renderer {
 			g2d.drawImage(Client.playerZombieImage, drawX, drawY, null);
 		}
 		else if(z.getState() == DataPacket.State.PLAYER) {
-			g2d.drawImage(Client.zombieImage, drawX, drawY, null);
+			g2d.drawImage(Client.opponentZombieImage, drawX, drawY, null);
 		}
 		else {
-			g2d.drawImage(Client.zombieImage, drawX, drawY, null);
+			g2d.drawImage(Client.wildZombieImage, drawX, drawY, null);
 		}
 		g2d.setTransform(at);
 	}
