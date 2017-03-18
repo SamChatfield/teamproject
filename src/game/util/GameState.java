@@ -40,6 +40,7 @@ public class GameState implements Serializable {
 	 * @param endState EndState to set
 	 */
 	public void setEndState(EndState endState) {
+		hasFinished = true;
 		this.endState = endState;
 	}
 
