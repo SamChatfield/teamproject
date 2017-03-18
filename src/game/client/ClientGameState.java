@@ -16,6 +16,10 @@ public class ClientGameState extends GameState {
 	private String otherPlayerName;
 	private Sound soundManager;
 
+	/**
+	 * Create a new ClientGameState
+	 * @param username Username of local user
+	 */
 	public ClientGameState(String username){
 		this.username = username;
 		this.mapImage = null;
@@ -25,7 +29,7 @@ public class ClientGameState extends GameState {
 	}
 
 	/**
-	 * Add the sound manager to this current game state
+	 * Add sound manager to this state
 	 * @param sound Sound object
 	 */
 	public void addSoundManager(Sound sound){
@@ -33,8 +37,8 @@ public class ClientGameState extends GameState {
 	}
 
 	/**
-	 * Update the client state with the new updated state
-	 * @param updatedState UpdatedState with new information
+	 * Update the state
+	 * @param updatedState New state containing information to update
 	 */
 	public void updateClientState(SendableState updatedState){
 
@@ -42,17 +46,20 @@ public class ClientGameState extends GameState {
 			this.mapImage = updatedState.getMapImage();
 
 			// We need to figure out if the server thinks we are player 1 or 2.
-			if(updatedState.getPlayer1().getUsername().equals(username)){ // We are player 1 to the server
+			if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
 				otherPlayerName = updatedState.getPlayer2().getUsername();
-			} else {
+			}else{
 				otherPlayerName = updatedState.getPlayer1().getUsername();
 			}
+
 			setUpGame(updatedState.getPlayer(username),updatedState.getPlayer(otherPlayerName));
+
 		}
 
-		this.bullets = updatedState.getBullets();
 
-		// Play sound if the player is hurt
+		this.bullets = updatedState.getBullets();
+		this.hasFinished = updatedState.HasFinished();
+
 		if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
 			soundManager.playerHurt();
 		}
@@ -67,8 +74,8 @@ public class ClientGameState extends GameState {
 
 	/**
 	 * Setup the game
-	 * @param p1 DataPacket for player 1
-	 * @param p2 DataPacket for player 2
+	 * @param p1 DataPacket containing information on Player 1
+	 * @param p2 DataPacket containing information on Player 2
 	 */
 	private void setUpGame(DataPacket p1, DataPacket p2){
 		setUpMapData(mapImage);
@@ -84,12 +91,13 @@ public class ClientGameState extends GameState {
 		//System.out.println(player1.getX());
 		//System.out.println(player1.getY());
 
+
 		isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
 	}
 
 	/**
-	 * Set up the map data
-	 * @param mapImage Name of map image
+	 * Set up map data using a string to the map image
+	 * @param mapImage String to map image
 	 */
 	public void setUpMapData(String mapImage){
 		this.mapImage = mapImage;
@@ -98,7 +106,7 @@ public class ClientGameState extends GameState {
 
 	/**
 	 * Finds the player that this state is local to.
-	 * @return The local player
+	 * @return The local player object
 	 */
 	public Player getPlayer() {
 		if(player1.getUsername().equals(username)){
@@ -111,7 +119,7 @@ public class ClientGameState extends GameState {
 
 	/**
 	 * Finds the other player
-	 * @return The other player
+	 * @return The other player object
 	 */
 	public Player getOtherPlayer() {
 		if(player1.getUsername().equals(username)){

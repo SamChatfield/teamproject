@@ -20,9 +20,9 @@ public class MapParser {
 
 	/**
 	 * Parse Tile Types
-	 * @param (String) tilesheetName - Name of tile sheet
-	 * @param (String) tileDataName - Name of tile data
-	 * @return  (HashMap<Color, TileType>) HashMap of Tile Types with their colour
+	 * @param tilesheetName Name of tile sheet
+	 * @param tileDataName Name of tile data
+	 * @return HashMap of Tile Types with their colour
 	 * @throws IOException
 	 */
 	public static HashMap<Color, TileType> parseTileTypes(String tilesheetName, String tileDataName) throws IOException {
@@ -52,9 +52,9 @@ public class MapParser {
 
 	/**
 	 * Parse the map
-	 * @param (HashMap<Color, TileType>) tileTypes - Type of tiles
-	 * @param (BufferedImage) mapImage - Sprite sheet image of map to use
-	 * @return (Tile[][]) 2D aray of Tiles
+	 * @param tileTypes Type of tiles
+	 * @param mapImage Sprite sheet image of map to use
+	 * @return 2D array of Tiles
 	 */
 	public static Tile[][] parseMap(HashMap<Color, TileType> tileTypes, BufferedImage mapImage){
 		int width = mapImage.getWidth();

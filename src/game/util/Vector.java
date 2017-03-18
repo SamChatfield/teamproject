@@ -11,8 +11,8 @@ public class Vector {
 
 	/**
 	 * Constructor to create a new Vector
-	 * @param (float) x - X value
-	 * @param (float) y - Y value
+	 * @param x X value
+	 * @param y Y value
 	 */
 	public Vector(float x, float y) {
 		this.x = x;
@@ -21,7 +21,7 @@ public class Vector {
 
 	/**
 	 * Get the normalised version of the vector
-	 * @return (Vector) Normalised version of vector
+	 * @return Normalised version of vector
 	 */
 	public Vector normalised() {
 		float mag = magnitude();
@@ -36,7 +36,7 @@ public class Vector {
 
 	/**
 	 * Get magnitude of vector
-	 * @return (float) Magnitude of vector
+	 * @return Magnitude of vector
 	 */
 	public float magnitude() {
 		return (float) Math.sqrt(x * x + y * y);
@@ -44,7 +44,7 @@ public class Vector {
 
 	/**
 	 * Add another vector to this vector
-	 * @param (Vector) - Another vector to add
+	 * @param Another vector to add
 	 */
 	public void add(Vector a) {
 		x += a.x();
@@ -54,7 +54,7 @@ public class Vector {
 	/**
 	 * Return a randomised a vector between with x,y = -1.0 | 0.0 | 1.0
 	 * Application includes randomising zombie movement
-	 * @return (Vector) Randomised vector
+	 * @return Randomised vector
 	 */
 	public static Vector randomVector() {
 		Random rand = new Random();
@@ -66,7 +66,7 @@ public class Vector {
 
 	/**
 	 * Get X value of vector
-	 * @return (float) X value
+	 * @return X value
 	 */
 	public float x() {
 		return x;
@@ -74,7 +74,7 @@ public class Vector {
 
 	/**
 	 * Get Y value of vector
-	 * @return (float) Y value
+	 * @return Y value
 	 */
 	public float y() {
 		return y;

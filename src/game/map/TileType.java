@@ -14,10 +14,10 @@ public class TileType {
 
 	/**
 	 * Constructor to make new tile
-	 * @param (String) name - Name of tile
-	 * @param (Color) repColour - Colour of tile
-	 * @param (BufferedImage) image - Tile image
-	 * @param (Boolean) obstacle - If tile is an obstacle
+	 * @param name Name of tile
+	 * @param repColour Colour of tile
+	 * @param image Tile image
+	 * @param obstacle If tile is an obstacle
 	 */
 	public TileType(String name, Color repColor, BufferedImage image, boolean obstacle) {
 		this.name = name;
@@ -28,7 +28,7 @@ public class TileType {
 
 	/**
 	 * Get name of tile
-	 * @return (String) - Name of tile
+	 * @return Name of tile
 	 */
 	public String getName() {
 		return name;
@@ -36,7 +36,7 @@ public class TileType {
 
 	/**
 	 * Get colour of tile
-	 * @return (Color) Colour of tile
+	 * @return Colour of tile
 	 */
 	public Color getRepColour() {
 		return repColour;
@@ -44,7 +44,7 @@ public class TileType {
 
 	/**
 	 * Get the image of the tile
-	 * @return (BufferedImage) Image of tile
+	 * @return Image of tile
 	 */
 	public BufferedImage getImage() {
 		return image;
@@ -52,7 +52,7 @@ public class TileType {
 
 	/**
 	 * Get if the tile is an obstacle (cannot be walked upon)
-	 * @return (boolean) If tile is obstacle
+	 * @return If tile is an obstacle
 	 */
 	public boolean isObstacle() {
 		return obstacle;

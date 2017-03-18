@@ -45,6 +45,7 @@ public class Client extends Canvas {
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
+	// Load main iamges into the game
 	public static final BufferedImage zombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
@@ -119,7 +120,7 @@ public class Client extends Canvas {
 		running = true;
 		currentState = STATE.START;
 		menuState = MSTATE.MAIN;
-		
+
 		// Setup sound
 		soundManager = new Sound();
 		state.addSoundManager(soundManager);
@@ -179,8 +180,6 @@ public class Client extends Canvas {
 				// Update game with the delta
 				update(delta);
 
-
-
 				// Render
 				renderer.render();
 
@@ -203,7 +202,6 @@ public class Client extends Canvas {
 				if(state.HasFinished()){
 					currentState = STATE.END;
 				}
-
 			}
 
 			// If the game is over then we can pass the end state into the renderer.
@@ -215,10 +213,10 @@ public class Client extends Canvas {
 		System.exit(0);
 	}
 
-
 	/**
-	 * Display game over screen
+	 * Update the game over screen (what is displayed and if buttons clicked)
 	 * @param rend Renderer object
+	 * @param state EndState of the game containing details of how game went
 	 */
 	private void gameOverUpdate(Renderer rend, EndState state) {
 		double mx, my;
@@ -226,6 +224,7 @@ public class Client extends Canvas {
 			mx = inputHandler.getMousePos().getX();
 			my = inputHandler.getMousePos().getY();
 		} catch(NullPointerException e) {
+			// Defauflt mouse pointer position
 			mx = 0;
 			my = 0;
 		}
@@ -259,6 +258,10 @@ public class Client extends Canvas {
 	}
 
 	// Update the menu
+	/**
+	 * Update when the menu is shown on screen (what is displayed and if buttons clicked)
+	 * @param menu MenuRenderer object
+	 */
 	private void menuUpdate(MenuRenderer menu) {
 		double mx, my;
 
@@ -268,7 +271,8 @@ public class Client extends Canvas {
 			my = inputHandler.getMousePos().getY();
 		}
 		catch(NullPointerException e) {
-			mx = 0; // Default position for mouse
+			// Default position for mouse
+			mx = 0;
 			my = 0;
 		}
 
@@ -421,30 +425,25 @@ public class Client extends Canvas {
 		Vector fv = null;
 		if (inputHandler.isMouseInside() && mousePos != null) {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
+
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
             	keyPresses.add("BUTTON1");
 				soundManager.bulletSound(player.canShoot());
 			}
-		}
 
-		// We need to do this in case fv is null
-		float x = -100;
-		float y = -100;
-		if(fv!=null){
-			x = fv.x();
-			y = fv.y();
-		}
-		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
-
-		updateLocalPlayer(keyPresses,delta,fv);
-
-		int newNumConvertedZombies = 0;
-		for (int i = 0; i < state.getZombieDataPackets().size(); i++) {
-			if (state.getZombieDataPackets().get(i).getUsername().equals(player.getUsername())) {
-				newNumConvertedZombies += 1;
+			// We need to do this in case fv is null
+			float x = -100;
+			float y = -100;
+			if(fv!=null){
+				x = fv.x();
+				y = fv.y();
 			}
+			sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
+
+			updateLocalPlayer(keyPresses,delta,fv);
+
 		}
-		player.setNumConvertedZombies(newNumConvertedZombies);
+
 
 		/*
 		if(player.getHealth() < 0) {
@@ -452,9 +451,14 @@ public class Client extends Canvas {
 			System.out.println("GAME OVER");
 		}
 		*/
-		
 	}
 
+	/**
+	 * Update player status locally
+	 * @param keyPresses ArrayList of strings that represent key presses
+	 * @param delta Interpolation
+	 * @param fv Movement for x and y
+	 */
 	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {
 
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
@@ -499,8 +503,10 @@ public class Client extends Canvas {
 
 	}
 
+	/**
+	 * Display login prompt allowing to choose a username and the IP address of server
+	 */
 	public static void loginPrompt() {
-		JFrame dialogue = new JFrame(TITLE);
 
 		JTextField usernameEntry = new JTextField();
 		JTextField ipaddyEntry = new JTextField();
@@ -513,10 +519,12 @@ public class Client extends Canvas {
 		if (option == JOptionPane.OK_OPTION) {
 			username = usernameEntry.getText();
 			if(username.equals("")) {
+				// Default value if no username selected
 				username = "a";
 			};
 			ipAddress = ipaddyEntry.getText();
 			if(ipAddress.equals("")) {
+				// Default value if no server address entered
 				ipAddress = "localhost";
 			}
 		} else {
@@ -525,13 +533,17 @@ public class Client extends Canvas {
 		}
 	}
 
+	/**
+	 * Get the player object
+	 * @return Player object
+	 */
 	public Player getPlayer() {
 		return player;
 	}
 
 	public static void main(String[] args) {
 
-
+		// Showlogin prompt
 		loginPrompt();
 
 		// Initialise
@@ -539,23 +551,24 @@ public class Client extends Canvas {
 		ObjectInputStream objIn = null;
 		Socket outSocket = null;
 
-		try{
+		try {
+			// Hardcoded port
 			outSocket = new Socket("localhost",4444);
 			objOut = new ObjectOutputStream(outSocket.getOutputStream());
 			objIn = new ObjectInputStream(outSocket.getInputStream());
-		}catch(Exception e){
-			System.out.println("WTF");
+		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, "Server offline!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
 
+		// ClientSender and ClientReceiver objects to handle communication with server
 		ClientSender client_sender = new ClientSender(username, objOut,null);
 		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
 
 		// Then create a client state for the client
 		ClientGameState state = new ClientGameState(username);
 
-		client_receiver.addState(state); //must be called before starting the thread.
+		client_receiver.addState(state); // Must be called before starting the thread.
 		client_sender.addState(state);
 		// If this method didn't exist, stateface would need to be added above, but stateface relies on receiver.
 

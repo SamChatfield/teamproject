@@ -80,6 +80,7 @@ public class MenuRenderer {
 		ArrayList<String> helpButtonStrings = new ArrayList<String>();
 		helpButtonStrings.add("Return");
 
+		//// Buttons to turn sound on and off
 		if(Sound.sfxPlayback) {
 			g2d.setColor(new Color(0, 100, 0));
 			helpButtonStrings.add("SFX On");

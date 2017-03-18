@@ -16,18 +16,10 @@ public class DataPacket implements Serializable {
 	private Type type;
 	private int numConvertedZombies;
 
-	public int getNumConvertedZombies() {
-		return numConvertedZombies;
-	}
-
-	public void setNumConvertedZombies(int numConvertedZombies) {
-		this.numConvertedZombies = numConvertedZombies;
-	}
-
 	/**
 	 * Object that the data packet refers to
 	 */
-	public enum Type{
+	public enum Type {
 		ZOMBIE,PLAYER,BULLET
 	}
 
@@ -39,7 +31,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get the current state of the DataPacket
-	 * @return (State) State of DataPacket
+	 * @return State of DataPacket
 	 */
 	public State getState(){
 		return state;
@@ -47,7 +39,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the state of the DataPacket
-	 * @param (State) state - New state of the DataPacket
+	 * @param state New state of the DataPacket
 	 */
 	public void setState(State state){
 		this.state = state;
@@ -55,15 +47,15 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get the type of the DataPacket
-	 * @return (Type) Type of data packet
+	 * @return Type of data packet
 	 */
 	public Type getType(){
 		return type;
 	}
 
 	/**
-	 * Get the username - mainy used to refer to Player
-	 * @return (String) Username
+	 * Get the username - mailny used to refer to Player
+	 * @return Username of player
 	 */
 	public String getUsername() {
 		return username;
@@ -71,7 +63,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the username
-	 * @param (String) username - Username to set
+	 * @param Username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -79,7 +71,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get the facing angle of the object
-	 * @return (double) Facing angle
+	 * @return Facing angle
 	 */
 	public double getFacingAngle() {
 		return facingAngle;
@@ -87,7 +79,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set facing angle of object
-	 * @param (double) facingAngle - New facing angle to set
+	 * @param facingAngle New facing angle to set
 	 */
 	public void setFacingAngle(double facingAngle) {
 		this.facingAngle = facingAngle;
@@ -95,7 +87,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get current move speed of the object
-	 * @return (float) Current move speed
+	 * @return Current move speed
 	 */
 	public float getMoveSpeed() {
 		return moveSpeed;
@@ -103,7 +95,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set move speed
-	 * @param (float) moveSpeed - New movespeed to set
+	 * @param moveSpeed New movespeed to set
 	 */
 	public void setMoveSpeed(float moveSpeed) {
 		this.moveSpeed = moveSpeed;
@@ -111,7 +103,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get the last attack time
-	 * @return (long) - Time of the last attack of the object
+	 * @return Time of the last attack of the object
 	 */
 	public long getLastAttackTime() {
 		return lastAttackTime;
@@ -119,15 +111,31 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the last attack time
-	 * @param (long) lastAttackTime - Time to set
+	 * @param lastAttackTime Time to set
 	 */
 	public void setLastAttackTime(long lastAttackTime) {
 		this.lastAttackTime = lastAttackTime;
 	}
 
 	/**
+	 * Get number of converted zombies
+	 * @return Number of converted zombies
+	 */
+	public int getNumConvertedZombies() {
+		return numConvertedZombies;
+	}
+
+	/**
+	 * Set number of converted zombies
+	 * @param numConvertedZombies New number of converted zombies
+	 */
+	public void setNumConvertedZombies(int numConvertedZombies) {
+		this.numConvertedZombies = numConvertedZombies;
+	}
+
+	/**
 	 * Get X coordinate of object
-	 * @return (int) X coordinate of object
+	 * @return X coordinate of object
 	 */
 	public float getX() {
 		return x;
@@ -135,7 +143,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set X coordinate of object
-	 * @param (float) x - X coordinate to set 
+	 * @param x X coordinate to set
 	 */
 	public void setX(float x) {
 		this.x = x;
@@ -143,7 +151,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get Y coordinate of object
-	 * @return (int) Y coordinate of object
+	 * @return Y coordinate of object
 	 */
 	public float getY() {
 		return y;
@@ -151,7 +159,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set Y coordinate of object
-	 * @param (float) y - Y coordinate to set 
+	 * @param y Y coordinate to set
 	 */
 	public void setY(float y) {
 		this.y = y;
@@ -159,7 +167,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Get the health of the object
-	 * @return (int) health of object
+	 * @return Health of object
 	 */
 	public int getHealth() {
 		return health;
@@ -167,7 +175,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the health of the object
-	 * @param (int) health - New health of object to set
+	 * @param health New health of object to set
 	 */
 	public void setHealth(int health) {
 		this.health = health;
@@ -175,12 +183,12 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Constructor to create a new DataPacket
-	 * @param (float) x - X coordinate
-	 * @param (float) y - Y coordinate
-	 * @param (float)  moveSpeed - Set move speed
-	 * @param (int) health - Current health
-	 * @param (long) lastAttackTime - Last attack time
-	 * @param (Type) t - Type of object that the DataPacket is based on
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param moveSpeed The set move speed
+	 * @param healt Current health
+	 * @param lastAttackTime Last attack time
+	 * @param t Type of object that the DataPacket is based on (ZOMBIE, PLAYER or BULLET)
 	 */
 	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t) {
 		this.lastAttackTime = lastAttackTime;

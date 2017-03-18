@@ -26,65 +26,55 @@ public class ResourceLoader {
 		return ImageIO.read(new File(RES_PATH + image));
 	}
 
+	private static BufferedImage getImage(String path) {
+		BufferedImage image = null;
+		try {
+			image = imageFromResPath(path);
+		} catch (IOException e) {
+			System.err.println("Error! Image + /" + path + "/ not found: " + e.getMessage() );
+			System.exit(1);
+		}
+		return image;
+	}
+
 	/**
-	 * Get image for player
-	 * @return BufferedImage of player
+	 * Load player image into the game
+	 * @return BufferedImage of the player
 	 */
 	public static BufferedImage playerImage() {
-		BufferedImage image = null;
-		try {
-			image = imageFromResPath("player.png");
-		} catch (IOException e) {
-			System.err.println("Error - Player image not found: " + e.getMessage());
-			System.exit(1);
-		}
-		return image;
+		return getImage("player.png");
 	}
 
-
 	/**
-	 * Get image for wild zombies
-	 * @return BufferedImage of wild zombie
+	 * Load wild zombie image into the game
+	 * @return BufferedImage of a wild zombie
 	 */
 	public static BufferedImage zombieImage() {
-		BufferedImage image = null;
-		try {
-			image =  imageFromResPath("zombie.png");
-		} catch (IOException e) {
-			System.err.println("Error - Wild Zombie image not found: " + e.getMessage());
-			System.exit(1);
-		}
-		return image;
+		return getImage("zombie.png");
 	}
 
 	/**
-	 * Get image for converted zombies on the player's team
-	 * @return BufferedImage of zombie on player's team
+	 * Load converted zombie image into the game
+	 * @return BufferedImage of a converted zombie
 	 */
 	public static BufferedImage zombiePlayerImage() {
-		BufferedImage image = null;
-		try {
-			image = imageFromResPath("zombieBlue.png");
-		} catch (IOException e) {
-			System.err.println("Error - Player zombie image not found: " + e.getMessage());
-			System.exit(1);
-		}
-		return image;
+		return getImage("zombieBlue.png");
 	}
 
 	/**
-	 * Get image for bullets
-	 * @return BufferedImage of bullet
+	 * Load image for bullets into the game
+	 * @return BufferedImage of a bullet
 	 */
 	public static BufferedImage bulletImage() {
-		BufferedImage image = null;
-		try {
-			return imageFromResPath("bullet.png");
-		} catch (IOException e) {
-			System.err.println("Error - Bullet image not found: " + e.getMessage());
-			System.exit(1);
-		}
-		return image;
+		return getImage("bullet.png");
+	}
+
+	/**
+	 * Load image for lighting into the game
+	 * @return BufferedImage for lighting
+	 */
+	public static BufferedImage lightingImage() {
+		return getImage("spotlight.png");
 	}
 
 	/**
@@ -95,7 +85,7 @@ public class ResourceLoader {
 		Font tradeWinds = null;
 
 		try {
-			File font_file = new File("src/game/res/tradewinds.ttf");
+			File font_file = new File(RES_PATH + "tradewinds.ttf");
 			tradeWinds = Font.createFont(Font.TRUETYPE_FONT, font_file);
 			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			genv.registerFont(tradeWinds);

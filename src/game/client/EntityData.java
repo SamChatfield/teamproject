@@ -3,60 +3,96 @@ package game.client;
 import java.io.Serializable;
 
 /**
- * Created by Daniel on 16/02/2017.
+ * Data for an individual entity
  */
 public class EntityData implements Serializable {
 
-    public enum Tag { PLAYER, ZOMBIE }
-    public enum ZombieState { WILD, PLAYER1, PLAYER2 }
+	public enum Tag { PLAYER, ZOMBIE }
+	public enum ZombieState { WILD, PLAYER1, PLAYER2 }
 
-    private int health;
-    private String username;
-    private float x,y;
-    private Tag tag;
-    private ZombieState state;
+	private int health;
+	private String username;
+	private float x,y;
+	private Tag tag;
+	private ZombieState state;
 
-    public int getHealth() {
-        return health;
-    }
+	/**
+	 * Get health of entity
+	 * @return Entity health
+	 */
+	public int getHealth() {
+		return health;
+	}
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
+	/**
+	 * Set health of entity
+	 * @param health New health to set
+	 */
+	public void setHealth(int health) {
+		this.health = health;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	/**
+	 * Get username of entity
+	 * @return Entity username
+	 */
+	public String getUsername() {
+		return username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	/**
+	 * Set username of entity
+	 * @param username New username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public float getX() {
-        return x;
-    }
+	/**
+	 * Get Y coordinate of entity
+	 * @return Y coordinate
+	 */
+	public float getX() {
+		return x;
+	}
 
-    public void setX(int x) {
-        this.x = x;
-    }
+	/**
+	 * Set X coordinate of entity
+	 * @param x New X coordinate to set
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
 
-    public float getY() {
-        return y;
-    }
+	/**
+	 * Get Y coordinate of entity
+	 * @return Y coordinate
+	 */
+	public float getY() {
+		return y;
+	}
 
-    public void setY(int y) {
-        this.y = y;
-    }
+	/**
+	 * Set Y coordinate of entity
+	 * @param y New Y coordinate to set
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
 
-    public EntityData(){
-    }
-
-    public EntityData(int health, float x, float y, Tag tag, ZombieState state ){
-        this.health = health;
-        this.x = x;
-        this.y = y;
-        this.tag = tag;
-        this.state = state;
-
-    }
+	/**
+	 * Create a new entity data object
+	 * @param health Current health of entity
+	 * @param x Current X coordinate of entity
+	 * @param y Current Y coordinate of entity
+	 * @param tag Entity tag (PLAYER / ZOMBIE)
+	 * @param state State if a zombie (WILD / PLAYER1 / PLAYER2)
+	 */
+	public EntityData(int health, float x, float y, Tag tag, ZombieState state ){
+		this.health = health;
+		this.x = x;
+		this.y = y;
+		this.tag = tag;
+		this.state = state;
+	}
 }
