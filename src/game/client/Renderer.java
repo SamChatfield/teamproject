@@ -214,7 +214,12 @@ public class Renderer {
 		ArrayList<String> gameOverStrings = new ArrayList<String>();
 		String gameWinner = "......";
 		String gameOverReason = "......";
+		String player1Zombies = "0";
+		String player2Zombies = "0";
+		String wildZombies = "0";
 
+		endState.getPlayer1().getNumConvertedZombies();
+		
 		try {
 			gameWinner = endState.getWinnerName();
 			if(endState.getReason() == endState.getReason().PLAYER_DIED) {
@@ -223,6 +228,9 @@ public class Renderer {
 			else if(endState.getReason() == endState.getReason().TIME_EXPIRED) {
 				gameOverReason = "Time over";
 			}
+			
+			player1Zombies = "" + endState.getPlayer1().getNumConvertedZombies();
+			player2Zombies = "" + endState.getPlayer2().getNumConvertedZombies();
 		}
 		catch(NullPointerException e) {
 			System.out.println(e.getMessage());
@@ -230,15 +238,24 @@ public class Renderer {
 
 		gameOverStrings.add("Winner of game: " + gameWinner);
 		gameOverStrings.add("Reason: " + gameOverReason);
+		gameOverStrings.add("Player 1 zombie count: " + player1Zombies);
+		gameOverStrings.add("Player 2 zombie count: " + player2Zombies);
 
 		// Display strings on screen
 		g2d.setColor(Color.RED);
 		g2d.setFont(tradeWinds.deriveFont(25f));
-		int y = 250;
+		int y = 200;
+		int counter = 0;
 		for(String gameOverString : gameOverStrings) {
 			int stringWidth = g2d.getFontMetrics().stringWidth(gameOverString);
 			g2d.drawString(gameOverString, (this.gameW /2) - (stringWidth /2), y);
-			y+= 50;
+			if(counter == 1) {
+				y += 70;
+			}
+			else {
+				y+= 40;
+			}
+			counter++;
 		} 
 
 		// Apply text
@@ -252,8 +269,8 @@ public class Renderer {
 		g2d.setFont(tradeWinds.deriveFont(25f));
 
 		ArrayList<Rectangle> gameOverButtons = new ArrayList<Rectangle>();
-		menuButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/10) * 6, 220, 50);
-		exitButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/10) * 8, 220, 50);
+		menuButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/15) * 10, 220, 50);
+		exitButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/15) * 12, 220, 50);
 		gameOverButtons.add(menuButton);
 		gameOverButtons.add(exitButton);
 
@@ -261,11 +278,11 @@ public class Renderer {
 		gameOverButtonStrings.add("Return to menu");
 		gameOverButtonStrings.add("Exit");
 
-		int counter = 0;
+		counter = 0;
 		for(String gameOverButtonString : gameOverButtonStrings) {
 			Rectangle button = gameOverButtons.get(counter);
 
-			g2d.setColor(new Color(102, 0, 0));
+			g2d.setColor(new Color(102, 0, 0, 255));
 			g2d.fill(button);
 
 			int width_button = g2d.getFontMetrics().stringWidth(gameOverButtonString);
