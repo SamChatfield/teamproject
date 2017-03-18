@@ -4,7 +4,7 @@ import game.client.Player;
 import game.util.Vector;
 
 /**
- * Initialise artwork in the game, pointing in the right direction
+ * Initialises zombie artwork, making sure they face in the direction of the player when they are near
  */
 public class ArtInt {
 

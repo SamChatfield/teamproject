@@ -1,15 +1,11 @@
 package game.client;
 
-import game.server.ServerGameState;
-import game.util.DataPacket;
+import java.io.ObjectInputStream;
+
 import game.util.EndState;
 import game.util.SendableState;
 
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-
 /**
- * @author georgesabourin, Daniel Tonks
  * Class for receiving objects from the server and then determining what to do with them
  */
 public class ClientReceiver extends Thread {
@@ -29,15 +25,17 @@ public class ClientReceiver extends Thread {
 		this.objIn = objIn;
 	}
 
-
+	/**
+	 * Add a new game state
+	 * @param state ClientGameState to end to this sender
+	 */
 	public void addState(ClientGameState state){
 		this.state = state;
 	}
 
-
 	// Main method to run when thread starts
 	public void run() {
-		System.out.println("DEBUG: ClientReceiver started");
+		System.out.println("Client: ClientReceiver started");
 		try {
 			while(true) {
 				Thread.sleep(1000/60);
@@ -62,8 +60,8 @@ public class ClientReceiver extends Thread {
 
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
-			System.err.println("Error! " + e.getMessage());
+			System.err.println("Exception in ClientReceiver: " + e.getMessage());
+			System.exit(1);
 		}
 	}
 }

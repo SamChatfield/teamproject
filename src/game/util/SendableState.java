@@ -21,13 +21,17 @@ public class SendableState implements Serializable {
 	private DataPacket player1;
 	private DataPacket player2;
 
+	/**
+	 * Get the ArrayList of bullets
+	 * @return ArrayList of bullets in the game
+	 */
 	public ArrayList<Bullet> getBullets() {
 		return bullets;
 	}
 
 	/**
 	 * Get current time remaining in the game
-	 * @return (int) Time remaining in game
+	 * @return Time remaining in game
 	 */
 	public int getTimeRemaining() {
 		return timeRemaining;
@@ -35,7 +39,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the current map image
-	 * @return (String) Map image
+	 * @return Map image
 	 */
 	public String getMapImage() {
 		return mapImage;
@@ -43,7 +47,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the ArrayList of zombies, in the form of DataPackets
-	 * @return ArrayList<DataPacket> Zombies in the game
+	 * @return ArrayList of zombies in the game (as DataPackets)
 	 */
 	public ArrayList<DataPacket> getZombies() {
 		return zombies;
@@ -51,22 +55,22 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket of a specific player
-	 * @param (String) username - Username of player to get
-	 * @return (DataPacket) DataPacket for specific player
+	 * @param (String) username Username of player to get
+	 * @return DataPacket for specific player
 	 */
 	public DataPacket getPlayer(String username){
 		if(username.equals(player1.getUsername())){
 			return player1;
-		}else if (username.equals(player2.getUsername())){
+		} else if (username.equals(player2.getUsername())){
 			return player2;
-		}else{
+		} else{
 			return null;
 		}
 	}
 
 	/**
 	 * Get the DataPacket object for the 1st player
-	 * @return (DataPacket) DataPacket of Player 1
+	 * @return DataPacket of Player 1
 	 */
 	public DataPacket getPlayer1(){
 		return player1;
@@ -74,19 +78,23 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket object for the 2nd player
-	 * @return (DataPacket) DataPacket of Player 2
+	 * @return DataPacket of Player 2
 	 */
 	public DataPacket getPlayer2(){
 		return player2;
 	}
 
+	/**
+	 * Get whether the game has finished
+	 * @return Boolean of whether game finished
+	 */
 	public boolean HasFinished() {
 		return hasFinished;
 	}
 
 	/**
 	 * Constructor to create new sendable state
-	 * @param (ServerGameState) state - Current state of Server
+	 * @param state Current state of Server
 	 */
 	public SendableState(ServerGameState state){
 		this.player1 = state.getPlayer1().getData();
@@ -98,6 +106,5 @@ public class SendableState implements Serializable {
 		this.bullets = state.getBullets();
 
 		this.hasFinished = state.HasFinished();
-
 	}
 }

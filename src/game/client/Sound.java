@@ -40,8 +40,8 @@ public class Sound extends Thread{
 	}
 
 	/**
-	 * The run method of the Sound thread. Used for the music and the
-	 * random zombie sound effects. Updates every half a second.
+	 * The run method of the Sound thread. 
+	 * Used for the music and the random zombie sound effects. Updates every half a second.
 	 */ 
 	public void run() {
 		playMusic();
@@ -59,8 +59,8 @@ public class Sound extends Thread{
 	}
 
 	/**
-	 * The update method called inside the run method. Plays a background
-	 * zombie sound based on ZOMBIE_SOUND_PROBABILITY
+	 * The update method called inside the run method. 
+	 * Plays a background zombie sound based on ZOMBIE_SOUND_PROBABILITY
 	 */
 	public void update() {
 		if(this.rn.nextFloat() < ZOMBIE_SOUND_PROBABILITY) {
@@ -70,7 +70,7 @@ public class Sound extends Thread{
 
 	/**
 	 * Creates an AudioInpuStream from a given file and then creates a Clip.
-	 * @param fileName - The sound file that will be played
+	 * @param fileName The sound file that will be played
 	 * @return Clip used to play the sound
 	 */
 	public Clip createClip(String fileName) {
@@ -111,7 +111,7 @@ public class Sound extends Thread{
 
 	/**
 	 * Method to play the gun sound. 
-	 * @param playerShot - Boolean of wherever the player has been allowed to shoot (fire rate)
+	 * @param playerShot Boolean of wherever the player has been allowed to shoot (fire rate)
 	 */
 	public void bulletSound(boolean playerShot) {
 		if (playerShot && sfxPlayback) {
@@ -123,8 +123,8 @@ public class Sound extends Thread{
 
 	/**
 	 * Method to alter the volume of a clip.
-	 * @param clip - The Clip which needs needs altering	
-	 * @param fl - Amount of decibels the volume needs changing by
+	 * @param clip The Clip which needs needs altering	
+	 * @param fl Amount of decibels the volume needs changing by
 	 */
 	public void turnDownVolume(Clip clip, Float fl) {
 		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);

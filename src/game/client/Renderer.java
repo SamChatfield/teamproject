@@ -57,58 +57,58 @@ public class Renderer {
 	/**
 	 * Run the render loop to render everything
 	 */    
-    public void render() {
-        this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
+	public void render() {
+		this.player = state.getPlayer(); // get the player object now (if render is called, the game definitely knows the state of the game)
 
-        int timeRemaining = state.getTimeRemaining();
-        ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
-        MapData mapData = state.getMapData();
+		int timeRemaining = state.getTimeRemaining();
+		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
+		MapData mapData = state.getMapData();
 
-        // Set up the graphics instance for the current back buffer
-        Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		// Set up the graphics instance for the current back buffer
+		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Clear the screen
-        g2d.setColor(g2d.getBackground());
-        g2d.fillRect(0, 0, gameH, gameW);
+		// Clear the screen
+		g2d.setColor(g2d.getBackground());
+		g2d.fillRect(0, 0, gameH, gameW);
 
-        g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.BLACK);
 
-        // Draw the map
-        drawMap(g2d, mapData, player);
+		// Draw the map
+		drawMap(g2d, mapData, player);
 
-        player.draw(g2d);
+		player.draw(g2d);
 
-        // Draw relative to other player
-        if(state.getOtherPlayer() != null){
-            state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
-        }
-        
-        // Draw bullets
-        for (Bullet b : state.getBullets()) {
-            if(b.active) {
-                if(b.getUsername().equals(player.getUsername())){
-                    b.draw(g2d);
-                } else{
-                    drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
+		// Draw relative to other player
+		if(state.getOtherPlayer() != null){
+			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
+		}
 
-                }
-            }
-        }
+		// Draw bullets
+		for (Bullet b : state.getBullets()) {
+			if(b.active) {
+				if(b.getUsername().equals(player.getUsername())){
+					b.draw(g2d);
+				} else{
+					drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
 
-        // Draw the zombies
-        for (DataPacket z : zombiePackets) {
-            drawZombie(g2d, player, z);
-        }
+				}
+			}
+		}
 
-        // Draw lighting
+		// Draw the zombies
+		for (DataPacket z : zombiePackets) {
+			drawZombie(g2d, player, z);
+		}
+
+		// Draw lighting
 		drawLighting(g2d);
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
 
 		g2d.setFont(tradeWinds.deriveFont(15f));
-		
+
 		g2d.setColor(new Color(128, 128, 128, 50));
 		Rectangle healthBarBackground = new Rectangle(10, 10, 200, 20);
 		g2d.fill(healthBarBackground);
@@ -149,40 +149,40 @@ public class Renderer {
 		int opponentZombies = state.getOtherPlayer().getNumConvertedZombies();
 		int totalZombies = zombiePackets.size();
 		System.out.println(playerZombies + "/" + totalZombies);
-		
+
 		// Zombie counts
 		ArrayList<Integer> zombieCounts = new ArrayList<Integer>();
 		zombieCounts.add(totalZombies - (opponentZombies + playerZombies));
 		zombieCounts.add(playerZombies);
 		zombieCounts.add(opponentZombies);
-		
+
 		// Zombie count box labels
 		ArrayList<String> zombieCountLabels = new ArrayList<String>();
 		zombieCountLabels.add("Wild");
 		zombieCountLabels.add("You");
 		zombieCountLabels.add("Opponent");
-		
+
 		// Colours for zombie count boxes
 		ArrayList<Color> zombieCountColours = new ArrayList<Color>();
 		zombieCountColours.add(new Color(0, 76, 153, 100));
 		zombieCountColours.add(new Color(0, 102, 0, 100));
 		zombieCountColours.add(new Color(100, 0, 0, 100));
-		
+
 		g2d.setColor(new Color(255, 255, 255, 100));
 		g2d.setFont(tradeWinds.deriveFont(10f));
 		g2d.drawString("Zombie Counts: ", 535, 520);
-		
+
 		int counter = 0;
 		int countsY = 530;
 		for(int count : zombieCounts) {
 			Rectangle zombieCountBox = new Rectangle(580, countsY, 30, 30);
 			g2d.setColor(zombieCountColours.get(counter));
 			g2d.fill(zombieCountBox);
-			
+
 			g2d.setColor(new Color(255, 255, 255, 100));
 			g2d.setFont(tradeWinds.deriveFont(20f));
 			g2d.drawString("" + count, (int) (zombieCountBox.getX() + 8),(int) (zombieCountBox.getY() + (zombieCountBox.getHeight() / 2) + 7));
-			
+
 			g2d.setFont(tradeWinds.deriveFont(10f));
 			g2d.drawString(zombieCountLabels.get(counter), (int)(zombieCountBox.getX() - (g2d.getFontMetrics().stringWidth(zombieCountLabels.get(counter)) + 5)), (int) (3 +  zombieCountBox.getY() + (zombieCountBox.getHeight() / 2)));
 			countsY += 30;
@@ -195,10 +195,10 @@ public class Renderer {
 	}
 
 	/**
-	 * Display game over screen
+	 * Display the game over screen
 	 */
 	public void renderGameOver(EndState endState) {
-		
+
 		// Set up the graphics instance for the current back buffer
 		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -206,12 +206,12 @@ public class Renderer {
 		// Clear the screen
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
-		
+
 		// Strings for game over screen
 		ArrayList<String> gameOverStrings = new ArrayList<String>();
 		String gameWinner = "......";
 		String gameOverReason = "......";
-		
+
 		try {
 			gameWinner = endState.getWinnerName();
 			if(endState.getReason() == endState.getReason().PLAYER_DIED) {
@@ -224,10 +224,10 @@ public class Renderer {
 		catch(NullPointerException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		gameOverStrings.add("Winner of game: " + gameWinner);
 		gameOverStrings.add("Reason: " + gameOverReason);
-		
+
 		// Display strings on screen
 		g2d.setColor(Color.RED);
 		g2d.setFont(tradeWinds.deriveFont(25f));
@@ -244,20 +244,20 @@ public class Renderer {
 		String gameOver = "GAME OVER";
 		int gameOverWidth = g2d.getFontMetrics().stringWidth(gameOver);
 		g2d.drawString(gameOver, (this.gameW / 2) - gameOverWidth / 2, this.gameH / 5);
-	
+
 		// Create buttons and display them and text on screen
 		g2d.setFont(tradeWinds.deriveFont(25f));
-		
+
 		ArrayList<Rectangle> gameOverButtons = new ArrayList<Rectangle>();
 		menuButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/10) * 6, 220, 50);
 		exitButton = new Rectangle((this.gameW / 2) - 110, (this.gameH/10) * 8, 220, 50);
 		gameOverButtons.add(menuButton);
 		gameOverButtons.add(exitButton);
-		
+
 		ArrayList<String> gameOverButtonStrings = new ArrayList<String>();
 		gameOverButtonStrings.add("Return to menu");
 		gameOverButtonStrings.add("Exit");
-		
+
 		int counter = 0;
 		for(String gameOverButtonString : gameOverButtonStrings) {
 			Rectangle button = gameOverButtons.get(counter);
@@ -294,10 +294,10 @@ public class Renderer {
 	}
 
 	/**
-	 * Draw the map
-	 * @param g2d - Graphics2D object
-	 * @param mapData - MapData to draw
-	 * @param player - Player object
+	 * Draw the map on screen
+	 * @param g2d Graphics2D object
+	 * @param mapData MapData to draw
+	 * @param player Player object
 	 */
 	public void drawMap(Graphics2D g2d, MapData mapData, Player player) {
 		Tile[][] map = mapData.getMap();
@@ -315,9 +315,9 @@ public class Renderer {
 
 	/**
 	 * Draw zombies on the screen
-	 * @param g2d - Graphics2D object
-	 * @param player - Player object
-	 * @param z - Zombies DataPacket
+	 * @param g2d Graphics2D object
+	 * @param player Player object
+	 * @param z Zombies DataPacket
 	 */
 	private void drawZombie(Graphics2D g2d, Player player, DataPacket z) {
 
@@ -357,7 +357,7 @@ public class Renderer {
 
 	/**
 	 * DEBUG METHOD: Set whether to show collision boxes
-	 * @param showCollBox - Boolean to set
+	 * @param showCollBox Boolean to set
 	 */
 	public void setShowCollBox(boolean showCollBox) {
 		this.showCollBox = showCollBox;
@@ -366,11 +366,11 @@ public class Renderer {
 
 	/**
 	 * Draw bullets on the screen
-	 * @param g2d - Graphics2D object
-	 * @param player - Player object
-	 * @param x - X coordinate of bullet
-	 * @param y - Y coordinate of bullet 
-	 * @param facingAngle - Angle the bullet is facing
+	 * @param g2d Graphics2D object
+	 * @param player Player object
+	 * @param x X coordinate of bullet
+	 * @param y Y coordinate of bullet 
+	 * @param facingAngle Angle the bullet is facing
 	 */
 	private void drawBullet(Graphics2D g2d, Player player, float x, float y, double facingAngle) {
 		int w = Client.bulletImage.getWidth();

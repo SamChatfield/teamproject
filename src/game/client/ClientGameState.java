@@ -13,106 +13,122 @@ import game.util.SendableState;
  */
 public class ClientGameState extends GameState {
 
-    private String username;
-    private String otherPlayerName;
-    private Sound soundManager;
+	private String username;
+	private String otherPlayerName;
+	private Sound soundManager;
 
-    public ClientGameState(String username){
-        this.username = username;
-        this.mapImage = null;
-        this.isConnected = false;
-        this.bullets = new ArrayList<Bullet>();
-        // TODO addded
-        this.zombieDataPackets = new ArrayList<>();
-    }
+	/**
+	 * Create a new ClientGameState
+	 * @param username Username of local user
+	 */
+	public ClientGameState(String username){
+		this.username = username;
+		this.mapImage = null;
+		this.isConnected = false;
+		this.bullets = new ArrayList<Bullet>();
+		// TODO addded
+		this.zombieDataPackets = new ArrayList<>();
+	}
 
-    public void addSoundManager(Sound sound){
-        this.soundManager = sound;
-    }
+	/**
+	 * Add sound manager to this state
+	 * @param sound Sound object
+	 */
+	public void addSoundManager(Sound sound){
+		this.soundManager = sound;
+	}
 
+	/**
+	 * Update the state
+	 * @param updatedState New state containing information to update
+	 */
+	public void updateClientState(SendableState updatedState){
 
-    public void updateClientState(SendableState updatedState){
+		if(!isConnected){
+			this.mapImage = updatedState.getMapImage();
 
-        if(!isConnected){
-            this.mapImage = updatedState.getMapImage();
-            
-         // We need to figure out if the server thinks we are player 1 or 2.
-            if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
-                otherPlayerName = updatedState.getPlayer2().getUsername();
-            }else{
-                otherPlayerName = updatedState.getPlayer1().getUsername();
-            }
-            
-            setUpGame(updatedState.getPlayer(username),updatedState.getPlayer(otherPlayerName));
-     
-        }
+			// We need to figure out if the server thinks we are player 1 or 2.
+			if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
+				otherPlayerName = updatedState.getPlayer2().getUsername();
+			}else{
+				otherPlayerName = updatedState.getPlayer1().getUsername();
+			}
 
+			setUpGame(updatedState.getPlayer(username),updatedState.getPlayer(otherPlayerName));
 
-        this.bullets = updatedState.getBullets();
-        this.hasFinished = updatedState.HasFinished();
-
-        if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
-            soundManager.playerHurt();
-        }
-        
-        player1.updateLocalPlayerData(updatedState.getPlayer(username));
-        player2.updateData(updatedState.getPlayer(otherPlayerName));
-
-        // TODO changed
-        ArrayList<DataPacket> sentZombies = updatedState.getZombies();
-        this.zombieDataPackets = sentZombies;
-        updateTime(updatedState.getTimeRemaining());
-    }
-
-    private void setUpGame(DataPacket p1, DataPacket p2){
-        setUpMapData(mapImage);
-
-        // Set up two player objects that we can update later.
-        this.player1 = new Player(0,0,mapData,username);
-        this.player2 = new Player(0,0,mapData,null); // We'll set this later
-        
-        // We can reliably update each player locally without knowing which order they were sent in by the server.
-        player1.updateData(p1);
-        player2.updateData(p2);
-        
-        System.out.println(player1.getX());
-        System.out.println(player1.getY());
-        
-
-        isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
-    }
+		}
 
 
-    public void setUpMapData(String mapImage){
-        this.mapImage = mapImage;
-        mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
-    }
+		this.bullets = updatedState.getBullets();
+		this.hasFinished = updatedState.HasFinished();
 
+		if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
+			soundManager.playerHurt();
+		}
 
-    /**
-     * Finds the player that this state is local to.
-     * @return The local player
-     */
-    public Player getPlayer() {
-        if(player1.getUsername().equals(username)){
-            return player1;
-        }else if(player2.getUsername().equals(username)) {
+		player1.updateLocalPlayerData(updatedState.getPlayer(username));
+		player2.updateData(updatedState.getPlayer(otherPlayerName));
 
-            return player2;
-        }
-        return null;
-    }
+		ArrayList<DataPacket> sentZombies = updatedState.getZombies();
+		this.zombieDataPackets = sentZombies;
+		updateTime(updatedState.getTimeRemaining());
+	}
 
-    /**
-     * Finds the other player
-     * @return The other player
-     */
-    public Player getOtherPlayer() {
-        if(player1.getUsername().equals(username)){
-            return player2;
-        }else if(player2.getUsername().equals(username)) {
-            return player1;
-        }
-        return null;
-    }
+	/**
+	 * Setup the game
+	 * @param p1 DataPacket containing information on Player 1
+	 * @param p2 DataPacket containing information on Player 2
+	 */
+	private void setUpGame(DataPacket p1, DataPacket p2){
+		setUpMapData(mapImage);
+
+		// Set up two player objects that we can update later.
+		this.player1 = new Player(0,0,mapData,username);
+		this.player2 = new Player(0,0,mapData,null); // We'll set this later
+
+		// We can reliably update each player locally without knowing which order they were sent in by the server.
+		player1.updateData(p1);
+		player2.updateData(p2);
+
+		System.out.println(player1.getX());
+		System.out.println(player1.getY());
+
+		isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
+	}
+
+	/**
+	 * Set up map data using a string to the map image
+	 * @param mapImage String to map image
+	 */
+	public void setUpMapData(String mapImage){
+		this.mapImage = mapImage;
+		mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
+	}
+
+	/**
+	 * Finds the player that this state is local to.
+	 * @return The local player object
+	 */
+	public Player getPlayer() {
+		if(player1.getUsername().equals(username)){
+			return player1;
+		}else if(player2.getUsername().equals(username)) {
+
+			return player2;
+		}
+		return null;
+	}
+
+	/**
+	 * Finds the other player
+	 * @return The other player object
+	 */
+	public Player getOtherPlayer() {
+		if(player1.getUsername().equals(username)){
+			return player2;
+		}else if(player2.getUsername().equals(username)) {
+			return player1;
+		}
+		return null;
+	}
 }

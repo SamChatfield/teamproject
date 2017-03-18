@@ -1,51 +1,77 @@
 package game.util;
 
-import game.client.Player;
-
 import java.io.Serializable;
 
+import game.client.Player;
+
 /**
- * Created by Daniel on 17/03/2017.
  * Class for passing information about why the game has ended to each player
  */
 public class EndState implements Serializable {
 
-    private boolean hasFinished;
-    private String winnerName;
+	private boolean hasFinished;
+	private String winnerName;
 
-    public boolean hasFinished() {
-        return hasFinished;
-    }
+	private Player player1;
+	private Player player2;
+	private EndReason reason;
 
-    public String getWinnerName() {
-        return winnerName;
-    }
+	public enum EndReason{
+		MORE_ZOMBIES, PLAYER_DIED, TIME_EXPIRED
+	}
 
-    public Player getPlayer1() {
-        return player1;
-    }
+	/** Create new EndState
+	 * @param hasFinished Whether game finished
+	 * @param winnerName Name of winner of game
+	 * @param player1 Player1 object
+	 * @param player2 Player2 object
+	 * @param reason Reason game ended
+	 */
+	public EndState(boolean hasFinished, String winnerName, Player player1, Player player2, EndReason reason) {
+		this.hasFinished = hasFinished;
+		this.winnerName = winnerName;
+		this.player1 = player1;
+		this.player2 = player2;
+		this.reason  = reason;
+	}
 
-    public Player getPlayer2() {
-        return player2;
-    }
+	/**
+	 * Whether the game has finished
+	 * @return Boolean of whether game finised
+	 */
+	public boolean hasFinished() {
+		return hasFinished;
+	}
 
-    public EndReason getReason() {
-        return reason;
-    }
+	/**
+	 * Get name of player who won the game
+	 * @return Name of winner
+	 */
+	public String getWinnerName() {
+		return winnerName;
+	}
 
-    private Player player1;
-    private Player player2;
-    private EndReason reason;
-    
-    public enum EndReason{
-        MORE_ZOMBIES, PLAYER_DIED, TIME_EXPIRED
-    }
+	/**
+	 * Get object for Player 1
+	 * @return Player 1 object
+	 */
+	public Player getPlayer1() {
+		return player1;
+	}
 
-    public EndState(boolean hasFinished, String winnerName, Player player1, Player player2, EndReason reason) {
-        this.hasFinished = hasFinished;
-        this.winnerName = winnerName;
-        this.player1 = player1;
-        this.player2 = player2;
-        this.reason  = reason;
-    }
+	/**
+	 * Get object for Player 1
+	 * @return Player 1 object
+	 */
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	/**
+	 * Get reason why game ended
+	 * @return Reason game ended
+	 */
+	public EndReason getReason() {
+		return reason;
+	}
 }

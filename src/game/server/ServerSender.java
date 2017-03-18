@@ -16,7 +16,7 @@ public class ServerSender extends Thread {
 
 	/**
 	 * Constructor method
-	 * @param objOut - The ObjectOutputStream
+	 * @param objOut The ObjectOutputStream
 	 */
 	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
 		this.objOut = objOut; this.state = state; this.initial = true;
@@ -39,6 +39,9 @@ public class ServerSender extends Thread {
 	}
 
 
+	/**
+	 * Send the end state of the game
+	 */
 	public void sendEndState() {
 
 		try {
@@ -53,7 +56,7 @@ public class ServerSender extends Thread {
 
 	/**
 	 * Send an object up the ObjectOutputStream to the Client
-	 * @param obj - Object to send
+	 * @param obj Object to send
 	 */
 	public void sendObject(Object obj) {
 		try {
@@ -63,7 +66,7 @@ public class ServerSender extends Thread {
 			System.err.println("Communication Error! " + e.getMessage());
 			System.exit(1);
 		}
-		System.out.println("DEBUG: Object successfully sent");
+		System.out.println("Server: Object successfully sent");
 	}
 
 	// Main method to run when thread starts
@@ -77,16 +80,16 @@ public class ServerSender extends Thread {
 						initial = false;
 					}
 					if(state.HasFinished()){
-						sendGameState(); // send a final update (so players don't finish with 50% health because they didnt get the final update.
-						sendEndState();
+						sendGameState(); // Send a final update (so players don't finish with 50% health because they didn't get the final update.
+						sendEndState(); // Send end state of the game
 					}else{
 						sendGameState(); // Send the game state
 					}
 				} else{
-					//System.out.println("Game not ready yet");
+					// System.out.println("Game not ready yet");
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				System.err.println("ServerSender Interupted Exception: " + e.getMessage());
 			} 
 		}
 	}

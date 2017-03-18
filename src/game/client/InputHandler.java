@@ -19,7 +19,7 @@ public class InputHandler implements KeyListener, MouseListener {
 
 	/**
 	 * Create a new InputHandler
-	 * @param client - The Client object
+	 * @param client The Client object
 	 */
 	public InputHandler(Client client) {
 		keyArray = new boolean[256];
@@ -38,7 +38,7 @@ public class InputHandler implements KeyListener, MouseListener {
 
 	/**
 	 * Set whether the mouse has been clicked
-	 * @param bool - Boolean of whether is clicked
+	 * @param bool Boolean of whether is clicked
 	 */
 	public void setMouseClicked(boolean bool) {
 		this.clicked = bool;
@@ -46,7 +46,7 @@ public class InputHandler implements KeyListener, MouseListener {
 
 	/**
 	 * Get if a current key is down/pressed on the keyboard
-	 * @param keyCode - Key to check
+	 * @param keyCode Key to check
 	 * @return Whether key is pressed on keyboard
 	 */
 	public boolean isKeyDown(int keyCode) {
@@ -63,7 +63,7 @@ public class InputHandler implements KeyListener, MouseListener {
 
 	/**
 	 * Check if mouse button is down
-	 * @param button - Button to check
+	 * @param button Button to check
 	 * @return Whether mouse button is currently down/clicked
 	 */ 
 	public boolean isMouseButtonDown(int button) {

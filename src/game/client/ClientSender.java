@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 /**
- * @author georgesabourin
  * Class for sending objects from the client to the server
  */
 public class ClientSender extends Thread {
@@ -12,7 +11,6 @@ public class ClientSender extends Thread {
 	private String username;
 	private ObjectOutputStream objOut;
 	private ClientGameState state;
-
 
 	/**
 	 * Constructor
@@ -34,15 +32,14 @@ public class ClientSender extends Thread {
 			objOut.writeObject(obj);
 			objOut.flush();
 		} catch (IOException e) {
-			System.err.println("Communication Error! " + e.getMessage());
+			System.err.println("Communication Error in ClientSender: " + e.getMessage());
 			System.exit(1);
 		}
-		//System.out.println("DEBUG: Object successfully sent");
 	}
 
 	// Main method to run when thread starts
 	public void run() {
-		System.out.println("DEBUG: ClientSender running");
+		System.out.println("Client: ClientSender running");
 		sendObject(username);
 
 		// Keep running, sending the player object from the client game state every so often.
@@ -52,16 +49,20 @@ public class ClientSender extends Thread {
 					System.out.println("Sending player");
 					//objOut.writeObject(state.getPlayer().getData());
 					objOut.flush();
-
 				}
 				Thread.sleep(3000);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.err.println("Exception in ClientSender: " + e.getMessage());
+				System.exit(1);
 			}
 		}
 	}
 
+	/**
+	 * Add a new game state
+	 * @param state ClientGameState to end to this sender
+	 */
 	public void addState(ClientGameState state){
-	    this.state = state;
-    }
+		this.state = state;
+	}
 }
