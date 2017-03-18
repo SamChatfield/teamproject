@@ -150,7 +150,6 @@ public class Renderer {
 		int playerZombies = player.getNumConvertedZombies();
 		int opponentZombies = state.getOtherPlayer().getNumConvertedZombies();
 		int totalZombies = zombiePackets.size();
-		System.out.println(playerZombies + "/" + totalZombies);
 
 		// Zombie counts
 		ArrayList<Integer> zombieCounts = new ArrayList<Integer>();

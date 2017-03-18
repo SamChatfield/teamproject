@@ -125,7 +125,6 @@ public class GameInstance extends Thread {
 			}
 		} catch(ConcurrentModificationException e){
 			System.out.println("Error, this shouldn't happen: " + e.getMessage());
-			System.exit(1);
 		}
 
 		// Player converted zombies
