@@ -2,6 +2,7 @@ package game.server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ConcurrentModificationException;
 
 import game.util.SendableState;
 
@@ -26,15 +27,17 @@ public class ServerSender extends Thread {
 	 * Send an object down the ObjectOutputStream to the client
 	 */
 	public void sendGameState() {
-		SendableState send = state.getPackagedState();
 
 		try {
-			objOut.writeObject(send);
+			SendableState newState = state.getPackagedState();
+			objOut.writeObject(newState);
 			objOut.flush();
 			objOut.reset();
 		} catch (IOException e) {
 			System.err.println("Communication Error! " + e.getMessage());
-			System.exit(1);
+			//System.exit(1);
+		} catch(ConcurrentModificationException c){
+			System.out.println("Concurrent mod exception in sendGameState()");
 		}
 	}
 
@@ -71,6 +74,7 @@ public class ServerSender extends Thread {
 
 	// Main method to run when thread starts
 	public void run() {
+		boolean finalStateSent = false;
 		while(true) {
 			try {
 				Thread.sleep(1000/60);
@@ -79,9 +83,12 @@ public class ServerSender extends Thread {
 						sendObject("StartingGame");
 						initial = false;
 					}
-					if(state.HasFinished()){
+					if(state.HasFinished() && !finalStateSent){
+						finalStateSent = true;
+
 						sendGameState(); // Send a final update (so players don't finish with 50% health because they didn't get the final update.
 						sendEndState(); // Send end state of the game
+						System.out.println("Final state sent, end state sent");
 					}else{
 						sendGameState(); // Send the game state
 					}
