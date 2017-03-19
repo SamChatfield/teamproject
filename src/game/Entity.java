@@ -8,7 +8,7 @@ import game.util.DataPacket;
 /**
  * Representation of entities in the game (Zombies and Players)
  */
-public class Entity implements Serializable{
+public class Entity implements Serializable {
 
 	protected CollisionBox collisionBox;
 	protected transient MapData mapData;

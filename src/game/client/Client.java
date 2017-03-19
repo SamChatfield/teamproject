@@ -62,7 +62,7 @@ public class Client extends Canvas {
 		GAME,
 		END, 
 		EXIT
-	};
+	}
 	// Menu state
 	private enum MSTATE {
 		MAIN,

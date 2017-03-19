@@ -65,7 +65,7 @@ public class Bullet extends Entity implements Serializable {
 
 		distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
 
-		if (distance > fadeDistance) {
+		if(distance > fadeDistance) {
 			this.active = false;
 		}
 	}
@@ -103,12 +103,13 @@ public class Bullet extends Entity implements Serializable {
 				zom.convert(player.getUsername()); // pass the shooting player
 				// to the zombie.
 				System.out.println("Successfully converted zombie!");
-			} else {
+			}
+			else {
 				// TODO: Add in so converted zombies won't damage player
-				if (entity.getHealth() <= damageDone) {
+				if(entity.getHealth() <= damageDone){
 					System.out.println("Critically injured");
 					entity.setHealth(0);
-				} else {
+				}else{
 					entity.setHealth(entity.getHealth() - damageDone);
 				}
 				active = false;
@@ -123,7 +124,6 @@ public class Bullet extends Entity implements Serializable {
 	 */
 	public void damagePlayer(Player player, int damageDone) {
 		if (active) {
-
 			if (player.getHealth() <= damageDone) {
 				System.out.println("Critically injured");
 				player.setHealth(0);
@@ -132,7 +132,6 @@ public class Bullet extends Entity implements Serializable {
 			}
 			active = false;
 		}
-
 	}
 
 	/**
