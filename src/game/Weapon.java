@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Graphics2D;
 
+// IS THIS CLASS STILL NEEDED?
+
 public class Weapon {
 	private static final int WIDTH = 5;
 	private static final int HEIGHT = 5;

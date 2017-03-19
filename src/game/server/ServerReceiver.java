@@ -1,21 +1,18 @@
 package game.server;
 
-import game.client.EntityData;
-import game.util.DataPacket;
-import game.util.PlayerUpdatePacket;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import game.util.PlayerUpdatePacket;
+
 /**
- * @author georgesabourin
  * Class for managing receiving from the client and handling this data
  */
 public class ServerReceiver extends Thread {
 
 	private ServerGameState state;
 	private ObjectInputStream objIn;
-	
+
 	/**
 	 * Constructor method
 	 * @param objIn The ObjectInputStream
@@ -24,7 +21,7 @@ public class ServerReceiver extends Thread {
 		this.objIn = objIn;
 		this.state = state;
 	}
-	
+
 	// Main method to run when thread starts
 	public void run() {
 
@@ -37,7 +34,6 @@ public class ServerReceiver extends Thread {
 						state.startNewGame();
 					}
 				}else if(obj.getClass() == PlayerUpdatePacket.class){
-				//	System.out.println("Received a player object");
 					PlayerUpdatePacket plr = (PlayerUpdatePacket) obj;
 					state.updatePlayer(plr.getData().getUsername(),plr);
 				}
@@ -45,13 +41,13 @@ public class ServerReceiver extends Thread {
 				//System.out.println(obj.getPlayers().size());
 				//state.updateGameState(obj);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Class Exception in ServerReceiver: " + e.getMessage());
+				System.exit(1);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("IO Exception in ServerReceiver: " + e.getMessage());
+				System.exit(1);
 			}
-			
+
 		}
 
 	}

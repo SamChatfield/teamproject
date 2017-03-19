@@ -1,86 +1,166 @@
 package game.util;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import game.Bullet;
 import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 /**
- * Created by Daniel on 17/02/2017.
- *
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
  * be called on both game states.
  */
 public class GameState implements Serializable {
 
-    protected ArrayList<Zombie> zombies;
-    protected ArrayList<Bullet> bullets;
-    protected ArrayList<DataPacket> zombieDataPackets;
-    protected ArrayList<DataPacket> bulletDataPackets;
-    protected Player player1;
-    protected Player player2;
-    protected String mapImage; // the name of the file being used to create the image.
-    protected int timeRemaining;
-    protected MapData mapData;
-    protected boolean inProgress; // is the game in progress?
-    protected boolean isConnected; // is the game connected to the server? If this is false, the server hasn't sent a state yet
+	protected ArrayList<Zombie> zombies;
+	protected ArrayList<Bullet> bullets;
+	protected ArrayList<DataPacket> zombieDataPackets;
+	protected Player player1;
+	protected Player player2;
+	protected String mapImage; // Name of the file being used to create the image.
+	protected int timeRemaining;
+	protected MapData mapData;
+	protected boolean inProgress; // Is the game in progress?
+	protected boolean isConnected; // Is the game connected to the server? If this is false, the server hasn't sent a state yet
+	protected EndState endState;
+	protected boolean hasFinished;
 
-    public ArrayList<Bullet> getBullets() {
-        return bullets;
-    }
+	/**
+	 * Get EndState of game
+	 * @return The EndState of this game
+	 */
+	public EndState getEndState() {
+		return endState;
+	}
 
-    public void setBullets(ArrayList<Bullet> bullets) {
-        this.bullets = bullets;
-    }
+	/**
+	 * Set the EndState of the current game
+	 * @param endState EndState to set
+	 */
+	public void setEndState(EndState endState) {
+		hasFinished = true;
+		this.endState = endState;
+	}
 
-    public MapData getMapData() {
-        return mapData;
-    }
+	/**
+	 * Get whether the game has finished
+	 * @return Whether game finished
+	 */
+	public boolean HasFinished() {
+		return hasFinished;
+	}
 
-    public String getMapImage() {
-        return mapImage;
-    }
+	/**
+	 * Set whether game has finished
+	 * @param hasFinished Boolean of whether game finished
+	 */
+	public void setHasFinished(boolean hasFinished) {
+		this.hasFinished = hasFinished;
+	}
 
-    public int getTimeRemaining() {
-        return timeRemaining;
-    }
+	/**
+	 * Get the list of bullets
+	 * @return ArrayList of bullets
+	 */
+	public ArrayList<Bullet> getBullets() {
+		return bullets;
+	}
 
-    public void updateTime(int time){
-        timeRemaining = time;
-    }
+	/**
+	 * Set the bullets
+	 * @param bullets New ArrayList of bullets to set
+	 */
+	public void setBullets(ArrayList<Bullet> bullets) {
+		this.bullets = bullets;
+	}
 
-    public ArrayList<Zombie> getZombies() {
-        return zombies;
-    }
+	/**
+	 * Get the current MapData
+	 * @return MapData object
+	 */
+	public MapData getMapData() {
+		return mapData;
+	}
 
-    public ArrayList<DataPacket> getZombieDataPackets() {
-        return zombieDataPackets;
-    }
+	/**
+	 * Get the current image of the map
+	 * @return Get the current MapImage as a String
+	 */
+	public String getMapImage() {
+		return mapImage;
+	}
 
-    public ArrayList<DataPacket> getBulletDataPackets() {
-        return bulletDataPackets;
-    }
+	/**
+	 * Get the time remaining of the current game
+	 * @return Time remaining
+	 */
+	public int getTimeRemaining() {
+		return timeRemaining;
+	}
 
-    public Player getPlayer1() {
-        return player1;
-    }
+	/**
+	 * Update time remaining in the game
+	 * @param time New time to set
+	 */
+	public void updateTime(int time){
+		timeRemaining = time;
+	}
 
-    public Player getPlayer2() {
-        return player2;
-    }
+	/**
+	 * Get an ArrayList of the zombies in the current game state
+	 * @return ArrayList of zombies
+	 */
+	public ArrayList<Zombie> getZombies() {
+		return zombies;
+	}
 
-    public boolean inProgress(){
-        return inProgress;
-    }
+	/**
+	 * Get data packet of zombies
+	 * @return ArrayList of data packets for zombies currently in the game
+	 */
+	public ArrayList<DataPacket> getZombieDataPackets() {
+		return zombieDataPackets;
+	}
 
-    public boolean isConnected(){
-        return isConnected;
-    }
+	/**
+	 * Get the player object for player 1 
+	 * @return Player 1 object
+	 */
+	public Player getPlayer1() {
+		return player1;
+	}
 
-    public void setInProgress(boolean bool){
-        inProgress = bool;
-    }
+	/**
+	 * Get the player object for player 2 
+	 * @return Player 2 object
+	 */
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	/**
+	 * Get whether a game is currently in progress
+	 * @return Boolean of whether game in progress
+	 */
+	public boolean inProgress(){
+		return inProgress;
+	}
+
+	/**
+	 * Get whether a game state is currently connected between two players
+	 * @return Boolean of whether two players connected
+	 */
+	public boolean isConnected(){
+		return isConnected;
+	}
+
+	/**
+	 * Set whether a new is in progress
+	 * @param bool Whether game in progress
+	 */
+	public void setInProgress(boolean bool){
+		inProgress = bool;
+	}
 }

@@ -2,6 +2,7 @@ package game.server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ConcurrentModificationException;
 
 import game.util.SendableState;
 
@@ -16,7 +17,7 @@ public class ServerSender extends Thread {
 
 	/**
 	 * Constructor method
-	 * @param (ObjectOutputStream) objOut - The ObjectOutputStream
+	 * @param objOut The ObjectOutputStream
 	 */
 	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
 		this.objOut = objOut; this.state = state; this.initial = true;
@@ -26,10 +27,28 @@ public class ServerSender extends Thread {
 	 * Send an object down the ObjectOutputStream to the client
 	 */
 	public void sendGameState() {
-		SendableState send = state.getPackagedState();
 
 		try {
-			objOut.writeObject(send);
+			SendableState newState = state.getPackagedState();
+			objOut.writeObject(newState);
+			objOut.flush();
+			objOut.reset();
+		} catch (IOException e) {
+			System.err.println("Communication Error! " + e.getMessage());
+			//System.exit(1);
+		} catch(ConcurrentModificationException c){
+			System.out.println("Concurrent mod exception in sendGameState()");
+		}
+	}
+
+
+	/**
+	 * Send the end state of the game
+	 */
+	public void sendEndState() {
+
+		try {
+			objOut.writeObject(state.getEndState());
 			objOut.flush();
 			objOut.reset();
 		} catch (IOException e) {
@@ -40,7 +59,7 @@ public class ServerSender extends Thread {
 
 	/**
 	 * Send an object up the ObjectOutputStream to the Client
-	 * @param (Object) obj - Object to send
+	 * @param obj Object to send
 	 */
 	public void sendObject(Object obj) {
 		try {
@@ -50,11 +69,12 @@ public class ServerSender extends Thread {
 			System.err.println("Communication Error! " + e.getMessage());
 			System.exit(1);
 		}
-		System.out.println("DEBUG: Object successfully sent");
+		System.out.println("Server: Object successfully sent");
 	}
 
 	// Main method to run when thread starts
 	public void run() {
+		boolean finalStateSent = false;
 		while(true) {
 			try {
 				Thread.sleep(1000/60);
@@ -63,12 +83,20 @@ public class ServerSender extends Thread {
 						sendObject("StartingGame");
 						initial = false;
 					}
-					sendGameState(); // Send the game state
+					if(state.HasFinished() && !finalStateSent){
+						finalStateSent = true;
+
+						sendGameState(); // Send a final update (so players don't finish with 50% health because they didn't get the final update.
+						sendEndState(); // Send end state of the game
+						System.out.println("Final state sent, end state sent");
+					}else{
+						sendGameState(); // Send the game state
+					}
 				} else{
-					System.out.println("Game not ready yet");
+					// System.out.println("Game not ready yet");
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				System.err.println("ServerSender Interupted Exception: " + e.getMessage());
 			} 
 		}
 	}

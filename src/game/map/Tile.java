@@ -10,9 +10,9 @@ public class Tile {
 
 	/**
 	 * Constructor to create a new tile
-	 * @param (float) x - X coordinate of tile
-	 * @param (float) y - Y coordinate of tile
-	 * @param (TileType) type - Type of tile to create
+	 * @param x X coordinate of tile
+	 * @param y Y coordinate of tile
+	 * @param type Type of tile to create
 	 */
 	public Tile(float x, float y, TileType type) {
 		this.x = x;
@@ -22,7 +22,7 @@ public class Tile {
 
 	/**
 	 * Get X coordinate of tile
-	 * @return (float) X coordinate of tile
+	 * @return X coordinate of tile
 	 */
 	public float getX() {
 		return x;
@@ -30,7 +30,7 @@ public class Tile {
 
 	/**
 	 * Get Y coordinate of tile
-	 * @return (float) Y coordinate of tile
+	 * @return Y coordinate of tile
 	 */
 	public float getY() {
 		return y;
@@ -38,7 +38,7 @@ public class Tile {
 
 	/**
 	 * Get the type of the tile
-	 * @return (TileType) Type of tile
+	 * @return Type of tile
 	 */
 	public TileType getType() {
 		return type;
