@@ -49,7 +49,7 @@ public class ClientGameState extends GameState {
 			// We need to figure out if the server thinks we are player 1 or 2.
 			if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
 				otherPlayerName = updatedState.getPlayer2().getUsername();
-			}else{
+			} else {
 				otherPlayerName = updatedState.getPlayer1().getUsername();
 			}
 
@@ -110,7 +110,7 @@ public class ClientGameState extends GameState {
 	public Player getPlayer() {
 		if(player1.getUsername().equals(username)){
 			return player1;
-		}else if(player2.getUsername().equals(username)) {
+		} else if(player2.getUsername().equals(username)) {
 			return player2;
 		}
 		return null;
@@ -123,7 +123,7 @@ public class ClientGameState extends GameState {
 	public Player getOtherPlayer() {
 		if(player1.getUsername().equals(username)){
 			return player2;
-		}else if(player2.getUsername().equals(username)) {
+		} else if(player2.getUsername().equals(username)) {
 			return player1;
 		}
 		return null;

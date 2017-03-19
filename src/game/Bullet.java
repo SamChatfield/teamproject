@@ -107,9 +107,9 @@ public class Bullet extends Entity implements Serializable {
 			else {
 				// TODO: Add in so converted zombies won't damage player
 				if(entity.getHealth() <= damageDone){
-					System.out.println("Critically injured");
+					System.out.println("Zombie critically injured");
 					entity.setHealth(0);
-				}else{
+				} else {
 					entity.setHealth(entity.getHealth() - damageDone);
 				}
 				active = false;
@@ -125,7 +125,7 @@ public class Bullet extends Entity implements Serializable {
 	public void damagePlayer(Player player, int damageDone) {
 		if (active) {
 			if (player.getHealth() <= damageDone) {
-				System.out.println("Critically injured");
+				System.out.println("Player critically injured");
 				player.setHealth(0);
 			} else {
 				player.setHealth(player.getHealth() - damageDone);

@@ -1,9 +1,10 @@
 package game.util;
 
-import game.server.ServerGameState;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import game.Bullet;
+import game.server.ServerGameState;
 
 /**
  * Sendable state that is sent to the server to handle status of the game
@@ -13,7 +14,7 @@ public class SendableState implements Serializable {
 	private int timeRemaining;
 	private String mapImage;
 	private ArrayList<DataPacket> zombies;
-	private ArrayList<DataPacket> bullets;
+	private ArrayList<Bullet> bullets;
 
 	private boolean hasFinished;
 

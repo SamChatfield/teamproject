@@ -114,6 +114,12 @@ public class GameInstance extends Thread {
 			Iterator<Bullet> bullets = state.getBullets().iterator();
 			while (bullets.hasNext()) {
 				Bullet b = bullets.next();
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
 					bullets.remove();
 					continue;
@@ -124,7 +130,8 @@ public class GameInstance extends Thread {
 				b.move(delta);
 			}
 		} catch(ConcurrentModificationException e){
-			System.out.println("Error, this shouldn't happen: " + e.getMessage());
+			System.out.println("ConcurrentModificationException - This shouldn't happen: " + e.getMessage());
+			e.printStackTrace();
 		}
 
 		// Player converted zombies
@@ -153,7 +160,7 @@ public class GameInstance extends Thread {
 		if(state.getPlayer1().getHealth() == 0){
 			winner = state.getPlayer2();
 			return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.PLAYER_DIED);
-		}else if(state.getPlayer2().getHealth() == 0){
+		} else if(state.getPlayer2().getHealth() == 0){
 			winner = state.getPlayer1();
 			return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.PLAYER_DIED);
 		}
