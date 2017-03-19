@@ -1,13 +1,5 @@
 package game.client;
 
-import game.ResourceLoader;
-import game.util.EndState;
-import game.util.PlayerUpdatePacket;
-import game.util.Vector;
-
-import javax.swing.*;
-import java.awt.*;
-
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -27,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import game.ResourceLoader;
+import game.util.EndState;
 import game.util.PlayerUpdatePacket;
 import game.util.Vector;
 
@@ -193,9 +186,9 @@ public class Client extends Canvas {
 					try {
 						Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 					} catch (InterruptedException e) {
+						System.err.println("Client loop state interupted exception: " + e.getMessage());
 						e.printStackTrace();
-						System.out.println("Client loop interrupted exception");
-
+	
 					}
 				}
 
@@ -293,7 +286,6 @@ public class Client extends Canvas {
 					}
 				}
 			}
-
 			// Position of SFX Button
 			int sfxX = (int)menu.sfxButton.getX();
 			int sfxY = (int)menu.sfxButton.getY();

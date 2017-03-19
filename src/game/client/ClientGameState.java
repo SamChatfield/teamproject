@@ -12,6 +12,7 @@ import game.util.SendableState;
  * The game state of the client at any one time.
  */
 public class ClientGameState extends GameState {
+	
 	private String username;
 	private String otherPlayerName;
 	private Sound soundManager;
@@ -89,7 +90,6 @@ public class ClientGameState extends GameState {
 
 		//System.out.println(player1.getX());
 		//System.out.println(player1.getY());
-
 
 		isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
 	}
