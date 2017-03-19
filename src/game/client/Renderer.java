@@ -79,7 +79,6 @@ public class Renderer {
 		// Draw the map
 		drawMap(g2d, mapData, player);
 
-
 		// Draw the player
 		player.draw(g2d);
 

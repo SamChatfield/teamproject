@@ -431,20 +431,17 @@ public class Client extends Canvas {
             	keyPresses.add("BUTTON1");
 				soundManager.bulletSound(player.canShoot());
 			}
-
+		}
 			// We need to do this in case fv is null
 			float x = -100;
 			float y = -100;
-			if(fv!=null){
+			if(fv!=null) {
 				x = fv.x();
 				y = fv.y();
 			}
 			sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
 			updateLocalPlayer(keyPresses,delta,fv);
-
-		}
-
 
 		/*
 		if(player.getHealth() < 0) {
