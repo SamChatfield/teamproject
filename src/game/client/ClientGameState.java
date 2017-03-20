@@ -1,12 +1,11 @@
 package game.client;
 
-import java.util.ArrayList;
-
-import game.Bullet;
 import game.map.MapData;
 import game.util.DataPacket;
 import game.util.GameState;
 import game.util.SendableState;
+
+import java.util.ArrayList;
 
 /**
  * The game state of the client at any one time.
@@ -25,8 +24,9 @@ public class ClientGameState extends GameState {
 		this.username = username;
 		this.mapImage = null;
 		this.isConnected = false;
-		this.bullets = new ArrayList<Bullet>();
+		this.bullets = new ArrayList<>();
 		this.zombieDataPackets = new ArrayList<>();
+        this.bulletDataPackets = new ArrayList<>();
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class ClientGameState extends GameState {
 
 		}
 
-		this.bullets = updatedState.getBullets();
+//		this.bullets = updatedState.getBullets();
 		//this.hasFinished = updatedState.HasFinished();
 
 		if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
@@ -67,8 +67,9 @@ public class ClientGameState extends GameState {
 		player1.updateLocalPlayerData(updatedState.getPlayer(username));
 		player2.updateData(updatedState.getPlayer(otherPlayerName));
 
-		ArrayList<DataPacket> sentZombies = updatedState.getZombies();
-		this.zombieDataPackets = sentZombies;
+		this.zombieDataPackets = updatedState.getZombies();
+        this.bulletDataPackets = updatedState.getBullets();
+
 		updateTime(updatedState.getTimeRemaining());
 	}
 

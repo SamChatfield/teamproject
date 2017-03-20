@@ -1,12 +1,12 @@
 package game.util;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import game.Bullet;
 import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
@@ -17,6 +17,7 @@ public class GameState implements Serializable {
 	protected ArrayList<Zombie> zombies;
 	protected ArrayList<Bullet> bullets;
 	protected ArrayList<DataPacket> zombieDataPackets;
+    protected ArrayList<DataPacket> bulletDataPackets;
 	protected Player player1;
 	protected Player player2;
 	protected String mapImage; // Name of the file being used to create the image.
@@ -123,6 +124,14 @@ public class GameState implements Serializable {
 	public ArrayList<DataPacket> getZombieDataPackets() {
 		return zombieDataPackets;
 	}
+
+    /**
+     * Get data packet of bullets
+     * @return ArrayList of data packets for bullets currently in the game
+     */
+    public ArrayList<DataPacket> getBulletDataPackets() {
+        return bulletDataPackets;
+    }
 
 	/**
 	 * Get the player object for player 1 

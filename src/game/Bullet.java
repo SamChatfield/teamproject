@@ -1,22 +1,18 @@
 package game;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.Serializable;
-
 import game.client.Player;
 import game.map.MapData;
 import game.util.DataPacket;
 import game.util.Vector;
+
+import java.io.Serializable;
 
 /**
  * Class that represents bullets in the game that can harm zombies
  */
 public class Bullet extends Entity implements Serializable {
 
-	public static final float BULLET_SPEED = 0.15f; // Speed of bullets
+	public static final float BULLET_SPEED = 0.3f; // Speed of bullets
 
 	private float dx, dy; // Change in x and y of the bullet each update before delta
 
@@ -25,27 +21,26 @@ public class Bullet extends Entity implements Serializable {
 	private double distance;
 	private static final double fadeDistance = 5;
 
-	// Load image for bullet
-	private static final BufferedImage image = ResourceLoader.bulletImage();
-
 	/**
 	 * Create a new bullet
 	 * @param player Player object
 	 * @param aimX X coordinate aimed in
 	 * @param aimY Y coordinate aimed in
+	 * @param pdx player's x velocity
+	 * @param pdy player's y velocity
 	 * @param mapData Current mapdata used to know when bullet is over obstacles
 	 */
-	public Bullet(Player player, float aimX, float aimY, MapData mapData) {
+	public Bullet(Player player, float aimX, float aimY, float pdx, float pdy, MapData mapData) {
 		super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData, DataPacket.Type.BULLET);
 
 		setUsername(player.getUsername());
 
 		Vector normalDir = new Vector(aimX, aimY).normalised();
-		dx = normalDir.x();
-		dy = normalDir.y();
+		dx = normalDir.x() * BULLET_SPEED + pdx;
+		dy = normalDir.y() * BULLET_SPEED + pdy;
 
-		data.setFacingAngle(player.getFacingAngle()); // TODO check the
-		// efficiency of this
+		data.setFacingAngle(player.getFacingAngle());
+
 		active = true;
 		this.player = player;
 	}
@@ -55,39 +50,17 @@ public class Bullet extends Entity implements Serializable {
 	 * @param delta Interpolation
 	 */
 	public void move(double delta) {
-		float deltX = (float) (dx * BULLET_SPEED * delta);
-		float deltY = (float) (dy * BULLET_SPEED * delta);
-		float incX = (float) (dx * BULLET_SPEED * delta);
-		float incY = (float) (dy * BULLET_SPEED * delta);
+		float deltX = (float) (dx * delta);
+		float deltY = (float) (dy * delta);
 
-		data.setX(getX() + incX);
-		data.setY(getY() + incY);
+		data.setX(getX() + deltX);
+		data.setY(getY() + deltY);
 
 		distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
 
 		if(distance > fadeDistance) {
 			this.active = false;
 		}
-	}
-
-	/**
-	 * Draw bullet on the screen
-	 * @param g2d Graphics2D object
-	 */
-	public void draw(Graphics2D g2d) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-
-		// Draw relative to the player
-		Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
-		int drawX = drawPoint.x;
-		int drawY = drawPoint.y;
-
-		// Rotate bullet so it is facing direction of travel
-		AffineTransform at = g2d.getTransform();
-		g2d.rotate(data.getFacingAngle(), drawX, drawY);
-		g2d.drawImage(image, drawX, drawY, null);
-		g2d.setTransform(at);
 	}
 
 	/**
@@ -132,14 +105,6 @@ public class Bullet extends Entity implements Serializable {
 			}
 			active = false;
 		}
-	}
-
-	/**
-	 * Get image for bullet
-	 * @return BufferedImage of bullet
-	 */
-	public static BufferedImage getImage() {
-		return image;
 	}
 
 	public CollisionBox getCollisionBox() {
