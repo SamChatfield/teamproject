@@ -56,7 +56,6 @@ public class ServerReceiver extends Thread {
 							table.changePlayerStatus(player2, ClientTable.playerStatus.IN_GAME);
 							players.remove(0);
 							players.remove(0);
-							System.out.println("Check players called");
 						}
 					}
 				}else if(obj.getClass() == PlayerUpdatePacket.class){
