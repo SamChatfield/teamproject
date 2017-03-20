@@ -1,6 +1,8 @@
 package game.server;
 
 
+import game.util.User;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,43 +11,43 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * Main server class that spins up the ServerReceiver and ServerSender threads for each connected client
+ * Main server class
+ * Created by Daniel on 31/01/2017.
+ * Modified by George on 04/02/2017
  */
 public class Server {
 
-	public static void main(String[] args){
-		/*
-    	if(args.length != 1){
-            System.out.println("Usage: java Server <port>");
+    public static void main(String[] args){
+        if(args.length != 2){
+            System.out.println("Usage: java Server <host> <port>");
             System.exit(0);
         }
-        int port = Integer.parseInt(args[0]);
-		 */
+        
+        String host = args[0];
+        int port = Integer.parseInt(args[1]);
+        
+        // Keep track of connected users
+        // TODO: Expand clientTable
+        ClientTable clientTable = new ClientTable();
+      
+        // Create ServerSocket
+        ServerSocket outSocket = null;
 
-		// Port currently hardcoded as 4444 to match the client
-		int port = 4444;
+        // this state should be shared between two connected clients. One made for each game.
+        //ServerGameState state = new ServerGameState("a","b");
 
-		// Keep track of connected users
-		ClientTable clientTable = new ClientTable();
+        try {
+        	outSocket = new ServerSocket(port);
+        } catch (IOException e) {
+        	System.err.println("Error! Unable to listen on port " + port );
+        	System.exit(1);
+        }
+        
+        System.out.println("Success! Server successfully started");
 
-		// Create ServerSocket
-		ServerSocket outSocket = null;
-
-		// this state should be shared between two connected clients. One made for each game.
-		ServerGameState state = new ServerGameState("a","b");
-
-		try {
-			outSocket = new ServerSocket(port);
-		} catch (IOException e) {
-			System.err.println("Server: Error! Unable to listen on port " + port );
-			System.exit(1);
-		}
-
-		System.out.println("Success! Server successfully started");
-
-		try {
-			while(true) {
-				Socket clientSocket = outSocket.accept();
+        try {
+        	while(true) {
+        		 Socket clientSocket = outSocket.accept();
 
         		 // Someone connected, for debug we'll now generate the game state
         		 System.out.println("DEBUG: Accepting socket connection");
@@ -58,29 +60,26 @@ public class Server {
                  String clientName = (String)objIn.readObject();
                  System.out.println("DEBUG: Read client name");
                  System.out.println("New user connected: " + clientName);
-                 clientTable.addToTable(clientName);
-
-                 ArrayList<String> players = clientTable.checkAvailable();
-				 System.out.println(players.size());
-                 if((players.size() % 2 == 0) && !(players.size() == 0)) {
-                 	System.out.println("We have enough players now");
-                 	state.setReady(true);
-                 	clientTable.changePlayerStatus(clientName, ClientTable.playerStatus.IN_GAME);
-				 }
-
-
+                 User newUser = new User(clientName);
+                 clientTable.addToTable(newUser);
+                 
                  // Start threads
-                 ServerSender server_sender = new ServerSender(objOut,state);
+                 ServerSender server_sender = new ServerSender(objOut);
                  server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn,state, clientName, clientTable);
+                 ServerReceiver server_receiver = new ServerReceiver(objIn, newUser, clientTable);
                  server_receiver.start();
 
-				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
-			}
+                 newUser.setServerReceiver(server_receiver);
+                 newUser.setServerSender(server_sender);
+        		
+                 // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
+            }
 
-		} catch(Exception e) {
-			System.err.println("Exception in Server: " + e.getMessage());
-			e.printStackTrace();
+        } catch(Exception e) {
+			//e.printStackTrace();
+			System.exit(1); 
         }
-	}
+    }
+
+
 }

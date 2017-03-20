@@ -14,16 +14,17 @@ public class ServerSender extends Thread {
 	private ServerGameState state;
 	private ObjectOutputStream objOut;
 	private boolean initial, playersReadyInitial;
-	
+
+
 	/**
 	 * Constructor method
 	 * @param objOut The ObjectOutputStream
 	 */
-	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
+	public ServerSender(ObjectOutputStream objOut) {
 		this.objOut = objOut;
-		this.state = state;
 		this.initial = true;
 		this.playersReadyInitial = true;
+		this.state = new ServerGameState("a", "b");
 	}
 
 	/**
@@ -111,5 +112,9 @@ public class ServerSender extends Thread {
 				e.printStackTrace();
 			} 
 		}
+	}
+
+	public void updateState(ServerGameState server) {
+		this.state = server;
 	}
 }

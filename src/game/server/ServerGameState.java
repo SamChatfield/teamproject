@@ -198,4 +198,8 @@ public class ServerGameState extends GameState {
 		SendableState copyOf = new SendableState(this); // Create a copy of the state.
 		return copyOf; // Return this so that it can be sent.
 	}
+
+    public void setPlayer1Username(String username) {player1Username = username; }
+
+    public void setPlayer2Username(String username) {player2Username = username; }
 }
