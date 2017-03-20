@@ -49,18 +49,12 @@ public class Player extends Entity {
         conversionMode = false;
     }
 
-    /**
-     * Shoots player's weapon in direction of mouse cursor
-     * @param aimX Direction X weapon is aimed in
-     * @param aimY Direction Y weapon is aimed in
-     * @return Bullet object travelling in specified direction
-     */
-    public Bullet shoot(float aimX, float aimY) {
+    public Bullet shoot(float aimX, float aimY, float pdx, float pdy) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
         if (now - getLastAttackTime() > SHOOT_DELAY) {
             setLastAttackTime(now);
-            return new Bullet(this, aimX, aimY, mapData);
+            return new Bullet(this, aimX, aimY, pdx, pdy, mapData);
         } else {
         	return null;
         }
