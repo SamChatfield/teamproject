@@ -20,7 +20,7 @@ public class ServerGameState extends GameState {
 
 	private String player1Username;
 	private String player2Username;
-	private int zombieCount = 5;
+	private int zombieCount = 10;
 
 	public ServerGameState(String player1Username, String player2Username){
 		this.player1Username = player1Username;
@@ -183,4 +183,6 @@ public class ServerGameState extends GameState {
 		SendableState copyOf = new SendableState(this); // Create a copy of the state.
 		return copyOf; // Return this so that it can be sent.
 	}
+
+
 }

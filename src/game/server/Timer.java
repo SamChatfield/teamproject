@@ -14,7 +14,7 @@ public class Timer implements Runnable {
 	 */
 	public Timer(int duration,ServerGameState state)
 	{
-		this.time = duration;
+		time = duration;
 		this.state = state;
 	}
 
@@ -29,7 +29,7 @@ public class Timer implements Runnable {
 	// Start the thread
 	public void run() {
 		boolean running = true;
-		for(time++; time>=0; time--) {
+		for(time = time; time>=0; time--) {
 			if(!running){
 				break;
 			}

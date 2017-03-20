@@ -79,7 +79,6 @@ public class Server {
 
 		} catch(Exception e) {
 			System.err.println("Exception in Server: " + e.getMessage());
-			e.printStackTrace();
 			System.exit(1); 
 		}
 	}

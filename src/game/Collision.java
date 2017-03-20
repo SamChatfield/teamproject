@@ -42,7 +42,8 @@ public class Collision {
 	 * @param zombies ArrayList of zombies
 	 * @param player Player objects
 	 */ 
-	public static void checkBulletCollision(Bullet b, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies,	Player player) {
+	public static void checkBulletCollision(Bullet b, ArrayList<Bullet> bullets, ArrayList<Zombie> zombies,
+			Player player) {
 		for (int i = 0; i < zombies.size(); i++) {
 			if (b.getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {
 				b.damage(zombies.get(i), 25, player.conversionMode);

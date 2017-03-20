@@ -35,10 +35,9 @@ public class ServerSender extends Thread {
 			objOut.reset();
 		} catch (IOException e) {
 			System.err.println("Communication Error! " + e.getMessage());
-			e.printStackTrace();
+			//System.exit(1);
 		} catch(ConcurrentModificationException c){
-			System.err.println("Concurrent mod exception in sendGameState() // Line 40");
-			c.printStackTrace();
+			System.out.println("Concurrent mod exception in sendGameState()");
 		}
 	}
 
@@ -90,15 +89,14 @@ public class ServerSender extends Thread {
 						sendGameState(); // Send a final update (so players don't finish with 50% health because they didn't get the final update.
 						sendEndState(); // Send end state of the game
 						System.out.println("Final state sent, end state sent");
-					} else{
+					}else{
 						sendGameState(); // Send the game state
 					}
-				} else {
+				} else{
 					// System.out.println("Game not ready yet");
 				}
 			} catch (InterruptedException e) {
 				System.err.println("ServerSender Interupted Exception: " + e.getMessage());
-				e.printStackTrace();
 			} 
 		}
 	}

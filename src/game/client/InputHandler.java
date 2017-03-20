@@ -91,6 +91,8 @@ public class InputHandler implements KeyListener, MouseListener {
 			clicked = false;
 		} catch (InterruptedException e1) {
 			System.out.println("Error in mouse detection: " + e1.getMessage());
+		} {
+
 		}
 	}
 
