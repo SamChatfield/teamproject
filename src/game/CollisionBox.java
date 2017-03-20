@@ -1,12 +1,12 @@
 package game;
 
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
-
 import game.client.Client;
 import game.client.Player;
 import game.util.DataPacket;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  * Created by Sam on 31/01/2017.
@@ -39,11 +39,11 @@ public class CollisionBox implements Serializable {
 			iheight = Client.wildZombieImage.getHeight();
 
 		} else {
-			width = (float) Bullet.getImage().getWidth() / (float) Client.TILE_SIZE;
-			height = (float) Bullet.getImage().getHeight() / (float) Client.TILE_SIZE;
+			width = (float) Client.bulletImage.getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Client.bulletImage.getHeight() / (float) Client.TILE_SIZE;
 
-			iwidth = Bullet.getImage().getWidth();
-			iheight = Bullet.getImage().getHeight();
+			iwidth = Client.bulletImage.getWidth();
+			iheight = Client.bulletImage.getHeight();
 		}
 	}
 
