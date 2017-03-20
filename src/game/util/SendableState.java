@@ -1,9 +1,10 @@
 package game.util;
 
-import game.server.ServerGameState;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import game.Bullet;
+import game.server.ServerGameState;
 
 /**
  * Sendable state that is sent to the server to handle status of the game
@@ -13,18 +14,24 @@ public class SendableState implements Serializable {
 	private int timeRemaining;
 	private String mapImage;
 	private ArrayList<DataPacket> zombies;
-	private ArrayList<DataPacket> bullets;
+	private ArrayList<Bullet> bullets;
+
+	private boolean hasFinished;
 
 	private DataPacket player1;
 	private DataPacket player2;
 
-	public ArrayList<DataPacket> getBullets() {
+	/**
+	 * Get the ArrayList of bullets
+	 * @return ArrayList of bullets in the game
+	 */
+	public ArrayList<Bullet> getBullets() {
 		return bullets;
 	}
 
 	/**
 	 * Get current time remaining in the game
-	 * @return (int) Time remaining in game
+	 * @return Time remaining in game
 	 */
 	public int getTimeRemaining() {
 		return timeRemaining;
@@ -32,7 +39,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the current map image
-	 * @return (String) Map image
+	 * @return Map image
 	 */
 	public String getMapImage() {
 		return mapImage;
@@ -40,7 +47,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the ArrayList of zombies, in the form of DataPackets
-	 * @return ArrayList<DataPacket> Zombies in the game
+	 * @return ArrayList of zombies in the game (as DataPackets)
 	 */
 	public ArrayList<DataPacket> getZombies() {
 		return zombies;
@@ -48,15 +55,15 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket of a specific player
-	 * @param username - Username of player to get
-	 * @return (DataPacket) DataPacket for specific player
+	 * @param (String) username Username of player to get
+	 * @return DataPacket for specific player
 	 */
 	public DataPacket getPlayer(String username){
 		if(username.equals(player1.getUsername())){
 			return player1;
-		}else if (username.equals(player2.getUsername())){
+		} else if (username.equals(player2.getUsername())){
 			return player2;
-		}else{
+		} else{
 			return null;
 		}
 	}
@@ -78,8 +85,16 @@ public class SendableState implements Serializable {
 	}
 
 	/**
+	 * Get whether the game has finished
+	 * @return Boolean of whether game finished
+	 */
+	public boolean HasFinished() {
+		return hasFinished;
+	}
+
+	/**
 	 * Constructor to create new sendable state
-	 * @param state - Current state of Server
+	 * @param state Current state of Server
 	 */
 	public SendableState(ServerGameState state){
 		this.player1 = state.getPlayer1().getData();
@@ -88,6 +103,8 @@ public class SendableState implements Serializable {
 		this.zombies = state.getSendableZombies();
 		this.timeRemaining = state.getTimeRemaining();
 		this.mapImage = state.getMapImage();
-		this.bullets = state.getSendableBullets();
+		this.bullets = state.getBullets();
+
+		this.hasFinished = state.HasFinished();
 	}
 }

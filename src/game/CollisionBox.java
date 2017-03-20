@@ -1,106 +1,141 @@
 package game;
 
+import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
+
 import game.client.Client;
 import game.client.Player;
 import game.util.DataPacket;
-
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 
 /**
  * Created by Sam on 31/01/2017.
  */
 public class CollisionBox implements Serializable {
 
-    private Entity owner;
-    private float width, height; // width and height of the box in the game coord system
-    private int iwidth, iheight;
+	private Entity owner;
+	private float width, height; // width and height of the box in the game coord system
+	private int iwidth, iheight;
 
-    public CollisionBox(Entity owner) {
-        this.owner = owner;
-//        width = (float) owner.image.getWidth() / (float) Client.TILE_SIZE;
-//        height = (float) owner.image.getHeight() / (float) Client.TILE_SIZE;
-        if (owner instanceof Player) {
-            width = (float) Player.getImage().getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Player.getImage().getHeight() / (float) Client.TILE_SIZE;
+	/**
+	 * Create a new collision box
+	 * @param owner Owner of this collision box (entity)
+	 */
+	public CollisionBox(Entity owner) {
+		this.owner = owner;
 
-            iwidth = Player.getImage().getWidth();
-            iheight = Player.getImage().getHeight();
-        } else if (owner instanceof Zombie){
-            width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
+		if (owner instanceof Player) {
+			width = (float) Player.getImage().getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Player.getImage().getHeight() / (float) Client.TILE_SIZE;
 
-            iwidth = Client.zombieImage.getWidth();
-            iheight = Client.zombieImage.getHeight();
-        } else {
-            width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
-            height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
+			iwidth = Player.getImage().getWidth();
+			iheight = Player.getImage().getHeight();
 
-            iwidth = Client.zombieImage.getWidth();
-            iheight = Client.zombieImage.getHeight();
-        }
-    }
+		} else if (owner instanceof Zombie){
+			width = (float) Client.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Client.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-    public Rectangle2D.Float getRect() {
-        return new Rectangle2D.Float(owner.getX() - width / 2, owner.getY() - height / 2, width, height);
-    }
+			iwidth = Client.wildZombieImage.getWidth();
+			iheight = Client.wildZombieImage.getHeight();
 
-    /**
-     * Get the screen rectangle representing this collision box relative to the player
-     * @param p player
-     * @return rectangle to draw to the screen for this box
-     */
-    public Rectangle2D.Float getDrawRect(Player p) {
-        float px = p.getX();
-        float py = p.getY();
+		} else {
+			width = (float) Bullet.getImage().getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Bullet.getImage().getHeight() / (float) Client.TILE_SIZE;
 
-        Rectangle2D.Float drawRect;
+			iwidth = Bullet.getImage().getWidth();
+			iheight = Bullet.getImage().getHeight();
+		}
+	}
 
-        // This is the player's collision box if true
-        if (owner instanceof Player && getX() == px && getY() == py) {
-            drawRect = new Rectangle2D.Float(320.0f - iwidth / 2, 320.0f - iheight / 2, iwidth, iheight);
-        } else {
-            Point drawPoint = p.relativeDrawPoint(owner.getX(), owner.getY(), iwidth, iheight);
-            drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
-        }
+	/**
+	 * Get a rectangle representing the collision box
+	 * @return Rectangle of collision box
+	 */
+	public Rectangle2D.Float getRect() {
+		return new Rectangle2D.Float(owner.getX() - width / 2, owner.getY() - height / 2, width, height);
+	}
 
-        return drawRect;
-    }
+	/**
+	 * Get the screen rectangle representing this collision box relative to the player
+	 * @param p player
+	 * @return rectangle to draw to the screen for this box
+	 */
+	public Rectangle2D.Float getDrawRect(Player p) {
+		float px = p.getX();
+		float py = p.getY();
 
-    public float getX() {
-        return owner.getX();
-    }
+		Rectangle2D.Float drawRect;
 
-    public float getY() {
-        return owner.getY();
-    }
+		// This is the player's collision box if true
+		if (owner instanceof Player && getX() == px && getY() == py) {
+			drawRect = new Rectangle2D.Float(320.0f - iwidth / 2, 320.0f - iheight / 2, iwidth, iheight);
+		} else {
+			Point drawPoint = p.relativeDrawPoint(owner.getX(), owner.getY(), iwidth, iheight);
+			drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
+		}
 
-    public float getWidth() {
-        return width;
-    }
+		return drawRect;
+	}
 
-    public float getHeight() {
-        return height;
-    }
+	/**
+	 * Get X coordinate of owner of collision box
+	 * @return X coordinate of owner
+	 */
+	public float getX() {
+		return owner.getX();
+	}
 
-    public boolean intersects(CollisionBox otherBox) {
-        return getRect().intersects(otherBox.getRect());
-    }
+	/**
+	 * Get Y coordinate of owner of collision box
+	 * @return Y coordinate of owner
+	 */
+	public float getY() {
+		return owner.getY();
+	}
 
-    public static Rectangle2D.Float collBoxRectFromData(DataPacket z, Player p) {
-        Rectangle2D.Float drawRect;
+	/**
+	 * Get width of collision box
+	 * @return Width
+	 */
+	public float getWidth() {
+		return width;
+	}
 
-        float width = (float) Client.zombieImage.getWidth() / (float) Client.TILE_SIZE;
-        float height = (float) Client.zombieImage.getHeight() / (float) Client.TILE_SIZE;
+	/**
+	 * Get height of collision box
+	 * @return Height
+	 */
+	public float getHeight() {
+		return height;
+	}
 
-        int iwidth = Client.zombieImage.getWidth();
-        int iheight = Client.zombieImage.getHeight();
+	/**
+	 * Get whether this collision box intersects with another
+	 * @param otherBox Another CollisionBox
+	 * @return Boolean of whether collided
+	 */
+	public boolean intersects(CollisionBox otherBox) {
+		return getRect().intersects(otherBox.getRect());
+	}
 
-        Point drawPoint = p.relativeDrawPoint(z.getX(), z.getY(), iwidth, iheight);
-        drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
+	/**
+	 * Get collision box rectanngle from DataPacket
+	 * @param z DataPacket object
+	 * @param p Player object
+	 * @return Rectangle
+	 */
+	public static Rectangle2D.Float collBoxRectFromData(DataPacket z, Player p) {
+		Rectangle2D.Float drawRect;
 
-        return drawRect;
-    }
+		float width = (float) Client.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
+		float height = (float) Client.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
 
+		int iwidth = Client.wildZombieImage.getWidth();
+		int iheight = Client.wildZombieImage.getHeight();
+
+		Point drawPoint = p.relativeDrawPoint(z.getX(), z.getY(), iwidth, iheight);
+		drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
+
+		return drawRect;
+	}
 }

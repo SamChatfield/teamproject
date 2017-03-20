@@ -2,7 +2,6 @@ package game.server;
 
 /**
  * Class to countdown from set time to 0
- * TODO: Improve or replace this class to allow pausing and modifying start times
  */
 public class Timer implements Runnable {
 
@@ -15,7 +14,7 @@ public class Timer implements Runnable {
 	 */
 	public Timer(int duration,ServerGameState state)
 	{
-		int time = duration;
+		this.time = duration;
 		this.state = state;
 	}
 
@@ -27,12 +26,18 @@ public class Timer implements Runnable {
 		return time;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
+	// Start the thread
 	public void run() {
-		for(time = 180; time>=0; time--) {
+		boolean running = true;
+		for(time++; time>=0; time--) {
+			if(!running){
+				break;
+			}
 			// System.out.println("Time "+time);
+
+			if (state.HasFinished()) {
+				running = false; // Stop the countdown
+			}
 			try {
 				state.updateTime(time);
 				Thread.sleep(1000);

@@ -19,9 +19,9 @@ public class MapData {
 
 	/**
 	 * Constructor for MapData
-	 * @param (String) mapPath - Path to map file
-	 * @param (String) tilesheet - Name of tile sheet file
-	 * @param (tileData - Name of tile data file
+	 * @param mapPath Path to map file
+	 * @param tilesheet Name of tile sheet file
+	 * @param tileData Name of tile data file
 	 */
 	public MapData(String mapPath, String tilesheet, String tileData) {
 
@@ -50,10 +50,10 @@ public class MapData {
 	/**
 	 * Check if the entity (zombie/player/bullet) can move on a specific coordinate
 	 * This stops entities going over obstacles such as trees
-	 * @param (float) x - X coordinate to check
-	 * @param (float) y - Y coordinate to check
-	 * @param (Entity) e - Specific entity (to get the width and height)
-	 * @return (boolean) Whether the entities move is valid
+	 * @param x X coordinate to check
+	 * @param y Y coordinate to check
+	 * @param e Specific entity (to get the width and height)
+	 * @return Whether the entities move is valid
 	 */
 	public boolean isEntityMoveValid(float x, float y, Entity e) {
 		float wBound = width / 2.0f;
@@ -78,9 +78,9 @@ public class MapData {
 
 	/**
 	 * Get the type of tile at a specific coordinate
-	 * @param (float) x - X coordinate
-	 * @param (float) y - Y coordinate
-	 * @return (TileType) Type of tile at that coordinate
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @return Type of tile at that coordinate
 	 */
 	public TileType tileTypeAt(float x, float y) {
 		int ix = Math.round(x + width / 2.0f - 0.5f);
@@ -91,7 +91,7 @@ public class MapData {
 
 	/**
 	 * Get the map
-	 * @return (Tile[][]) 2D array of tiles = the map
+	 * @return 2D array of tiles = the map
 	 */
 	public Tile[][] getMap() {
 		return map;
@@ -99,7 +99,7 @@ public class MapData {
 
 	/**
 	 * Get the width of the map
-	 * @return (int) Width of map
+	 * @return Width of map
 	 */
 	public int getWidth() {
 		return width;
@@ -107,7 +107,7 @@ public class MapData {
 
 	/**
 	 * Get the height of the map
-	 * @return (int) Height of map
+	 * @return Height of map
 	 */
 	public int getHeight() {
 		return height;
