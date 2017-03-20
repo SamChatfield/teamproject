@@ -416,7 +416,7 @@ public class Client extends Canvas {
 		// Face the player in the direction of the mouse postate
 		Point mousePos = inputHandler.getMousePos();
 		Vector fv = null;
-		if (inputHandler.isMouseInside() && mousePos != null && this.hasFocus()) {
+		if (inputHandler.isMouseInside() && mousePos != null) {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
 
             if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {

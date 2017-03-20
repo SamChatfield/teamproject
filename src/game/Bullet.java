@@ -16,7 +16,7 @@ import game.util.Vector;
  */
 public class Bullet extends Entity implements Serializable {
 
-	public static final float BULLET_SPEED = 0.3f;
+	public static final float BULLET_SPEED = 0.15f; // Speed of bullets
 
 	private float dx, dy; // Change in x and y of the bullet each update before delta
 
@@ -25,15 +25,24 @@ public class Bullet extends Entity implements Serializable {
 	private double distance;
 	private static final double fadeDistance = 5;
 
-	public Bullet(Player player, float aimX, float aimY, float pdx, float pdy, MapData mapData) {
+	// Load image for bullet
+	private static final BufferedImage image = ResourceLoader.bulletImage();
+
+	/**
+	 * Create a new bullet
+	 * @param player Player object
+	 * @param aimX X coordinate aimed in
+	 * @param aimY Y coordinate aimed in
+	 * @param mapData Current mapdata used to know when bullet is over obstacles
+	 */
+	public Bullet(Player player, float aimX, float aimY, MapData mapData) {
 		super(player.getX(), player.getY(), BULLET_SPEED, 0, mapData, DataPacket.Type.BULLET);
 
 		setUsername(player.getUsername());
 
 		Vector normalDir = new Vector(aimX, aimY).normalised();
-
-		dx = normalDir.x() * BULLET_SPEED + pdx;
-		dy = normalDir.y() * BULLET_SPEED + pdy;
+		dx = normalDir.x();
+		dy = normalDir.y();
 
 		data.setFacingAngle(player.getFacingAngle()); // TODO check the
 		// efficiency of this
@@ -46,11 +55,13 @@ public class Bullet extends Entity implements Serializable {
 	 * @param delta Interpolation
 	 */
 	public void move(double delta) {
-		float deltX = (float) (dx * delta);
-		float deltY = (float) (dy * delta);
+		float deltX = (float) (dx * BULLET_SPEED * delta);
+		float deltY = (float) (dy * BULLET_SPEED * delta);
+		float incX = (float) (dx * BULLET_SPEED * delta);
+		float incY = (float) (dy * BULLET_SPEED * delta);
 
-		data.setX(getX() + deltX);
-		data.setY(getY() + deltY);
+		data.setX(getX() + incX);
+		data.setY(getY() + incY);
 
 		distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
 
