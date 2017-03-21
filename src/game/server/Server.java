@@ -18,13 +18,8 @@ import java.util.ArrayList;
 public class Server {
 
 	public static void main(String[] args){
-		if(args.length != 2){
-			System.out.println("Usage: java Server <host> <port>");
-			System.exit(0);
-		}
 
-		String host = args[0];
-		int port = Integer.parseInt(args[1]);
+		int port = 4444;
 
 		// Keep track of connected users
 		// TODO: Expand clientTable
