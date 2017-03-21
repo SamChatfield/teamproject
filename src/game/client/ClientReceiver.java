@@ -39,6 +39,14 @@ public class ClientReceiver extends Thread {
 		try {
 			while(true) {
 				Thread.sleep(1000/120);
+				if(!state.playersReady()) {
+					String s = (String)objIn.readObject();
+					if(s.equals("PlayersReady")) {
+						state.setReady(true);
+						System.out.println("state set to true");
+						System.out.println(state.playersReady());
+					}
+				}
 				if(!inProgress){
 					String s = (String)objIn.readObject();
 					if(s.equals("StartingGame")){
