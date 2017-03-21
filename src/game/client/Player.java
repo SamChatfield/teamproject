@@ -22,6 +22,7 @@ public class Player extends Entity {
 	private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
 	private static final float MOVE_SPEED = 0.1f;
 	private static final BufferedImage image = ResourceLoader.playerImage();
+	private static final BufferedImage opponentImage = ResourceLoader.opponentImage();
 
 	private boolean showCollBox;
 
@@ -87,6 +88,10 @@ public class Player extends Entity {
         int w = image.getWidth();
         int h = image.getHeight();
 
+        // Screen width and height
+        int sw = Client.GAME_DIMENSION.width;
+        int sh = Client.GAME_DIMENSION.height;
+
         if (showCollBox) {
             g2d.setColor(Color.RED);
             g2d.draw(collisionBox.getDrawRect(this));
@@ -95,9 +100,9 @@ public class Player extends Entity {
 
         // Ensures player is facing the right direction (based on mouse pointer location)
         AffineTransform at = g2d.getTransform();
-        g2d.rotate(data.getFacingAngle(), 320, 320);
+        g2d.rotate(data.getFacingAngle(), sw / 2, sh / 2);
         
-        g2d.drawImage(image, 320 - w / 2, 320 - h / 2, null);
+        g2d.drawImage(image, sw / 2 - w / 2, sw / 2 - h / 2, null);
         g2d.setTransform(at);
         
     }
@@ -109,8 +114,8 @@ public class Player extends Entity {
      */
     public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player) {
         // Width and height of the entity sprite
-        int w = image.getWidth();
-        int h = image.getHeight();
+        int w = opponentImage.getWidth();
+        int h = opponentImage.getHeight();
 
         Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
         int drawX = drawPoint.x;
@@ -136,7 +141,7 @@ public class Player extends Entity {
         AffineTransform at = g2d.getTransform();
         g2d.rotate(data.getFacingAngle(), drawX + w / 2, drawY + h / 2);
 
-        g2d.drawImage(image, drawX, drawY, null);
+        g2d.drawImage(opponentImage, drawX, drawY, null);
         g2d.setTransform(at);
     }
 
@@ -157,17 +162,8 @@ public class Player extends Entity {
 
         int drawX = swr + Math.round((x - px) / pvr * swr) - (w / 2); // 320 + ((2 - 6) / 5 * 320)
         int drawY = shr + Math.round((py - y) / pvr * shr) - (h / 2); // 320 + ((6 - 2) / 5 * 320) y is inverted because our coord system is traditional whereas awt origin is top-left
-        // System.out.println("Draw x,y: (" + drawX + "," + drawY + ") and actual x,y: (" + x + "," + y + ") and p: (" + px + "," + py + ")");
 
         return new Point(drawX, drawY);
-    }
-
-    /**
-     * Get list of bullets currently in the game (shot) that belong to the player
-     * @return ArrayList of bullets
-     */
-    public ArrayList<Bullet> getBullets() {
-        return bullets;
     }
 
     /**
