@@ -27,8 +27,10 @@ public class Sound extends Thread{
 	private Clip musicClip, gunClip;
 	private static final float ZOMBIE_SOUND_PROBABILITY = 0.01f;
 	Random rn, oneTwoOrThree;
-	public static boolean musicPlayback = false;
+	public static boolean musicPlayback = true;
 	public static boolean sfxPlayback = true;
+	public boolean initial = true;
+	public boolean isActive = true;
 
 	/**
 	 * Initialise sound object
@@ -44,12 +46,9 @@ public class Sound extends Thread{
 	 * Used for the music and the random zombie sound effects. Updates every half a second.
 	 */ 
 	public void run() {
-		playMusic();
 		try {
 			while(running) {
-				if(!musicPlayback) {
-					stopMusic();
-				}
+				playMusic();
 				update();
 				Thread.sleep(500);
 			}
@@ -145,8 +144,10 @@ public class Sound extends Thread{
 	 * Method to play the sound of player being hit by a zombie
 	 */
 	public void playerHurt() {
-		Clip playerHurt = this.createClip(hurt);
-		playerHurt.start();
+		if(sfxPlayback) {
+			Clip playerHurt = this.createClip(hurt);
+			playerHurt.start();
+		}
 	}
 
 	/**
@@ -166,19 +167,22 @@ public class Sound extends Thread{
 	 * Method used to play the music. The music is looped continuously
 	 */
 	public void playMusic() {
-		if(!musicPlayback) {
-			musicPlayback = true;
+		if(initial) {
+			System.out.println("Music started, we good");
 			musicClip = this.createClip(music);
 			musicClip.loop(Clip.LOOP_CONTINUOUSLY);
-		}
-	}
+			isActive = true;
+			initial = false;
+		}else if(musicPlayback && !isActive) {
+			System.out.println("Music started again");
+			musicClip = this.createClip(music);
+			musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+			isActive = true;
+		} else if(!musicPlayback && isActive) {
+			System.out.println("Music stopped");
+			musicClip.close();
+			isActive = false;
 
-	/**
-	 * Method used to stop the music
-	 */
-	public void stopMusic() {
-		if(musicClip.isActive()) {
-			musicClip.stop();
 		}
 	}
 }

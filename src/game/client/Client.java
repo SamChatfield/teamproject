@@ -42,6 +42,13 @@ public class Client extends Canvas {
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
 
+	// Load main iamges into the game
+	public static final BufferedImage wildZombieImage = ResourceLoader.zombieImage();
+	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
+	public static final BufferedImage opponentZombieImage = ResourceLoader.zombieOpponentImage();
+	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
+	public static final BufferedImage lightingImage = ResourceLoader.lightingImage();
+
 	public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
@@ -413,15 +420,14 @@ public class Client extends Canvas {
 		// Turn all sound on
 		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
 			System.out.println("Sound ON");
-			Sound.sfxPlayback = true;sdjhasdahsd
-			soundManager.playMusic();
+			Sound.sfxPlayback = true;
+			Sound.musicPlayback = true;
 		}
 		// Turn all sound off
 		if(inputHandler.isKeyDown(KeyEvent.VK_M)) {
 			System.out.println("Sound OFF");
 			Sound.musicPlayback = false;
 			Sound.sfxPlayback = false;
-			soundManager.stopMusic();
 		}
 
 		// Face the player in the direction of the mouse postate
@@ -594,7 +600,7 @@ public class Client extends Canvas {
 		User newUser = new User(username, difficulty);
 		// ClientSender and ClientReceiver objects to handle communication with server
 		ClientSender client_sender = new ClientSender(newUser, objOut,null);
-		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
+		ClientReceiver client_receiver = new ClientReceiver(newUser, objIn);
 
 		// Then create a client state for the client
 		ClientGameState state = new ClientGameState(username);
