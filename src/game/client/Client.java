@@ -413,7 +413,7 @@ public class Client extends Canvas {
 		// Turn all sound on
 		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
 			System.out.println("Sound ON");
-			Sound.sfxPlayback = true;
+			Sound.sfxPlayback = true;sdjhasdahsd
 			soundManager.playMusic();
 		}
 		// Turn all sound off
