@@ -31,6 +31,8 @@ public class Renderer {
 	public static final BufferedImage opponentZombieImage = ResourceLoader.zombieOpponentImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
 	public static final BufferedImage lightingImage = ResourceLoader.lightingImage();
+	public static final BufferedImage speedUp = ResourceLoader.speedUp();
+	public static final BufferedImage speedDown = ResourceLoader.speedDown();
 
 	public Rectangle menuButton;
 	public Rectangle exitButton;

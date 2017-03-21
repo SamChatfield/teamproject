@@ -86,6 +86,22 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for speed up powerup into the game
+	 * @return BufferedImage for speed up powerup
+	 */
+	public static BufferedImage speedUp() {
+		return getImage("speedUp.png");
+	}
+
+	/**
+	 * Load image for speed down powerup into the game
+	 * @return BufferedImage for speed down powerup
+	 */
+	public static BufferedImage speedDown() {
+		return getImage("speedDown.png");
+	}
+
+	/**
 	 * Import Tradewinds font into the game
 	 * @return Imported Font
 	 */
