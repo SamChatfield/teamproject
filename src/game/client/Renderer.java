@@ -30,7 +30,7 @@ public class Renderer {
 	public Rectangle menuButton;
 	public Rectangle exitButton;
 
-	private Color fadedWhite = new Color(255,255,255,190);
+	public Color fadedWhite = new Color(255,255,255,190);
 
 	/**
 	 * Create a new Renderer

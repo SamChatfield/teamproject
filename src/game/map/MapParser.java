@@ -61,7 +61,7 @@ public class MapParser {
 		int height = mapImage.getHeight();
 		Tile[][] map = new Tile[width][height];
 
-		System.out.println(new Color(mapImage.getRGB(0,0)));
+		// System.out.println(new Color(mapImage.getRGB(0,0)));
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				Color colour = new Color(mapImage.getRGB(x, y));

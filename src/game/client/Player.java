@@ -103,7 +103,7 @@ public class Player extends Entity {
     }
 
     /**
-     * Draw relative to the other player
+     * Draw opponent relative to the player
      * @param g2d Graphics2D object
      * @param player Player object
      */
@@ -115,7 +115,13 @@ public class Player extends Entity {
         Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
+        
+        // Display player name
+        g2d.setFont(ResourceLoader.getTradewindsFont().deriveFont(15f));
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(player.getUsername(), drawX, drawY-20);
 
+        // Health bar
         g2d.setColor(Color.GREEN);
         Rectangle healthBarFill = new Rectangle(drawX, drawY + 50, getHealth(), 2);
         g2d.fill(healthBarFill);

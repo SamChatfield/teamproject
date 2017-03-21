@@ -67,7 +67,7 @@ public class ServerGameState extends GameState {
 		mapData = new MapData(mapImage, "tilesheet.png", "tiledata.csv");
 
 		// Set up two player objects that we can update later.
-		this.player1 = new Player(-15,0 ,mapData, player1Username);
+		this.player1 = new Player(13,0 ,mapData, player1Username);
 		this.player2 = new Player(15 ,0 ,mapData, player2Username);
 
 		ArrayList<Zombie> zombieFactory = new ArrayList<>();

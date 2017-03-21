@@ -3,6 +3,7 @@ package game.server;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -56,7 +57,9 @@ public class ServerReceiver extends Thread {
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("User disconnected -- closing the server");
+				System.exit(1);
+				//e.printStackTrace();
 			}
 			
 		}

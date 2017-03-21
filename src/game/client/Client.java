@@ -453,12 +453,6 @@ public class Client extends Canvas {
 
 			updateLocalPlayer(keyPresses,delta,fv);
 
-		/*
-		if(player.getHealth() < 0) {
-			currentState = STATE.END;
-			System.out.println("GAME OVER");
-		}
-		*/
 	}
 
 	/**
@@ -555,7 +549,6 @@ public class Client extends Canvas {
 					break;
 			}
 
-			System.out.println(difficulty);
 			if(username.equals("")) {
 				// Default value if no username selected
 				username = "a";

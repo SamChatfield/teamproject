@@ -43,14 +43,14 @@ public class ClientReceiver extends Thread {
 					String s = (String)objIn.readObject();
 					if(s.equals("PlayersReady")) {
 						state.setReady(true);
-						System.out.println("state set to true");
-						System.out.println(state.playersReady());
+						// System.out.println("state set to true");
+						// System.out.println(state.playersReady());
 					}
 				}
 				if(!inProgress){
 					String s = (String)objIn.readObject();
 					if(s.equals("StartingGame")){
-						System.out.println("starting");
+						System.out.println("Starting the game");
 						inProgress = true;
 					}else if(s.equals("GameOver")){
 						inProgress = false;
@@ -69,9 +69,8 @@ public class ClientReceiver extends Thread {
 			}
 		} catch(Exception e) {
 			System.err.println("Exception in ClientReceiver: " + e.getMessage());
-
-			e.printStackTrace();;
-			//System.exit(1);
+			// e.printStackTrace();;
+			System.exit(1);
 
 		}
 	}

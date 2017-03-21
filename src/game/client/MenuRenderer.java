@@ -144,7 +144,7 @@ public class MenuRenderer {
 		try {
 			background = ImageIO.read(new File("src/game/res/background.png"));
 		} catch (IOException e) {
-			System.err.println("Error reading backgroind image: " + e.getMessage());
+			System.err.println("Error reading background image: " + e.getMessage());
 		}
 
 		// Setup buttons
