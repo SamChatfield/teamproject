@@ -421,14 +421,13 @@ public class Client extends Canvas {
 		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
 			System.out.println("Sound ON");
 			Sound.sfxPlayback = true;
-			soundManager.playMusic();
+			Sound.musicPlayback = true;
 		}
 		// Turn all sound off
 		if(inputHandler.isKeyDown(KeyEvent.VK_M)) {
 			System.out.println("Sound OFF");
 			Sound.musicPlayback = false;
 			Sound.sfxPlayback = false;
-			soundManager.stopMusic();
 		}
 
 		// Face the player in the direction of the mouse postate
@@ -608,7 +607,7 @@ public class Client extends Canvas {
 		User newUser = new User(username, difficulty);
 		// ClientSender and ClientReceiver objects to handle communication with server
 		ClientSender client_sender = new ClientSender(newUser, objOut,null);
-		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
+		ClientReceiver client_receiver = new ClientReceiver(newUser, objIn);
 
 		// Then create a client state for the client
 		ClientGameState state = new ClientGameState(username);
