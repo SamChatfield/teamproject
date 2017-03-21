@@ -35,7 +35,7 @@ public class Matchmaker extends Thread{
 							table.changePlayerStatus(player1, ClientTable.playerStatus.IN_GAME);
 							table.changePlayerStatus(player2, ClientTable.playerStatus.IN_GAME);
 							players.remove(i);
-							players.remove(j);
+							players.remove(j-1);
 						}
 					}
 				}
