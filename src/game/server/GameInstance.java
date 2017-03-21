@@ -7,7 +7,6 @@ import game.client.Player;
 import game.util.EndState;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -110,21 +109,32 @@ public class GameInstance extends Thread {
 		}
 
 		// Move all of the bullets, remove them if they've gone off of the map/hit an object
-		try {
-			Iterator<Bullet> bullets = state.getBullets().iterator();
-			while (bullets.hasNext()) {
-				Bullet b = bullets.next();
-				if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
-					bullets.remove();
-					continue;
-				}
-				Player owner = state.getPlayer(b.getUsername());
-				Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
-				Collision.checkPlayerCollision(b, state.getBullets(), owner, state.getOtherPlayer(owner.getUsername()));
-				b.move(delta);
+//		try {
+//			Iterator<Bullet> bullets = state.getBullets().iterator();
+//			while (bullets.hasNext()) {
+//				Bullet b = bullets.next();
+//				if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
+//					bullets.remove();
+//					continue;
+//				}
+//				Player owner = state.getPlayer(b.getUsername());
+//				Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
+//				Collision.checkPlayerCollision(b, state.getBullets(), owner, state.getOtherPlayer(owner.getUsername()));
+//				b.move(delta);
+//			}
+//		} catch(ConcurrentModificationException e){
+//			System.out.println("Error, this shouldn't happen: " + e.getMessage());
+//		}
+		for (Iterator<Bullet> it = state.getBullets().iterator(); it.hasNext(); ) {
+			Bullet b = it.next();
+			if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
+				it.remove();
+				continue;
 			}
-		} catch(ConcurrentModificationException e){
-			System.out.println("Error, this shouldn't happen: " + e.getMessage());
+			Player owner = state.getPlayer(b.getUsername());
+			Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
+			Collision.checkPlayerCollision(b, state.getBullets(), owner, state.getOtherPlayer(owner.getUsername()));
+			b.move(delta);
 		}
 
 		// Player converted zombies
