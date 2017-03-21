@@ -85,10 +85,10 @@ public class Client extends Canvas {
 	 * @param state CurrentSlientState object
 	 * @param sender ClientSender object
 	 */
-	private Client(ClientGameState state, ClientSender sender) {
+	private Client(ClientGameState state, ClientSender sender, String username) {
 		this.state = state;
 		this.sender = sender;
-		container = new JFrame(TITLE);
+		container = new JFrame(TITLE + " - " + username);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
 		panel.setLayout(null);
@@ -596,7 +596,7 @@ public class Client extends Canvas {
 		client_sender.start();
 		client_receiver.start();
 
-		Client client = new Client(state,client_sender);
+		Client client = new Client(state,client_sender, username);
 
 		// Create and start the client loop over the loop method of the client object.
 		// :: is a method reference since loop is an existing method,
