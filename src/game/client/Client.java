@@ -24,6 +24,7 @@ import javax.swing.WindowConstants;
 import game.ResourceLoader;
 import game.util.EndState;
 import game.util.PlayerUpdatePacket;
+import game.util.User;
 import game.util.Vector;
 
 /**
@@ -78,7 +79,7 @@ public class Client extends Canvas {
 
 	private static String username;
 	private static String ipAddress;
-	private static String difficulty;
+	private static int difficulty;
 
 	/**
 	 * Create a new Client object
@@ -154,6 +155,17 @@ public class Client extends Canvas {
 
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
+
+				if(!state.playersReady()) {
+					while(!state.playersReady()) {
+						renderer.renderWaitingForOpponent();
+						try {
+							Thread.sleep(100);
+						} catch(Exception e) {
+
+						}
+					}
+				}
 
 				if (!state.isConnected()) {
 					sender.sendObject("StartGame"); // Send a message to the server to start the game.
@@ -338,6 +350,7 @@ public class Client extends Canvas {
 					if(inputHandler.wasMouseClicked()) {
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
+						sender.sendObject("Waiting");
 						inputHandler.setMouseClicked(false);
 					}
 				}
@@ -529,7 +542,19 @@ public class Client extends Canvas {
 		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE);
 		if (option == JOptionPane.OK_OPTION) {
 			username = usernameEntry.getText();
-			difficulty = (String) difficultySelection.getSelectedItem();
+			String choice = (String) difficultySelection.getSelectedItem();
+			switch(choice) {
+				case "Easy":
+					difficulty = User.EASY;
+					break;
+				case "Medium":
+					difficulty = User.MED;
+					break;
+				case "Hard":
+					difficulty = User.HARD;
+					break;
+			}
+
 			System.out.println(difficulty);
 			if(username.equals("")) {
 				// Default value if no username selected
@@ -580,9 +605,9 @@ public class Client extends Canvas {
 			JOptionPane.showMessageDialog(null, "Server offline!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
-
+		User newUser = new User(username, difficulty);
 		// ClientSender and ClientReceiver objects to handle communication with server
-		ClientSender client_sender = new ClientSender(username, objOut,null);
+		ClientSender client_sender = new ClientSender(newUser, objOut,null);
 		ClientReceiver client_receiver = new ClientReceiver(username, objIn);
 
 		// Then create a client state for the client

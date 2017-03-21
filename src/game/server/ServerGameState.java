@@ -19,11 +19,13 @@ public class ServerGameState extends GameState {
 	private String player2Username;
 	private int zombieCount = 5;
 
-	public ServerGameState(String player1Username, String player2Username){
-		this.player1Username = player1Username;
-		this.player2Username = player2Username;
-		this.bullets = new ArrayList<>();
-	}
+    public ServerGameState(String player1Username, String player2Username, int difficulty){
+        this.player1Username = player1Username;
+        this.player2Username = player2Username;
+        this.bullets = new ArrayList<>();
+        this.playersConnected = false;
+        zombieCount = (difficulty+1)*10;
+    }
 
 	/**
 	 * Get a player
@@ -197,4 +199,8 @@ public class ServerGameState extends GameState {
 		SendableState copyOf = new SendableState(this); // Create a copy of the state.
 		return copyOf; // Return this so that it can be sent.
 	}
+
+    public void setPlayer1Username(String username) {player1Username = username; }
+
+    public void setPlayer2Username(String username) {player2Username = username; }
 }

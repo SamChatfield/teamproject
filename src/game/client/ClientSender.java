@@ -1,5 +1,7 @@
 package game.client;
 
+import game.util.User;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
@@ -8,17 +10,17 @@ import java.io.ObjectOutputStream;
  */
 public class ClientSender extends Thread {
 
-	private String username;
+	private User user;
 	private ObjectOutputStream objOut;
 	private ClientGameState state;
 
 	/**
 	 * Constructor
-	 * @param username Name of user
+	 * @param user Object of user
 	 * @param objOut ObjectOutputStream
 	 */
-	ClientSender(String username, ObjectOutputStream objOut, ClientGameState state) {
-		this.username = username;
+	ClientSender(User user, ObjectOutputStream objOut, ClientGameState state) {
+		this.user = user;
 		this.objOut = objOut;
 		this.state = state;
 	}
@@ -40,7 +42,7 @@ public class ClientSender extends Thread {
 	// Main method to run when thread starts
 	public void run() {
 		System.out.println("Client: ClientSender running");
-		sendObject(username);
+		sendObject(user);
 
 		// Keep running, sending the player object from the client game state every so often.
 		while(true) {

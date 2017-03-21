@@ -13,14 +13,19 @@ public class ServerSender extends Thread {
 
 	private ServerGameState state;
 	private ObjectOutputStream objOut;
-	private boolean initial;
+	private boolean initial, playersReadyInitial;
+
 
 	/**
 	 * Constructor method
 	 * @param objOut The ObjectOutputStream
 	 */
-	public ServerSender(ObjectOutputStream objOut, ServerGameState state) {
-		this.objOut = objOut; this.state = state; this.initial = true;
+	public ServerSender(ObjectOutputStream objOut) {
+		this.objOut = objOut;
+		this.initial = true;
+		this.playersReadyInitial = true;
+		//This is a dummy state that won't be used, it is waiting for a real state to be created
+		this.state = new ServerGameState("a", "b", 0);
 	}
 
 	/**
@@ -77,9 +82,16 @@ public class ServerSender extends Thread {
 	public void run() {
 		boolean finalStateSent = false;
 		while(true) {
-			try {
+            try {
 				Thread.sleep(1000/60);
-				if (state.inProgress()) { // If there is a game in progress
+				if(state.playersReady()) {
+					if(playersReadyInitial) {
+						sendObject("PlayersReady");
+						System.out.println("Sent out playersReady");
+						playersReadyInitial = false;
+					}
+				}
+				if (state.inProgress()) { // if there is a game in progress
 					if(initial){
 						sendObject("StartingGame");
 						initial = false;
@@ -101,5 +113,9 @@ public class ServerSender extends Thread {
 				e.printStackTrace();
 			} 
 		}
+	}
+
+	public void updateState(ServerGameState server) {
+		this.state = server;
 	}
 }
