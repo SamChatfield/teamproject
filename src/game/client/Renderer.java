@@ -25,7 +25,12 @@ public class Renderer {
 	private ClientGameState state;
 	private boolean showCollBox = false;
 
-	private BufferedImage lighting;
+	// Load main iamges into the game
+	public static final BufferedImage wildZombieImage = ResourceLoader.zombieImage();
+	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
+	public static final BufferedImage opponentZombieImage = ResourceLoader.zombieOpponentImage();
+	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
+	public static final BufferedImage lightingImage = ResourceLoader.lightingImage();
 
 	public Rectangle menuButton;
 	public Rectangle exitButton;
@@ -312,7 +317,7 @@ public class Renderer {
 	 * @param g2d Graphics2D object
 	 */
 	public void drawLighting(Graphics2D g2d) {
-		g2d.drawImage(Client.lightingImage, 0, 0, null);
+		g2d.drawImage(lightingImage, 0, 0, null);
 	}
 
 	/**
@@ -344,8 +349,8 @@ public class Renderer {
 	private void drawZombie(Graphics2D g2d, Player player, DataPacket z) {
 
 		// Width and height of the entity sprite
-		int w = Client.wildZombieImage.getWidth();
-		int h = Client.wildZombieImage.getHeight();
+		int w = wildZombieImage.getWidth();
+		int h = wildZombieImage.getHeight();
 
 		Point drawPoint = player.relativeDrawPoint(z.getX(), z.getY(), w, h);
 		int drawX = drawPoint.x;
@@ -366,13 +371,13 @@ public class Renderer {
 		g2d.rotate(z.getFacingAngle(), drawX + w / 2, drawY + h / 2);
 
 		if(z.getState() == DataPacket.State.PLAYER && player.getUsername().equals(z.getUsername())) {
-			g2d.drawImage(Client.playerZombieImage, drawX, drawY, null);
+			g2d.drawImage(playerZombieImage, drawX, drawY, null);
 		}
 		else if(z.getState() == DataPacket.State.PLAYER) {
-			g2d.drawImage(Client.opponentZombieImage, drawX, drawY, null);
+			g2d.drawImage(opponentZombieImage, drawX, drawY, null);
 		}
 		else {
-			g2d.drawImage(Client.wildZombieImage, drawX, drawY, null);
+			g2d.drawImage(wildZombieImage, drawX, drawY, null);
 		}
 		g2d.setTransform(at);
 	}
@@ -393,8 +398,8 @@ public class Renderer {
 	 * @param b DataPacket for the bullet
 	 */
 	private void drawBullet(Graphics2D g2d, Player player, DataPacket b) {
-		int w = Client.bulletImage.getWidth();
-		int h = Client.bulletImage.getHeight();
+		int w = bulletImage.getWidth();
+		int h = bulletImage.getHeight();
 
 		Point drawPoint = player.relativeDrawPoint(b.getX(), b.getY(), w, h);
 		int drawX = drawPoint.x;
@@ -402,7 +407,7 @@ public class Renderer {
 
 		AffineTransform at = g2d.getTransform();
 		g2d.rotate(b.getFacingAngle(), drawX, drawY);
-		g2d.drawImage(Client.bulletImage, drawX, drawY, null);
+		g2d.drawImage(bulletImage, drawX, drawY, null);
 		g2d.setTransform(at);
 	}
 
