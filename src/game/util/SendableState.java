@@ -24,7 +24,7 @@ public class SendableState implements Serializable {
 	 * Get the ArrayList of bullets
 	 * @return ArrayList of bullets in the game
 	 */
-	public ArrayList<Bullet> getBullets() {
+	public ArrayList<DataPacket> getBullets() {
 		return bullets;
 	}
 
@@ -54,7 +54,7 @@ public class SendableState implements Serializable {
 
 	/**
 	 * Get the DataPacket of a specific player
-	 * @param (String) username Username of player to get
+	 * @param username Username of player to get
 	 * @return DataPacket for specific player
 	 */
 	public DataPacket getPlayer(String username){
@@ -102,7 +102,7 @@ public class SendableState implements Serializable {
 		this.zombies = state.getSendableZombies();
 		this.timeRemaining = state.getTimeRemaining();
 		this.mapImage = state.getMapImage();
-		this.bullets = state.getBullets();
+		this.bullets = state.getSendableBullets();
 
 		this.hasFinished = state.HasFinished();
 	}

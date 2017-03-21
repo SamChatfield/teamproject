@@ -1,17 +1,14 @@
 package game.server;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import game.Bullet;
 import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
-import game.util.DataPacket;
-import game.util.GameState;
-import game.util.PlayerUpdatePacket;
-import game.util.SendableState;
-import game.util.Vector;
+import game.util.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * The game state of the server at any one time.
@@ -109,6 +106,18 @@ public class ServerGameState extends GameState {
 		return data;
 	}
 
+    /**
+     * Get an ArrayList of DataPacket that represents bullets in the game state
+     * @return ArrayList of DataPackets containing bullets
+     */
+    public ArrayList<DataPacket> getSendableBullets() {
+        ArrayList<DataPacket> data = new ArrayList<>();
+        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
+            data.add(it.next().getData());
+        }
+        return data;
+    }
+
 	/**
 	 * Update a player in the game state
 	 * @param username Username of player to update
@@ -123,6 +132,7 @@ public class ServerGameState extends GameState {
 		ArrayList<String> moves = packet.getKeyPresses();
 		double delta = packet.getDelta();
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
+        boolean shootNow = false;
 
 		// Apply player movement
 		for(String s:moves) {
@@ -152,15 +162,8 @@ public class ServerGameState extends GameState {
 				toModify.conversionMode = false;
 				break;
 			case "BUTTON1":
-				// game coord x and y position of the aim
-				double playerAngle = toModify.getFacingAngle();
-				float aimX = (float) Math.cos(playerAngle);
-				float aimY = (float) -Math.sin(playerAngle);
-				Bullet b = toModify.shoot(aimX, aimY);
-				if(b != null){ // this could happen if they have already shot recently.
-					bullets.add(b);
-				}
-				break;
+                shootNow = true;
+                break;
 			}
 		}
 		if(packet.getfX() == -100 || packet.getfY() == -100 ){
@@ -173,6 +176,17 @@ public class ServerGameState extends GameState {
 		float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update
 		toModify.move(pdx, pdy);
+
+        if (shootNow) {
+            // game coord x and y position of the aim
+            double playerAngle = toModify.getFacingAngle();
+            float aimX = (float) Math.cos(playerAngle);
+            float aimY = (float) -Math.sin(playerAngle);
+            Bullet b = toModify.shoot(aimX, aimY, pdx, pdy);
+            if(b != null){ // this could happen if they have already shot recently.
+                bullets.add(b);
+            }
+        }
 	}
 
 	/**
