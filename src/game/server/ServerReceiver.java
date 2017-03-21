@@ -42,21 +42,6 @@ public class ServerReceiver extends Thread {
 					} else if(obj.toString().equals("Waiting")) {
 						//the player is waiting to be paired with another player
 						table.changePlayerStatus(username, ClientTable.playerStatus.WAITING);
-						ArrayList<User> players = table.checkAvailable();
-						while(players.size() != 0 && players.size() %2 == 0) {
-							User player1 = players.get(0);
-							User player2 = players.get(1);
-							ServerGameState state = new ServerGameState(player1.getUsername(), player2.getUsername());
-							player1.getServerReceiver().updateState(state);
-							player1.getServerSender().updateState(state);
-							player2.getServerReceiver().updateState(state);
-							player2.getServerSender().updateState(state);
-							state.setReady(true);
-							table.changePlayerStatus(player1, ClientTable.playerStatus.IN_GAME);
-							table.changePlayerStatus(player2, ClientTable.playerStatus.IN_GAME);
-							players.remove(0);
-							players.remove(0);
-						}
 					}
 				}else if(obj.getClass() == PlayerUpdatePacket.class){
 				//	System.out.println("Received a player object");

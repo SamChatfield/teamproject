@@ -38,7 +38,7 @@ public class ClientTable {
 		while(itr.hasNext()) {
 			HashMap.Entry pair = (HashMap.Entry)itr.next();
 			User aUser = (User) pair.getKey();
-			System.out.println(aUser.getUsername() + ", " + pair.getValue());
+			//System.out.println(aUser.getUsername() + ", " + pair.getValue());
 			if((playerStatus)pair.getValue() == playerStatus.WAITING) {
 				availablePlayers.add(aUser);
 			}

@@ -17,69 +17,72 @@ import java.util.ArrayList;
  */
 public class Server {
 
-    public static void main(String[] args){
-        if(args.length != 2){
-            System.out.println("Usage: java Server <host> <port>");
-            System.exit(0);
-        }
-        
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
-        
-        // Keep track of connected users
-        // TODO: Expand clientTable
-        ClientTable clientTable = new ClientTable();
-      
-        // Create ServerSocket
-        ServerSocket outSocket = null;
+	public static void main(String[] args){
+		if(args.length != 2){
+			System.out.println("Usage: java Server <host> <port>");
+			System.exit(0);
+		}
 
-        // this state should be shared between two connected clients. One made for each game.
-        //ServerGameState state = new ServerGameState("a","b");
+		String host = args[0];
+		int port = Integer.parseInt(args[1]);
 
-        try {
-        	outSocket = new ServerSocket(port);
-        } catch (IOException e) {
-        	System.err.println("Error! Unable to listen on port " + port );
-        	System.exit(1);
-        }
-        
-        System.out.println("Success! Server successfully started");
+		// Keep track of connected users
+		// TODO: Expand clientTable
+		ClientTable clientTable = new ClientTable();
 
-        try {
-        	while(true) {
-        		 Socket clientSocket = outSocket.accept();
+		// Create ServerSocket
+		ServerSocket outSocket = null;
 
-        		 // Someone connected, for debug we'll now generate the game state
-        		 System.out.println("DEBUG: Accepting socket connection");
-        		 
-        		 ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
-        		 ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
-                 System.out.println("DEBUG: I/O streams created");
-                 
-                 // Get name from client -- sort out duplicates later
-                 String clientName = (String)objIn.readObject();
-                 System.out.println("DEBUG: Read client name");
-                 System.out.println("New user connected: " + clientName);
-                 User newUser = new User(clientName);
-                 clientTable.addToTable(newUser);
-                 
-                 // Start threads
-                 ServerSender server_sender = new ServerSender(objOut);
-                 server_sender.start();
-                 ServerReceiver server_receiver = new ServerReceiver(objIn, newUser, clientTable);
-                 server_receiver.start();
+		Matchmaker matchmaker = new Matchmaker(clientTable);
+		matchmaker.start();
 
-                 newUser.setServerReceiver(server_receiver);
-                 newUser.setServerSender(server_sender);
-        		
-                 // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
-            }
+		// this state should be shared between two connected clients. One made for each game.
+		//ServerGameState state = new ServerGameState("a","b");
 
-        } catch(Exception e) {
+		try {
+			outSocket = new ServerSocket(port);
+		} catch (IOException e) {
+			System.err.println("Error! Unable to listen on port " + port );
+			System.exit(1);
+		}
+
+		System.out.println("Success! Server successfully started");
+
+		try {
+			while(true) {
+				Socket clientSocket = outSocket.accept();
+
+				// Someone connected, for debug we'll now generate the game state
+				System.out.println("DEBUG: Accepting socket connection");
+
+				ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
+				ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
+				System.out.println("DEBUG: I/O streams created");
+
+				// Get name from client -- sort out duplicates later
+				String clientName = (String)objIn.readObject();
+				System.out.println("DEBUG: Read client name");
+				System.out.println("New user connected: " + clientName);
+				User newUser = new User(clientName);
+				clientTable.addToTable(newUser);
+
+				// Start threads
+				ServerSender server_sender = new ServerSender(objOut);
+				server_sender.start();
+				ServerReceiver server_receiver = new ServerReceiver(objIn, newUser, clientTable);
+				server_receiver.start();
+
+				newUser.setServerReceiver(server_receiver);
+				newUser.setServerSender(server_sender);
+
+				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
+			}
+
+		} catch(Exception e) {
 			//e.printStackTrace();
-			System.exit(1); 
-        }
-    }
+			System.exit(1);
+		}
+	}
 
 
 }

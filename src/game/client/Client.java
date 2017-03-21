@@ -349,6 +349,7 @@ public class Client extends Canvas {
 					if(inputHandler.wasMouseClicked()) {
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
+						sender.sendObject("Waiting");
 						inputHandler.setMouseClicked(false);
 					}
 				}

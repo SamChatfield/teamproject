@@ -54,7 +54,7 @@ public class Renderer {
 
 		int timeRemaining = state.getTimeRemaining();
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
-        ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
+		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
 		MapData mapData = state.getMapData();
 
 		// Set up the graphics instance for the current back buffer
@@ -78,10 +78,10 @@ public class Renderer {
 			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
 		}
 
-        // Draw the bullets
-        for (DataPacket b : bulletPackets) {
-            drawBullet(g2d, player, b);
-        }
+		// Draw the bullets
+		for (DataPacket b : bulletPackets) {
+			drawBullet(g2d, player, b);
+		}
 
 		// Draw the zombies
 		for (DataPacket z : zombiePackets) {
@@ -132,40 +132,6 @@ public class Renderer {
 		g2d.drawString(remainingTime, gameW - (g2d.getFontMetrics().stringWidth(remainingTime) + 20), 40);
 
 		// Display number of converted zombies
-		g2d.drawString("Converted zombies: " + player.getNumConvertedZombies() + "/" + zombiePackets.size() , 450, 630);
-		
-        // Clean up and flip the buffer
-        g2d.dispose();
-        bufferStrategy.show();
-    }
-
-    public void renderWaitingForOpponent() {
-
-		// Set up the graphics instance for the current back buffer
-		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		// Clear the screen
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
-
-		// Apply text
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(tradeWinds.deriveFont(20f));
-		String text = "Matching you with an opponent...";
-		int twidth = g2d.getFontMetrics().stringWidth(text);
-		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - twidth / 2, Client.GAME_DIMENSION.height / 5);
-
-		// Clean up and flip the buffer
-		g2d.dispose();
-		bufferStrategy.show();
-	}
-
-    public void renderGameOver() {
-    	
-    	// Set up the graphics instance for the current back buffer
-        Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		int playerZombies = player.getNumConvertedZombies();
 		int opponentZombies = state.getOtherPlayer().getNumConvertedZombies();
 		int totalZombies = zombiePackets.size();
@@ -209,6 +175,28 @@ public class Renderer {
 			countsY += 30;
 			counter++;
 		}
+
+		// Clean up and flip the buffer
+		g2d.dispose();
+		bufferStrategy.show();
+	}
+
+	public void renderWaitingForOpponent() {
+
+		// Set up the graphics instance for the current back buffer
+		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Clear the screen
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
+
+		// Apply text
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(tradeWinds.deriveFont(20f));
+		String text = "Matching you with an opponent...";
+		int twidth = g2d.getFontMetrics().stringWidth(text);
+		g2d.drawString(text, (Client.GAME_DIMENSION.width / 2) - twidth / 2, Client.GAME_DIMENSION.height / 5);
 
 		// Clean up and flip the buffer
 		g2d.dispose();
@@ -324,7 +312,7 @@ public class Renderer {
 	 * @param g2d Graphics2D object
 	 */
 	public void drawLighting(Graphics2D g2d) {
-        g2d.drawImage(Client.lightingImage, 0, 0, null);
+		g2d.drawImage(Client.lightingImage, 0, 0, null);
 	}
 
 	/**
