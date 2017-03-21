@@ -1,12 +1,10 @@
 package game.client;
 
-import game.ResourceLoader;
-import game.util.EndState;
-import game.util.PlayerUpdatePacket;
-import game.util.Vector;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
@@ -15,6 +13,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+import game.ResourceLoader;
+import game.util.EndState;
+import game.util.PlayerUpdatePacket;
+import game.util.Vector;
 
 /**
  * This class is the one that the player will run when they want to start the game.
@@ -68,16 +78,17 @@ public class Client extends Canvas {
 
 	private static String username;
 	private static String ipAddress;
+	private static String difficulty;
 
 	/**
 	 * Create a new Client object
 	 * @param state CurrentSlientState object
 	 * @param sender ClientSender object
 	 */
-	private Client(ClientGameState state, ClientSender sender) {
+	private Client(ClientGameState state, ClientSender sender, String username) {
 		this.state = state;
 		this.sender = sender;
-		container = new JFrame(TITLE);
+		container = new JFrame(TITLE + " - " + username);
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
 		panel.setLayout(null);
@@ -491,18 +502,35 @@ public class Client extends Canvas {
 	 * Display login prompt allowing to choose a username and the IP address of server
 	 */
 	public static void loginPrompt() {
+		
+		
 
 		JTextField usernameEntry = new JTextField("a");
 		JTextField ipaddyEntry = new JTextField("127.0.0.1");
+		String[] difficultyStrings = { "Easy", "Medium", "Hard"};
+		JComboBox difficultySelection = new JComboBox(difficultyStrings);
+		difficultySelection.setSelectedIndex(0);
+		
+		difficultySelection.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox)e.getSource();
+			}
+		});
+		
 		Object[] message = {
-				"Username:", usernameEntry,
-				"Server IP Address:", ipaddyEntry
+				"Username: ", usernameEntry,
+				"Server IP Address: ", ipaddyEntry,
+				"Level Difficulty: ", difficultySelection
 		};
 
 		String regex = "([0-9]+)[.]([0-9])+[.]([0-9])+[.][0-9]+";
 		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE);
 		if (option == JOptionPane.OK_OPTION) {
 			username = usernameEntry.getText();
+			difficulty = (String) difficultySelection.getSelectedItem();
+			System.out.println(difficulty);
 			if(username.equals("")) {
 				// Default value if no username selected
 				username = "a";
@@ -568,7 +596,7 @@ public class Client extends Canvas {
 		client_sender.start();
 		client_receiver.start();
 
-		Client client = new Client(state,client_sender);
+		Client client = new Client(state,client_sender, username);
 
 		// Create and start the client loop over the loop method of the client object.
 		// :: is a method reference since loop is an existing method,
