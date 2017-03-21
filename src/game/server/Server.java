@@ -60,20 +60,19 @@ public class Server {
 				System.out.println("DEBUG: I/O streams created");
 
 				// Get name from client -- sort out duplicates later
-				String clientName = (String)objIn.readObject();
+				User clientObject = (User)objIn.readObject();
 				System.out.println("DEBUG: Read client name");
-				System.out.println("New user connected: " + clientName);
-				User newUser = new User(clientName);
-				clientTable.addToTable(newUser);
+				System.out.println("New user connected: " + clientObject.getUsername());
+				clientTable.addToTable(clientObject);
 
 				// Start threads
 				ServerSender server_sender = new ServerSender(objOut);
 				server_sender.start();
-				ServerReceiver server_receiver = new ServerReceiver(objIn, newUser, clientTable);
+				ServerReceiver server_receiver = new ServerReceiver(objIn, clientObject, clientTable);
 				server_receiver.start();
 
-				newUser.setServerReceiver(server_receiver);
-				newUser.setServerSender(server_sender);
+				clientObject.setServerReceiver(server_receiver);
+				clientObject.setServerSender(server_sender);
 
 				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
 			}

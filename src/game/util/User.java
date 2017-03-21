@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class User implements Serializable{
 
 	private String username;
+	private int difficulty;
 	public static final int EASY =0;
 	public static final int MED =1;
 	public static final int HARD =2;
@@ -18,9 +19,14 @@ public class User implements Serializable{
 	public ServerSender server_sender;
 	public ServerReceiver server_receiver;
 
-	public User(String username) {
+	public User(String username, int difficulty) {
 		this.username = username;
+		this.difficulty = difficulty;
 
+	}
+
+	public int getDifficulty() {
+		return difficulty;
 	}
 
 	public String getUsername() { return username; }

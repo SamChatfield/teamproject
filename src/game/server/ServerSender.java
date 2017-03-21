@@ -24,7 +24,8 @@ public class ServerSender extends Thread {
 		this.objOut = objOut;
 		this.initial = true;
 		this.playersReadyInitial = true;
-		this.state = new ServerGameState("a", "b");
+		//This is a dummy state that won't be used, it is waiting for a real state to be created
+		this.state = new ServerGameState("a", "b", 0);
 	}
 
 	/**
