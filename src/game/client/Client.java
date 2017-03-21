@@ -1,8 +1,12 @@
 package game.client;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Point;
+import game.ResourceLoader;
+import game.util.EndState;
+import game.util.PlayerUpdatePacket;
+import game.util.Vector;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
@@ -11,17 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import game.ResourceLoader;
-import game.util.EndState;
-import game.util.PlayerUpdatePacket;
-import game.util.Vector;
 
 /**
  * This class is the one that the player will run when they want to start the game.
@@ -43,6 +36,7 @@ public class Client extends Canvas {
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
 	public static final BufferedImage opponentZombieImage = ResourceLoader.zombieOpponentImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
+	public static final BufferedImage lightingImage = ResourceLoader.lightingImage();
 
 	public Sound soundManager;
 	private JFrame container;

@@ -1,27 +1,17 @@
 package game.client;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
-import game.Bullet;
 import game.CollisionBox;
 import game.ResourceLoader;
 import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
 import game.util.EndState;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Renders the game on screen
@@ -64,6 +54,7 @@ public class Renderer {
 
 		int timeRemaining = state.getTimeRemaining();
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
+        ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
 		MapData mapData = state.getMapData();
 
 		// Set up the graphics instance for the current back buffer
@@ -87,17 +78,10 @@ public class Renderer {
 			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
 		}
 
-		// Draw bullets
-		for (Bullet b : state.getBullets()) {
-			if(b.active) {
-				if(b.getUsername().equals(player.getUsername())){
-					b.draw(g2d);
-				} else{
-					drawBullet(g2d, player, b.getX(), b.getY(), b.getFacingAngle());
-
-				}
-			}
-		}
+        // Draw the bullets
+        for (DataPacket b : bulletPackets) {
+            drawBullet(g2d, player, b);
+        }
 
 		// Draw the zombies
 		for (DataPacket z : zombiePackets) {
@@ -306,12 +290,7 @@ public class Renderer {
 	 * @param g2d Graphics2D object
 	 */
 	public void drawLighting(Graphics2D g2d) {
-		try {
-			lighting = ImageIO.read(new File("src/game/res/spotlight.png"));
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		g2d.drawImage(lighting, 0, 0, null);
+        g2d.drawImage(Client.lightingImage, 0, 0, null);
 	}
 
 	/**
@@ -389,21 +368,20 @@ public class Renderer {
 	 * Draw bullets on the screen
 	 * @param g2d Graphics2D object
 	 * @param player Player object
-	 * @param x X coordinate of bullet
-	 * @param y Y coordinate of bullet 
-	 * @param facingAngle Angle the bullet is facing
+	 * @param b DataPacket for the bullet
 	 */
-	private void drawBullet(Graphics2D g2d, Player player, float x, float y, double facingAngle) {
+	private void drawBullet(Graphics2D g2d, Player player, DataPacket b) {
 		int w = Client.bulletImage.getWidth();
 		int h = Client.bulletImage.getHeight();
 
-		Point drawPoint = player.relativeDrawPoint(x, y, w, h);
+		Point drawPoint = player.relativeDrawPoint(b.getX(), b.getY(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
 
 		AffineTransform at = g2d.getTransform();
-		g2d.rotate(facingAngle, drawX, drawY);
+		g2d.rotate(b.getFacingAngle(), drawX, drawY);
 		g2d.drawImage(Client.bulletImage, drawX, drawY, null);
 		g2d.setTransform(at);
 	}
+
 }

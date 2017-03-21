@@ -1,18 +1,15 @@
 package game.client;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
 import game.Bullet;
 import game.Entity;
 import game.ResourceLoader;
 import game.map.MapData;
 import game.util.DataPacket;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Class to represent the player in the game
@@ -53,16 +50,18 @@ public class Player extends Entity {
      * Shoots player's weapon in direction of mouse cursor
      * @param aimX Direction X weapon is aimed in
      * @param aimY Direction Y weapon is aimed in
+     * @param pdx Player's velocity in the x direction at the time of firing
+     * @param pdy Player's velocity in the y direction at the time of firing
      * @return Bullet object travelling in specified direction
      */
-    public Bullet shoot(float aimX, float aimY) {
+    public Bullet shoot(float aimX, float aimY, float pdx, float pdy) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
         if (now - getLastAttackTime() > SHOOT_DELAY) {
             setLastAttackTime(now);
-            return new Bullet(this, aimX, aimY, mapData);
+            return new Bullet(this, aimX, aimY, pdx, pdy, mapData);
         } else {
-        	return null;
+            return null;
         }
     }
 
