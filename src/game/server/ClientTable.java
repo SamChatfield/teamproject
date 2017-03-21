@@ -22,11 +22,13 @@ public class ClientTable {
 		clientTable = new HashMap();
 	}
 
+
+	public enum playerStatus {NOT_PLAYING, WAITING, IN_GAME }
+
 	/**
 	 * Add a user to the table
 	 * @param username Username to add
 	 */
-	public enum playerStatus {NOT_PLAYING, WAITING, IN_GAME }
 
 	public void addToTable(User username) {
 		clientTable.put(username, playerStatus.NOT_PLAYING);
@@ -48,5 +50,23 @@ public class ClientTable {
 
 	public void changePlayerStatus(User username, playerStatus status) {
 		clientTable.put(username, status);
+	}
+
+	/**
+	 *
+	 * @param username
+	 * @return
+	 */
+	public boolean userExists(String username) {
+		boolean exists = false;
+		Iterator<?> itr = clientTable.entrySet().iterator();
+		while(itr.hasNext()) {
+			HashMap.Entry pair = (HashMap.Entry)itr.next();
+			User aUser = (User) pair.getKey();
+			if(aUser.getUsername().equals(username)) {
+				exists = true;
+			}
+		}
+		return exists;
 	}
 }

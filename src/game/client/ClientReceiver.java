@@ -4,24 +4,25 @@ import java.io.ObjectInputStream;
 
 import game.util.EndState;
 import game.util.SendableState;
+import game.util.User;
 
 /**
  * Class for receiving objects from the server and then determining what to do with them
  */
 public class ClientReceiver extends Thread {
 
-	private String username;
+	private User user;
 	private ObjectInputStream objIn;
 	private ClientGameState state;
 	private boolean inProgress;
 
 	/**
 	 * Constructor
-	 * @param username Name of user
+	 * @param user Name of user
 	 * @param objIn ObjectInputStream
 	 */
-	ClientReceiver(String username, ObjectInputStream objIn) {
-		this.username = username;
+	ClientReceiver(User user, ObjectInputStream objIn) {
+		this.user = user;
 		this.objIn = objIn;
 	}
 

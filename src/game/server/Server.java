@@ -54,10 +54,16 @@ public class Server {
 				ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
 				System.out.println("DEBUG: I/O streams created");
 
-				// Get name from client -- sort out duplicates later
 				User clientObject = (User)objIn.readObject();
 				System.out.println("DEBUG: Read client name");
 				System.out.println("New user connected: " + clientObject.getUsername());
+				int counter = 1;
+				boolean userExists = clientTable.userExists(clientObject.getUsername());
+				while(userExists)
+					if(userExists) {
+						clientObject.setUsername(clientObject.getUsername() + counter);
+						counter++;
+					}
 				clientTable.addToTable(clientObject);
 
 				// Start threads

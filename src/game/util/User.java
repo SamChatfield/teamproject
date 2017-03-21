@@ -31,6 +31,8 @@ public class User implements Serializable{
 
 	public String getUsername() { return username; }
 
+	public void setUsername(String username) { this.username = username; }
+
 	public void setServerSender(ServerSender sender) {
 		server_sender = sender;
 	}
