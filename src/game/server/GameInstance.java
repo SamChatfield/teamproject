@@ -108,23 +108,6 @@ public class GameInstance extends Thread {
 			zombie.move(delta);
 		}
 
-		// Move all of the bullets, remove them if they've gone off of the map/hit an object
-//		try {
-//			Iterator<Bullet> bullets = state.getBullets().iterator();
-//			while (bullets.hasNext()) {
-//				Bullet b = bullets.next();
-//				if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
-//					bullets.remove();
-//					continue;
-//				}
-//				Player owner = state.getPlayer(b.getUsername());
-//				Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
-//				Collision.checkPlayerCollision(b, state.getBullets(), owner, state.getOtherPlayer(owner.getUsername()));
-//				b.move(delta);
-//			}
-//		} catch(ConcurrentModificationException e){
-//			System.out.println("Error, this shouldn't happen: " + e.getMessage());
-//		}
 		for (Iterator<Bullet> it = state.getBullets().iterator(); it.hasNext(); ) {
 			Bullet b = it.next();
 			if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
@@ -132,8 +115,8 @@ public class GameInstance extends Thread {
 				continue;
 			}
 			Player owner = state.getPlayer(b.getUsername());
-			Collision.checkBulletCollision(b, state.getBullets(), zombies, owner);
-			Collision.checkPlayerCollision(b, state.getBullets(), owner, state.getOtherPlayer(owner.getUsername()));
+			Collision.checkBulletCollision(b, zombies, owner);
+			Collision.checkPlayerCollision(b, state.getOtherPlayer(owner.getUsername()));
 			b.move(delta);
 		}
 
