@@ -32,10 +32,19 @@ public class Entity implements Serializable {
 		this.mapData = mapData;
 		collisionBox = new CollisionBox(this);
 		this.x = x;
-		this.y = y;
-		
+		this.y = y;		
 	}
 
+	
+	public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t, boolean isActive, float appearTime) {
+		this.data = new DataPacket(x,y,moveSpeed,health, 0L,t, isActive, appearTime);
+		//        showCollBox = false;
+		this.mapData = mapData;
+		collisionBox = new CollisionBox(this);
+		this.x = x;
+		this.y = y;		
+	}
+	
 	
 	public Entity(float x, float y, MapData mapData) {
 		this.mapData = mapData;
@@ -127,6 +136,14 @@ public class Entity implements Serializable {
 	public void setMoveSpeed(float moveSpeed) {
 		data.setMoveSpeed(moveSpeed);
 	}
+	
+	public void setIsActive(boolean isActive){
+		data.setIsActive(isActive);
+	}
+	
+	public void setAppearTime(float appearTime){
+		data.setAppearTime(appearTime);
+	}
 
 	/**
 	 * Get current X coordinate of entity
@@ -160,6 +177,9 @@ public class Entity implements Serializable {
 		setLastAttackTime(data2.getLastAttackTime());
 		setHealth(data2.getHealth());
 		setNumConvertedZombies(data2.getNumConvertedZombies());
+		setMoveSpeed(data2.getMoveSpeed());
+		setIsActive(data2.getIsActive());
+		setAppearTime(data2.getAppearTime());
 	}
 
 	/**
@@ -234,6 +254,14 @@ public class Entity implements Serializable {
 		return data.getMoveSpeed();
 	}
 
+	public boolean getIsActive(){
+		return data.getIsActive();
+	}
+	
+	public float getAppearTime(){
+		return data.getAppearTime();
+	}
+	
 	/**
 	 * Set health of entity
 	 * @param newHealth New health to set

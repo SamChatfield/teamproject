@@ -82,7 +82,7 @@ public class GameInstance extends Thread {
 	 */
 	private void update(double delta) {
 		ArrayList<Zombie> zombies = state.getZombies();
-		ArrayList<PowerUp> powerups = state.getPowerups();
+		//ArrayList<PowerUp> powerups = state.getPowerups();
 
 		// Update the player states
 		Player player1 = state.getPlayer1();
@@ -117,6 +117,8 @@ public class GameInstance extends Thread {
 			zombie.move(delta);
 		}
 
+		
+		//PPOWERUPS
 		Random r = new Random();
 		int chance = r.nextInt(100) + 1;
 		try {
@@ -130,8 +132,8 @@ public class GameInstance extends Thread {
 				}
 			}
 			
-			if (chance <= 2) {
-				newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.PuState.TEST, System.nanoTime()));
+			if (chance == 2) {
+				newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
 			}
 
 			state.setPowerUp(newPowerup);
@@ -140,8 +142,22 @@ public class GameInstance extends Thread {
 			System.out.println("Error, PWUPS, this shouldn't happen: " + e.getMessage());
 		}
 
+		
+		
+		//ACTIVE PU
+		//ArrayList<Player> newPlayers = new ArrayList<>();
+		for (Player p : players){
+			long now = System.nanoTime();			
+			if(p.getIsActive()){
+				if(now - p.getAppearTime() >= 3000000000l){
+					PowerUp.normalSpeed(p);
+				}
+			}
+		}
+		
 
-
+		
+		//BULLETS
 		ArrayList<Bullet> newBullets = new ArrayList<>();
 		for (Bullet b : state.getBullets()) {
 			if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {

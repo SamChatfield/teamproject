@@ -15,6 +15,9 @@ public class DataPacket implements Serializable {
 	private String username;
 	private Type type;
 	private int numConvertedZombies;
+	private boolean isActive;
+	private float appearTime;
+	
 
 	/**
 	 * Object that the data packet refers to
@@ -93,12 +96,28 @@ public class DataPacket implements Serializable {
 		return moveSpeed;
 	}
 
+	public boolean getIsActive(){
+		return isActive;
+	}
+	
+	public float getAppearTime(){
+		return appearTime;
+	}
+	
 	/**
 	 * Set move speed
 	 * @param moveSpeed New movespeed to set
 	 */
 	public void setMoveSpeed(float moveSpeed) {
 		this.moveSpeed = moveSpeed;
+	}
+	
+	public void setIsActive(boolean isActive){
+		this.isActive = isActive;
+	}
+	
+	public void setAppearTime(float appearTime){
+		this.appearTime = appearTime;
 	}
 
 	/**
@@ -197,6 +216,20 @@ public class DataPacket implements Serializable {
 		this.y = y;
 		this.moveSpeed = moveSpeed;
 		this.health = health;
+		this.type = t;
+	}
+	
+	
+	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t, boolean isActive, float appearTime) {
+		this.lastAttackTime = lastAttackTime;
+
+		this.x = x;
+		this.y = y;
+		this.moveSpeed = moveSpeed;
+		this.health = health;
+		this.isActive = isActive;
+		this.appearTime = appearTime;
+		
 		this.type = t;
 	}
 }
