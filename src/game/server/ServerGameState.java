@@ -88,7 +88,7 @@ public class ServerGameState extends GameState {
 		}
 		this.zombies = zombieFactory;
 
-		GameInstance instance = new GameInstance(this);        // Start up a new game instance
+		GameInstance instance = new GameInstance(this); // Start up a new game instance
 		instance.start();
 		this.inProgress = true;
 	}

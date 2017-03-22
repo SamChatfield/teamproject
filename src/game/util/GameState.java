@@ -24,9 +24,18 @@ public class GameState implements Serializable {
 	protected int timeRemaining;
 	protected MapData mapData;
 	protected boolean inProgress; // Is the game in progress?
+	protected boolean isConnected;
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void setConnected(boolean connected) {
+		isConnected = connected;
+	}
+
 	protected EndState endState;
 	protected boolean hasFinished;
-	protected boolean playersConnected;
 
 	/**
 	 * Get EndState of game
@@ -158,17 +167,8 @@ public class GameState implements Serializable {
 		return player2;
 	}
 
-	/**
-	 * Get whether a game is currently in progress
-	 * @return Boolean of whether game in progress
-	 */
-	public boolean inProgress(){
-		return inProgress;
-	}
 
 
-    public boolean playersReady() { return playersConnected; }
 
-    public void setReady(boolean bool) { playersConnected = bool;}
 
 }

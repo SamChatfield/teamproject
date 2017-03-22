@@ -14,7 +14,7 @@ public class ClientReceiver extends Thread {
 	private User user;
 	private ObjectInputStream objIn;
 	private ClientGameState state;
-	private boolean inProgress;
+	private boolean inProgress, initialState;
 
 	/**
 	 * Constructor
@@ -24,6 +24,7 @@ public class ClientReceiver extends Thread {
 	ClientReceiver(User user, ObjectInputStream objIn) {
 		this.user = user;
 		this.objIn = objIn;
+		this.initialState = true;
 	}
 
 	/**
@@ -49,17 +50,20 @@ public class ClientReceiver extends Thread {
 						String newUsername = strings[1];
 						user.setUsername(newUsername);
 						System.out.println(user.getUsername());
-					}else if(state.equals("PlayersReady") && !state.playersReady()){
-						state.setReady(true);
 					}else if(!inProgress){
 						if(s.equals("StartingGame")){
 							System.out.println("starting");
 							inProgress = true;
+							initialState = true;
 						}else if(s.equals("GameOver")){
 							inProgress = false;
 						}
 					}
 				}else if(obj.getClass() == SendableState.class){
+					if(initialState){
+						state.setConnected(true);
+						initialState = false;
+					}
 					System.out.println("New state");
 					SendableState updatedState = (SendableState) obj;
 					state.updateClientState(updatedState); // update the clients view of the game state.

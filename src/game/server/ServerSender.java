@@ -83,13 +83,13 @@ public class ServerSender extends Thread {
 		while(true) {
             try {
 				Thread.sleep(1000/60);
-				if(state.playersReady()) {
-					if(playersReadyInitial) {
-						sendObject("PlayersReady");
-						System.out.println("Sent out playersReady");
-						playersReadyInitial = false;
-					}
-				}
+//				if(state.playersReady()) {
+//					if(playersReadyInitial) {
+//						sendObject("PlayersReady");
+//						System.out.println("Sent out playersReady");
+//						playersReadyInitial = false;
+//					}
+//				}
 				if (gameInProgress) { // if there is a game in progress
 					if(initial){
 						sendObject("StartingGame");

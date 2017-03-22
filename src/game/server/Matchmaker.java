@@ -36,8 +36,6 @@ public class Matchmaker extends Thread{
 							player2.getServerReceiver().updateState(state);
 							player2.getServerSender().startNewGame(state);
 
-							state.setReady(true);
-
 							table.changePlayerStatus(player1, ClientTable.playerStatus.IN_GAME);
 							table.changePlayerStatus(player2, ClientTable.playerStatus.IN_GAME);
 

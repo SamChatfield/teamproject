@@ -141,9 +141,9 @@ public class Client extends Canvas {
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
 
-				if(!state.playersReady()) {
-					while(!state.playersReady()) {
-						System.out.println(state.playersReady());
+				if(!state.isConnected()) {
+					while(!state.isConnected()) {
+						System.out.println(state.isConnected());
 
 						renderer.renderWaitingForOpponent();
 						try {
