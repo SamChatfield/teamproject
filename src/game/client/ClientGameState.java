@@ -31,6 +31,15 @@ public class ClientGameState extends GameState {
         this.bulletDataPackets = new ArrayList<>();
 	}
 
+	public void resetState(User user) {
+		this.user = user;
+		this.mapImage = null;
+		this.initial = true;
+		this.bullets = new ArrayList<>();
+		this.zombieDataPackets = new ArrayList<>();
+		this.bulletDataPackets = new ArrayList<>();
+	}
+
 	/**
 	 * Add sound manager to this state
 	 * @param sound Sound object

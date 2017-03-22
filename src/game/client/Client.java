@@ -41,6 +41,7 @@ public class Client extends Canvas {
 
 	private ClientGameState state;
 	private ClientSender sender;
+	private ClientReceiver receiver;
 
 	private Renderer renderer;
 
@@ -70,10 +71,11 @@ public class Client extends Canvas {
 	 * @param state CurrentSlientState object
 	 * @param sender ClientSender object
 	 */
-	private Client(ClientGameState state, ClientSender sender, User user) {
+	private Client(ClientGameState state, ClientSender sender, ClientReceiver receiver, User user) {
 		this.user = user;
 		this.state = state;
 		this.sender = sender;
+		this.receiver = receiver;
 		container = new JFrame(TITLE + " - " + user.getUsername());
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -143,11 +145,12 @@ public class Client extends Canvas {
 
 				if(!state.isConnected()) {
 					while(!state.isConnected()) {
-						System.out.println(state.isConnected());
+						System.out.println("Client state: " + state.isConnected());
+
 
 						renderer.renderWaitingForOpponent();
 						try {
-							Thread.sleep(1500);
+							Thread.sleep(200);
 						} catch(Exception e) {
 
 						}
@@ -238,7 +241,10 @@ public class Client extends Canvas {
 				if(inputHandler.wasMouseClicked()) {
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
-					state = new ClientGameState(user);
+					state.resetState(user);
+					state.setHasFinished(false);
+					state.setConnected(false);
+
 				}
 			}
 		}
@@ -600,7 +606,7 @@ public class Client extends Canvas {
 		client_sender.start();
 		client_receiver.start();
 
-		Client client = new Client(state,client_sender, newUser);
+		Client client = new Client(state,client_sender, client_receiver, newUser);
 
 		// Create and start the client loop over the loop method of the client object.
 		// :: is a method reference since loop is an existing method,
