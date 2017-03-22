@@ -99,13 +99,20 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for more health powerup into the game
+	 * @return BufferedImage for more health powerup
+	 */
+	public static BufferedImage moreHealth() {
+		return getImage("moreHealth.png");
+	}
+
+	/**
 	 * Load image for speed down powerup into the game
 	 * @return BufferedImage for speed down powerup
 	 */
 	public static BufferedImage speedDown() {
 		return getImage("speedDown.png");
 	}
-
 	/**
 	 * Import Tradewinds font into the game
 	 * @return Imported Font
