@@ -91,6 +91,45 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for speed up powerup into the game
+	 * @return BufferedImage for speed up powerup
+	 */
+	public static BufferedImage speedUp() {
+		return getImage("speedUp.png");
+	}
+
+	/**
+	 * Load image for more health powerup into the game
+	 * @return BufferedImage for more health powerup
+	 */
+	public static BufferedImage moreHealth() {
+		return getImage("moreHealth.png");
+	}
+
+	/**
+	 * Load image for invert controls powerup into the game
+	 * @return BufferedImage for invert controls powerup
+	 */
+	public static BufferedImage invertControls() {
+		return getImage("invertControls.png");
+	}
+
+	/**
+	 * Load image for freeze other player powerup into the game
+	 * @return BufferedImage for freeze other player powerup
+	 */
+	public static BufferedImage freezePlayer() {
+		return getImage("freezePlayer.png");
+	}
+
+	/**
+	 * Load image for speed down powerup into the game
+	 * @return BufferedImage for speed down powerup
+	 */
+	public static BufferedImage speedDown() {
+		return getImage("speedDown.png");
+	}
+	/**
 	 * Import Tradewinds font into the game
 	 * @return Imported Font
 	 */

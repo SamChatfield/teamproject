@@ -186,7 +186,7 @@ public class DataPacket implements Serializable {
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 * @param moveSpeed The set move speed
-	 * @param healt Current health
+	 * @param health Current health
 	 * @param lastAttackTime Last attack time
 	 * @param t Type of object that the DataPacket is based on (ZOMBIE, PLAYER or BULLET)
 	 */

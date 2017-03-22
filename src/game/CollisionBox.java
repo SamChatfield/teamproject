@@ -2,6 +2,7 @@ package game;
 
 import game.client.Client;
 import game.client.Player;
+import game.client.Renderer;
 import game.util.DataPacket;
 
 import java.awt.*;
@@ -32,18 +33,18 @@ public class CollisionBox implements Serializable {
 			iheight = Player.getImage().getHeight();
 
 		} else if (owner instanceof Zombie){
-			width = (float) Client.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
-			height = (float) Client.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
+			width = (float) Renderer.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Renderer.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-			iwidth = Client.wildZombieImage.getWidth();
-			iheight = Client.wildZombieImage.getHeight();
+			iwidth = Renderer.wildZombieImage.getWidth();
+			iheight = Renderer.wildZombieImage.getHeight();
 
 		} else {
-			width = (float) Client.bulletImage.getWidth() / (float) Client.TILE_SIZE;
-			height = (float) Client.bulletImage.getHeight() / (float) Client.TILE_SIZE;
+			width = (float) Renderer.bulletImage.getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Renderer.bulletImage.getHeight() / (float) Client.TILE_SIZE;
 
-			iwidth = Client.bulletImage.getWidth();
-			iheight = Client.bulletImage.getHeight();
+			iwidth = Renderer.bulletImage.getWidth();
+			iheight = Renderer.bulletImage.getHeight();
 		}
 	}
 
@@ -127,11 +128,11 @@ public class CollisionBox implements Serializable {
 	public static Rectangle2D.Float collBoxRectFromData(DataPacket z, Player p) {
 		Rectangle2D.Float drawRect;
 
-		float width = (float) Client.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
-		float height = (float) Client.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
+		float width = (float) Renderer.wildZombieImage.getWidth() / (float) Client.TILE_SIZE;
+		float height = (float) Renderer.wildZombieImage.getHeight() / (float) Client.TILE_SIZE;
 
-		int iwidth = Client.wildZombieImage.getWidth();
-		int iheight = Client.wildZombieImage.getHeight();
+		int iwidth = Renderer.wildZombieImage.getWidth();
+		int iheight = Renderer.wildZombieImage.getHeight();
 
 		Point drawPoint = p.relativeDrawPoint(z.getX(), z.getY(), iwidth, iheight);
 		drawRect = new Rectangle2D.Float(drawPoint.x, drawPoint.y, iwidth, iheight);
