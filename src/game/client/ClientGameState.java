@@ -16,6 +16,7 @@ public class ClientGameState extends GameState {
 	private User user;
 	private String otherPlayerName;
 	private Sound soundManager;
+	private boolean initial;
 
 	/**
 	 * Create a new ClientGameState
@@ -24,10 +25,19 @@ public class ClientGameState extends GameState {
 	public ClientGameState(User user){
 		this.user = user;
 		this.mapImage = null;
-		this.isConnected = false;
+		this.initial = true;
 		this.bullets = new ArrayList<>();
 		this.zombieDataPackets = new ArrayList<>();
         this.bulletDataPackets = new ArrayList<>();
+	}
+
+	public void resetState(User user) {
+		this.user = user;
+		this.mapImage = null;
+		this.initial = true;
+		this.bullets = new ArrayList<>();
+		this.zombieDataPackets = new ArrayList<>();
+		this.bulletDataPackets = new ArrayList<>();
 	}
 
 	/**
@@ -44,7 +54,8 @@ public class ClientGameState extends GameState {
 	 */
 	public void updateClientState(SendableState updatedState){
 
-		if(!isConnected){
+		if(initial){
+			initial = false;
 			this.mapImage = updatedState.getMapImage();
 
 			// We need to figure out if the server thinks we are player 1 or 2.
@@ -57,9 +68,6 @@ public class ClientGameState extends GameState {
 			setUpGame(updatedState.getPlayer(user.getUsername()),updatedState.getPlayer(otherPlayerName));
 
 		}
-
-//		this.bullets = updatedState.getBullets();
-		//this.hasFinished = updatedState.HasFinished();
 
 		if(player1.getHealth() > updatedState.getPlayer(user.getUsername()).getHealth()){
 			soundManager.playerHurt();
@@ -92,8 +100,6 @@ public class ClientGameState extends GameState {
 
 		//System.out.println(player1.getX());
 		//System.out.println(player1.getY());
-
-		isConnected = true; // we've got our first state send from the server. We are now connected and ready to receive states.
 	}
 
 	/**

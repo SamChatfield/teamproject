@@ -22,7 +22,6 @@ public class ServerGameState extends GameState {
         this.player1Username = player1Username;
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
-        this.playersConnected = false;
         zombieCount = (difficulty+1)*10;
     }
 
@@ -89,10 +88,9 @@ public class ServerGameState extends GameState {
 		}
 		this.zombies = zombieFactory;
 
-		GameInstance instance = new GameInstance(this);        // Start up a new game instance
+		GameInstance instance = new GameInstance(this); // Start up a new game instance
 		instance.start();
 		this.inProgress = true;
-
 	}
 
 	/**

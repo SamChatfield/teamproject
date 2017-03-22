@@ -14,7 +14,7 @@ public class ClientReceiver extends Thread {
 	private User user;
 	private ObjectInputStream objIn;
 	private ClientGameState state;
-	private boolean inProgress;
+	private boolean inProgress, initialState;
 
 	/**
 	 * Constructor
@@ -24,6 +24,7 @@ public class ClientReceiver extends Thread {
 	ClientReceiver(User user, ObjectInputStream objIn) {
 		this.user = user;
 		this.objIn = objIn;
+		this.initialState = true;
 	}
 
 	/**
@@ -40,35 +41,38 @@ public class ClientReceiver extends Thread {
 		try {
 			while(true) {
 				Thread.sleep(1000/120);
-				if(!state.playersReady()) {
-					String s = (String)objIn.readObject();
-					if(s.equals("PlayersReady")) {
-						state.setReady(true);
-					} else if(s.substring(0, 11).equals("newUsername")) {
+				Object obj = objIn.readObject();
+
+				if(obj.getClass() == String.class){
+					String s = (String) obj;
+					if(s.substring(0, 11).equals("newUsername")) {
 						String strings[] = s.split(":");
 						String newUsername = strings[1];
 						user.setUsername(newUsername);
 						System.out.println(user.getUsername());
+					}else if(!inProgress){
+						if(s.equals("StartingGame")){
+							System.out.println("starting");
+							inProgress = true;
+							initialState = true;
+						}else if(s.equals("GameOver")){
+							inProgress = false;
+						}
 					}
-				} else if(!inProgress){
-					String s = (String)objIn.readObject();
-					if(s.equals("StartingGame")){
-						System.out.println("starting");
-						inProgress = true;
-					}else if(s.equals("GameOver")){
-						inProgress = false;
+				}else if(obj.getClass() == SendableState.class){
+					if(initialState){
+						state.setConnected(true);
+						initialState = false;
 					}
-				}else{
-					Object obj = objIn.readObject();
-					if(obj.getClass() == SendableState.class){
-						SendableState updatedState = (SendableState) obj;
-						state.updateClientState(updatedState); // update the clients view of the game state.
-					}else if(obj.getClass() == EndState.class){
-						EndState end = (EndState) obj;
-						state.setEndState(end);
-					}
+					SendableState updatedState = (SendableState) obj;
+					state.updateClientState(updatedState); // update the clients view of the game state.
+				}else if(obj.getClass() == EndState.class) {
+					System.out.println("End state");
+					EndState end = (EndState) obj;
+					state.setEndState(end);
+					//Set initialState back to true, to reinitialise the state
+					initialState = true;
 				}
-
 			}
 		} catch(Exception e) {
 			System.err.println("Exception in ClientReceiver: " + e.getMessage());
