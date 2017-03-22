@@ -142,29 +142,28 @@ public class Client extends Canvas {
 			while (currentState == STATE.GAME) {
 
 				if(!state.playersReady()) {
-					System.out.println("Got here; players not ready");
 					while(!state.playersReady()) {
-						System.out.println("Got here; players STILL not ready");
+						System.out.println(state.playersReady());
 
 						renderer.renderWaitingForOpponent();
 						try {
-							Thread.sleep(100);
+							Thread.sleep(1500);
 						} catch(Exception e) {
 
 						}
 					}
 				}
 
-				if (!state.isConnected()) {
-					sender.sendObject("StartGame"); // Send a message to the server to start the game.
-					while (!state.isConnected()) {
-						try {
-							Thread.sleep(1);
-						} catch (Exception e) {
-							System.err.println("Error in starting game: " + e.getMessage());
-						} // Without this, this loop breaks on some machines.
-					}
-				}
+//				if (!state.isConnected()) {
+//					sender.sendObject("StartGame"); // Send a message to the server to start the game.
+//					while (!state.isConnected()) {
+//						try {
+//							Thread.sleep(1);
+//						} catch (Exception e) {
+//							System.err.println("Error in starting game: " + e.getMessage());
+//						} // Without this, this loop breaks on some machines.
+//					}
+//				}
 
 				// Get current state of player
 				this.player = state.getPlayer();

@@ -103,7 +103,6 @@ public class ServerSender extends Thread {
 						sendEndState(); // Send end state of the game
 
 						gameInProgress = false; // locally stop receiving updates.
-						playersReadyInitial = true; // set initial back to true, so it can send a new game state 'PlayersReady'
 						initial = true;
 						System.out.println("Final state sent, end state sent");
 					}else{
@@ -122,5 +121,6 @@ public class ServerSender extends Thread {
 	public void startNewGame(ServerGameState server) {
 		this.state = server;
 		this.gameInProgress = true;
+		this.playersReadyInitial = true;
 	}
 }

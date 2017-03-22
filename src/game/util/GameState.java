@@ -24,7 +24,6 @@ public class GameState implements Serializable {
 	protected int timeRemaining;
 	protected MapData mapData;
 	protected boolean inProgress; // Is the game in progress?
-	protected boolean isConnected; // Is the game connected to the server? If this is false, the server hasn't sent a state yet
 	protected EndState endState;
 	protected boolean hasFinished;
 	protected boolean playersConnected;
@@ -167,17 +166,9 @@ public class GameState implements Serializable {
 		return inProgress;
 	}
 
-	/**
-	 * Get whether a game state is currently connected between two players
-	 * @return Boolean of whether two players connected
-	 */
-	public boolean isConnected(){
-		return isConnected;
-	}
 
     public boolean playersReady() { return playersConnected; }
 
-    public void setReady(boolean bool) { playersConnected = bool;
-		System.out.println(bool);}
+    public void setReady(boolean bool) { playersConnected = bool;}
 
 }
