@@ -129,6 +129,14 @@ public class ResourceLoader {
 	public static BufferedImage speedDown() {
 		return getImage("speedDown.png");
 	}
+
+	/**
+	 * Load image for the game icon
+	 * @return BufferedImage for the icon
+	 */
+	public static BufferedImage iconImage() {
+		return getImage("icon.png");
+	}
 	/**
 	 * Import Tradewinds font into the game
 	 * @return Imported Font

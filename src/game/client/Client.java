@@ -1,5 +1,6 @@
 package game.client;
 
+import game.ResourceLoader;
 import game.util.EndState;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
@@ -84,6 +85,7 @@ public class Client extends Canvas {
 		setBounds(0, 0, GAME_DIMENSION.width, GAME_DIMENSION.height);
 		panel.add(this);
 
+		container.setIconImage(ResourceLoader.iconImage());
 		setIgnoreRepaint(true);
 
 		container.pack();
@@ -145,9 +147,7 @@ public class Client extends Canvas {
 
 				if(!state.isConnected()) {
 					while(!state.isConnected()) {
-						System.out.println("Client state: " + state.isConnected());
-
-
+						//System.out.println("Client state: " + state.isConnected());
 						renderer.renderWaitingForOpponent();
 						try {
 							Thread.sleep(200);
@@ -156,17 +156,6 @@ public class Client extends Canvas {
 						}
 					}
 				}
-
-//				if (!state.isConnected()) {
-//					sender.sendObject("StartGame"); // Send a message to the server to start the game.
-//					while (!state.isConnected()) {
-//						try {
-//							Thread.sleep(1);
-//						} catch (Exception e) {
-//							System.err.println("Error in starting game: " + e.getMessage());
-//						} // Without this, this loop breaks on some machines.
-//					}
-//				}
 
 				// Get current state of player
 				this.player = state.getPlayer();
