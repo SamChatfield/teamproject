@@ -29,8 +29,8 @@ public class ClientGameStateTest {
 	EndState endState = new EndState(false, null, player, player1, null);
 	ArrayList<Bullet> bullets;
 	ArrayList<Zombie> zombies;
-	Zombie zombie = new Zombie(1,1,null);
-	Zombie zombie1 = new Zombie(1,1,null);
+	Zombie zombie = new Zombie(1,1,null, 0);
+	Zombie zombie1 = new Zombie(1,1,null, 0);
 	User user = new User("ryan", 1);
 	SendableState updatedState = new SendableState(serverState);
 	

@@ -23,9 +23,9 @@ public class CollisionTest {
 		Player player1 = new Player(3, 3, null, "ryan");
 		Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
 		Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
-		Zombie zombie = new Zombie(1,1,null);
-		Zombie zombie1 = new Zombie(1,1,null);
-		Zombie zombie2 = new Zombie(2,2,null);
+		Zombie zombie = new Zombie(1,1,null, 0);
+		Zombie zombie1 = new Zombie(1,1,null, 0);
+		Zombie zombie2 = new Zombie(2,2,null, 0);
 		ArrayList<Zombie> zombies = new ArrayList<>();
         
         
