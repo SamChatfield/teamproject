@@ -35,6 +35,8 @@ public class Renderer {
 	public static final BufferedImage speedDown = ResourceLoader.speedDown();
 	public static final BufferedImage moreHealth = ResourceLoader.moreHealth();
 	public static final BufferedImage invertControls = ResourceLoader.invertControls();
+	public static final BufferedImage freezePlayer = ResourceLoader.freezePlayer();
+
 
 
 

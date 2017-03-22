@@ -115,6 +115,14 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for freeze other player powerup into the game
+	 * @return BufferedImage for freeze other player powerup
+	 */
+	public static BufferedImage freezePlayer() {
+		return getImage("freezePlayer.png");
+	}
+
+	/**
 	 * Load image for speed down powerup into the game
 	 * @return BufferedImage for speed down powerup
 	 */
