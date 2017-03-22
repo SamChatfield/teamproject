@@ -23,7 +23,7 @@ public class CollisionBoxTest {
 	//Player player1 = new Player(1, 1, null, "ryan");
 	Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
-	Zombie zombie = new Zombie(1,1,null);
+	Zombie zombie = new Zombie(1,1,null, 0);
 	private ArrayList<Bullet> bullets;
 	protected transient MapData mapData;
 	DataPacket data = new DataPacket(1, 1, 0.3f, 50, 10l, null);

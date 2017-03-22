@@ -18,8 +18,8 @@ public class BulletTest {
 	Bullet bullet2 = new Bullet(player, 1, 1, 1, 1, null);
 	Bullet bullet3 = new Bullet(player, 1, 1, 1, 1, null);
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
-	Zombie zombie = new Zombie(1,1,null);
-	Zombie zombie1 = new Zombie(1,1,null);
+	Zombie zombie = new Zombie(1,1,null, 0);
+	Zombie zombie1 = new Zombie(1,1,null, 0);
 	private ArrayList<Bullet> bullets;
 	protected transient MapData mapData;
 	DataPacket data = new DataPacket(1, 1, 0.3f, 50, 10l, null);

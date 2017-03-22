@@ -102,6 +102,29 @@ public class Entity implements Serializable {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Move entity on the map
+	 * @param dx Movement X
+	 * @param dy Movement Y
+	 */
+	public void move(float dx, float dy) {
+		float nx = data.getX() + dx;;
+		
+		float ny = data.getY() + dy;
+
+		if (mapData.isEntityMoveValid(nx, ny, this)) {
+			data.setX(nx);
+			data.setY(ny);
+		} else if (mapData.isEntityMoveValid(nx, data.getY(), this)) {
+			data.setX(nx);
+		} else if (mapData.isEntityMoveValid(data.getX(), ny, this)) {
+			data.setY(ny);
+		}
+	}
+
+	/**
+>>>>>>> tests
 	 * Set the facing angle of the entity
 	 * @param fx Facing X value
 	 * @param fy Facing Y value

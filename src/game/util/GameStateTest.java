@@ -25,8 +25,8 @@ public class GameStateTest {
 	EndState endState = new EndState(false, null, player, player1, null);
 	ArrayList<Bullet> bullets;
 	ArrayList<Zombie> zombies;
-	Zombie zombie = new Zombie(1,1,null);
-	Zombie zombie1 = new Zombie(1,1,null);
+	Zombie zombie = new Zombie(1,1,null, 0);
+	Zombie zombie1 = new Zombie(1,1,null, 0);
 	
 	/**
 	 * Test method for {@link game.util.GameState#getEndState()}.
@@ -153,16 +153,16 @@ public class GameStateTest {
 
 	/**
 	 * Test method for {@link game.util.GameState#setReady(boolean)}.
-	 */
+	
 	@Test
 	public final void testSetReady() {
 		state.setReady(true);
 		assertTrue(state.playersReady());
 	}
-
+ */
 	/**
 	 * Test method for {@link game.util.GameState#setInProgress(boolean)}.
-	 */
+	 
 	@Test
 	public final void testSetInProgress() {
 		state.setInProgress(true);
@@ -170,5 +170,5 @@ public class GameStateTest {
 		state.setInProgress(false);
 		assertNotNull(state.inProgress());
 	}
-
+*/
 }
