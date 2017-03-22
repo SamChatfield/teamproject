@@ -10,7 +10,6 @@ import game.util.EndState;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -24,8 +23,6 @@ public class Renderer {
 	private Font tradeWinds;
 	private ClientGameState state;
 	private boolean showCollBox = false;
-
-	private BufferedImage lighting;
 
 	public Rectangle menuButton;
 	public Rectangle exitButton;
@@ -223,8 +220,7 @@ public class Renderer {
 		String player1Zombies = "0";
 		String player2Zombies = "0";
 		String wildZombies = "0";
-
-		System.out.println(endState.getWinnerName());
+		
 		endState.getPlayer1().getNumConvertedZombies();
 
 		try {

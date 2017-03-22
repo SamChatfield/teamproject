@@ -1,13 +1,10 @@
 package game;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 /**
  * Load resources into the game
@@ -43,6 +40,14 @@ public class ResourceLoader {
 	 */
 	public static BufferedImage playerImage() {
 		return getImage("player.png");
+	}
+
+	/**
+	 * Load player image into the game
+	 * @return BufferedImage of the player
+	 */
+	public static BufferedImage opponentImage() {
+		return getImage("playerRed.png");
 	}
 
 	/**
@@ -97,11 +102,11 @@ public class ResourceLoader {
 			tradeWinds = Font.createFont(Font.TRUETYPE_FONT, font_file);
 			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			genv.registerFont(tradeWinds);
-		} catch (FontFormatException e) {
-			System.err.println("Error importing font: " + e.getMessage());
-		} catch (IOException e) {
+		} catch (FontFormatException | IOException e) {
 			System.err.println("Error importing font: " + e.getMessage());
 		}
-		return tradeWinds;
+
+        return tradeWinds;
 	}
+
 }
