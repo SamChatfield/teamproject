@@ -115,7 +115,7 @@ public class GameInstance extends Thread {
 			zombie.move(delta);
 		}
 
-		try {
+	try {
 			for (Iterator<PowerUp> pwups = state.getPowerups().iterator(); pwups.hasNext();) {
 				PowerUp p = pwups.next();
 
@@ -131,18 +131,24 @@ public class GameInstance extends Thread {
 		} catch (ConcurrentModificationException e) {
 			System.out.println("Error, PWUPS, this shouldn't happen: " + e.getMessage());
 		}
-
-		for (Iterator<Bullet> it = state.getBullets().iterator(); it.hasNext();) {
-			Bullet b = it.next();
-			if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
-				it.remove();
-				continue;
+		
+		
+		
+		ArrayList<Bullet> newBullets = new ArrayList<>();
+		for (Bullet b : state.getBullets()) {
+			if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {
+				newBullets.add(b);
 			}
+		}
+
+		for (Bullet b : newBullets) {
 			Player owner = state.getPlayer(b.getUsername());
 			Collision.checkBulletCollision(b, zombies, owner);
 			Collision.checkPlayerCollision(b, state.getOtherPlayer(owner.getUsername()));
 			b.move(delta);
 		}
+
+		state.setBullets(newBullets);
 
 		// Player converted zombies
 		int play1Converted = 0;
