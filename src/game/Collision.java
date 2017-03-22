@@ -49,4 +49,17 @@ public class Collision {
 			}
 		}
 	}
+	
+	
+	public static boolean checkPowerupCollision(PowerUp p, Player player,
+			Player opponent) {
+		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
+			p.getPowerupStats(p, player);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
 }

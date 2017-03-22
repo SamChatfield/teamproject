@@ -14,6 +14,8 @@ public class Entity implements Serializable {
 	protected transient MapData mapData;
 	protected int imageWidth, imageHeight;
 	protected DataPacket data;
+	float x;
+	float y;
 
 	/**
 	 * Create a new entity
@@ -29,8 +31,18 @@ public class Entity implements Serializable {
 		//        showCollBox = false;
 		this.mapData = mapData;
 		collisionBox = new CollisionBox(this);
+		this.x = x;
+		this.y = y;
+		
 	}
 
+	
+	public Entity(float x, float y, MapData mapData) {
+		this.mapData = mapData;
+		collisionBox = new CollisionBox(this);
+	}
+
+	
 	/**
 	 * Get the type of the DataPacket within this entity
 	 * @return Type of data packet
@@ -45,6 +57,15 @@ public class Entity implements Serializable {
 	 */
 	public long getLastAttackTime(){
 		return data.getLastAttackTime();
+	}
+	
+	
+	public float getx(){
+		return x;
+	}
+	
+	public float gety(){
+		return y;
 	}
 
 	/**

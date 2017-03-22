@@ -7,11 +7,13 @@ import game.client.Player;
 import game.util.EndState;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
-
+import game.PowerUp;
 /**
- * A class that runs whilst the game is running. It primarily updates zombie positions.
+ * A class that runs whilst the game is running. It primarily updates zombie
+ * positions.
  */
 public class GameInstance extends Thread {
 
@@ -22,11 +24,13 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Constructor to create a new game instance
-	 * @param state The state of the server
+	 * 
+	 * @param state
+	 *            The state of the server
 	 */
-	public GameInstance(ServerGameState state){
+	public GameInstance(ServerGameState state) {
 		this.state = state;
-		Timer timer = new Timer(180,state);
+		Timer timer = new Timer(180, state);
 		new Thread(timer).start();
 
 		state.updateTime(timer.getTimeRemaining());
@@ -50,10 +54,11 @@ public class GameInstance extends Thread {
 
 			// Check if the game has ended
 			EndState end = checkForEnd();
-			if(end.hasFinished()){
+			if (end.hasFinished()) {
 				System.out.println("Game ended");
 				state.setEndState(end); // Give the game state the end state.
-				state.setHasFinished(true); // Will cause the timer thread to close too
+				state.setHasFinished(true); // Will cause the timer thread to
+											// close too
 				running = false;
 			}
 			now = System.nanoTime();
@@ -70,7 +75,9 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Update the game instance
-	 * @param delta Interpolation
+	 * 
+	 * @param delta
+	 *            Interpolation
 	 */
 	private void update(double delta) {
 		ArrayList<Zombie> zombies = state.getZombies();
@@ -90,7 +97,7 @@ public class GameInstance extends Thread {
 		while (zombs.hasNext()) {
 			Zombie zombie = zombs.next();
 			// Change the zombie's direction with given probability
-			if(zombie.getHealth() == 0){
+			if (zombie.getHealth() == 0) {
 				zombs.remove();
 			}
 			for (Player player : players) {
@@ -108,7 +115,24 @@ public class GameInstance extends Thread {
 			zombie.move(delta);
 		}
 
-		for (Iterator<Bullet> it = state.getBullets().iterator(); it.hasNext(); ) {
+		try {
+			for (Iterator<PowerUp> pwups = state.getPowerups().iterator(); pwups.hasNext();) {
+				PowerUp p = pwups.next();
+
+				for (Player player : players) {
+					Player owner = state.getPlayer(player.getUsername());
+					Player opponent = state.getOtherPlayer(owner.getUsername());
+					if (Collision.checkPowerupCollision(p, owner, opponent)) {
+						pwups.remove();
+
+					}
+				}
+			}
+		} catch (ConcurrentModificationException e) {
+			System.out.println("Error, PWUPS, this shouldn't happen: " + e.getMessage());
+		}
+
+		for (Iterator<Bullet> it = state.getBullets().iterator(); it.hasNext();) {
 			Bullet b = it.next();
 			if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
 				it.remove();
@@ -127,8 +151,8 @@ public class GameInstance extends Thread {
 		for (int i = 0; i < state.getZombies().size(); i++) {
 			if (state.getZombies().get(i).getUsername().equals(state.getPlayer1().getUsername())) {
 				play1Converted += 1;
-			}else if (state.getZombies().get(i).getUsername().equals(state.getPlayer2().getUsername())){
-				play2Converted += 1 ;
+			} else if (state.getZombies().get(i).getUsername().equals(state.getPlayer2().getUsername())) {
+				play2Converted += 1;
 			}
 		}
 		state.getPlayer1().setNumConvertedZombies(play1Converted);
@@ -137,35 +161,41 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Method that checks of the end of the game
+	 * 
 	 * @return EndState of the game
 	 */
-	private EndState checkForEnd(){
+	private EndState checkForEnd() {
 		Player winner;
 
 		// First of all, do any players have 0 health.
-		if(state.getPlayer1().getHealth() == 0){
+		if (state.getPlayer1().getHealth() == 0) {
 			winner = state.getPlayer2();
-			return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.PLAYER_DIED);
-		}else if(state.getPlayer2().getHealth() == 0){
+			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+					EndState.EndReason.PLAYER_DIED);
+		} else if (state.getPlayer2().getHealth() == 0) {
 			winner = state.getPlayer1();
-			return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.PLAYER_DIED);
+			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+					EndState.EndReason.PLAYER_DIED);
 		}
 
 		// Now we should see if the time has ended
-		if(state.getTimeRemaining() <= 0){// time has ended
+		if (state.getTimeRemaining() <= 0) {// time has ended
 			// the winner is now who has converted more zombies.
-			if(state.getPlayer1().getNumConvertedZombies() > state.getPlayer2().getNumConvertedZombies()){
+			if (state.getPlayer1().getNumConvertedZombies() > state.getPlayer2().getNumConvertedZombies()) {
 				winner = state.getPlayer1();
-				return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.TIME_EXPIRED);
-			} else if( state.getPlayer2().getNumConvertedZombies() > state.getPlayer1().getNumConvertedZombies()){
+				return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+						EndState.EndReason.TIME_EXPIRED);
+			} else if (state.getPlayer2().getNumConvertedZombies() > state.getPlayer1().getNumConvertedZombies()) {
 				winner = state.getPlayer2();
-				return new EndState(true,winner.getUsername(),state.getPlayer1(),state.getPlayer2(), EndState.EndReason.TIME_EXPIRED);
+				return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+						EndState.EndReason.TIME_EXPIRED);
 
-			} else{
-				return new EndState(true,"Tie",state.getPlayer1(),state.getPlayer2(), EndState.EndReason.TIME_EXPIRED);
+			} else {
+				return new EndState(true, "Tie", state.getPlayer1(), state.getPlayer2(),
+						EndState.EndReason.TIME_EXPIRED);
 			}
-		} else{
-			return new EndState(false,"InProgress",null,null,null);
+		} else {
+			return new EndState(false, "InProgress", null, null, null);
 		}
 	}
 }
