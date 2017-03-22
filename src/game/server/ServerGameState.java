@@ -74,7 +74,7 @@ public class ServerGameState extends GameState {
 		this.player2 = new Player(15 ,0 ,mapData, player2Username);
 
 		ArrayList<PowerUp> startPowerups = new ArrayList<>();
-		startPowerups.add(new PowerUp (13, 3, mapData, System.nanoTime()) );
+		//startPowerups.add(new PowerUp (13, 3, mapData, System.nanoTime()) );
 		this.powerups = startPowerups;
 		
 		

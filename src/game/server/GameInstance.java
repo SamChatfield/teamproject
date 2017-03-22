@@ -11,6 +11,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 import game.PowerUp;
+
 /**
  * A class that runs whilst the game is running. It primarily updates zombie
  * positions.
@@ -81,6 +82,7 @@ public class GameInstance extends Thread {
 	 */
 	private void update(double delta) {
 		ArrayList<Zombie> zombies = state.getZombies();
+		ArrayList<PowerUp> powerups = state.getPowerups();
 
 		// Update the player states
 		Player player1 = state.getPlayer1();
@@ -115,25 +117,31 @@ public class GameInstance extends Thread {
 			zombie.move(delta);
 		}
 
-	try {
-			for (Iterator<PowerUp> pwups = state.getPowerups().iterator(); pwups.hasNext();) {
-				PowerUp p = pwups.next();
+		Random r = new Random();
+		int chance = r.nextInt(100) + 1;
+		try {
+			ArrayList<PowerUp> newPowerup = new ArrayList<>();
+			long now = System.nanoTime();
 
-				for (Player player : players) {
-					Player owner = state.getPlayer(player.getUsername());
-					Player opponent = state.getOtherPlayer(owner.getUsername());
-					if (Collision.checkPowerupCollision(p, owner, opponent)) {
-						pwups.remove();
-
-					}
+			for (PowerUp p : state.getPowerups()) {
+				if (now - p.time <= 1000000000l && !Collision.checkPowerupCollision(p, player1, player2)
+						&& !Collision.checkPowerupCollision(p, player2, player1)) {
+					newPowerup.add(p);
 				}
 			}
+			
+			if (chance <= 2) {
+				newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.PuState.TEST, System.nanoTime()));
+			}
+
+			state.setPowerUp(newPowerup);
+
 		} catch (ConcurrentModificationException e) {
 			System.out.println("Error, PWUPS, this shouldn't happen: " + e.getMessage());
 		}
-		
-		
-		
+
+
+
 		ArrayList<Bullet> newBullets = new ArrayList<>();
 		for (Bullet b : state.getBullets()) {
 			if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {
