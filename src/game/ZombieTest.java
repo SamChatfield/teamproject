@@ -17,13 +17,17 @@ public class ZombieTest {
 	Player player = new Player(1, 1, null, "ryan"); 
 	Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
+
 	Zombie zombie = new Zombie(1,1,null, 0);
+
 	/**
 	 * Test method for {@link game.Zombie#Zombie(float, float, game.map.MapData)}.
 	 */
 	@Test
 	public final void testZombie() {
+
 		Zombie zombie = new Zombie(1,1,null, 0);
+
 		assertNotNull(zombie);
 	}
 
