@@ -59,7 +59,6 @@ public class GameInstance extends Thread {
 //			System.out.println("time diff: " + (now - lastLoopTime));
 			if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
 				try {
-					System.out.println("sleep for ms: " + ((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000));
 					Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
