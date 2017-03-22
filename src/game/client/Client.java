@@ -1,31 +1,21 @@
 package game.client;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Point;
+import game.util.EndState;
+import game.util.PlayerUpdatePacket;
+import game.util.User;
+import game.util.Vector;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import game.ResourceLoader;
-import game.util.EndState;
-import game.util.PlayerUpdatePacket;
-import game.util.User;
-import game.util.Vector;
 
 /**
  * This class is the one that the player will run when they want to start the game.
@@ -495,7 +485,8 @@ public class Client extends Canvas {
 		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
 		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual change in y this update
-		player.move(pdx, pdy);
+
+		player.move(pdx, pdy, state.getOtherPlayer());
 
 	}
 

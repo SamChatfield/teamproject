@@ -49,4 +49,9 @@ public class Collision {
 			}
 		}
 	}
+
+	public static boolean playersColliding(Entity player, Entity opponent) {
+		return player.getCollisionBox().intersects(opponent.getCollisionBox());
+	}
+
 }

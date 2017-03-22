@@ -177,7 +177,7 @@ public class ServerGameState extends GameState {
 		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
 		float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update
-		toModify.move(pdx, pdy);
+		toModify.move(pdx, pdy, getOtherPlayer(username));
 
         if (shootNow) {
             // game coord x and y position of the aim

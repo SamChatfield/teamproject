@@ -63,7 +63,26 @@ public class Zombie extends Entity {
 	public void move(double delta) {
 		float moveX = dx * getMoveSpeed() * (float) delta;
 		float moveY = dy * getMoveSpeed() * (float) delta;
-		super.move(moveX,moveY);
+		move(moveX,moveY);
+	}
+
+	/**
+	 * Move zombie on the map
+	 * @param dx Movement X
+	 * @param dy Movement Y
+	 */
+	public void move(float dx, float dy) {
+		float nx = data.getX() + dx;
+		float ny = data.getY() + dy;
+
+		if (mapData.isEntityMoveValid(nx, ny, this)) {
+			data.setX(nx);
+			data.setY(ny);
+		} else if (mapData.isEntityMoveValid(nx, data.getY(), this)) {
+			data.setX(nx);
+		} else if (mapData.isEntityMoveValid(data.getX(), ny, this)) {
+			data.setY(ny);
+		}
 	}
 
 	/**
