@@ -17,12 +17,14 @@ public class ServerGameState extends GameState {
 	private String player1Username;
 	private String player2Username;
 	private int zombieCount = 5;
+	private int difficulty;
 
     public ServerGameState(String player1Username, String player2Username, int difficulty){
         this.player1Username = player1Username;
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
-        zombieCount = (difficulty+1)*10;
+        this.difficulty = difficulty;
+        zombieCount = difficulty*10;
     }
 
 	/**
@@ -80,7 +82,7 @@ public class ServerGameState extends GameState {
 					x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
 					y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
 				}
-				zombieFactory.add(new Zombie(x,y,mapData));
+				zombieFactory.add(new Zombie(x,y,mapData,1*difficulty));
 			}
 		} catch(Exception e){
 			System.out.println("Exception: " + e.getMessage());

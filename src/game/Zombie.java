@@ -25,9 +25,10 @@ public class Zombie extends Entity {
 	 * @param y Initial y coordinate
 	 * @param mapData MapData of the current map
 	 */
-	public Zombie(float x, float y, MapData mapData) {
+	public Zombie(float x, float y, MapData mapData, int attackDamage) {
 		super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.ZOMBIE);
 		setState(DataPacket.State.WILD);
+		setAttackDamage(attackDamage);
 		setUsername("None");
 	}
 
