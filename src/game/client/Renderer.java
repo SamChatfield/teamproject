@@ -26,14 +26,16 @@ public class Renderer {
 	private boolean showCollBox = false;
 
 	// Load main iamges into the game
-	public static final BufferedImage awildZombieImage = ResourceLoader.zombieImage();
+	public static final BufferedImage wildZombieImage = ResourceLoader.zombieImage();
 	public static final BufferedImage playerZombieImage = ResourceLoader.zombiePlayerImage();
 	public static final BufferedImage opponentZombieImage = ResourceLoader.zombieOpponentImage();
 	public static final BufferedImage bulletImage = ResourceLoader.bulletImage();
 	public static final BufferedImage lightingImage = ResourceLoader.lightingImage();
 	public static final BufferedImage speedUp = ResourceLoader.speedUp();
 	public static final BufferedImage speedDown = ResourceLoader.speedDown();
-	public static final BufferedImage wildZombieImage = ResourceLoader.moreHealth();
+	public static final BufferedImage moreHealth = ResourceLoader.moreHealth();
+	public static final BufferedImage invertControls = ResourceLoader.invertControls();
+
 
 
 	public Rectangle menuButton;

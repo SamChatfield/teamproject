@@ -107,6 +107,14 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for invert controls powerup into the game
+	 * @return BufferedImage for invert controls powerup
+	 */
+	public static BufferedImage invertControls() {
+		return getImage("invertControls.png");
+	}
+
+	/**
 	 * Load image for speed down powerup into the game
 	 * @return BufferedImage for speed down powerup
 	 */
