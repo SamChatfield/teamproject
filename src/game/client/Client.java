@@ -202,6 +202,7 @@ public class Client extends Canvas {
 				// Is the game over?
 				if(state.HasFinished()){
 					currentState = STATE.END;
+
 				}
 			}
 
@@ -241,6 +242,7 @@ public class Client extends Canvas {
 				if(inputHandler.wasMouseClicked()) {
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
+					soundManager.playPressed();
 					//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
 					//for a new game
 					state.resetState(user);
@@ -255,6 +257,7 @@ public class Client extends Canvas {
 		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
 			if(my >= exitY && my <= (exitY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
+					soundManager.buttonPressed();
 					currentState = STATE.EXIT;
 					running = false;
 				}
@@ -292,6 +295,7 @@ public class Client extends Canvas {
 			if(mx >= returnX && mx <= (returnX + menu.returnButton.getWidth())) {
 				if(my >= returnY && my <= (returnY + menu.returnButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.buttonPressed();
 						menuState = MSTATE.MAIN;
 						inputHandler.setMouseClicked(false);
 					}
@@ -310,6 +314,7 @@ public class Client extends Canvas {
 							Sound.sfxPlayback = true;
 						}
 						inputHandler.setMouseClicked(false);
+						soundManager.buttonPressed();
 					}
 				}
 			}
@@ -321,6 +326,7 @@ public class Client extends Canvas {
 			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
 				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.buttonPressed();
 						if(Sound.musicPlayback) {
 							Sound.musicPlayback = false;
 						} else {
@@ -342,6 +348,7 @@ public class Client extends Canvas {
 			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
 				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.playPressed();
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
 						sender.sendObject("Waiting");
@@ -352,6 +359,7 @@ public class Client extends Canvas {
 			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
 				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.buttonPressed();
 						menuState = MSTATE.HOPTIONS;
 						inputHandler.setMouseClicked(false);
 					}
