@@ -87,7 +87,7 @@ public class InputHandler implements KeyListener, MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		clicked = true;
 		try {
-			Thread.sleep(50);
+			Thread.sleep(100);
 			clicked = false;
 		} catch (InterruptedException e1) {
 			System.out.println("Error in mouse detection: " + e1.getMessage());
