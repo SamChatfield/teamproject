@@ -142,7 +142,10 @@ public class Client extends Canvas {
 			while (currentState == STATE.GAME) {
 
 				if(!state.playersReady()) {
+					System.out.println("Got here; players not ready");
 					while(!state.playersReady()) {
+						System.out.println("Got here; players STILL not ready");
+
 						renderer.renderWaitingForOpponent();
 						try {
 							Thread.sleep(100);
@@ -203,7 +206,7 @@ public class Client extends Canvas {
 			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
 				renderer.renderGameOver(state.getEndState());
-				gameOverUpdate(renderer,state.getEndState());
+				gameOverUpdate();
 			}
 		}
 		System.exit(0);
@@ -211,10 +214,8 @@ public class Client extends Canvas {
 
 	/**
 	 * Update the game over screen (what is displayed and if buttons clicked)
-	 * @param rend Renderer object
-	 * @param state EndState of the game containing details of how game went
 	 */
-	private void gameOverUpdate(Renderer rend, EndState state) {
+	private void gameOverUpdate() {
 		double mx, my;
 		try {
 			mx = inputHandler.getMousePos().getX();
@@ -224,13 +225,13 @@ public class Client extends Canvas {
 			mx = 0;
 			my = 0;
 		}
-		int buttonWidth = (int)rend.menuButton.getWidth();
-		int buttonHeight = (int)rend.menuButton.getHeight();
+		int buttonWidth = (int)renderer.menuButton.getWidth();
+		int buttonHeight = (int)renderer.menuButton.getHeight();
 
-		int menuX = (int)rend.menuButton.getX();
-		int menuY = (int) rend.menuButton.getY();
-		int exitX = (int)rend.exitButton.getX();
-		int exitY = (int)rend.exitButton.getY();
+		int menuX = (int)renderer.menuButton.getX();
+		int menuY = (int)renderer.menuButton.getY();
+		int exitX = (int)renderer.exitButton.getX();
+		int exitY = (int)renderer.exitButton.getY();
 
 		// If return to menu button clicked
 		if(mx >= menuX && mx <= (menuX + buttonWidth)) {
@@ -238,6 +239,7 @@ public class Client extends Canvas {
 				if(inputHandler.wasMouseClicked()) {
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
+					state = new ClientGameState(user);
 				}
 			}
 		}

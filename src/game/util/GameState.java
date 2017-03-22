@@ -60,6 +60,7 @@ public class GameState implements Serializable {
 	 */
 	public void setHasFinished(boolean hasFinished) {
 		this.hasFinished = hasFinished;
+		this.inProgress = false;
 	}
 
 	/**
@@ -176,14 +177,7 @@ public class GameState implements Serializable {
 
     public boolean playersReady() { return playersConnected; }
 
-    public void setReady(boolean bool) { playersConnected = bool; }
+    public void setReady(boolean bool) { playersConnected = bool;
+		System.out.println(bool);}
 
-	/**
-	 * Set whether a new is in progress
-	 * @param bool Whether game in progress
-	 */
-
-    public void setInProgress(boolean bool){
-        inProgress = bool;
-    }
 }

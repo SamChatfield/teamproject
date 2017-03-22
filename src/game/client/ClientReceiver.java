@@ -42,7 +42,7 @@ public class ClientReceiver extends Thread {
 				Thread.sleep(1000/120);
 				if(!state.playersReady()) {
 					String s = (String)objIn.readObject();
-					if(s.equals("PlayersReady")) {
+					if(s.equals("PlayersReady")){
 						state.setReady(true);
 					} else if(s.substring(0, 11).equals("newUsername")) {
 						String strings[] = s.split(":");
@@ -60,12 +60,14 @@ public class ClientReceiver extends Thread {
 					}
 				}else{
 					Object obj = objIn.readObject();
+					System.out.println("rgs");
 					if(obj.getClass() == SendableState.class){
 						SendableState updatedState = (SendableState) obj;
 						state.updateClientState(updatedState); // update the clients view of the game state.
 					}else if(obj.getClass() == EndState.class){
 						EndState end = (EndState) obj;
 						state.setEndState(end);
+						//inProgress = false;
 					}
 				}
 
