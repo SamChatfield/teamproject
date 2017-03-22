@@ -241,6 +241,8 @@ public class Client extends Canvas {
 				if(inputHandler.wasMouseClicked()) {
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
+					//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
+					//for a new game
 					state.resetState(user);
 					state.setHasFinished(false);
 					state.setConnected(false);
