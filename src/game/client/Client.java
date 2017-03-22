@@ -418,14 +418,14 @@ public class Client extends Canvas {
 			System.out.println("Disabled conversion mode!");
 		}
 		// Turn all sound on
-		if(inputHandler.isKeyDown(KeyEvent.VK_N)) {
-			System.out.println("Sound ON");
+		if(inputHandler.isKeyDown(KeyEvent.VK_O)) {
+			//System.out.println("Sound ON");
 			Sound.sfxPlayback = true;
 			Sound.musicPlayback = true;
 		}
 		// Turn all sound off
-		if(inputHandler.isKeyDown(KeyEvent.VK_M)) {
-			System.out.println("Sound OFF");
+		if(inputHandler.isKeyDown(KeyEvent.VK_P)) {
+			//System.out.println("Sound OFF");
 			Sound.musicPlayback = false;
 			Sound.sfxPlayback = false;
 		}

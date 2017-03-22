@@ -117,12 +117,13 @@ public class MenuRenderer {
 		helpStrings.add("Use the mouse pointer to aim");
 		helpStrings.add("Left click to shoot in the direction of the player");
 		helpStrings.add("Use number keys 1-5 to use the corresponding item");
-		int helpX = 200;
+		helpStrings.add("O = Music and SFX on / P = Music and SFX off");
+		int helpX = 175;
 
 		for(String helpString : helpStrings) {
 			int helpStringWidth = g2d.getFontMetrics().stringWidth(helpString);
 			g2d.drawString(helpString, (Client.GAME_DIMENSION.width / 2) - helpStringWidth / 2, helpX);
-			helpX += 70;
+			helpX += 60;
 		}
 
 		// Clean up and flip the buffer
@@ -179,7 +180,7 @@ public class MenuRenderer {
 		for(String buttonString : buttonStrings) {
 			Rectangle button = buttons.get(counter);
 
-			g2d.setColor(new Color(0, 0, 0, 150));
+			g2d.setColor(new Color(0, 0, 0, 175));
 			g2d.fill(button);
 
 			int width_button = g2d.getFontMetrics().stringWidth(buttonString);
