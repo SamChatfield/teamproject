@@ -201,4 +201,20 @@ public class Entity implements Serializable {
 	public void setHealth(int newHealth){
 		data.setHealth(newHealth);
 	}
+
+	/**
+	 * Get attack damage of entity
+	 * @return Attack damage
+	 */
+	public int getAttackDamage(){
+		return data.getAttackDamage();
+	}
+
+	/**
+	 * Set health of entity
+	 * @param newDamage New health to set
+	 */
+	public void setAttackDamage(int newDamage){
+		data.setAttackDamage(newDamage);
+	}
 }

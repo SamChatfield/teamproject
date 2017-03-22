@@ -12,9 +12,9 @@ public class User implements Serializable{
 
 	private String username;
 	private int difficulty;
-	public static final int EASY =0;
-	public static final int MED =1;
-	public static final int HARD =2;
+	public static final int EASY =1;
+	public static final int MED =2;
+	public static final int HARD =3;
 
 	public ServerSender server_sender;
 	public ServerReceiver server_receiver;
