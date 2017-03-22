@@ -7,7 +7,6 @@ import game.client.Player;
 import game.util.EndState;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -57,8 +56,10 @@ public class GameInstance extends Thread {
 				running = false;
 			}
 			now = System.nanoTime();
+//			System.out.println("time diff: " + (now - lastLoopTime));
 			if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
 				try {
+//					System.out.println("sleep");
 					Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -73,6 +74,7 @@ public class GameInstance extends Thread {
 	 * @param delta Interpolation
 	 */
 	private void update(double delta) {
+//		System.out.println("delta: " + delta);
 		ArrayList<Zombie> zombies = state.getZombies();
 
 		// Update the player states
@@ -86,39 +88,47 @@ public class GameInstance extends Thread {
 
 		// Move the zombies around randomly
 		Random rand = new Random();
-		Iterator<Zombie> zombs = state.getZombies().iterator();
-		while (zombs.hasNext()) {
-			Zombie zombie = zombs.next();
-			// Change the zombie's direction with given probability
-			if(zombie.getHealth() == 0){
-				zombs.remove();
+		ArrayList<Zombie> newZombies = new ArrayList<>();
+
+		for (Zombie z : state.getZombies()) {
+			if (z.getHealth() != 0) {
+				newZombies.add(z);
 			}
+		}
+
+		for (Zombie z : newZombies) {
 			for (Player player : players) {
-				if (Math.hypot(zombie.getX() - player.getX(), zombie.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
-					zombie.followDirection(player);
+				if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
+					z.followDirection(player);
 				} else {
 					if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-						zombie.newMovingDir();
+						z.newMovingDir();
 					}
 				}
 				// Check if player has collided with a zombie
-				Collision.checkCollision(zombie, player);
+				Collision.checkCollision(z, player);
 			}
 			// Apply zombie movements on map
-			zombie.move(delta);
+			z.move(delta);
 		}
 
-		for (Iterator<Bullet> it = state.getBullets().iterator(); it.hasNext(); ) {
-			Bullet b = it.next();
-			if ((!state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b)) || !b.active) {
-				it.remove();
-				continue;
+		state.setZombies(newZombies);
+
+		ArrayList<Bullet> newBullets = new ArrayList<>();
+		for (Bullet b : state.getBullets()) {
+			if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {
+				newBullets.add(b);
 			}
+		}
+
+		for (Bullet b : newBullets) {
 			Player owner = state.getPlayer(b.getUsername());
 			Collision.checkBulletCollision(b, zombies, owner);
 			Collision.checkPlayerCollision(b, state.getOtherPlayer(owner.getUsername()));
 			b.move(delta);
 		}
+
+		state.setBullets(newBullets);
 
 		// Player converted zombies
 		int play1Converted = 0;

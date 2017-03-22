@@ -119,6 +119,14 @@ public class GameState implements Serializable {
 	}
 
 	/**
+	 * Set the list of zombies to the argument
+	 * @param zombies new list of zombies
+	 */
+	public void setZombies(ArrayList<Zombie> zombies) {
+		this.zombies = zombies;
+	}
+
+	/**
 	 * Get data packet of zombies
 	 * @return ArrayList of data packets for zombies currently in the game
 	 */

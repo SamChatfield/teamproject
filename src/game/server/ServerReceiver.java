@@ -3,10 +3,8 @@ package game.server;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
 
 /**
  * @author georgesabourin
@@ -31,7 +29,6 @@ public class ServerReceiver extends Thread {
 	
 	// Main method to run when thread starts
 	public void run() {
-
 		while(true) {
 			try {
 				Object obj = objIn.readObject();
@@ -61,7 +58,6 @@ public class ServerReceiver extends Thread {
 				System.exit(1);
 				//e.printStackTrace();
 			}
-			
 		}
 
 	}
