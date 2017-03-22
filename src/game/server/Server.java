@@ -56,15 +56,14 @@ public class Server {
 
 				User clientObject = (User)objIn.readObject();
 				System.out.println("DEBUG: Read client name");
-				System.out.println("New user connected: " + clientObject.getUsername());
 				int counter = 1;
 				boolean userExists = clientTable.userExists(clientObject.getUsername());
-				while(userExists)
-					if(userExists) {
-						clientObject.setUsername(clientObject.getUsername() + counter);
-						counter++;
-					}
+				if(userExists) {
+					clientObject.setUsername(clientObject.getUsername() + counter);
+					counter++;
+				}
 				clientTable.addToTable(clientObject);
+				System.out.println("New user connected: " + clientObject.getUsername());
 
 				// Start threads
 				ServerSender server_sender = new ServerSender(objOut);
@@ -74,6 +73,9 @@ public class Server {
 
 				clientObject.setServerReceiver(server_receiver);
 				clientObject.setServerSender(server_sender);
+				if(userExists) {
+					server_sender.sendObject("newUsername:"+ clientObject.getUsername());
+				}
 
 				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
 			}

@@ -164,22 +164,22 @@ public class Sound extends Thread{
 	}
 
 	/**
-	 * Method used to play the music. The music is looped continuously
+	 * Method used to play and stop the music. The music is looped continuously
 	 */
 	public void playMusic() {
 		if(initial) {
-			System.out.println("Music started, we good");
+			//System.out.println("Music started, we good");
 			musicClip = this.createClip(music);
 			musicClip.loop(Clip.LOOP_CONTINUOUSLY);
 			isActive = true;
 			initial = false;
 		}else if(musicPlayback && !isActive) {
-			System.out.println("Music started again");
+			//System.out.println("Music started again");
 			musicClip = this.createClip(music);
 			musicClip.loop(Clip.LOOP_CONTINUOUSLY);
 			isActive = true;
 		} else if(!musicPlayback && isActive) {
-			System.out.println("Music stopped");
+			//System.out.println("Music stopped");
 			musicClip.close();
 			isActive = false;
 

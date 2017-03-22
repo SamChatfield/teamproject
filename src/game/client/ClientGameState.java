@@ -4,6 +4,7 @@ import game.map.MapData;
 import game.util.DataPacket;
 import game.util.GameState;
 import game.util.SendableState;
+import game.util.User;
 
 import java.util.ArrayList;
 
@@ -12,16 +13,16 @@ import java.util.ArrayList;
  */
 public class ClientGameState extends GameState {
 	
-	private String username;
+	private User user;
 	private String otherPlayerName;
 	private Sound soundManager;
 
 	/**
 	 * Create a new ClientGameState
-	 * @param username Username of local user
+	 * @param user Username of local user
 	 */
-	public ClientGameState(String username){
-		this.username = username;
+	public ClientGameState(User user){
+		this.user = user;
 		this.mapImage = null;
 		this.isConnected = false;
 		this.bullets = new ArrayList<>();
@@ -47,24 +48,24 @@ public class ClientGameState extends GameState {
 			this.mapImage = updatedState.getMapImage();
 
 			// We need to figure out if the server thinks we are player 1 or 2.
-			if(updatedState.getPlayer1().getUsername().equals(username)){ // we are player 1 to the server
+			if(updatedState.getPlayer1().getUsername().equals(user.getUsername())){ // we are player 1 to the server
 				otherPlayerName = updatedState.getPlayer2().getUsername();
 			}else{
 				otherPlayerName = updatedState.getPlayer1().getUsername();
 			}
 
-			setUpGame(updatedState.getPlayer(username),updatedState.getPlayer(otherPlayerName));
+			setUpGame(updatedState.getPlayer(user.getUsername()),updatedState.getPlayer(otherPlayerName));
 
 		}
 
 //		this.bullets = updatedState.getBullets();
 		//this.hasFinished = updatedState.HasFinished();
 
-		if(player1.getHealth() > updatedState.getPlayer(username).getHealth()){
+		if(player1.getHealth() > updatedState.getPlayer(user.getUsername()).getHealth()){
 			soundManager.playerHurt();
 		}
 
-		player1.updateLocalPlayerData(updatedState.getPlayer(username));
+		player1.updateLocalPlayerData(updatedState.getPlayer(user.getUsername()));
 		player2.updateData(updatedState.getPlayer(otherPlayerName));
 
 		this.zombieDataPackets = updatedState.getZombies();
@@ -82,7 +83,7 @@ public class ClientGameState extends GameState {
 		setUpMapData(mapImage);
 
 		// Set up two player objects that we can update later.
-		this.player1 = new Player(0,0,mapData,username);
+		this.player1 = new Player(0,0,mapData,user.getUsername());
 		this.player2 = new Player(0,0,mapData,null); // We'll set this later
 
 		// We can reliably update each player locally without knowing which order they were sent in by the server.
@@ -109,9 +110,9 @@ public class ClientGameState extends GameState {
 	 * @return The local player object
 	 */
 	public Player getPlayer() {
-		if(player1.getUsername().equals(username)){
+		if(player1.getUsername().equals(user.getUsername())){
 			return player1;
-		}else if(player2.getUsername().equals(username)) {
+		}else if(player2.getUsername().equals(user.getUsername())) {
 			return player2;
 		}
 		return null;
@@ -122,9 +123,9 @@ public class ClientGameState extends GameState {
 	 * @return The other player object
 	 */
 	public Player getOtherPlayer() {
-		if(player1.getUsername().equals(username)){
+		if(player1.getUsername().equals(user.getUsername())){
 			return player2;
-		}else if(player2.getUsername().equals(username)) {
+		}else if(player2.getUsername().equals(user.getUsername())) {
 			return player1;
 		}
 		return null;
