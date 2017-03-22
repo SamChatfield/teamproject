@@ -77,6 +77,7 @@ public class Client extends Canvas {
 	private STATE currentState;
 	private MSTATE menuState;
 
+	private User user;
 	private static String username;
 	private static String ipAddress;
 	private static int difficulty;
@@ -86,10 +87,11 @@ public class Client extends Canvas {
 	 * @param state CurrentSlientState object
 	 * @param sender ClientSender object
 	 */
-	private Client(ClientGameState state, ClientSender sender, String username) {
+	private Client(ClientGameState state, ClientSender sender, User user) {
+		this.user = user;
 		this.state = state;
 		this.sender = sender;
-		container = new JFrame(TITLE + " - " + username);
+		container = new JFrame(TITLE + " - " + user.getUsername());
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
 		panel.setLayout(null);
@@ -603,7 +605,7 @@ public class Client extends Canvas {
 		ClientReceiver client_receiver = new ClientReceiver(newUser, objIn);
 
 		// Then create a client state for the client
-		ClientGameState state = new ClientGameState(username);
+		ClientGameState state = new ClientGameState(newUser);
 
 		client_receiver.addState(state); // Must be called before starting the thread.
 		client_sender.addState(state);
@@ -613,7 +615,7 @@ public class Client extends Canvas {
 		client_sender.start();
 		client_receiver.start();
 
-		Client client = new Client(state,client_sender, username);
+		Client client = new Client(state,client_sender, newUser);
 
 		// Create and start the client loop over the loop method of the client object.
 		// :: is a method reference since loop is an existing method,

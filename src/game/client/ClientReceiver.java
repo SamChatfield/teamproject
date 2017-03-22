@@ -44,14 +44,16 @@ public class ClientReceiver extends Thread {
 					String s = (String)objIn.readObject();
 					if(s.equals("PlayersReady")) {
 						state.setReady(true);
-						// System.out.println("state set to true");
-						// System.out.println(state.playersReady());
+					} else if(s.substring(0, 11).equals("newUsername")) {
+						String strings[] = s.split(":");
+						String newUsername = strings[1];
+						user.setUsername(newUsername);
+						System.out.println(user.getUsername());
 					}
-				}
-				if(!inProgress){
+				} else if(!inProgress){
 					String s = (String)objIn.readObject();
 					if(s.equals("StartingGame")){
-						System.out.println("Starting the game");
+						System.out.println("starting");
 						inProgress = true;
 					}else if(s.equals("GameOver")){
 						inProgress = false;
@@ -70,8 +72,9 @@ public class ClientReceiver extends Thread {
 			}
 		} catch(Exception e) {
 			System.err.println("Exception in ClientReceiver: " + e.getMessage());
-			// e.printStackTrace();;
-			System.exit(1);
+
+			e.printStackTrace();;
+			//System.exit(1);
 
 		}
 	}
