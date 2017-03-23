@@ -131,7 +131,6 @@ public class SendableState implements Serializable {
 		this.bullets = state.getSendableBullets();
 		this.powerups = state.getPowerups();
 		this.weapons = state.getWeapons();
-		this.deadZombies = state.getDeadZombies();
 		this.hasFinished = state.HasFinished();
 	}
 }
