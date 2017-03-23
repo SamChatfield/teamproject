@@ -1,8 +1,11 @@
 package game.client;
 
 import game.Bullet;
+import game.Collision;
 import game.Entity;
 import game.ResourceLoader;
+import game.Weapon;
+import game.Weapon.WeaponState;
 import game.map.MapData;
 import game.util.DataPacket;
 
@@ -19,7 +22,7 @@ public class Player extends Entity {
 	private static final float COLL_BOX_WIDTH = 25.0f;
 	private static final float COLL_BOX_HEIGHT = 25.0f;
 	public static final int HEALTH = 50;
-	private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
+	public long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
 	private static final float MOVE_SPEED = 0.1f;
 	private static final BufferedImage image = ResourceLoader.playerImage();
 	private static final BufferedImage opponentImage = ResourceLoader.opponentImage();
@@ -28,7 +31,16 @@ public class Player extends Entity {
 
 	public boolean conversionMode;
     private ArrayList<Bullet> bullets;
+    
+    private static final boolean isActivePU = false;
+    private static final long appearTimePU = 0;
+    
+    private static final boolean isActivePD = false;
+    private static final float appearTimePD = 0;
 
+    private static final WeaponState[] inventory = new WeaponState[5];  
+    
+    
     /**
      * Create a new Player object in the game
      * @param x Initial X coordinate
@@ -37,14 +49,42 @@ public class Player extends Entity {
      * @param username Username of this player
      */
     public Player(float x, float y, MapData mapData, String username) {
-        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER);
+        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER, isActivePU, appearTimePU, isActivePD, appearTimePD);
 
         showCollBox = false;
         bullets = new ArrayList<>(20);
         setUsername(username);
         
         // Initially cannot convert zombies
-        conversionMode = false;
+        conversionMode = false;        
+        inventory[0] = Weapon.WeaponState.PISTOL;
+    }
+
+    /**
+     * Move entity on the map
+     * @param dx Movement X
+     * @param dy Movement Y
+     * @param opponent Opponent player
+     */
+    public void move(float dx, float dy, Entity opponent) {
+        float cx = data.getX();
+        float cy = data.getY();
+        float nx = cx + dx;
+        float ny = cy + dy;
+
+        if (mapData.isEntityMoveValid(nx, ny, this)) {
+            data.setX(nx);
+            data.setY(ny);
+        } else if (mapData.isEntityMoveValid(nx, data.getY(), this)) {
+            data.setX(nx);
+        } else if (mapData.isEntityMoveValid(data.getX(), ny, this)) {
+            data.setY(ny);
+        }
+
+        if (Collision.playersColliding(this, opponent)) {
+            data.setX(cx);
+            data.setY(cy);
+        }
     }
 
     /**
@@ -78,6 +118,7 @@ public class Player extends Entity {
             return false;
         }
     }
+
 
     /**
      * Draw the player on the screen
@@ -182,4 +223,8 @@ public class Player extends Entity {
         this.showCollBox = showCollBox;
     }
 
+    
+	public WeaponState[] getInventory(){
+		return inventory;
+	}
 }

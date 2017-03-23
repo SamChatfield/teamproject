@@ -1,9 +1,9 @@
 package game;
 
-import java.io.Serializable;
-
 import game.map.MapData;
 import game.util.DataPacket;
+
+import java.io.Serializable;
 
 /**
  * Representation of entities in the game (Zombies and Players)
@@ -14,6 +14,8 @@ public class Entity implements Serializable {
 	protected transient MapData mapData;
 	protected int imageWidth, imageHeight;
 	protected DataPacket data;
+	float x;
+	float y;
 
 	/**
 	 * Create a new entity
@@ -29,8 +31,27 @@ public class Entity implements Serializable {
 		//        showCollBox = false;
 		this.mapData = mapData;
 		collisionBox = new CollisionBox(this);
+		this.x = x;
+		this.y = y;		
 	}
 
+	
+	public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t, boolean isActivePU, float appearTimePU, boolean isActivePD, float appearTimePD) {
+		this.data = new DataPacket(x,y,moveSpeed,health, 0L,t, isActivePU, appearTimePU, isActivePD, appearTimePD);
+		//        showCollBox = false;
+		this.mapData = mapData;
+		collisionBox = new CollisionBox(this);
+		this.x = x;
+		this.y = y;		
+	}
+	
+	
+	public Entity(float x, float y, MapData mapData) {
+		this.mapData = mapData;
+		collisionBox = new CollisionBox(this);
+	}
+
+	
 	/**
 	 * Get the type of the DataPacket within this entity
 	 * @return Type of data packet
@@ -45,6 +66,15 @@ public class Entity implements Serializable {
 	 */
 	public long getLastAttackTime(){
 		return data.getLastAttackTime();
+	}
+	
+	
+	public float getx(){
+		return x;
+	}
+	
+	public float gety(){
+		return y;
 	}
 
 	/**
@@ -72,25 +102,6 @@ public class Entity implements Serializable {
 	}
 
 	/**
-	 * Move entity on the map
-	 * @param dx Movement X
-	 * @param dy Movement Y
-	 */
-	public void move(float dx, float dy) {
-		float nx = data.getX() + dx;
-		float ny = data.getY() + dy;
-
-		if (mapData.isEntityMoveValid(nx, ny, this)) {
-			data.setX(nx);
-			data.setY(ny);
-		} else if (mapData.isEntityMoveValid(nx, data.getY(), this)) {
-			data.setX(nx);
-		} else if (mapData.isEntityMoveValid(data.getX(), ny, this)) {
-			data.setY(ny);
-		}
-	}
-
-	/**
 	 * Set the facing angle of the entity
 	 * @param fx Facing X value
 	 * @param fy Facing Y value
@@ -105,6 +116,22 @@ public class Entity implements Serializable {
 	 */
 	public void setMoveSpeed(float moveSpeed) {
 		data.setMoveSpeed(moveSpeed);
+	}
+	
+	public void setIsActive(boolean isActive){
+		data.setIsActive(isActive);
+	}
+	
+	public void setAppearTime(float appearTime){
+		data.setAppearTime(appearTime);
+	}
+	
+	public void setIsActivePD(boolean isActivePD){
+		data.setIsActivePD(isActivePD);
+	}
+	
+	public void setAppearTimePD(float appearTimePD){
+		data.setAppearTimePD(appearTimePD);
 	}
 
 	/**
@@ -139,6 +166,11 @@ public class Entity implements Serializable {
 		setLastAttackTime(data2.getLastAttackTime());
 		setHealth(data2.getHealth());
 		setNumConvertedZombies(data2.getNumConvertedZombies());
+		setMoveSpeed(data2.getMoveSpeed());
+		setIsActive(data2.getIsActive());
+		setAppearTime(data2.getAppearTime());
+		setIsActivePD(data2.getIsActivePD());
+		setAppearTimePD(data2.getAppearTimePD());
 	}
 
 	/**
@@ -213,11 +245,43 @@ public class Entity implements Serializable {
 		return data.getMoveSpeed();
 	}
 
+	public boolean getIsActive(){
+		return data.getIsActive();
+	}
+	
+	public float getAppearTime(){
+		return data.getAppearTime();
+	}
+	
+	public boolean getIsActivePD(){
+		return data.getIsActivePD();
+	}
+	
+	public float getAppearTimePD(){
+		return data.getAppearTimePD();
+	}
+	
 	/**
 	 * Set health of entity
 	 * @param newHealth New health to set
 	 */
 	public void setHealth(int newHealth){
 		data.setHealth(newHealth);
+	}
+
+	/**
+	 * Get attack damage of entity
+	 * @return Attack damage
+	 */
+	public int getAttackDamage(){
+		return data.getAttackDamage();
+	}
+
+	/**
+	 * Set health of entity
+	 * @param newDamage New health to set
+	 */
+	public void setAttackDamage(int newDamage){
+		data.setAttackDamage(newDamage);
 	}
 }

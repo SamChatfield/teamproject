@@ -19,12 +19,15 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class Sound extends Thread{
 	private String pistolSound = "src/game/sounds/pistol.wav";
+	private String shotgunSound = "src/game/sounds/shotgun.wav";
 	private String music = "src/game/sounds/music.wav";
 	private String zombieDeath = "src/game/sounds/zombieDeath.wav";
 	private String zombieSound ="src/game/sounds/zombieSound";
 	private String hurt = "src/game/sounds/hit.wav";
+	private String buttonPressed = "src/game/sounds/buttonPressed.wav";
+	private String playPressed = "src/game/sounds/playPressed.wav";
 	private boolean running;
-	private Clip musicClip, gunClip;
+	private Clip musicClip;
 	private static final float ZOMBIE_SOUND_PROBABILITY = 0.01f;
 	Random rn, oneTwoOrThree;
 	public static boolean musicPlayback = true;
@@ -118,6 +121,20 @@ public class Sound extends Thread{
 			turnDownVolume(gunClip, -10.0f);
 			gunClip.start();
 		}  
+	}
+
+	public void buttonPressed() {
+		if(sfxPlayback) {
+			Clip newClip = this.createClip(buttonPressed);
+			newClip.start();
+		}
+	}
+
+	public void playPressed() {
+		if(sfxPlayback) {
+			Clip newClip = this.createClip(playPressed);
+			newClip.start();
+		}
 	}
 
 	/**

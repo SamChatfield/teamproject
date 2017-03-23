@@ -22,16 +22,16 @@ public class PlayerUpdatePacket implements Serializable {
 	}
 
 	/**
-	 * Get change in X value
-	 * @return Change in X
+	 * Get x value of the facing vector
+	 * @return facing x
 	 */
 	public float getfX() {
 		return fX;
 	}
 
 	/**
-	 * Get change in Y value
-	 * @return Change in Y
+	 * Get y value of the facing vector
+	 * @return facing y
 	 */
 	public float getfY() {
 		return fY;
@@ -42,8 +42,8 @@ public class PlayerUpdatePacket implements Serializable {
 	 * @param data DataPacket
 	 * @param keyPresses ArrayList of keypresses as strings
 	 * @param delta Delta value
-	 * @param x X value
-	 * @param y Y value
+	 * @param x facing vector x value
+	 * @param y facing vector y value
 	 */
 	public PlayerUpdatePacket(DataPacket data, ArrayList<String> keyPresses, double delta, float x, float y) {
 		this.data = data;

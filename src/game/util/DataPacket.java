@@ -15,8 +15,14 @@ public class DataPacket implements Serializable {
 	private String username;
 	private Type type;
 	private int numConvertedZombies;
+	private boolean isActive;
+	private float appearTime;
+	private boolean isActivePD;
+	private float appearTimePD;
+	private int attackDamage;
 
-	/**
+
+		/**
 	 * Object that the data packet refers to
 	 */
 	public enum Type {
@@ -93,6 +99,23 @@ public class DataPacket implements Serializable {
 		return moveSpeed;
 	}
 
+	public boolean getIsActive(){
+		return isActive;
+	}
+	
+	public float getAppearTime(){
+		return appearTime;
+	}
+	
+	public boolean getIsActivePD(){
+		return isActivePD;
+	}
+	
+	public float getAppearTimePD(){
+		return appearTimePD;
+	}
+	
+	
 	/**
 	 * Set move speed
 	 * @param moveSpeed New movespeed to set
@@ -100,7 +123,24 @@ public class DataPacket implements Serializable {
 	public void setMoveSpeed(float moveSpeed) {
 		this.moveSpeed = moveSpeed;
 	}
+	
+	public void setIsActive(boolean isActive){
+		this.isActive = isActive;
+	}
+	
+	public void setAppearTime(float appearTime){
+		this.appearTime = appearTime;
+	}
+	
+	public void setIsActivePD(boolean isActivePD){
+		this.isActivePD = isActivePD;
+	}
 
+	public void setAppearTimePD(float appearTimePD){
+		this.appearTimePD = appearTimePD;
+	}
+	
+	
 	/**
 	 * Get the last attack time
 	 * @return Time of the last attack of the object
@@ -182,6 +222,22 @@ public class DataPacket implements Serializable {
 	}
 
 	/**
+	 * Get the attack damage of the object
+	 */
+	public int getAttackDamage() {
+		return attackDamage;
+	}
+
+	/**
+	 * Set the attack damage of the object
+	 * @param attackDamage New amount of damage to set.
+	 */
+	public void setAttackDamage(int attackDamage) {
+		this.attackDamage = attackDamage;
+	}
+
+
+	/**
 	 * Constructor to create a new DataPacket
 	 * @param x X coordinate
 	 * @param y Y coordinate
@@ -197,6 +253,20 @@ public class DataPacket implements Serializable {
 		this.y = y;
 		this.moveSpeed = moveSpeed;
 		this.health = health;
+		this.type = t;
+	}
+	
+	
+	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t, boolean isActive, float appearTime, boolean isActivePD, float appearTimePD) {
+		this.lastAttackTime = lastAttackTime;
+
+		this.x = x;
+		this.y = y;
+		this.moveSpeed = moveSpeed;
+		this.health = health;
+		this.isActive = isActive;
+		this.appearTime = appearTime;
+		
 		this.type = t;
 	}
 }

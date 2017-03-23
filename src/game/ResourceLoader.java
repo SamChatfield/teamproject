@@ -129,6 +129,73 @@ public class ResourceLoader {
 	public static BufferedImage speedDown() {
 		return getImage("speedDown.png");
 	}
+
+	/**
+	 * Load image for the blood splatter
+	 * @return BufferedImage for the blood splatter
+	 */
+	public static BufferedImage splatter1() {
+		return getImage("splatter1.png");
+	}
+
+
+	/**
+	 * Load image for the blood splatter
+	 * @return BufferedImage for the blood splatter
+	 */
+	public static BufferedImage splatter2() {
+		return getImage("splatter2.png");
+	}
+
+
+	/**
+	 * Load image for the blood splatter
+	 * @return BufferedImage for the blood splatter
+	 */
+	public static BufferedImage splatter3() {
+		return getImage("splatter3.png");
+	}
+
+	/**
+	 * Load image for the machine gun
+	 * @return BufferedImage for the machine gun
+	 */
+	public static BufferedImage machineGun() {
+		return getImage("machineGun.png");
+	}
+
+	/**
+	 * Load image for the shotgun
+	 * @return BufferedImage for the shotgun
+	 */
+	public static BufferedImage shotgun() {
+		return getImage("shotgun.png");
+	}
+
+	/**
+	 * Load image for the converter
+	 * @return BufferedImage for the converter
+	 */
+	public static BufferedImage converter() {
+		return getImage("converter.png");
+	}
+
+	/**
+	 * Load image for the uzi
+	 * @return BufferedImage for the uzi
+	 */
+	public static BufferedImage uzi() {
+		return getImage("uzi.png");
+	}
+
+
+	/**
+	 * Load image for the game icon
+	 * @return BufferedImage for the icon
+	 */
+	public static BufferedImage iconImage() {
+		return getImage("icon.png");
+	}
 	/**
 	 * Import Tradewinds font into the game
 	 * @return Imported Font

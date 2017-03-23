@@ -8,6 +8,11 @@ import game.map.MapData;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import game.PowerUp;
+import game.Weapon;
+
+import javax.xml.crypto.Data;
+
 /**
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
  * be called on both game states.
@@ -15,19 +20,32 @@ import java.util.ArrayList;
 public class GameState implements Serializable {
 
 	protected ArrayList<Zombie> zombies;
+	protected ArrayList<DataPacket> deadZombies;
+
 	protected ArrayList<Bullet> bullets;
 	protected ArrayList<DataPacket> zombieDataPackets;
     protected ArrayList<DataPacket> bulletDataPackets;
+    protected ArrayList<PowerUp> powerups;
+    protected ArrayList<Weapon>  weapons;
+    
 	protected Player player1;
 	protected Player player2;
 	protected String mapImage; // Name of the file being used to create the image.
 	protected int timeRemaining;
 	protected MapData mapData;
 	protected boolean inProgress; // Is the game in progress?
-	protected boolean isConnected; // Is the game connected to the server? If this is false, the server hasn't sent a state yet
+	protected boolean isConnected;
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void setConnected(boolean connected) {
+		isConnected = connected;
+	}
+
 	protected EndState endState;
 	protected boolean hasFinished;
-	protected boolean playersConnected;
 
 	/**
 	 * Get EndState of game
@@ -60,6 +78,7 @@ public class GameState implements Serializable {
 	 */
 	public void setHasFinished(boolean hasFinished) {
 		this.hasFinished = hasFinished;
+		this.inProgress = false;
 	}
 
 	/**
@@ -78,6 +97,25 @@ public class GameState implements Serializable {
 		this.bullets = bullets;
 	}
 
+	
+	public ArrayList<PowerUp> getPowerups(){
+		return powerups;
+	}
+	
+	public void setPowerUp(ArrayList<PowerUp> powerups){
+		this.powerups = powerups;
+	}
+	
+	
+	public ArrayList<Weapon> getWeapons(){
+		return weapons;
+	}
+	
+	public void setWeapons(ArrayList<Weapon> weapons){
+		this.weapons = weapons;
+	}
+	
+	
 	/**
 	 * Get the current MapData
 	 * @return MapData object
@@ -119,6 +157,24 @@ public class GameState implements Serializable {
 	}
 
 	/**
+	 * Set the list of zombies to the argument
+	 * @param zombies new list of zombies
+	 */
+	public void setZombies(ArrayList<Zombie> zombies) {
+		this.zombies = zombies;
+	}
+
+	/**
+	 * Get an ArrayList of the dead zombies in the current game state
+	 * @return ArrayList of zombies
+	 */
+	public ArrayList<DataPacket> getDeadZombies() {
+		return deadZombies;
+	}
+
+
+
+	/**
 	 * Get data packet of zombies
 	 * @return ArrayList of data packets for zombies currently in the game
 	 */
@@ -150,32 +206,8 @@ public class GameState implements Serializable {
 		return player2;
 	}
 
-	/**
-	 * Get whether a game is currently in progress
-	 * @return Boolean of whether game in progress
-	 */
-	public boolean inProgress(){
-		return inProgress;
-	}
 
-	/**
-	 * Get whether a game state is currently connected between two players
-	 * @return Boolean of whether two players connected
-	 */
-	public boolean isConnected(){
-		return isConnected;
-	}
 
-    public boolean playersReady() { return playersConnected; }
 
-    public void setReady(boolean bool) { playersConnected = bool; }
 
-	/**
-	 * Set whether a new is in progress
-	 * @param bool Whether game in progress
-	 */
-
-    public void setInProgress(boolean bool){
-        inProgress = bool;
-    }
 }

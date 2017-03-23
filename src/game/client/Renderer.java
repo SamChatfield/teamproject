@@ -1,7 +1,9 @@
 package game.client;
 
 import game.CollisionBox;
+import game.PowerUp;
 import game.ResourceLoader;
+import game.Weapon;
 import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
@@ -11,7 +13,11 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Random;
+
+import static game.PowerUp.PuState.FREEZE;
 
 /**
  * Renders the game on screen
@@ -38,9 +44,21 @@ public class Renderer {
 	public static final BufferedImage freezePlayer = ResourceLoader.freezePlayer();
 
 
+	//Blood splatters
+    public static final BufferedImage splatter1 = ResourceLoader.splatter1();
+    public static final BufferedImage splatter2 = ResourceLoader.splatter2();
+    public static final BufferedImage splatter3 = ResourceLoader.splatter3();
 
 
-	public Rectangle menuButton;
+    //Weapons
+    public static final BufferedImage machineGun = ResourceLoader.machineGun();
+    public static final BufferedImage shotgun = ResourceLoader.shotgun();
+    public static final BufferedImage converter = ResourceLoader.converter();
+    public static final BufferedImage uzi = ResourceLoader.uzi();
+
+
+
+    public Rectangle menuButton;
 	public Rectangle exitButton;
 
 	public Color fadedWhite = new Color(255,255,255,190);
@@ -68,7 +86,11 @@ public class Renderer {
 		int timeRemaining = state.getTimeRemaining();
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
-		MapData mapData = state.getMapData();
+        ArrayList<DataPacket> deadZombies = state.getDeadZombies();
+
+        MapData mapData = state.getMapData();
+		ArrayList<PowerUp> powerups = state.getPowerups();
+		ArrayList<Weapon> weapons = state.getWeapons();
 
 		// Set up the graphics instance for the current back buffer
 		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
@@ -83,7 +105,11 @@ public class Renderer {
 		// Draw the map
 		drawMap(g2d, mapData, player);
 
-		// Draw the player
+        for(DataPacket d: deadZombies){
+            drawDeadZombie(g2d,d,player,(deadZombies.indexOf(d)%3)+1);
+        }
+
+        // Draw the player
 		player.draw(g2d);
 
 		// Draw relative to other player
@@ -100,9 +126,18 @@ public class Renderer {
 		for (DataPacket z : zombiePackets) {
 			drawZombie(g2d, player, z);
 		}
+		
+		for(PowerUp p : powerups){
+			drawPowerup(g2d, p, player);
+		}
 
+
+		for(Weapon w : weapons){
+			drawWeapon(g2d, w, player);
+		}
+		
 		// Draw lighting
-		drawLighting(g2d);
+		// drawLighting(g2d);
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
@@ -237,8 +272,8 @@ public class Renderer {
 		String player2Zombies = "0";
 		String wildZombies = "0";
 
-		System.out.println(endState.getWinnerName());
-		endState.getPlayer1().getNumConvertedZombies();
+		//		System.out.println(endState.getWinnerName());
+		// endState.getPlayer1().getNumConvertedZombies();
 
 		try {
 			gameWinner = endState.getWinnerName();
@@ -391,6 +426,14 @@ public class Renderer {
 	}
 
 	/**
+	 * Get whether collision boxes are being shown
+	 * @return are collision boxes being shown
+	 */
+	public boolean getShowCollBox() {
+		return showCollBox;
+	}
+
+	/**
 	 * DEBUG METHOD: Set whether to show collision boxes
 	 * @param showCollBox Boolean to set
 	 */
@@ -419,4 +462,80 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
+    private void drawDeadZombie(Graphics2D g2d, DataPacket d, Player player, int i) {
+        int w = Renderer.splatter1.getWidth();
+        int h = Renderer.splatter1.getHeight();
+
+        Point drawPoint = player.relativeDrawPoint(d.getX(), d.getY(), w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        BufferedImage image = Renderer.splatter1;
+
+        if(i == 2){
+            image = Renderer.splatter2;
+        }else if (i == 3){
+            image = Renderer.splatter3;
+        }
+        g2d.drawImage(image, drawX, drawY, null);
+    }
+	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {
+		int w = Renderer.freezePlayer.getWidth();
+		int h = Renderer.freezePlayer.getHeight();
+		
+		Point drawPoint = player.relativeDrawPoint(p.getx(), p.gety(), w, h);
+		int drawX = drawPoint.x;
+		int drawY = drawPoint.y;
+
+		BufferedImage image = Renderer.opponentZombieImage;
+
+		switch(p.getpState()){
+			case FREEZE:
+				image = Renderer.freezePlayer;
+				break;
+            case HEALTH:
+                image = Renderer.moreHealth;
+                break;
+            case INVERSE:
+                image = Renderer.invertControls;
+                break;
+            case SPEED_UP:
+                image = Renderer.speedUp;
+                break;
+            case SLOW_DOWN:
+                image = Renderer.speedDown;
+                break;
+
+		default:
+			break;
+
+		}
+		g2d.drawImage(image, drawX, drawY, null);
+	}
+	
+	private void drawWeapon(Graphics2D g2d, Weapon g, Player player) {
+		int w = Renderer.moreHealth.getWidth();
+		int h = Renderer.moreHealth.getHeight();
+
+		BufferedImage image = Renderer.machineGun;
+		switch(g.getwState()){
+            case MAC_GUN:
+                image = Renderer.machineGun;
+                break;
+            case SHOTGUN:
+                image = Renderer.shotgun;
+                break;
+            case CONVERT:
+                image = Renderer.converter;
+                break;
+            case UZI:
+                image = Renderer.uzi;
+        }
+
+		Point drawPoint = player.relativeDrawPoint(g.getx(), g.gety(), w, h);
+		int drawX = drawPoint.x;
+		int drawY = drawPoint.y;
+		g2d.drawImage(image, drawX, drawY, null);
+	}
+	
 }
