@@ -86,7 +86,6 @@ public class Renderer {
 		int timeRemaining = state.getTimeRemaining();
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
-        ArrayList<DataPacket> deadZombies = state.getDeadZombies();
 
         MapData mapData = state.getMapData();
 		ArrayList<PowerUp> powerups = state.getPowerups();
@@ -136,7 +135,6 @@ public class Renderer {
 		for(PowerUp p : powerups){
 			drawPowerup(g2d, p, player);
 		}
-
 
 		for(Weapon w : weapons){
 			drawWeapon(g2d, w, player);
@@ -188,7 +186,7 @@ public class Renderer {
 		// Display number of converted zombies
 		int playerZombies = player.getNumConvertedZombies();
 		int opponentZombies = state.getOtherPlayer().getNumConvertedZombies();
-		int totalZombies = zombiePackets.size();
+		int totalZombies = state.getAliveZombies().size();
 
 		// Zombie counts
 		ArrayList<Integer> zombieCounts = new ArrayList<Integer>();
