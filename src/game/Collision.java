@@ -42,8 +42,9 @@ public class Collision {
 	public static void checkBulletCollision(Bullet b, ArrayList<Zombie> zombies,
 			Player player) {
 		for (int i = 0; i < zombies.size(); i++) {
-			if (b.getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {
-				b.damage(zombies.get(i), 25, player.conversionMode);
+			Zombie z = zombies.get(i);
+			if (!z.getUsername().equals(player.getUsername()) && b.getCollisionBox().intersects(z.getCollisionBox())) {
+				b.damage(z, 25, player.conversionMode);
 				b.active = false;
 				break;
 			}
@@ -63,8 +64,9 @@ public class Collision {
 	
 	
 	public static boolean checkWeaponCollision(Weapon w, Player player) {
-		if (w.getCollisionBox().intersects(player.getCollisionBox())) {
-			w.getWeaponStats(w, player);
+		if (w.getCollisionBox().intersects(player.getCollisionBox())) {		
+			w.addToInventory(w.getwState(), player);
+			
 			return true;
 		}
 		return false;

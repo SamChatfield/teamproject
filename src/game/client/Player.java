@@ -4,6 +4,8 @@ import game.Bullet;
 import game.Collision;
 import game.Entity;
 import game.ResourceLoader;
+import game.Weapon;
+import game.Weapon.WeaponState;
 import game.map.MapData;
 import game.util.DataPacket;
 
@@ -36,6 +38,9 @@ public class Player extends Entity {
     private static final boolean isActivePD = false;
     private static final float appearTimePD = 0;
 
+    private static final WeaponState[] inventory = new WeaponState[5];  
+    
+    
     /**
      * Create a new Player object in the game
      * @param x Initial X coordinate
@@ -51,7 +56,8 @@ public class Player extends Entity {
         setUsername(username);
         
         // Initially cannot convert zombies
-        conversionMode = false;
+        conversionMode = false;        
+        inventory[0] = Weapon.WeaponState.PISTOL;
     }
 
     /**
@@ -218,11 +224,7 @@ public class Player extends Entity {
     }
 
     
-	/*public static long getShootDelay() {
-		return SHOOT_DELAY;
+	public WeaponState[] getInventory(){
+		return inventory;
 	}
-
-	public void setShootDelay(long shootDelay){
-		Player.SHOOT_DELAY = shootDelay;
-	}*/
 }
