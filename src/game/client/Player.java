@@ -1,10 +1,6 @@
 package game.client;
 
-import game.Bullet;
-import game.Collision;
-import game.Entity;
-import game.ResourceLoader;
-import game.Weapon;
+import game.*;
 import game.Weapon.WeaponState;
 import game.map.MapData;
 import game.util.DataPacket;

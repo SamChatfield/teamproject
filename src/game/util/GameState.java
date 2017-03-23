@@ -1,17 +1,14 @@
 package game.util;
 
 import game.Bullet;
+import game.PowerUp;
+import game.Weapon;
 import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import game.PowerUp;
-import game.Weapon;
-
-import javax.xml.crypto.Data;
 
 /**
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can

@@ -1,8 +1,6 @@
 package game.client;
 
 import game.ResourceLoader;
-import game.Weapon;
-import game.Weapon.WeaponState;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
 import game.util.Vector;
@@ -13,23 +11,9 @@ import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import game.ResourceLoader;
-import game.util.PlayerUpdatePacket;
-import game.util.User;
-import game.util.Vector;
 
 /**
  * This class is the one that the player will run when they want to start the

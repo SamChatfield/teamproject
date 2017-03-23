@@ -13,11 +13,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.ArrayList;
-import java.util.Random;
-
-import static game.PowerUp.PuState.FREEZE;
 
 /**
  * Renders the game on screen
