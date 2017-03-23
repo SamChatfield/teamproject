@@ -16,6 +16,10 @@ public class PowerUp extends Entity implements Serializable {
 		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, TEST,
 	}
 
+	public PuState getpState() {
+		return pState;
+	}
+
 	public PowerUp(float x, float y, MapData mapData, PuState pState, long time) {
 		super(x, y, mapData);
 		// setUsername("None");

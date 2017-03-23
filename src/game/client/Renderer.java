@@ -13,7 +13,10 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.ArrayList;
+
+import static game.PowerUp.PuState.FREEZE;
 
 /**
  * Renders the game on screen
@@ -448,7 +451,27 @@ public class Renderer {
 		Point drawPoint = player.relativeDrawPoint(p.getx(), p.gety(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
-		g2d.drawImage(Renderer.freezePlayer, drawX, drawY, null);
+
+		BufferedImage image = Renderer.opponentZombieImage;
+
+		switch(p.getpState()){
+			case FREEZE:
+				image = Renderer.freezePlayer;
+				break;
+            case HEALTH:
+                image = Renderer.moreHealth;
+                break;
+            case INVERSE:
+                image = Renderer.invertControls;
+                break;
+            case SPEED_UP:
+                image = Renderer.speedUp;
+                break;
+            case SLOW_DOWN:
+                image = Renderer.speedDown;
+                break;
+		}
+		g2d.drawImage(image, drawX, drawY, null);
 	}
 
 	

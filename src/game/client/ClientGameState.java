@@ -104,6 +104,7 @@ public class ClientGameState extends GameState {
 
 		//System.out.println(player1.getX());
 		//System.out.println(player1.getY());
+
 	}
 
 	/**
