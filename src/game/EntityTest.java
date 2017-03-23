@@ -251,7 +251,7 @@ public class EntityTest {
 	 */
 	@Test
 	public final void testGetState() {
-		assertNotNull(player.getState());
+		assertNull(player.getState());
 	}
 
 	/**
