@@ -55,11 +55,12 @@ public class ServerReceiver extends Thread {
 
 		try {
 			table.removeFromTable(username);
-			System.out.println("Closing socket");
+			System.out.println("Closing InputStream");
+			//Closing the ObjectInputStream should also close the Socket and the ObjectOutputStream
 			objIn.close();
 
 		} catch(IOException e) {
-			System.out.println("Closing socket didn't work, dying");
+			System.out.println("Closing InputStream didn't work, dying");
 			System.exit(1);
 		}
 

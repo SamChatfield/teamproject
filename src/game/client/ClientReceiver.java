@@ -75,9 +75,7 @@ public class ClientReceiver extends Thread {
 				}
 			}
 		} catch(Exception e) {
-			System.err.println("Exception in ClientReceiver: " + e.getMessage());
-
-			e.printStackTrace();;
+			//System.err.println("Exception in ClientReceiver: " + e.getMessage());
 			//System.exit(1);
 
 		}

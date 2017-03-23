@@ -63,4 +63,14 @@ public class ClientSender extends Thread {
 	public void addState(ClientGameState state){
 		this.state = state;
 	}
+
+	public void closeStreams() {
+		try {
+			objOut.close();
+		} catch(IOException e) {
+			System.out.println("Closing ObjoutOutputStream didn't work");
+			System.exit(1);
+		}
+	}
+
 }
