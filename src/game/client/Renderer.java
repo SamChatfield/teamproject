@@ -50,6 +50,11 @@ public class Renderer {
     public static final BufferedImage splatter3 = ResourceLoader.splatter3();
 
 
+    //Weapons
+    public static final BufferedImage machineGun = ResourceLoader.machineGun();
+    public static final BufferedImage shotgun = ResourceLoader.shotgun();
+    public static final BufferedImage converter = ResourceLoader.converter();
+    public static final BufferedImage uzi = ResourceLoader.uzi();
 
 
 
@@ -103,7 +108,6 @@ public class Renderer {
         for(DataPacket d: deadZombies){
             drawDeadZombie(g2d,d,player,(deadZombies.indexOf(d)%3)+1);
         }
-
 
         // Draw the player
 		player.draw(g2d);
@@ -508,11 +512,26 @@ public class Renderer {
 	private void drawWeapon(Graphics2D g2d, Weapon g, Player player) {
 		int w = Renderer.moreHealth.getWidth();
 		int h = Renderer.moreHealth.getHeight();
-		
+
+		BufferedImage image = Renderer.machineGun;
+		switch(g.getwState()){
+            case MAC_GUN:
+                image = Renderer.machineGun;
+                break;
+            case SHOTGUN:
+                image = Renderer.shotgun;
+                break;
+            case CONVERT:
+                image = Renderer.converter;
+                break;
+            case UZI:
+                image = Renderer.uzi;
+        }
+
 		Point drawPoint = player.relativeDrawPoint(g.getx(), g.gety(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
-		g2d.drawImage(Renderer.moreHealth, drawX, drawY, null);
+		g2d.drawImage(image, drawX, drawY, null);
 	}
 	
 }
