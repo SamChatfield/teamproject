@@ -11,6 +11,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 import game.PowerUp;
+import game.Weapon;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie
@@ -82,7 +83,7 @@ public class GameInstance extends Thread {
 	 */
 	private void update(double delta) {
 		ArrayList<Zombie> zombies = state.getZombies();
-		//ArrayList<PowerUp> powerups = state.getPowerups();
+		// ArrayList<PowerUp> powerups = state.getPowerups();
 
 		// Update the player states
 		Player player1 = state.getPlayer1();
@@ -118,51 +119,66 @@ public class GameInstance extends Thread {
 		}
 
 		
-		//PPOWERUPS
+		
+		//RANDOMNESS
 		Random r = new Random();
-		int chance = r.nextInt(100) + 1;
-		try {
-			ArrayList<PowerUp> newPowerup = new ArrayList<>();
-			long now = System.nanoTime();
-
-			for (PowerUp p : state.getPowerups()) {
-				if (now - p.time <= 1000000000l && !Collision.checkPowerupCollision(p, player1, player2)
-						&& !Collision.checkPowerupCollision(p, player2, player1)) {
-					newPowerup.add(p);
-				}
+		int chancePU = r.nextInt(100) + 1;
+		
+		// WEAPONS
+		ArrayList<Weapon> newWeapon = new ArrayList<>();
+		long now = System.nanoTime();
+		
+		for (Weapon w : state.getWeapons()){
+			if (now - w.time <= 1000000000l && !Collision.checkWeaponCollision(w, player1)
+					&& !Collision.checkWeaponCollision(w, player2)) {
+				newWeapon.add(w);
 			}
-			
-			if (chance == 2) {
-				newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
+		}
+		
+		if (chancePU == 1) {
+			newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
+		}
+		
+		state.setWeapons(newWeapon);
+		
+
+		// POWERUPS & DOWNS
+		ArrayList<PowerUp> newPowerup = new ArrayList<>();
+		long now1 = System.nanoTime();
+
+		for (PowerUp p : state.getPowerups()) {
+			if (now1 - p.time <= 1000000000l && !Collision.checkPowerupCollision(p, player1, player2)
+					&& !Collision.checkPowerupCollision(p, player2, player1)) {
+				newPowerup.add(p);
 			}
-
-			state.setPowerUp(newPowerup);
-
-		} catch (ConcurrentModificationException e) {
-			System.out.println("Error, PWUPS, this shouldn't happen: " + e.getMessage());
 		}
 
+		if (chancePU == 2) {
+			newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
+		}
+
+		state.setPowerUp(newPowerup);
+
 		
 		
-		//ACTIVE PU
-		//ArrayList<Player> newPlayers = new ArrayList<>();
-		for (Player p : players){
-			long now = System.nanoTime();			
-			if(p.getIsActive()){
-				if(now - p.getAppearTime() >= 4000000000l){
+		// CHECK ACTIVE POWERUPS
+		for (Player p : players) {
+			long now11 = System.nanoTime();
+			if (p.getIsActive()) {
+				if (now11 - p.getAppearTime() >= 10000000000l) {
 					PowerUp.normalSpeed(p);
 				}
 			}
-			if(p.getIsActivePD()){
-				if(now - p.getAppearTimePD() >= 4000000000l){
+			if (p.getIsActivePD()) {
+				if (now11 - p.getAppearTimePD() >= 10000000000l) {
 					PowerUp.normalSpeedPD(p);
 				}
 			}
 		}
-		
 
 		
-		//BULLETS
+		
+		// BULLETS
 		ArrayList<Bullet> newBullets = new ArrayList<>();
 		for (Bullet b : state.getBullets()) {
 			if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {
@@ -179,6 +195,8 @@ public class GameInstance extends Thread {
 
 		state.setBullets(newBullets);
 
+		
+		
 		// Player converted zombies
 		int play1Converted = 0;
 		int play2Converted = 0;

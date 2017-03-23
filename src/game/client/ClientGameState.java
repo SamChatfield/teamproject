@@ -29,6 +29,7 @@ public class ClientGameState extends GameState {
 		this.zombieDataPackets = new ArrayList<>();
         this.bulletDataPackets = new ArrayList<>();
         this.powerups = new ArrayList<>();
+        this.weapons = new ArrayList<>();
 	}
 
 	/**
@@ -72,6 +73,7 @@ public class ClientGameState extends GameState {
 		this.zombieDataPackets = updatedState.getZombies();
         this.bulletDataPackets = updatedState.getBullets();
         this.powerups = updatedState.getPowerups();
+        this.weapons = updatedState.getWeapons();
 
 		updateTime(updatedState.getTimeRemaining());
 	}

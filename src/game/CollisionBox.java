@@ -49,8 +49,13 @@ public class CollisionBox implements Serializable {
 			iwidth = Renderer.freezePlayer.getWidth();
 			iheight = Renderer.freezePlayer.getHeight();
 		}
+		else if (owner instanceof Weapon) {
+			width = (float) Renderer.moreHealth.getWidth() / (float) Client.TILE_SIZE;
+			height = (float) Renderer.moreHealth.getHeight() / (float) Client.TILE_SIZE;
 
-		else {
+			iwidth = Renderer.moreHealth.getWidth();
+			iheight = Renderer.moreHealth.getHeight();
+		}else {
 			width = (float) Renderer.bulletImage.getWidth() / (float) Client.TILE_SIZE;
 			height = (float) Renderer.bulletImage.getHeight() / (float) Client.TILE_SIZE;
 
@@ -66,7 +71,7 @@ public class CollisionBox implements Serializable {
 	 */
 	public Rectangle2D.Float getRect() {
 
-		if (owner instanceof PowerUp) {
+		if (owner instanceof PowerUp || owner instanceof Weapon) {
 			return new Rectangle2D.Float(owner.getx() - width / 2, owner.gety() - height / 2, width, height);
 		}
 

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import game.PowerUp;
+import game.Weapon;
 
 /**
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
@@ -21,6 +22,7 @@ public class GameState implements Serializable {
 	protected ArrayList<DataPacket> zombieDataPackets;
     protected ArrayList<DataPacket> bulletDataPackets;
     protected ArrayList<PowerUp> powerups;
+    protected ArrayList<Weapon>  weapons;
     
 	protected Player player1;
 	protected Player player2;
@@ -89,6 +91,15 @@ public class GameState implements Serializable {
 	
 	public void setPowerUp(ArrayList<PowerUp> powerups){
 		this.powerups = powerups;
+	}
+	
+	
+	public ArrayList<Weapon> getWeapons(){
+		return weapons;
+	}
+	
+	public void setWeapons(ArrayList<Weapon> weapons){
+		this.weapons = weapons;
 	}
 	
 	
