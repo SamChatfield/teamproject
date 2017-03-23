@@ -149,8 +149,13 @@ public class GameInstance extends Thread {
 		for (Player p : players){
 			long now = System.nanoTime();			
 			if(p.getIsActive()){
-				if(now - p.getAppearTime() >= 3000000000l){
+				if(now - p.getAppearTime() >= 4000000000l){
 					PowerUp.normalSpeed(p);
+				}
+			}
+			if(p.getIsActivePD()){
+				if(now - p.getAppearTimePD() >= 4000000000l){
+					PowerUp.normalSpeedPD(p);
 				}
 			}
 		}

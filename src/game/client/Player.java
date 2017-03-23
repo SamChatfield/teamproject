@@ -29,8 +29,11 @@ public class Player extends Entity {
 	public boolean conversionMode;
     private ArrayList<Bullet> bullets;
     
-    private static final boolean isActive = false;
-    private static final long appearTime = 0;
+    private static final boolean isActivePU = false;
+    private static final long appearTimePU = 0;
+    
+    private static final boolean isActivePD = false;
+    private static final float appearTimePD = 0;
 
     /**
      * Create a new Player object in the game
@@ -40,7 +43,7 @@ public class Player extends Entity {
      * @param username Username of this player
      */
     public Player(float x, float y, MapData mapData, String username) {
-        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER, isActive, appearTime);
+        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER, isActivePU, appearTimePU, isActivePD, appearTimePD);
 
         showCollBox = false;
         bullets = new ArrayList<>(20);

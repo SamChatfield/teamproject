@@ -43,6 +43,24 @@ public class PowerUp extends Entity implements Serializable {
 		}
 	}
 
+	public void getPowerdownStats(PowerUp powerup, Player opponent) {
+		if (!opponent.getIsActivePD()) {
+			opponent.setIsActivePD(true);
+			opponent.setAppearTimePD(System.nanoTime());
+						
+			if (powerup.pState == PuState.SLOW_DOWN) {
+				opponent.setMoveSpeed(opponent.getMoveSpeed() - 0.05f);
+			}
+			if (powerup.pState == PuState.FREEZE) {
+				opponent.setMoveSpeed(opponent.getMoveSpeed() - 0.1f);
+			}
+			if (powerup.pState == PuState.INVERSE) {
+				opponent.setMoveSpeed(opponent.getMoveSpeed() - 0.2f);
+			}
+		}
+
+	}
+
 	public float getx() {
 		return x;
 	}
@@ -54,8 +72,17 @@ public class PowerUp extends Entity implements Serializable {
 	public static PuState randomPU() {
 		Random r = new Random();
 		int chance = r.nextInt(100) + 1;
-		if (chance <= 50) {
+		if (chance <= 20) {
 			return PowerUp.PuState.SPEED_UP;
+		}
+		if (20 < chance && chance <= 40) {
+			return PowerUp.PuState.SLOW_DOWN;
+		}
+		if (40 < chance && chance <= 60) {
+			return PowerUp.PuState.FREEZE;
+		}
+		if (60 < chance && chance <= 80) {
+			return PowerUp.PuState.INVERSE;
 		}
 
 		return PowerUp.PuState.HEALTH;
@@ -65,6 +92,12 @@ public class PowerUp extends Entity implements Serializable {
 		player.setMoveSpeed(0.1f);
 		player.setIsActive(false);
 		player.setAppearTime(0);
+	}
+	
+	public static void normalSpeedPD(Player player) {
+		player.setMoveSpeed(0.1f);
+		player.setIsActivePD(false);
+		player.setAppearTimePD(0);
 	}
 
 }

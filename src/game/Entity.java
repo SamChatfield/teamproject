@@ -36,8 +36,8 @@ public class Entity implements Serializable {
 	}
 
 	
-	public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t, boolean isActive, float appearTime) {
-		this.data = new DataPacket(x,y,moveSpeed,health, 0L,t, isActive, appearTime);
+	public Entity(float x, float y, float moveSpeed, int health, MapData mapData, DataPacket.Type t, boolean isActivePU, float appearTimePU, boolean isActivePD, float appearTimePD) {
+		this.data = new DataPacket(x,y,moveSpeed,health, 0L,t, isActivePU, appearTimePU, isActivePD, appearTimePD);
 		//        showCollBox = false;
 		this.mapData = mapData;
 		collisionBox = new CollisionBox(this);
@@ -144,6 +144,14 @@ public class Entity implements Serializable {
 	public void setAppearTime(float appearTime){
 		data.setAppearTime(appearTime);
 	}
+	
+	public void setIsActivePD(boolean isActivePD){
+		data.setIsActivePD(isActivePD);
+	}
+	
+	public void setAppearTimePD(float appearTimePD){
+		data.setAppearTimePD(appearTimePD);
+	}
 
 	/**
 	 * Get current X coordinate of entity
@@ -180,6 +188,8 @@ public class Entity implements Serializable {
 		setMoveSpeed(data2.getMoveSpeed());
 		setIsActive(data2.getIsActive());
 		setAppearTime(data2.getAppearTime());
+		setIsActivePD(data2.getIsActivePD());
+		setAppearTimePD(data2.getAppearTimePD());
 	}
 
 	/**
@@ -260,6 +270,14 @@ public class Entity implements Serializable {
 	
 	public float getAppearTime(){
 		return data.getAppearTime();
+	}
+	
+	public boolean getIsActivePD(){
+		return data.getIsActivePD();
+	}
+	
+	public float getAppearTimePD(){
+		return data.getAppearTimePD();
 	}
 	
 	/**

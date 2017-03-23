@@ -17,6 +17,8 @@ public class DataPacket implements Serializable {
 	private int numConvertedZombies;
 	private boolean isActive;
 	private float appearTime;
+	private boolean isActivePD;
+	private float appearTimePD;
 	
 
 	/**
@@ -104,6 +106,15 @@ public class DataPacket implements Serializable {
 		return appearTime;
 	}
 	
+	public boolean getIsActivePD(){
+		return isActivePD;
+	}
+	
+	public float getAppearTimePD(){
+		return appearTimePD;
+	}
+	
+	
 	/**
 	 * Set move speed
 	 * @param moveSpeed New movespeed to set
@@ -119,7 +130,16 @@ public class DataPacket implements Serializable {
 	public void setAppearTime(float appearTime){
 		this.appearTime = appearTime;
 	}
+	
+	public void setIsActivePD(boolean isActivePD){
+		this.isActivePD = isActivePD;
+	}
 
+	public void setAppearTimePD(float appearTimePD){
+		this.appearTimePD = appearTimePD;
+	}
+	
+	
 	/**
 	 * Get the last attack time
 	 * @return Time of the last attack of the object
@@ -220,7 +240,7 @@ public class DataPacket implements Serializable {
 	}
 	
 	
-	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t, boolean isActive, float appearTime) {
+	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t, boolean isActive, float appearTime, boolean isActivePD, float appearTimePD) {
 		this.lastAttackTime = lastAttackTime;
 
 		this.x = x;
