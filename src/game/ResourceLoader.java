@@ -65,7 +65,7 @@ public class ResourceLoader {
 	public static BufferedImage zombiePlayerImage() {
 		return getImage("zombieBlue.png");
 	}
-	
+
 	/**
 	 * Load converted zombie image into the game
 	 * @return BufferedImage of a converted zombie
@@ -188,6 +188,77 @@ public class ResourceLoader {
 		return getImage("/weapons/spawns/uzi.png");
 	}
 
+	///////// HOT BAR IMAGES
+	/**
+	 * Load image for the pistol
+	 * @return BufferedImage for the pistol
+	 */
+	public static BufferedImage pistol(boolean weaponObtained) {
+		if(weaponObtained) {
+			return getImage("/weapons/hotbar/pistol.png");
+		}
+		else {
+			return getImage("/weapons/hotbar/pistolDark.png");
+		}
+	}
+	
+	/**
+	 * Load image for the machine gun
+	 * @return BufferedImage for the machine gun
+	 */
+	public static BufferedImage machineGun(boolean weaponObtained) {
+		if(weaponObtained) {
+			return getImage("/weapons/hotbar/machineGun.png");
+		}
+		else {
+			return getImage("/weapons/hotbar/machineGun.png");
+		}
+	}
+
+	/**
+	 * Load image for the shotgun
+	 * @return BufferedImage for the shotgun
+	 */
+	public static BufferedImage shotgun(boolean weaponObtained) {
+		if(weaponObtained) {
+			return getImage("/weapons/hotbar/shotgun.png");
+		}
+		else {
+			return getImage("/weapons/hotbar/shotgunDark.png");
+		}
+	}
+
+	/**
+	 * Load image for the converter
+	 * @return BufferedImage for the converter
+	 */
+	public static BufferedImage converter(boolean weaponObtained) {
+		if(weaponObtained) {
+			return getImage("/weapons/hotbar/converter.png");
+		}
+		else {
+			return getImage("/weapons/hotbar/converterDark.png");
+		}
+	}
+
+	/**
+	 * Load image for the uzi
+	 * @return BufferedImage for the uzi
+	 */
+	public static BufferedImage uziHotBar(boolean weaponObtained) {
+		if(weaponObtained) {
+			return getImage("/weapons/hotbar/uzi.png");
+		}
+		else {
+			return getImage("/weapons/hotbar/uziDark.png");
+		}
+	}
+
+
+
+
+
+
 
 	/**
 	 * Load image for the game icon
@@ -212,7 +283,7 @@ public class ResourceLoader {
 			System.err.println("Error importing font: " + e.getMessage());
 		}
 
-        return tradeWinds;
+		return tradeWinds;
 	}
 
 }

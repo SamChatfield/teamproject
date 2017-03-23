@@ -188,10 +188,12 @@ public class Renderer {
 			case SHOTGUN:
 				g2d.drawString("Current Weapon: Shotgun", xCoord+5, 580);
 				break;
+			case UZI:
+				g2d.drawString("Current Weapon:  Uzi", xCoord+5, 580);
+				break;
 			case CONVERT:
 				g2d.drawString("Current Weapon: Zombie Converter", xCoord+5, 580);
-			case FLAME_THROWER:
-				g2d.drawString("Current Weapon: Flamethrower", xCoord+5, 580);
+				break;
 			default:
 				break;
 		}
@@ -204,7 +206,6 @@ public class Renderer {
 			} else {
 				g2d.setColor(new Color(255,255,255, 250));
 			}
-			
 			
 			Rectangle itemsBox = new Rectangle(xCoord, 590, 45, 45);
 			g2d.fill(itemsBox);
