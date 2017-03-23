@@ -49,7 +49,7 @@ public class Weapon extends Entity {
 			} if (w == WeaponState.UZI) {
 				player.SHOOT_DELAY = 100000000L;
 				Bullet.setBulletSpeed(0.3f);
-				Bullet.setFadeDistance(3);
+				Bullet.setFadeDistance(2);
 			} if (w == WeaponState.FLAME_THROWER) {
 				player.SHOOT_DELAY = 100000L;
 				Bullet.setBulletSpeed(0.3f);
