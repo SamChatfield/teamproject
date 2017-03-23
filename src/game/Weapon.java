@@ -62,7 +62,7 @@ public class Weapon extends Entity {
 			} 
 			//Doesn't work yet
 			if (w == WeaponState.SHOTGUN) {
-				player.SHOOT_DELAY = 500000000L;
+			//	player.SHOOT_DELAY = 500000000L;
 				// add 3 angled bullets per shot
 			} 
 		}
@@ -80,7 +80,7 @@ public class Weapon extends Entity {
 		if (50 < chance && chance <= 75) {
 			return Weapon.WeaponState.CONVERT;
 		}
-		return Weapon.WeaponState.PISTOL;
+		return WeaponState.SHOTGUN;
 	}
 
 	public static int getIndex(WeaponState w) {
