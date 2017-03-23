@@ -100,7 +100,7 @@ public class ServerGameState extends GameState {
 	 * @return ArrayList of DataPackets containing zombies
 	 */
 	public ArrayList<DataPacket> getSendableZombies(){
-		ArrayList<DataPacket> data = new ArrayList<DataPacket>();
+		ArrayList<DataPacket> data = new ArrayList<>();
 		for(Zombie z:zombies){
 			data.add(z.getData());
 		}
@@ -114,9 +114,7 @@ public class ServerGameState extends GameState {
     public ArrayList<DataPacket> getSendableBullets() {
         ArrayList<DataPacket> data = new ArrayList<>();
         ArrayList<Bullet> bs = this.bullets;
-//        for (Iterator<Bullet> it = bs.iterator(); it.hasNext(); ) {
-//            data.add(it.next().getData());
-//        }
+
         for (Bullet b : bs) {
             data.add(b.getData());
         }
@@ -142,12 +140,6 @@ public class ServerGameState extends GameState {
 		// Apply player movement
 		for(String s:moves) {
 			switch(s){
-			case "VK_1":
-				toModify.setMoveSpeed(toModify.getMoveSpeed() - 0.01f);
-				break;
-			case "VK_2":
-				toModify.setMoveSpeed(toModify.getMoveSpeed() + 0.01f);
-				break;
 			case "VK_W":
 				pdv.add(new Vector(0.0f, 1.0f));
 				break;
@@ -167,7 +159,8 @@ public class ServerGameState extends GameState {
 				toModify.conversionMode = false;
 				break;
 			case "BUTTON1":
-                shootNow = true;
+				System.out.println("shoot");
+				shootNow = true;
                 break;
 			}
 		}

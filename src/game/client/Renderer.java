@@ -391,6 +391,14 @@ public class Renderer {
 	}
 
 	/**
+	 * Get whether collision boxes are being shown
+	 * @return are collision boxes being shown
+	 */
+	public boolean getShowCollBox() {
+		return showCollBox;
+	}
+
+	/**
 	 * DEBUG METHOD: Set whether to show collision boxes
 	 * @param showCollBox Boolean to set
 	 */
