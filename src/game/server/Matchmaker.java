@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jonwoodburn on 21/03/17.
+ * Class to match players that are both waiting and have the same difficulty.
  */
 public class Matchmaker extends Thread{
 
@@ -19,7 +20,7 @@ public class Matchmaker extends Thread{
 		while(true) {
 			ArrayList<User> players = table.checkAvailable();
 			while(players.size() != 0 && players.size() %2 == 0) {
-
+				players = table.checkAvailable();
 				for(int i =0; i<players.size(); i++) {
 					User player1 = players.get(i);
 					for(int j= i+1; j<players.size(); j++) {
