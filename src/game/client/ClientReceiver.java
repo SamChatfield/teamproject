@@ -60,12 +60,12 @@ public class ClientReceiver extends Thread {
 						}
 					}
 				}else if(obj.getClass() == SendableState.class){
+					SendableState updatedState = (SendableState) obj;
+					state.updateClientState(updatedState); // update the clients view of the game state.
 					if(initialState){
 						state.setConnected(true);
 						initialState = false;
 					}
-					SendableState updatedState = (SendableState) obj;
-					state.updateClientState(updatedState); // update the clients view of the game state.
 				}else if(obj.getClass() == EndState.class) {
 					System.out.println("End state");
 					EndState end = (EndState) obj;

@@ -27,6 +27,7 @@ public class ServerGameState extends GameState {
         this.player1Username = player1Username;
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
+        this.deadZombies = new ArrayList<>();
         this.difficulty = difficulty;
         zombieCount = difficulty*10;
     }

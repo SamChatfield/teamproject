@@ -15,6 +15,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static game.PowerUp.PuState.FREEZE;
 
@@ -43,9 +44,16 @@ public class Renderer {
 	public static final BufferedImage freezePlayer = ResourceLoader.freezePlayer();
 
 
+	//Blood splatters
+    public static final BufferedImage splatter1 = ResourceLoader.splatter1();
+    public static final BufferedImage splatter2 = ResourceLoader.splatter2();
+    public static final BufferedImage splatter3 = ResourceLoader.splatter3();
 
 
-	public Rectangle menuButton;
+
+
+
+    public Rectangle menuButton;
 	public Rectangle exitButton;
 
 	public Color fadedWhite = new Color(255,255,255,190);
@@ -73,7 +81,9 @@ public class Renderer {
 		int timeRemaining = state.getTimeRemaining();
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
-		MapData mapData = state.getMapData();
+        ArrayList<DataPacket> deadZombies = state.getDeadZombies();
+
+        MapData mapData = state.getMapData();
 		ArrayList<PowerUp> powerups = state.getPowerups();
 		ArrayList<Weapon> weapons = state.getWeapons();
 
@@ -90,7 +100,12 @@ public class Renderer {
 		// Draw the map
 		drawMap(g2d, mapData, player);
 
-		// Draw the player
+        for(DataPacket d: deadZombies){
+            drawDeadZombie(g2d,d,player,(deadZombies.indexOf(d)%3)+1);
+        }
+
+
+        // Draw the player
 		player.draw(g2d);
 
 		// Draw relative to other player
@@ -111,7 +126,7 @@ public class Renderer {
 		for(PowerUp p : powerups){
 			drawPowerup(g2d, p, player);
 		}
-		
+
 
 		for(Weapon w : weapons){
 			drawWeapon(g2d, w, player);
@@ -442,8 +457,24 @@ public class Renderer {
 		g2d.drawImage(bulletImage, drawX, drawY, null);
 		g2d.setTransform(at);
 	}
-	
-	
+
+    private void drawDeadZombie(Graphics2D g2d, DataPacket d, Player player, int i) {
+        int w = Renderer.splatter1.getWidth();
+        int h = Renderer.splatter1.getHeight();
+
+        Point drawPoint = player.relativeDrawPoint(d.getX(), d.getY(), w, h);
+        int drawX = drawPoint.x;
+        int drawY = drawPoint.y;
+
+        BufferedImage image = Renderer.splatter1;
+
+        if(i == 2){
+            image = Renderer.splatter2;
+        }else if (i == 3){
+            image = Renderer.splatter3;
+        }
+        g2d.drawImage(image, drawX, drawY, null);
+    }
 	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {
 		int w = Renderer.freezePlayer.getWidth();
 		int h = Renderer.freezePlayer.getHeight();
@@ -473,7 +504,6 @@ public class Renderer {
 		}
 		g2d.drawImage(image, drawX, drawY, null);
 	}
-
 	
 	private void drawWeapon(Graphics2D g2d, Weapon g, Player player) {
 		int w = Renderer.moreHealth.getWidth();

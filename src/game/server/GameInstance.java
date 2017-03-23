@@ -4,6 +4,7 @@ import game.Bullet;
 import game.Collision;
 import game.Zombie;
 import game.client.Player;
+import game.util.DataPacket;
 import game.util.EndState;
 
 import java.util.ArrayList;
@@ -25,10 +26,8 @@ public class GameInstance extends Thread {
 	private boolean running;
 
 	/**
-	 * Constructor to create a new game instance
-	 * 
-	 * @param state
-	 *            The state of the server
+	 * Constructor to create a new game instance.
+	 * @param state The state of the server
 	 */
 	public GameInstance(ServerGameState state) {
 		this.state = state;
@@ -104,7 +103,8 @@ public class GameInstance extends Thread {
 		for (Zombie z : state.getZombies()) {
 			if (z.getHealth() != 0) {
 				newZombies.add(z);
-
+			}else{
+				state.getDeadZombies().add(z.getData()); // if they are dead, add them to the appropriate list.
 			}
 		}
 

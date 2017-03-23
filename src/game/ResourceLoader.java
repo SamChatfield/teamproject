@@ -131,6 +131,31 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for the blood splatter
+	 * @return BufferedImage for the blood splatter
+	 */
+	public static BufferedImage splatter1() {
+		return getImage("splatter1.png");
+	}
+
+
+	/**
+	 * Load image for the blood splatter
+	 * @return BufferedImage for the blood splatter
+	 */
+	public static BufferedImage splatter2() {
+		return getImage("splatter2.png");
+	}
+
+
+	/**
+	 * Load image for the blood splatter
+	 * @return BufferedImage for the blood splatter
+	 */
+	public static BufferedImage splatter3() {
+		return getImage("splatter3.png");
+	}
+	/**
 	 * Load image for the game icon
 	 * @return BufferedImage for the icon
 	 */

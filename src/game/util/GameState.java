@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import game.PowerUp;
 import game.Weapon;
 
+import javax.xml.crypto.Data;
+
 /**
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
  * be called on both game states.
@@ -18,6 +20,8 @@ import game.Weapon;
 public class GameState implements Serializable {
 
 	protected ArrayList<Zombie> zombies;
+	protected ArrayList<DataPacket> deadZombies;
+
 	protected ArrayList<Bullet> bullets;
 	protected ArrayList<DataPacket> zombieDataPackets;
     protected ArrayList<DataPacket> bulletDataPackets;
@@ -159,6 +163,16 @@ public class GameState implements Serializable {
 	public void setZombies(ArrayList<Zombie> zombies) {
 		this.zombies = zombies;
 	}
+
+	/**
+	 * Get an ArrayList of the dead zombies in the current game state
+	 * @return ArrayList of zombies
+	 */
+	public ArrayList<DataPacket> getDeadZombies() {
+		return deadZombies;
+	}
+
+
 
 	/**
 	 * Get data packet of zombies

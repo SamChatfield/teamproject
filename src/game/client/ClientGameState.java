@@ -82,7 +82,7 @@ public class ClientGameState extends GameState {
         this.bulletDataPackets = updatedState.getBullets();
         this.powerups = updatedState.getPowerups();
         this.weapons = updatedState.getWeapons();
-
+		this.deadZombies = updatedState.getDeadZombies();
 		updateTime(updatedState.getTimeRemaining());
 	}
 
