@@ -1,6 +1,8 @@
 package game.util;
 
 import game.Bullet;
+import game.PowerUp;
+import game.Weapon;
 import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
@@ -8,21 +10,17 @@ import game.map.MapData;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import game.PowerUp;
-import game.Weapon;
-
-import javax.xml.crypto.Data;
-
 /**
  * A class that ServerGameState and ClientGameState inherit from. This contains many useful methods that can
  * be called on both game states.
  */
 public class GameState implements Serializable {
 
+	//Used w/ ServerGameState
 	protected ArrayList<Zombie> zombies;
-	protected ArrayList<DataPacket> deadZombies;
-
 	protected ArrayList<Bullet> bullets;
+
+	//Used w/ ClientGameState
 	protected ArrayList<DataPacket> zombieDataPackets;
     protected ArrayList<DataPacket> bulletDataPackets;
     protected ArrayList<PowerUp> powerups;
@@ -164,15 +162,6 @@ public class GameState implements Serializable {
 		this.zombies = zombies;
 	}
 
-	/**
-	 * Get an ArrayList of the dead zombies in the current game state
-	 * @return ArrayList of zombies
-	 */
-	public ArrayList<DataPacket> getDeadZombies() {
-		return deadZombies;
-	}
-
-
 
 	/**
 	 * Get data packet of zombies
@@ -205,9 +194,5 @@ public class GameState implements Serializable {
 	public Player getPlayer2() {
 		return player2;
 	}
-
-
-
-
 
 }

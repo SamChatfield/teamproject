@@ -1,18 +1,16 @@
 package game.server;
 
 import game.Bullet;
-import game.Zombie;
+import game.PowerUp;
+import game.Weapon;
 import game.Weapon.WeaponState;
+import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
 import game.util.*;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
-
-import game.PowerUp;
-import game.Weapon;
 
 /**
  * The game state of the server at any one time.
@@ -24,13 +22,10 @@ public class ServerGameState extends GameState {
 	private int zombieCount = 5;
 	private int difficulty;
 
-
-
     public ServerGameState(String player1Username, String player2Username, int difficulty){
         this.player1Username = player1Username;
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
-        this.deadZombies = new ArrayList<>();
         this.difficulty = difficulty;
         zombieCount = difficulty*10;
     }
@@ -233,7 +228,6 @@ public class ServerGameState extends GameState {
 				toModify.conversionMode = false;
 				break;
 			case "BUTTON1":
-				System.out.println("shoot");
 				shootNow = true;
 				break;
 			}

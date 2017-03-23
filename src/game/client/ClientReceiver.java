@@ -1,10 +1,10 @@
 package game.client;
 
-import java.io.ObjectInputStream;
-
 import game.util.EndState;
 import game.util.SendableState;
 import game.util.User;
+
+import java.io.ObjectInputStream;
 
 /**
  * Class for receiving objects from the server and then determining what to do with them

@@ -1,19 +1,14 @@
 package game.client;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import game.ResourceLoader;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
-import game.ResourceLoader;
 
 /**
  * Renders the game menus on screen (main menu and options/help screen)
