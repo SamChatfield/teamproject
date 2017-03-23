@@ -20,9 +20,17 @@ public class DataPacket implements Serializable {
 	private boolean isActivePD;
 	private float appearTimePD;
 	private int attackDamage;
+	private boolean alive;
 
+	public boolean isAlive() {
+		return alive;
+	}
 
-		/**
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	/**
 	 * Object that the data packet refers to
 	 */
 	public enum Type {
@@ -254,6 +262,7 @@ public class DataPacket implements Serializable {
 		this.moveSpeed = moveSpeed;
 		this.health = health;
 		this.type = t;
+		this.alive = true;
 	}
 	
 	
@@ -268,5 +277,7 @@ public class DataPacket implements Serializable {
 		this.appearTime = appearTime;
 		
 		this.type = t;
+
+		this.alive = true;
 	}
 }

@@ -105,11 +105,15 @@ public class Renderer {
 		// Draw the map
 		drawMap(g2d, mapData, player);
 
-        for(DataPacket d: deadZombies){
-            drawDeadZombie(g2d,d,player,(deadZombies.indexOf(d)%3)+1);
-        }
 
-        // Draw the player
+		// Draw the zombies that are dead first
+		for (DataPacket z : zombiePackets) {
+			if(!z.isAlive()) {
+				drawDeadZombie(g2d, player, z,1);
+			}
+		}
+
+		// Draw the player
 		player.draw(g2d);
 
 		// Draw relative to other player
@@ -124,7 +128,9 @@ public class Renderer {
 
 		// Draw the zombies
 		for (DataPacket z : zombiePackets) {
-			drawZombie(g2d, player, z);
+			if(z.isAlive()){ // we don't want to draw the dead zombies again.
+				drawZombie(g2d, player, z);
+			}
 		}
 		
 		for(PowerUp p : powerups){
@@ -462,7 +468,7 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-    private void drawDeadZombie(Graphics2D g2d, DataPacket d, Player player, int i) {
+    private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
         int w = Renderer.splatter1.getWidth();
         int h = Renderer.splatter1.getHeight();
 
