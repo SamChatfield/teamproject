@@ -37,7 +37,7 @@ public class Weapon extends Entity {
 		player.conversionMode = false;
 
 		if (w != null) {
-
+			player.setCurrentlyEquipped(w);
 			if (w == WeaponState.MAC_GUN) {
 				player.SHOOT_DELAY = 100000000L;
 				Bullet.setBulletSpeed(0.3f);
