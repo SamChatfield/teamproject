@@ -53,7 +53,7 @@ public class ClientTable {
 	}
 
 	/**
-	 *
+	 *Checks if a user exists in the client table. If they do, return true.
 	 * @param username
 	 * @return
 	 */
