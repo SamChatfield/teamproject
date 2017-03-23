@@ -32,7 +32,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
-//	private InputHandler inputHandler;
 	private boolean running;
 	private Player player;
 	private boolean[] keyArray, mouseButtonArray;
@@ -44,9 +43,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	private Renderer renderer;
 	private MenuRenderer menu;
-
-//	private ArrayList<String> keyPresses;
-
 
 	// Client state
 	private enum STATE {
@@ -96,7 +92,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		// Handle input
-//		inputHandler = new InputHandler(this);
 		addMouseListener(this);
 		addKeyListener(this);
 
@@ -213,160 +208,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	}
 
 	/**
-	 * Update the game over screen (what is displayed and if buttons clicked)
-	 */
-//	private void gameOverUpdate() {
-//		double mx, my;
-//		try {
-//			mx = inputHandler.getMousePos().getX();
-//			my = inputHandler.getMousePos().getY();
-//		} catch(NullPointerException e) {
-//			// Default mouse pointer position
-//			mx = 0;
-//			my = 0;
-//		}
-//		int buttonWidth = (int)renderer.menuButton.getWidth();
-//		int buttonHeight = (int)renderer.menuButton.getHeight();
-//
-//		int menuX = (int)renderer.menuButton.getX();
-//		int menuY = (int)renderer.menuButton.getY();
-//		int exitX = (int)renderer.exitButton.getX();
-//		int exitY = (int)renderer.exitButton.getY();
-//
-//		// If return to menu button clicked
-//		if(mx >= menuX && mx <= (menuX + buttonWidth)) {
-//			if(my >= menuY && my <= (menuY + buttonHeight)) {
-//				if(inputHandler.wasMouseClicked()) {
-//					currentState = STATE.START;
-//					menuState = MSTATE.MAIN;
-//					soundManager.playPressed();
-//					//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
-//					//for a new game
-//					state.resetState(user);
-//					state.setHasFinished(false);
-//					state.setConnected(false);
-//
-//				}
-//			}
-//		}
-//
-//		// If exit button clicked
-//		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
-//			if(my >= exitY && my <= (exitY + buttonHeight)) {
-//				if(inputHandler.wasMouseClicked()) {
-//					soundManager.buttonPressed();
-//					currentState = STATE.EXIT;
-//					running = false;
-//				}
-//			}
-//		}
-//	}
-
-	// Update the menu
-
-	/**
-	 * Update when the menu is shown on screen (what is displayed and if buttons clicked)
-	 * @param menu MenuRenderer object
-	 */
-//	private void menuUpdate(MenuRenderer menu) {
-//		double mx, my;
-//
-//		// Get location of mouse pointer
-//		try {
-//			mx = inputHandler.getMousePos().getX();
-//			my = inputHandler.getMousePos().getY();
-//		}
-//		catch(NullPointerException e) {
-//			// Default position for mouse
-//			mx = 0;
-//			my = 0;
-//		}
-//
-//		// Help menu
-//		if(menuState == MSTATE.HOPTIONS) {
-//
-//			// Position of return button
-//			int returnX = (int)menu.returnButton.getX();
-//			int returnY = (int)menu.returnButton.getY();
-//
-//			// Handle clicks on the return button
-//			if(mx >= returnX && mx <= (returnX + menu.returnButton.getWidth())) {
-//				if(my >= returnY && my <= (returnY + menu.returnButton.getHeight())) {
-//					if(inputHandler.wasMouseClicked()) {
-//						soundManager.buttonPressed();
-//						menuState = MSTATE.MAIN;
-//						inputHandler.setMouseClicked(false);
-//					}
-//				}
-//			}
-//			// Position of SFX Button
-//			int sfxX = (int)menu.sfxButton.getX();
-//			int sfxY = (int)menu.sfxButton.getY();
-//
-//			if(mx >= sfxX && mx <= (sfxX + menu.sfxButton.getWidth())) {
-//				if(my >= sfxY && my <= (sfxY + menu.sfxButton.getHeight())) {
-//					if(inputHandler.wasMouseClicked()) {
-//						if(Sound.sfxPlayback) {
-//							Sound.sfxPlayback = false;
-//						} else {
-//							Sound.sfxPlayback = true;
-//						}
-//						inputHandler.setMouseClicked(false);
-//						soundManager.buttonPressed();
-//					}
-//				}
-//			}
-//
-//			// Position of music button
-//			int musicX = (int)menu.musicButton.getX();
-//			int musicY = (int)menu.musicButton.getY();
-//
-//			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
-//				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
-//					if(inputHandler.wasMouseClicked()) {
-//						soundManager.buttonPressed();
-//						if(Sound.musicPlayback) {
-//							Sound.musicPlayback = false;
-//						} else {
-//							Sound.musicPlayback = true;
-//						}
-//						inputHandler.setMouseClicked(false);
-//					}
-//				}
-//			}
-//		}
-//		else if(menuState == MSTATE.MAIN) {
-//
-//			// Buttons on the main menu
-//			int playX = (int)menu.playButton.getX();
-//			int playY = (int) menu.playButton.getY();
-//			int helpOptionsX = (int)menu.helpOptionsButton.getX();
-//			int helpOptionsY = (int)menu.helpOptionsButton.getY();
-//
-//			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
-//				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
-//					if(inputHandler.wasMouseClicked()) {
-//						soundManager.playPressed();
-//						currentState = STATE.GAME;
-//						menuState = MSTATE.NONE;
-//						sender.sendObject("Waiting");
-//						inputHandler.setMouseClicked(false);
-//					}
-//				}
-//			}
-//			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
-//				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
-//					if(inputHandler.wasMouseClicked()) {
-//						soundManager.buttonPressed();
-//						menuState = MSTATE.HOPTIONS;
-//						inputHandler.setMouseClicked(false);
-//					}
-//				}
-//			}
-//		}
-//	}
-
-	/**
 	 * Runs during the game to update the displayed game state.
 	 * @param delta
 	 */
@@ -374,8 +215,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 		// Lets store every keypress we see this tick
 		ArrayList<String> keyPresses = new ArrayList<>();
-//		keyPresses.clear();
-		// Change the player movement speed with 1 and 2
 		// Handle player keyboard input to move
 		if (isKeyDown(KeyEvent.VK_W)) {
 			keyPresses.add("VK_W");
@@ -390,19 +229,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			keyPresses.add("VK_S");
 		}
 
-		////// DEBUGGING Key bindings
-//		// Display collision boxes
-//		if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
-//			renderer.setShowCollBox(true);
-//		}
-//		// Hide collision boxes
-//		if (inputHandler.isKeyDown(KeyEvent.VK_L)){
-//			renderer.setShowCollBox(false);
-//		}
-//		// Print the player's position
-//		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
-//			System.out.println("Player: (" + player.getX() + ", " + player.getY() + ")");
-//		}
 		// Toggle conversion mode
 		if (isKeyDown(KeyEvent.VK_Z)) {
 			keyPresses.add("VK_Z");
@@ -412,18 +238,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			keyPresses.add("VK_X");
 			System.out.println("Disabled conversion mode!");
 		}
-//		// Turn all sound on
-//		if(inputHandler.isKeyDown(KeyEvent.VK_O)) {
-//			//System.out.println("Sound ON");
-//			Sound.sfxPlayback = true;
-//			Sound.musicPlayback = true;
-//		}
-//		// Turn all sound off
-//		if(inputHandler.isKeyDown(KeyEvent.VK_P)) {
-//			//System.out.println("Sound OFF");
-//			Sound.musicPlayback = false;
-//			Sound.sfxPlayback = false;
-//		}
 
 		// Face the player in the direction of the mouse postate
 		Point mousePos = this.getMousePosition();
@@ -460,12 +274,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 		for(String s:keyPresses) {
 			switch(s){
-//			case "VK_1":
-//				player.setMoveSpeed(player.getMoveSpeed() - 0.01f);
-//				break;
-//			case "VK_2":
-//				player.setMoveSpeed(player.getMoveSpeed() + 0.01f);
-//				break;
 			case "VK_W":
 				pdv.add(new Vector(0.0f, 1.0f));
 				break;
@@ -620,9 +428,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-
-	}
+	public void keyTyped(KeyEvent e) {}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
