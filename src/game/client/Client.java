@@ -120,6 +120,12 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		container.setVisible(true);
 		container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		container.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				sender.sendObject("Bye");
+			}
+		});
+
 		// Handle input
 		addMouseListener(this);
 		addKeyListener(this);
@@ -539,6 +545,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			}
 			// If exit button was clicked
 			else if (renderer.exitButton.contains(mx, my)) {
+				sender.sendObject("Bye");
 				soundManager.buttonPressed();
 				currentState = STATE.EXIT;
 				running = false;
