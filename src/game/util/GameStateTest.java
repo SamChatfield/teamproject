@@ -174,12 +174,12 @@ public class GameStateTest {
 	
 	}
 	
-	@Test
-	public final void testGetDeadZombies() {
+	//@Test
+	//public final void testGetDeadZombies() {
 		
-		assertEquals(zombies, state.getDeadZombies());
+		//assertEquals(zombies, state.getDeadZombies());
 	
-	}
+	//}
 	
 	@Test
 	public final void testSetPowerups() {
