@@ -11,8 +11,23 @@ import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+import game.ResourceLoader;
+import game.util.PlayerUpdatePacket;
+import game.util.User;
+import game.util.Vector;
 
 /**
  * This class is the one that the player will run when they want to start the game.
@@ -83,6 +98,20 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		setBounds(0, 0, GAME_DIMENSION.width, GAME_DIMENSION.height);
 		panel.add(this);
 
+		// Set icon on macOS -- code from GitHub gist by bchapuis
+		try {
+		    Class util = Class.forName("com.apple.eawt.Application");
+		    Method getApplication = util.getMethod("getApplication", new Class[0]);
+		    Object application = getApplication.invoke(util);
+		    Class params[] = new Class[1];
+		    params[0] = Image.class;
+		    Method setDockIconImage = util.getMethod("setDockIconImage", params);
+		    setDockIconImage.invoke(application, ResourceLoader.iconImage());
+		} catch (Exception e) {
+		    // log exception
+		}
+		
+		// Set icon on Windows
 		container.setIconImage(ResourceLoader.iconImage());
 		setIgnoreRepaint(true);
 
