@@ -27,7 +27,7 @@ public class ServerGameState extends GameState {
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
         this.difficulty = difficulty;
-        zombieCount = difficulty*100;
+        zombieCount = difficulty*10;
     }
 
 
@@ -228,7 +228,6 @@ public class ServerGameState extends GameState {
 				toModify.conversionMode = false;
 				break;
 			case "BUTTON1":
-				System.out.println("shoot");
 				shootNow = true;
 				break;
 			}
