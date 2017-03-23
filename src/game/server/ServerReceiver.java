@@ -14,7 +14,7 @@ public class ServerReceiver extends Thread {
 
 	private ServerGameState state;
 	private ObjectInputStream objIn;
-	private User username;
+	private User user;
 	private ClientTable table;
 	private boolean running;
 	
@@ -22,9 +22,9 @@ public class ServerReceiver extends Thread {
 	 * Constructor method
 	 * @param objIn The ObjectInputStream
 	 */
-	public ServerReceiver(ObjectInputStream objIn, User username, ClientTable table) {
+	public ServerReceiver(ObjectInputStream objIn, User user, ClientTable table) {
 		this.objIn = objIn;
-		this.username = username;
+		this.user = user;
 		this.table = table;
 		this.running = true;
 	}
@@ -36,10 +36,11 @@ public class ServerReceiver extends Thread {
 				Object obj = objIn.readObject();
 				if(obj.getClass() == String.class){
 					if(obj.toString().equals("Waiting")) { 	//the player is waiting to be paired with another player
-						table.changePlayerStatus(username, ClientTable.playerStatus.WAITING);
+						table.changePlayerStatus(user, ClientTable.playerStatus.WAITING);
 					} else if(obj.toString().equals("Bye")) {
+						user.getServerSender().closeStream();
+						user.getServerReceiver().closeStream();
 						System.out.println("The client said bye :'(");
-						running = false;
 					}
 				}else if(obj.getClass() == PlayerUpdatePacket.class){
 					PlayerUpdatePacket plr = (PlayerUpdatePacket) obj;
@@ -54,14 +55,13 @@ public class ServerReceiver extends Thread {
 		}
 
 		try {
-			table.removeFromTable(username);
+			table.removeFromTable(user);
 			System.out.println("Closing InputStream");
-			//Closing the ObjectInputStream should also close the Socket and the ObjectOutputStream
 			objIn.close();
 
 		} catch(IOException e) {
 			System.out.println("Closing InputStream didn't work, dying");
-			System.exit(1);
+			//System.exit(1);
 		}
 
 	}
@@ -69,4 +69,6 @@ public class ServerReceiver extends Thread {
 	public void updateState(ServerGameState state) {
 		this.state = state;
 	}
+
+	public void closeStream() { running = false; }
 }

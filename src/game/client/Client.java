@@ -447,8 +447,14 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		return player;
 	}
 
+	/**
+	 * End the client by sending a message to the server and closing all streams.
+	 */
+
 	public void endClient() {
-		sender.closeStreams();
+		sender.sendObject("Bye");
+		sender.closeStream();
+		receiver.closeStream();
 	}
 
 	public static void main(String[] args) {
@@ -474,23 +480,23 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		User newUser = new User(username, difficulty);
 		// ClientSender and ClientReceiver objects to handle communication with
 		// server
-		ClientSender client_sender = new ClientSender(newUser, objOut, null);
-		ClientReceiver client_receiver = new ClientReceiver(newUser, objIn);
+		ClientSender clientSender = new ClientSender(newUser, objOut, null);
+		ClientReceiver clientReceiver = new ClientReceiver(newUser, objIn);
 
 		// Then create a client state for the client
 		ClientGameState state = new ClientGameState(newUser);
 
-		client_receiver.addState(state); // Must be called before starting the
+		clientReceiver.addState(state); // Must be called before starting the
 											// thread.
-		client_sender.addState(state);
+		clientSender.addState(state);
 		// If this method didn't exist, stateface would need to be added above,
 		// but stateface relies on receiver.
 
 		// Starting threads
-		client_sender.start();
-		client_receiver.start();
+		clientSender.start();
+		clientReceiver.start();
 
-		Client client = new Client(state, client_sender, client_receiver, newUser);
+		Client client = new Client(state, clientSender, clientReceiver, newUser);
 
 		// Create and start the client loop over the loop method of the client
 		// object.
@@ -586,7 +592,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			}
 			// If exit button was clicked
 			else if (renderer.exitButton.contains(mx, my)) {
-				sender.sendObject("Bye");
+				endClient();
 				soundManager.buttonPressed();
 				currentState = STATE.EXIT;
 				running = false;
