@@ -1,12 +1,12 @@
 package game.util;
 
 
+import game.PowerUp;
+import game.Weapon;
 import game.server.ServerGameState;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import game.PowerUp;
-import game.Weapon;
 
 /**
  * Sendable state that is sent to the server to handle status of the game

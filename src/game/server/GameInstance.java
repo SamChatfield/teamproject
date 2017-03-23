@@ -1,18 +1,11 @@
 package game.server;
 
-import game.Bullet;
-import game.Collision;
-import game.Zombie;
+import game.*;
 import game.client.Player;
-import game.util.DataPacket;
 import game.util.EndState;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.Random;
-import game.PowerUp;
-import game.Weapon;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie

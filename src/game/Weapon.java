@@ -1,9 +1,9 @@
 package game;
 
-import java.util.Random;
-import game.PowerUp.PuState;
 import game.client.Player;
 import game.map.MapData;
+
+import java.util.Random;
 
 public class Weapon extends Entity {
 	private WeaponState wState;

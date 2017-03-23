@@ -1,18 +1,16 @@
 package game.server;
 
 import game.Bullet;
-import game.Zombie;
+import game.PowerUp;
+import game.Weapon;
 import game.Weapon.WeaponState;
+import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
 import game.util.*;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
-
-import game.PowerUp;
-import game.Weapon;
 
 /**
  * The game state of the server at any one time.
