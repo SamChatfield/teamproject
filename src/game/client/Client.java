@@ -110,7 +110,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 		container.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				sender.sendObject("Bye");
+				endClient();
 			}
 		});
 
@@ -445,6 +445,10 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+
+	public void endClient() {
+		sender.closeStreams();
 	}
 
 	public static void main(String[] args) {
