@@ -19,7 +19,7 @@ public class Matchmaker extends Thread{
 		while(true) {
 			ArrayList<User> players = table.checkAvailable();
 			while(players.size() != 0 && players.size() %2 == 0) {
-
+				players = table.checkAvailable();
 				for(int i =0; i<players.size(); i++) {
 					User player1 = players.get(i);
 					for(int j= i+1; j<players.size(); j++) {
