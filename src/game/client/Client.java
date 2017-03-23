@@ -1,17 +1,13 @@
 package game.client;
 
 import game.ResourceLoader;
-import game.util.EndState;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
 import game.util.Vector;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,7 +18,7 @@ import java.util.ArrayList;
  * This class is the one that the player will run when they want to start the game.
  * When they click "play" in the menu, it will create a new 'Client' thread that will control input and data send/receive.
  */
-public class Client extends Canvas {
+public class Client extends Canvas implements KeyListener, MouseListener {
 
 	// Game settings
 	private static final String TITLE = "Outbreak";
@@ -36,37 +32,43 @@ public class Client extends Canvas {
 	public Sound soundManager;
 	private JFrame container;
 	private BufferStrategy bufferStrategy;
-	private InputHandler inputHandler;
+//	private InputHandler inputHandler;
 	private boolean running;
 	private Player player;
+	private boolean[] keyArray, mouseButtonArray;
+	private boolean mouseInside;
 
 	private ClientGameState state;
 	private ClientSender sender;
 	private ClientReceiver receiver;
 
 	private Renderer renderer;
+	private MenuRenderer menu;
+
+	private ArrayList<String> keyPresses;
+
 
 	// Client state
 	private enum STATE {
 		START,
 		GAME,
 		END, 
-		EXIT
+		EXIT;
 	}
+
 	// Menu state
 	private enum MSTATE {
 		MAIN,
 		HOPTIONS,
-		NONE
+		NONE;
 	}
 	private STATE currentState;
 	private MSTATE menuState;
-
 	private User user;
+
 	private static String username;
 	private static String ipAddress;
 	private static int difficulty;
-
 	/**
 	 * Create a new Client object
 	 * @param state CurrentSlientState object
@@ -94,9 +96,9 @@ public class Client extends Canvas {
 		container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		// Handle input
-		inputHandler = new InputHandler(this);
-		addMouseListener(inputHandler);
-		addKeyListener(inputHandler);
+//		inputHandler = new InputHandler(this);
+		addMouseListener(this);
+		addKeyListener(this);
 
 		// Request focus
 		requestFocus();
@@ -113,6 +115,12 @@ public class Client extends Canvas {
 		// Setup sound
 		soundManager = new Sound();
 		state.addSoundManager(soundManager);
+
+		// Set up input
+		keyArray = new boolean[256];
+		mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
+		mouseInside = false;
+		keyPresses = new ArrayList<>();
 	}
 
 	/**
@@ -121,7 +129,7 @@ public class Client extends Canvas {
 	private void loop() {
 
 		// Renders the menu
-		MenuRenderer menu = new MenuRenderer(bufferStrategy);
+		menu = new MenuRenderer(bufferStrategy);
 		renderer = new Renderer(bufferStrategy, state);
 
 		// System time
@@ -138,8 +146,8 @@ public class Client extends Canvas {
 					menu.renderMenu();
 				} else if (menuState == MSTATE.HOPTIONS) {
 					menu.renderHelpOptions();
-				} 
-				menuUpdate(menu);
+				}
+//				menuUpdate(menu);
 			}
 
 			// Starts the game once play button is clicked
@@ -184,7 +192,7 @@ public class Client extends Canvas {
 					} catch (InterruptedException e) {
 						System.err.println("Client loop state interupted exception: " + e.getMessage());
 						e.printStackTrace();
-	
+
 					}
 				}
 
@@ -198,7 +206,7 @@ public class Client extends Canvas {
 			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
 				renderer.renderGameOver(state.getEndState());
-				gameOverUpdate();
+//				gameOverUpdate();
 			}
 		}
 		System.exit(0);
@@ -207,155 +215,156 @@ public class Client extends Canvas {
 	/**
 	 * Update the game over screen (what is displayed and if buttons clicked)
 	 */
-	private void gameOverUpdate() {
-		double mx, my;
-		try {
-			mx = inputHandler.getMousePos().getX();
-			my = inputHandler.getMousePos().getY();
-		} catch(NullPointerException e) {
-			// Default mouse pointer position
-			mx = 0;
-			my = 0;
-		}
-		int buttonWidth = (int)renderer.menuButton.getWidth();
-		int buttonHeight = (int)renderer.menuButton.getHeight();
-
-		int menuX = (int)renderer.menuButton.getX();
-		int menuY = (int)renderer.menuButton.getY();
-		int exitX = (int)renderer.exitButton.getX();
-		int exitY = (int)renderer.exitButton.getY();
-
-		// If return to menu button clicked
-		if(mx >= menuX && mx <= (menuX + buttonWidth)) {
-			if(my >= menuY && my <= (menuY + buttonHeight)) {
-				if(inputHandler.wasMouseClicked()) {
-					currentState = STATE.START;
-					menuState = MSTATE.MAIN;
-					soundManager.playPressed();
-					//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
-					//for a new game
-					state.resetState(user);
-					state.setHasFinished(false);
-					state.setConnected(false);
-
-				}
-			}
-		}
-
-		// If exit button clicked
-		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
-			if(my >= exitY && my <= (exitY + buttonHeight)) {
-				if(inputHandler.wasMouseClicked()) {
-					soundManager.buttonPressed();
-					currentState = STATE.EXIT;
-					running = false;
-				}
-			}
-		}
-	}
+//	private void gameOverUpdate() {
+//		double mx, my;
+//		try {
+//			mx = inputHandler.getMousePos().getX();
+//			my = inputHandler.getMousePos().getY();
+//		} catch(NullPointerException e) {
+//			// Default mouse pointer position
+//			mx = 0;
+//			my = 0;
+//		}
+//		int buttonWidth = (int)renderer.menuButton.getWidth();
+//		int buttonHeight = (int)renderer.menuButton.getHeight();
+//
+//		int menuX = (int)renderer.menuButton.getX();
+//		int menuY = (int)renderer.menuButton.getY();
+//		int exitX = (int)renderer.exitButton.getX();
+//		int exitY = (int)renderer.exitButton.getY();
+//
+//		// If return to menu button clicked
+//		if(mx >= menuX && mx <= (menuX + buttonWidth)) {
+//			if(my >= menuY && my <= (menuY + buttonHeight)) {
+//				if(inputHandler.wasMouseClicked()) {
+//					currentState = STATE.START;
+//					menuState = MSTATE.MAIN;
+//					soundManager.playPressed();
+//					//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
+//					//for a new game
+//					state.resetState(user);
+//					state.setHasFinished(false);
+//					state.setConnected(false);
+//
+//				}
+//			}
+//		}
+//
+//		// If exit button clicked
+//		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
+//			if(my >= exitY && my <= (exitY + buttonHeight)) {
+//				if(inputHandler.wasMouseClicked()) {
+//					soundManager.buttonPressed();
+//					currentState = STATE.EXIT;
+//					running = false;
+//				}
+//			}
+//		}
+//	}
 
 	// Update the menu
+
 	/**
 	 * Update when the menu is shown on screen (what is displayed and if buttons clicked)
 	 * @param menu MenuRenderer object
 	 */
-	private void menuUpdate(MenuRenderer menu) {
-		double mx, my;
-
-		// Get location of mouse pointer
-		try {
-			mx = inputHandler.getMousePos().getX();
-			my = inputHandler.getMousePos().getY();
-		}
-		catch(NullPointerException e) {
-			// Default position for mouse
-			mx = 0;
-			my = 0;
-		}
-
-		// Help menu
-		if(menuState == MSTATE.HOPTIONS) {
-
-			// Position of return button
-			int returnX = (int)menu.returnButton.getX();
-			int returnY = (int)menu.returnButton.getY();
-
-			// Handle clicks on the return button
-			if(mx >= returnX && mx <= (returnX + menu.returnButton.getWidth())) {
-				if(my >= returnY && my <= (returnY + menu.returnButton.getHeight())) {
-					if(inputHandler.wasMouseClicked()) {
-						soundManager.buttonPressed();
-						menuState = MSTATE.MAIN;
-						inputHandler.setMouseClicked(false);
-					}
-				}
-			}
-			// Position of SFX Button
-			int sfxX = (int)menu.sfxButton.getX();
-			int sfxY = (int)menu.sfxButton.getY();
-
-			if(mx >= sfxX && mx <= (sfxX + menu.sfxButton.getWidth())) {
-				if(my >= sfxY && my <= (sfxY + menu.sfxButton.getHeight())) {
-					if(inputHandler.wasMouseClicked()) {
-						if(Sound.sfxPlayback) {
-							Sound.sfxPlayback = false;
-						} else {
-							Sound.sfxPlayback = true;
-						}
-						inputHandler.setMouseClicked(false);
-						soundManager.buttonPressed();
-					}
-				}
-			}
-
-			// Position of music button
-			int musicX = (int)menu.musicButton.getX();
-			int musicY = (int)menu.musicButton.getY();
-
-			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
-				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
-					if(inputHandler.wasMouseClicked()) {
-						soundManager.buttonPressed();
-						if(Sound.musicPlayback) {
-							Sound.musicPlayback = false;
-						} else {
-							Sound.musicPlayback = true;
-						}
-						inputHandler.setMouseClicked(false);
-					}
-				}
-			}
-		}
-		else if(menuState == MSTATE.MAIN) {
-
-			// Buttons on the main menu
-			int playX = (int)menu.playButton.getX();
-			int playY = (int) menu.playButton.getY();
-			int helpOptionsX = (int)menu.helpOptionsButton.getX();
-			int helpOptionsY = (int)menu.helpOptionsButton.getY();
-
-			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
-				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
-					if(inputHandler.wasMouseClicked()) {
-						soundManager.playPressed();
-						currentState = STATE.GAME;
-						menuState = MSTATE.NONE;
-						sender.sendObject("Waiting");
-						inputHandler.setMouseClicked(false);
-					}
-				}
-			}
-			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
-				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
-					if(inputHandler.wasMouseClicked()) {
-						soundManager.buttonPressed();
-						menuState = MSTATE.HOPTIONS;
-						inputHandler.setMouseClicked(false);
-					}
-				}
-			}
-		}
-	}
+//	private void menuUpdate(MenuRenderer menu) {
+//		double mx, my;
+//
+//		// Get location of mouse pointer
+//		try {
+//			mx = inputHandler.getMousePos().getX();
+//			my = inputHandler.getMousePos().getY();
+//		}
+//		catch(NullPointerException e) {
+//			// Default position for mouse
+//			mx = 0;
+//			my = 0;
+//		}
+//
+//		// Help menu
+//		if(menuState == MSTATE.HOPTIONS) {
+//
+//			// Position of return button
+//			int returnX = (int)menu.returnButton.getX();
+//			int returnY = (int)menu.returnButton.getY();
+//
+//			// Handle clicks on the return button
+//			if(mx >= returnX && mx <= (returnX + menu.returnButton.getWidth())) {
+//				if(my >= returnY && my <= (returnY + menu.returnButton.getHeight())) {
+//					if(inputHandler.wasMouseClicked()) {
+//						soundManager.buttonPressed();
+//						menuState = MSTATE.MAIN;
+//						inputHandler.setMouseClicked(false);
+//					}
+//				}
+//			}
+//			// Position of SFX Button
+//			int sfxX = (int)menu.sfxButton.getX();
+//			int sfxY = (int)menu.sfxButton.getY();
+//
+//			if(mx >= sfxX && mx <= (sfxX + menu.sfxButton.getWidth())) {
+//				if(my >= sfxY && my <= (sfxY + menu.sfxButton.getHeight())) {
+//					if(inputHandler.wasMouseClicked()) {
+//						if(Sound.sfxPlayback) {
+//							Sound.sfxPlayback = false;
+//						} else {
+//							Sound.sfxPlayback = true;
+//						}
+//						inputHandler.setMouseClicked(false);
+//						soundManager.buttonPressed();
+//					}
+//				}
+//			}
+//
+//			// Position of music button
+//			int musicX = (int)menu.musicButton.getX();
+//			int musicY = (int)menu.musicButton.getY();
+//
+//			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
+//				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
+//					if(inputHandler.wasMouseClicked()) {
+//						soundManager.buttonPressed();
+//						if(Sound.musicPlayback) {
+//							Sound.musicPlayback = false;
+//						} else {
+//							Sound.musicPlayback = true;
+//						}
+//						inputHandler.setMouseClicked(false);
+//					}
+//				}
+//			}
+//		}
+//		else if(menuState == MSTATE.MAIN) {
+//
+//			// Buttons on the main menu
+//			int playX = (int)menu.playButton.getX();
+//			int playY = (int) menu.playButton.getY();
+//			int helpOptionsX = (int)menu.helpOptionsButton.getX();
+//			int helpOptionsY = (int)menu.helpOptionsButton.getY();
+//
+//			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
+//				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
+//					if(inputHandler.wasMouseClicked()) {
+//						soundManager.playPressed();
+//						currentState = STATE.GAME;
+//						menuState = MSTATE.NONE;
+//						sender.sendObject("Waiting");
+//						inputHandler.setMouseClicked(false);
+//					}
+//				}
+//			}
+//			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
+//				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
+//					if(inputHandler.wasMouseClicked()) {
+//						soundManager.buttonPressed();
+//						menuState = MSTATE.HOPTIONS;
+//						inputHandler.setMouseClicked(false);
+//					}
+//				}
+//			}
+//		}
+//	}
 
 	/**
 	 * Runs during the game to update the displayed game state.
@@ -364,85 +373,80 @@ public class Client extends Canvas {
 	private void update(double delta) {
 
 		// Lets store every keypress we see this tick
-		ArrayList<String> keyPresses = new ArrayList<>();		
+//		ArrayList<String> keyPresses = new ArrayList<>();
+		keyPresses.clear();
 		// Change the player movement speed with 1 and 2
-		if (inputHandler.isKeyDown(KeyEvent.VK_1)) {
-			keyPresses.add("VK_1");
-		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_2)) {
-			keyPresses.add("VK_2");
-		}
 		// Handle player keyboard input to move
-		if (inputHandler.isKeyDown(KeyEvent.VK_W)) {
+		if (isKeyDown(KeyEvent.VK_W)) {
 			keyPresses.add("VK_W");
 		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_A)) {
+		if (isKeyDown(KeyEvent.VK_A)) {
 			keyPresses.add("VK_A");
 		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_D)) {
+		if (isKeyDown(KeyEvent.VK_D)) {
 			keyPresses.add("VK_D");
 		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_S)) {
+		if (isKeyDown(KeyEvent.VK_S)) {
 			keyPresses.add("VK_S");
 		}
 
 		////// DEBUGGING Key bindings
-		// Display collision boxes
-		if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
-			renderer.setShowCollBox(true);
-		}
-		// Hide collision boxes
-		if (inputHandler.isKeyDown(KeyEvent.VK_L)){
-			renderer.setShowCollBox(false);
-		}
-		// Print the player's position
-		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
-			System.out.println("Player: (" + player.getX() + ", " + player.getY() + ")");
-		}
+//		// Display collision boxes
+//		if (inputHandler.isKeyDown(KeyEvent.VK_K)) {
+//			renderer.setShowCollBox(true);
+//		}
+//		// Hide collision boxes
+//		if (inputHandler.isKeyDown(KeyEvent.VK_L)){
+//			renderer.setShowCollBox(false);
+//		}
+//		// Print the player's position
+//		if (inputHandler.isKeyDown(KeyEvent.VK_P)) {
+//			System.out.println("Player: (" + player.getX() + ", " + player.getY() + ")");
+//		}
 		// Toggle conversion mode
-		if (inputHandler.isKeyDown(KeyEvent.VK_Z)) {
+		if (isKeyDown(KeyEvent.VK_Z)) {
 			keyPresses.add("VK_Z");
 			System.out.println("Enabled conversion mode!");
 		}
-		if (inputHandler.isKeyDown(KeyEvent.VK_X)) {
+		if (isKeyDown(KeyEvent.VK_X)) {
 			keyPresses.add("VK_X");
 			System.out.println("Disabled conversion mode!");
 		}
-		// Turn all sound on
-		if(inputHandler.isKeyDown(KeyEvent.VK_O)) {
-			//System.out.println("Sound ON");
-			Sound.sfxPlayback = true;
-			Sound.musicPlayback = true;
-		}
-		// Turn all sound off
-		if(inputHandler.isKeyDown(KeyEvent.VK_P)) {
-			//System.out.println("Sound OFF");
-			Sound.musicPlayback = false;
-			Sound.sfxPlayback = false;
-		}
+//		// Turn all sound on
+//		if(inputHandler.isKeyDown(KeyEvent.VK_O)) {
+//			//System.out.println("Sound ON");
+//			Sound.sfxPlayback = true;
+//			Sound.musicPlayback = true;
+//		}
+//		// Turn all sound off
+//		if(inputHandler.isKeyDown(KeyEvent.VK_P)) {
+//			//System.out.println("Sound OFF");
+//			Sound.musicPlayback = false;
+//			Sound.sfxPlayback = false;
+//		}
 
 		// Face the player in the direction of the mouse postate
-		Point mousePos = inputHandler.getMousePos();
+		Point mousePos = this.getMousePosition();
 		Vector fv = null;
-		if (inputHandler.isMouseInside() && mousePos != null) {
+		if (mouseInside && mousePos != null) {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
 
-            if (inputHandler.isMouseButtonDown(MouseEvent.BUTTON1)) {
+            if (isMouseButtonDown(MouseEvent.BUTTON1)) {
             	keyPresses.add("BUTTON1");
 				soundManager.bulletSound(player.canShoot());
 			}
 		}
-			// We need to do this in case fv is null
-			float x = -100;
-			float y = -100;
-			if(fv!=null) {
-				x = fv.x();
-				y = fv.y();
-			}
-			sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
+		// We need to do this in case fv is null
+		float x = -100;
+		float y = -100;
+		if(fv!=null) {
+			x = fv.x();
+			y = fv.y();
+		}
+		System.out.println(keyPresses);
+		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
-			updateLocalPlayer(keyPresses,delta,fv);
-
+		updateLocalPlayer(keyPresses,delta,fv);
 	}
 
 	/**
@@ -456,12 +460,12 @@ public class Client extends Canvas {
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
 		for(String s:keyPresses) {
 			switch(s){
-			case "VK_1":
-				player.setMoveSpeed(player.getMoveSpeed() - 0.01f);
-				break;
-			case "VK_2":
-				player.setMoveSpeed(player.getMoveSpeed() + 0.01f);
-				break;
+//			case "VK_1":
+//				player.setMoveSpeed(player.getMoveSpeed() - 0.01f);
+//				break;
+//			case "VK_2":
+//				player.setMoveSpeed(player.getMoveSpeed() + 0.01f);
+//				break;
 			case "VK_W":
 				pdv.add(new Vector(0.0f, 1.0f));
 				break;
@@ -500,15 +504,15 @@ public class Client extends Canvas {
 	 * Display login prompt allowing to choose a username and the IP address of server
 	 */
 	public static void loginPrompt() {
-		
-		
+
+
 
 		JTextField usernameEntry = new JTextField("a");
 		JTextField ipaddyEntry = new JTextField("127.0.0.1");
 		String[] difficultyStrings = { "Easy", "Medium", "Hard"};
 		JComboBox difficultySelection = new JComboBox(difficultyStrings);
 		difficultySelection.setSelectedIndex(0);
-		
+
 		difficultySelection.addActionListener(new ActionListener() {
 
 			@Override
@@ -516,7 +520,7 @@ public class Client extends Canvas {
 				JComboBox cb = (JComboBox)e.getSource();
 			}
 		});
-		
+
 		Object[] message = {
 				"Username: ", usernameEntry,
 				"Server IP Address: ", ipaddyEntry,
@@ -545,7 +549,7 @@ public class Client extends Canvas {
 				username = "a";
 			};
 			ipAddress = ipaddyEntry.getText();
-			
+
 			// Pattern mattern correct format for IP address
 			/// XXX.XXX.XXX.XXX
 			if(!ipAddress.matches(regex)) {
@@ -613,4 +617,134 @@ public class Client extends Canvas {
 		Thread gameThread = new Thread(client::loop);
 		gameThread.start();
 	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		keyArray[e.getKeyCode()] = true;
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Collision box toggle
+		if (e.getKeyCode() == KeyEvent.VK_K) {
+			renderer.setShowCollBox(!renderer.getShowCollBox());
+		}
+		// Toggle sound
+		else if (e.getKeyCode() == KeyEvent.VK_M) {
+			Sound.sfxPlayback = !Sound.sfxPlayback;
+			Sound.musicPlayback = !Sound.musicPlayback;
+		}
+		// Print player's position
+		else if (e.getKeyCode() == KeyEvent.VK_P) {
+			System.out.println("Player: (" + player.getX() + ", " + player.getY() + ")");
+		}
+		keyArray[e.getKeyCode()] = false;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		double mx = this.getMousePosition().getX();
+		double my = this.getMousePosition().getY();
+
+		// If we're on the menu
+		if (currentState == STATE.START) {
+			// If we're on the main menu
+			if (menuState == MSTATE.MAIN) {
+				// If play button clicked
+				if (menu.playButton.contains(mx, my)) {
+					soundManager.playPressed();
+					currentState = STATE.GAME;
+					menuState = MSTATE.NONE;
+					sender.sendObject("Waiting");
+				}
+				// If help button clicked
+				else if (menu.helpOptionsButton.contains(mx, my)) {
+					soundManager.buttonPressed();
+					menuState = MSTATE.HOPTIONS;
+				}
+			}
+			// If we're on the help/options menu
+			else if (menuState == MSTATE.HOPTIONS) {
+				// If return button clicked
+				if (menu.returnButton.contains(mx, my)) {
+					soundManager.buttonPressed();
+					menuState = MSTATE.MAIN;
+				}
+				// If sfx button clicked
+				else if (menu.sfxButton.contains(mx, my)) {
+					soundManager.buttonPressed();
+					Sound.sfxPlayback = !Sound.sfxPlayback;
+				}
+				// If music button clicked
+				else if (menu.musicButton.contains(mx, my)) {
+					soundManager.buttonPressed();
+					Sound.musicPlayback = !Sound.musicPlayback;
+				}
+			}
+		}
+		// If we're on the game over screen
+		else if (currentState == STATE.END) {
+			// If menu button was clicked
+			if (renderer.menuButton.contains(mx, my)) {
+				currentState = STATE.START;
+				menuState = MSTATE.MAIN;
+				soundManager.playPressed();
+				//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
+				//for a new game
+				state.resetState(user);
+				state.setHasFinished(false);
+				state.setConnected(false);
+			}
+			// If exit button was clicked
+			else if (renderer.exitButton.contains(mx, my)) {
+				soundManager.buttonPressed();
+				currentState = STATE.EXIT;
+				running = false;
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		mouseButtonArray[e.getButton()] = true;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		mouseButtonArray[e.getButton()] = false;
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		mouseInside = true;
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		mouseInside = false;
+	}
+
+	/**
+	 * Get if a current key is down/pressed on the keyboard
+	 * @param keyCode Key to check
+	 * @return Whether key is pressed on keyboard
+	 */
+	public boolean isKeyDown(int keyCode) {
+		return keyArray[keyCode];
+	}
+
+	/**
+	 * Check if mouse button is down
+	 * @param button Button to check
+	 * @return Whether mouse button is currently down/clicked
+	 */
+	public boolean isMouseButtonDown(int button) {
+		return mouseButtonArray[button];
+	}
+
 }

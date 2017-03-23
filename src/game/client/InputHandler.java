@@ -65,7 +65,7 @@ public class InputHandler implements KeyListener, MouseListener {
 	 * Check if mouse button is down
 	 * @param button Button to check
 	 * @return Whether mouse button is currently down/clicked
-	 */ 
+	 */
 	public boolean isMouseButtonDown(int button) {
 		return mouseButtonArray[button];
 	}

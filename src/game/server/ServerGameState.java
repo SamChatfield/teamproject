@@ -140,14 +140,15 @@ public class ServerGameState extends GameState {
         boolean shootNow = false;
 
 		// Apply player movement
+		System.out.println("moves: " + moves);
 		for(String s:moves) {
 			switch(s){
-			case "VK_1":
-				toModify.setMoveSpeed(toModify.getMoveSpeed() - 0.01f);
-				break;
-			case "VK_2":
-				toModify.setMoveSpeed(toModify.getMoveSpeed() + 0.01f);
-				break;
+//			case "VK_1":
+//				toModify.setMoveSpeed(toModify.getMoveSpeed() - 0.01f);
+//				break;
+//			case "VK_2":
+//				toModify.setMoveSpeed(toModify.getMoveSpeed() + 0.01f);
+//				break;
 			case "VK_W":
 				pdv.add(new Vector(0.0f, 1.0f));
 				break;
@@ -167,7 +168,8 @@ public class ServerGameState extends GameState {
 				toModify.conversionMode = false;
 				break;
 			case "BUTTON1":
-                shootNow = true;
+				System.out.println("shoot");
+				shootNow = true;
                 break;
 			}
 		}
