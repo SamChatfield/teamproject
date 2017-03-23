@@ -1,19 +1,25 @@
 package game.client;
 
-import game.CollisionBox;
-import game.PowerUp;
-import game.ResourceLoader;
-import game.Weapon;
-import game.map.MapData;
-import game.map.Tile;
-import game.util.DataPacket;
-import game.util.EndState;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import game.CollisionBox;
+import game.PowerUp;
+import game.ResourceLoader;
+import game.Weapon;
+import game.Weapon.WeaponState;
+import game.map.MapData;
+import game.map.Tile;
+import game.util.DataPacket;
+import game.util.EndState;
 
 /**
  * Renders the game on screen
@@ -52,7 +58,8 @@ public class Renderer {
     public static final BufferedImage converter = ResourceLoader.converter();
     public static final BufferedImage uzi = ResourceLoader.uzi();
 
-
+    //ArrayList<BufferedImage> weaponImages = new ArrayList<>();
+    
 
     public Rectangle menuButton;
 	public Rectangle exitButton;
@@ -69,7 +76,7 @@ public class Renderer {
 		this.state = state;
 		this.gameH = Client.GAME_DIMENSION.height;
 		this.gameW = Client.GAME_DIMENSION.width;
-
+	
 		tradeWinds = ResourceLoader.getTradewindsFont();
 	}
 
@@ -137,7 +144,7 @@ public class Renderer {
 		}
 		
 		// Draw lighting
-		// drawLighting(g2d);
+		drawLighting(g2d);
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
@@ -161,16 +168,57 @@ public class Renderer {
 		String healthFormat = String.format("%.2f", healthPercentage);
 		g2d.drawString("Health: " + healthFormat + "%", 15, (int) (healthBarBackground.getY() + healthBarBackground.getHeight() + 20));
 
-		// Items box
+		////// Items box
+
+		WeaponState[] weaponStates = player.getInventory(); // Get states of weapons
+		
 		g2d.setColor(fadedWhite);
-
+		g2d.setFont(tradeWinds.deriveFont(12f));
 		int xCoord = 10;
+		g2d.drawString("Current Weapon: blablabla", xCoord+5, 580);
+		
+		// Loop to draw each box and weapon image
 		for(int i = 0; i < 5; i++) {
-			Rectangle itemsBox = new Rectangle(xCoord, 590, 40, 40);
-			g2d.draw(itemsBox);
-
-			g2d.drawString(Integer.toString(i+1), xCoord+4, 628);
-			xCoord+= 40;
+			g2d.setFont(tradeWinds.deriveFont(10f));
+			g2d.setColor(new Color(255,255,255, 160));
+			Rectangle itemsBox = new Rectangle(xCoord, 590, 45, 45);
+			g2d.fill(itemsBox);
+			
+			// Draw border and number
+			g2d.setColor(new Color(0,0,0, 180));
+			Rectangle itemsBox2 = new Rectangle(xCoord-1, 590-1, 45+1, 45+1);
+			g2d.draw(itemsBox2);
+			g2d.drawString(Integer.toString(i+1), xCoord+4, 632);
+			
+			// Change to !null
+			if(weaponStates[i] == null) {
+				
+				int weaponSizeX = 30;
+				int weaponSizeY = 30;
+				int weaponX = xCoord + 5;
+				int weaponY = 595;
+				
+				// Switch on index to determine which weapon to draw
+				switch(i) {
+					case 0:
+						g2d.drawImage(shotgun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
+						break;
+					case 1:
+						g2d.drawImage(machineGun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
+						break;
+					case 2:
+						g2d.drawImage(shotgun, weaponX, weaponY, null);
+						break;
+					case 3:
+						g2d.drawImage(converter, weaponX, weaponY, null);
+						break;
+					case 4:
+						g2d.drawImage(uzi, xCoord, weaponX, weaponSizeX, weaponSizeY, null);
+						break;
+				}
+				
+			}
+			xCoord+= 45;
 		}
 
 		// Display time remaining
