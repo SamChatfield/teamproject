@@ -1,6 +1,7 @@
 package game.client;
 
 import game.Bullet;
+import game.Collision;
 import game.Entity;
 import game.ResourceLoader;
 import game.map.MapData;
@@ -51,6 +52,33 @@ public class Player extends Entity {
         
         // Initially cannot convert zombies
         conversionMode = false;
+    }
+
+    /**
+     * Move entity on the map
+     * @param dx Movement X
+     * @param dy Movement Y
+     * @param opponent Opponent player
+     */
+    public void move(float dx, float dy, Entity opponent) {
+        float cx = data.getX();
+        float cy = data.getY();
+        float nx = cx + dx;
+        float ny = cy + dy;
+
+        if (mapData.isEntityMoveValid(nx, ny, this)) {
+            data.setX(nx);
+            data.setY(ny);
+        } else if (mapData.isEntityMoveValid(nx, data.getY(), this)) {
+            data.setX(nx);
+        } else if (mapData.isEntityMoveValid(data.getX(), ny, this)) {
+            data.setY(ny);
+        }
+
+        if (Collision.playersColliding(this, opponent)) {
+            data.setX(cx);
+            data.setY(cy);
+        }
     }
 
     /**

@@ -2,16 +2,20 @@ package game.client;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -22,7 +26,6 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import game.ResourceLoader;
-import game.util.EndState;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
 import game.util.Vector;
@@ -51,6 +54,7 @@ public class Client extends Canvas {
 
 	private ClientGameState state;
 	private ClientSender sender;
+	private ClientReceiver receiver;
 
 	private Renderer renderer;
 
@@ -80,10 +84,11 @@ public class Client extends Canvas {
 	 * @param state CurrentSlientState object
 	 * @param sender ClientSender object
 	 */
-	private Client(ClientGameState state, ClientSender sender, User user) {
+	private Client(ClientGameState state, ClientSender sender, ClientReceiver receiver, User user) {
 		this.user = user;
 		this.state = state;
 		this.sender = sender;
+		this.receiver = receiver;
 		container = new JFrame(TITLE + " - " + user.getUsername());
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(GAME_DIMENSION);
@@ -92,6 +97,21 @@ public class Client extends Canvas {
 		setBounds(0, 0, GAME_DIMENSION.width, GAME_DIMENSION.height);
 		panel.add(this);
 
+		// Set icon on macOS -- code from GitHub gist by bchapuis
+		try {
+		    Class util = Class.forName("com.apple.eawt.Application");
+		    Method getApplication = util.getMethod("getApplication", new Class[0]);
+		    Object application = getApplication.invoke(util);
+		    Class params[] = new Class[1];
+		    params[0] = Image.class;
+		    Method setDockIconImage = util.getMethod("setDockIconImage", params);
+		    setDockIconImage.invoke(application, ResourceLoader.iconImage());
+		} catch (Exception e) {
+		    // log exception
+		}
+		
+		// Set icon on Windows
+		container.setIconImage(ResourceLoader.iconImage());
 		setIgnoreRepaint(true);
 
 		container.pack();
@@ -151,25 +171,15 @@ public class Client extends Canvas {
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
 
-				if(!state.playersReady()) {
-					while(!state.playersReady()) {
+				if(!state.isConnected()) {
+					while(!state.isConnected()) {
+						//System.out.println("Client state: " + state.isConnected());
 						renderer.renderWaitingForOpponent();
 						try {
-							Thread.sleep(100);
+							Thread.sleep(200);
 						} catch(Exception e) {
 
 						}
-					}
-				}
-
-				if (!state.isConnected()) {
-					sender.sendObject("StartGame"); // Send a message to the server to start the game.
-					while (!state.isConnected()) {
-						try {
-							Thread.sleep(1);
-						} catch (Exception e) {
-							System.err.println("Error in starting game: " + e.getMessage());
-						} // Without this, this loop breaks on some machines.
 					}
 				}
 
@@ -207,13 +217,14 @@ public class Client extends Canvas {
 				// Is the game over?
 				if(state.HasFinished()){
 					currentState = STATE.END;
+
 				}
 			}
 
 			// If the game is over then we can pass the end state into the renderer.
 			while (currentState == STATE.END) {
 				renderer.renderGameOver(state.getEndState());
-				gameOverUpdate(renderer,state.getEndState());
+				gameOverUpdate();
 			}
 		}
 		System.exit(0);
@@ -221,10 +232,8 @@ public class Client extends Canvas {
 
 	/**
 	 * Update the game over screen (what is displayed and if buttons clicked)
-	 * @param rend Renderer object
-	 * @param state EndState of the game containing details of how game went
 	 */
-	private void gameOverUpdate(Renderer rend, EndState state) {
+	private void gameOverUpdate() {
 		double mx, my;
 		try {
 			mx = inputHandler.getMousePos().getX();
@@ -234,13 +243,13 @@ public class Client extends Canvas {
 			mx = 0;
 			my = 0;
 		}
-		int buttonWidth = (int)rend.menuButton.getWidth();
-		int buttonHeight = (int)rend.menuButton.getHeight();
+		int buttonWidth = (int)renderer.menuButton.getWidth();
+		int buttonHeight = (int)renderer.menuButton.getHeight();
 
-		int menuX = (int)rend.menuButton.getX();
-		int menuY = (int) rend.menuButton.getY();
-		int exitX = (int)rend.exitButton.getX();
-		int exitY = (int)rend.exitButton.getY();
+		int menuX = (int)renderer.menuButton.getX();
+		int menuY = (int)renderer.menuButton.getY();
+		int exitX = (int)renderer.exitButton.getX();
+		int exitY = (int)renderer.exitButton.getY();
 
 		// If return to menu button clicked
 		if(mx >= menuX && mx <= (menuX + buttonWidth)) {
@@ -248,6 +257,13 @@ public class Client extends Canvas {
 				if(inputHandler.wasMouseClicked()) {
 					currentState = STATE.START;
 					menuState = MSTATE.MAIN;
+					soundManager.playPressed();
+					//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
+					//for a new game
+					state.resetState(user);
+					state.setHasFinished(false);
+					state.setConnected(false);
+
 				}
 			}
 		}
@@ -256,6 +272,7 @@ public class Client extends Canvas {
 		if(mx >= exitX && mx <= (exitX + buttonWidth)) {
 			if(my >= exitY && my <= (exitY + buttonHeight)) {
 				if(inputHandler.wasMouseClicked()) {
+					soundManager.buttonPressed();
 					currentState = STATE.EXIT;
 					running = false;
 				}
@@ -293,6 +310,7 @@ public class Client extends Canvas {
 			if(mx >= returnX && mx <= (returnX + menu.returnButton.getWidth())) {
 				if(my >= returnY && my <= (returnY + menu.returnButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.buttonPressed();
 						menuState = MSTATE.MAIN;
 						inputHandler.setMouseClicked(false);
 					}
@@ -311,6 +329,7 @@ public class Client extends Canvas {
 							Sound.sfxPlayback = true;
 						}
 						inputHandler.setMouseClicked(false);
+						soundManager.buttonPressed();
 					}
 				}
 			}
@@ -322,6 +341,7 @@ public class Client extends Canvas {
 			if(mx >= musicX && mx <= (musicX + menu.musicButton.getWidth())) {
 				if(my >= musicY && my <= (musicY + menu.musicButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.buttonPressed();
 						if(Sound.musicPlayback) {
 							Sound.musicPlayback = false;
 						} else {
@@ -343,6 +363,7 @@ public class Client extends Canvas {
 			if(mx >= playX && mx <= (playX + menu.playButton.getWidth())) {
 				if(my >= playY && my <= (playY + menu.playButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.playPressed();
 						currentState = STATE.GAME;
 						menuState = MSTATE.NONE;
 						sender.sendObject("Waiting");
@@ -353,6 +374,7 @@ public class Client extends Canvas {
 			if(mx >= helpOptionsX && mx <= (helpOptionsX + menu.helpOptionsButton.getWidth())) {
 				if(my >= helpOptionsY && my <= (helpOptionsY + menu.helpOptionsButton.getHeight())) {
 					if(inputHandler.wasMouseClicked()) {
+						soundManager.buttonPressed();
 						menuState = MSTATE.HOPTIONS;
 						inputHandler.setMouseClicked(false);
 					}
@@ -495,7 +517,8 @@ public class Client extends Canvas {
 		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
 		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual change in y this update
-		player.move(pdx, pdy);
+
+		player.move(pdx, pdy, state.getOtherPlayer());
 
 	}
 
@@ -608,7 +631,7 @@ public class Client extends Canvas {
 		client_sender.start();
 		client_receiver.start();
 
-		Client client = new Client(state,client_sender, newUser);
+		Client client = new Client(state,client_sender, client_receiver, newUser);
 
 		// Create and start the client loop over the loop method of the client object.
 		// :: is a method reference since loop is an existing method,

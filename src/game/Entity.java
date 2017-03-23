@@ -1,9 +1,9 @@
 package game;
 
-import java.io.Serializable;
-
 import game.map.MapData;
 import game.util.DataPacket;
+
+import java.io.Serializable;
 
 /**
  * Representation of entities in the game (Zombies and Players)
@@ -99,25 +99,6 @@ public class Entity implements Serializable {
 	 */
 	public DataPacket.State getState(){
 		return data.getState();
-	}
-
-	/**
-	 * Move entity on the map
-	 * @param dx Movement X
-	 * @param dy Movement Y
-	 */
-	public void move(float dx, float dy) {
-		float nx = data.getX() + dx;
-		float ny = data.getY() + dy;
-
-		if (mapData.isEntityMoveValid(nx, ny, this)) {
-			data.setX(nx);
-			data.setY(ny);
-		} else if (mapData.isEntityMoveValid(nx, data.getY(), this)) {
-			data.setX(nx);
-		} else if (mapData.isEntityMoveValid(data.getX(), ny, this)) {
-			data.setY(ny);
-		}
 	}
 
 	/**
@@ -286,5 +267,21 @@ public class Entity implements Serializable {
 	 */
 	public void setHealth(int newHealth){
 		data.setHealth(newHealth);
+	}
+
+	/**
+	 * Get attack damage of entity
+	 * @return Attack damage
+	 */
+	public int getAttackDamage(){
+		return data.getAttackDamage();
+	}
+
+	/**
+	 * Set health of entity
+	 * @param newDamage New health to set
+	 */
+	public void setAttackDamage(int newDamage){
+		data.setAttackDamage(newDamage);
 	}
 }

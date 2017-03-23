@@ -16,7 +16,7 @@ public class Collision {
 	 */
 	public static void checkCollision(Zombie zombie, Player player) {
 		if (zombie.getCollisionBox().intersects(player.getCollisionBox())) {
-			zombie.attack(player, 1);
+			zombie.attack(player, zombie.getAttackDamage());
 		}
 	}
 
@@ -71,4 +71,10 @@ public class Collision {
 	}
 	
 	
+
+	public static boolean playersColliding(Entity player, Entity opponent) {
+		return player.getCollisionBox().intersects(opponent.getCollisionBox());
+	}
+
+
 }

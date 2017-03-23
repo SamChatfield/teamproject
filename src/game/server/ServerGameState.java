@@ -7,7 +7,6 @@ import game.map.MapData;
 import game.util.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 import game.PowerUp;
@@ -21,15 +20,15 @@ public class ServerGameState extends GameState {
 	private String player1Username;
 	private String player2Username;
 	private int zombieCount = 5;
-	
+	private int difficulty;
+
 
     public ServerGameState(String player1Username, String player2Username, int difficulty){
         this.player1Username = player1Username;
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
-        this.playersConnected = false;
-        //zombieCount = (difficulty+1)*10;
-        zombieCount = 0;
+        this.difficulty = difficulty;
+        zombieCount = difficulty*10;
     }
 
 	/**
@@ -95,7 +94,7 @@ public class ServerGameState extends GameState {
 					x = (float) (0.5-rand.nextFloat())*mapData.getWidth();
 					y = (float) (0.5-rand.nextFloat())*mapData.getHeight();
 				}
-				zombieFactory.add(new Zombie(x,y,mapData));
+				zombieFactory.add(new Zombie(x,y,mapData,1*difficulty));
 			}
 		} catch(Exception e){
 			System.out.println("Exception: " + e.getMessage());
@@ -103,10 +102,9 @@ public class ServerGameState extends GameState {
 		}
 		this.zombies = zombieFactory;
 
-		GameInstance instance = new GameInstance(this);        // Start up a new game instance
+		GameInstance instance = new GameInstance(this); // Start up a new game instance
 		instance.start();
 		this.inProgress = true;
-
 	}
 
 	/**
@@ -127,8 +125,12 @@ public class ServerGameState extends GameState {
      */
     public ArrayList<DataPacket> getSendableBullets() {
         ArrayList<DataPacket> data = new ArrayList<>();
-        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
-            data.add(it.next().getData());
+        ArrayList<Bullet> bs = this.bullets;
+//        for (Iterator<Bullet> it = bs.iterator(); it.hasNext(); ) {
+//            data.add(it.next().getData());
+//        }
+        for (Bullet b : bs) {
+            data.add(b.getData());
         }
         return data;
     }
@@ -199,7 +201,7 @@ public class ServerGameState extends GameState {
 		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
 		float pdx = pnv.x() * toModify.getMoveSpeed() * ((float) delta); // Actual change in x this update
 		float pdy = pnv.y() * toModify.getMoveSpeed() * ((float) delta); // Actual change in y this update
-		toModify.move(pdx, pdy);
+		toModify.move(pdx, pdy, getOtherPlayer(username));
 
         if (shootNow) {
             // game coord x and y position of the aim

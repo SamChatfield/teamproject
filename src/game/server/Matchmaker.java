@@ -27,17 +27,19 @@ public class Matchmaker extends Thread{
 						System.out.println(player1.getUsername());
 						System.out.println(player2.getUsername());
 						if(player1.getDifficulty() == player2.getDifficulty()) {
-
+							System.out.println("Matching "+player1.getUsername()+" and "+player2.getUsername());
 							ServerGameState state = new ServerGameState(player1.getUsername(), player2.getUsername(), player1.getDifficulty());
-							System.out.println(player1.getUsername());
-							System.out.println(player2.getUsername());
+							state.startNewGame();
+							// Update the state that both players have to a new one
 							player1.getServerReceiver().updateState(state);
-							player1.getServerSender().updateState(state);
+							player1.getServerSender().startNewGame(state);
 							player2.getServerReceiver().updateState(state);
-							player2.getServerSender().updateState(state);
-							state.setReady(true);
+							player2.getServerSender().startNewGame(state);
+
 							table.changePlayerStatus(player1, ClientTable.playerStatus.IN_GAME);
 							table.changePlayerStatus(player2, ClientTable.playerStatus.IN_GAME);
+
+							// Matched these players, continue matching others
 							players.remove(i);
 							players.remove(j-1);
 						}

@@ -30,10 +30,18 @@ public class GameState implements Serializable {
 	protected int timeRemaining;
 	protected MapData mapData;
 	protected boolean inProgress; // Is the game in progress?
-	protected boolean isConnected; // Is the game connected to the server? If this is false, the server hasn't sent a state yet
+	protected boolean isConnected;
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void setConnected(boolean connected) {
+		isConnected = connected;
+	}
+
 	protected EndState endState;
 	protected boolean hasFinished;
-	protected boolean playersConnected;
 
 	/**
 	 * Get EndState of game
@@ -66,6 +74,7 @@ public class GameState implements Serializable {
 	 */
 	public void setHasFinished(boolean hasFinished) {
 		this.hasFinished = hasFinished;
+		this.inProgress = false;
 	}
 
 	/**
@@ -144,6 +153,14 @@ public class GameState implements Serializable {
 	}
 
 	/**
+	 * Set the list of zombies to the argument
+	 * @param zombies new list of zombies
+	 */
+	public void setZombies(ArrayList<Zombie> zombies) {
+		this.zombies = zombies;
+	}
+
+	/**
 	 * Get data packet of zombies
 	 * @return ArrayList of data packets for zombies currently in the game
 	 */
@@ -175,32 +192,8 @@ public class GameState implements Serializable {
 		return player2;
 	}
 
-	/**
-	 * Get whether a game is currently in progress
-	 * @return Boolean of whether game in progress
-	 */
-	public boolean inProgress(){
-		return inProgress;
-	}
 
-	/**
-	 * Get whether a game state is currently connected between two players
-	 * @return Boolean of whether two players connected
-	 */
-	public boolean isConnected(){
-		return isConnected;
-	}
 
-    public boolean playersReady() { return playersConnected; }
 
-    public void setReady(boolean bool) { playersConnected = bool; }
 
-	/**
-	 * Set whether a new is in progress
-	 * @param bool Whether game in progress
-	 */
-
-    public void setInProgress(boolean bool){
-        inProgress = bool;
-    }
 }

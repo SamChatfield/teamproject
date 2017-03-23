@@ -19,9 +19,10 @@ public class DataPacket implements Serializable {
 	private float appearTime;
 	private boolean isActivePD;
 	private float appearTimePD;
-	
+	private int attackDamage;
 
-	/**
+
+		/**
 	 * Object that the data packet refers to
 	 */
 	public enum Type {
@@ -219,6 +220,22 @@ public class DataPacket implements Serializable {
 	public void setHealth(int health) {
 		this.health = health;
 	}
+
+	/**
+	 * Get the attack damage of the object
+	 */
+	public int getAttackDamage() {
+		return attackDamage;
+	}
+
+	/**
+	 * Set the attack damage of the object
+	 * @param attackDamage New amount of damage to set.
+	 */
+	public void setAttackDamage(int attackDamage) {
+		this.attackDamage = attackDamage;
+	}
+
 
 	/**
 	 * Constructor to create a new DataPacket
