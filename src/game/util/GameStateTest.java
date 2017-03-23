@@ -167,6 +167,7 @@ public class GameStateTest {
 	/**
 	 * Test method for {@link game.util.GameState#setInProgress(boolean)}.
 	*/
+
 	@Test
 	public final void testSetZombies() {
 		state.setZombies(zombies);
@@ -180,6 +181,7 @@ public class GameStateTest {
 		//assertEquals(zombies, state.getDeadZombies());
 	
 	//}
+
 	
 	@Test
 	public final void testSetPowerups() {
