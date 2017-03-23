@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import game.Bullet;
+import game.PowerUp;
+import game.Weapon;
 import game.Zombie;
 import game.client.Player;
 
@@ -25,8 +27,10 @@ public class GameStateTest {
 	EndState endState = new EndState(false, null, player, player1, null);
 	ArrayList<Bullet> bullets;
 	ArrayList<Zombie> zombies;
+	ArrayList<PowerUp> powerups;
 	Zombie zombie = new Zombie(1,1,null, 0);
 	Zombie zombie1 = new Zombie(1,1,null, 0);
+	ArrayList<Weapon> weapons;
 	
 	/**
 	 * Test method for {@link game.util.GameState#getEndState()}.
@@ -153,22 +157,42 @@ public class GameStateTest {
 
 	/**
 	 * Test method for {@link game.util.GameState#setReady(boolean)}.
-	
+	 */
 	@Test
-	public final void testSetReady() {
-		state.setReady(true);
-		assertTrue(state.playersReady());
+	public final void testSetConnected() {
+		state.setConnected(true);
+		assertTrue(state.isConnected());
 	}
- */
+
 	/**
 	 * Test method for {@link game.util.GameState#setInProgress(boolean)}.
-	 
+	*/
 	@Test
-	public final void testSetInProgress() {
-		state.setInProgress(true);
-		assertNotNull(state.inProgress());
-		state.setInProgress(false);
-		assertNotNull(state.inProgress());
+	public final void testSetZombies() {
+		state.setZombies(zombies);
+		assertEquals(zombies, state.getZombies());
+	
 	}
-*/
+	
+	@Test
+	public final void testGetDeadZombies() {
+		
+		assertEquals(zombies, state.getDeadZombies());
+	
+	}
+	
+	@Test
+	public final void testSetPowerups() {
+		state.setPowerUp(powerups);
+		assertEquals(powerups, state.getPowerups());
+	
+	}
+	
+	@Test
+	public final void testSetWeapons() {
+		state.setWeapons(weapons);
+		assertEquals(weapons, state.getWeapons());
+	
+	}
+
 }
