@@ -1,6 +1,5 @@
 package game;
 
-
 import game.client.Player;
 import game.util.Vector;
 
