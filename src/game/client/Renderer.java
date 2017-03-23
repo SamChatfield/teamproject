@@ -20,6 +20,7 @@ import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
 import game.util.EndState;
+import java.awt.*;
 
 /**
  * Renders the game on screen
