@@ -95,7 +95,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for speed up powerup
 	 */
 	public static BufferedImage speedUp() {
-		return getImage("speedUp.png");
+		return getImage("/powerups/speedUp.png");
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for more health powerup
 	 */
 	public static BufferedImage moreHealth() {
-		return getImage("moreHealth.png");
+		return getImage("/powerups/moreHealth.png");
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for invert controls powerup
 	 */
 	public static BufferedImage invertControls() {
-		return getImage("invertControls.png");
+		return getImage("/powerups/invertControls.png");
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for freeze other player powerup
 	 */
 	public static BufferedImage freezePlayer() {
-		return getImage("freezePlayer.png");
+		return getImage("/powerups/freezePlayer.png");
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for speed down powerup
 	 */
 	public static BufferedImage speedDown() {
-		return getImage("speedDown.png");
+		return getImage("/powerups/speedDown.png");
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for the machine gun
 	 */
 	public static BufferedImage machineGun() {
-		return getImage("machineGun.png");
+		return getImage("/weapons/spawns/machineGun.png");
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for the shotgun
 	 */
 	public static BufferedImage shotgun() {
-		return getImage("shotgun.png");
+		return getImage("/weapons/spawns/shotgun.png");
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for the converter
 	 */
 	public static BufferedImage converter() {
-		return getImage("converter.png");
+		return getImage("/weapons/spawns/converter.png");
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class ResourceLoader {
 	 * @return BufferedImage for the uzi
 	 */
 	public static BufferedImage uzi() {
-		return getImage("uzi.png");
+		return getImage("/weapons/spawns/uzi.png");
 	}
 
 
