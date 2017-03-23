@@ -45,7 +45,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	private Renderer renderer;
 	private MenuRenderer menu;
 
-	private ArrayList<String> keyPresses;
+//	private ArrayList<String> keyPresses;
 
 
 	// Client state
@@ -120,7 +120,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		keyArray = new boolean[256];
 		mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
 		mouseInside = false;
-		keyPresses = new ArrayList<>();
+//		keyPresses = new ArrayList<>();
 	}
 
 	/**
@@ -373,8 +373,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	private void update(double delta) {
 
 		// Lets store every keypress we see this tick
-//		ArrayList<String> keyPresses = new ArrayList<>();
-		keyPresses.clear();
+		ArrayList<String> keyPresses = new ArrayList<>();
+//		keyPresses.clear();
 		// Change the player movement speed with 1 and 2
 		// Handle player keyboard input to move
 		if (isKeyDown(KeyEvent.VK_W)) {
@@ -443,7 +443,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			x = fv.x();
 			y = fv.y();
 		}
-		System.out.println(keyPresses);
+
 		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
 
 		updateLocalPlayer(keyPresses,delta,fv);
@@ -480,6 +480,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				break;
 			case "VK_Z":
 				player.conversionMode = true;
+				System.out.println("enabling conv client side");
 				break;
 			case "VK_X":
 				player.conversionMode = false;
@@ -638,6 +639,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		else if (e.getKeyCode() == KeyEvent.VK_M) {
 			Sound.sfxPlayback = !Sound.sfxPlayback;
 			Sound.musicPlayback = !Sound.musicPlayback;
+			System.out.println("sfx: " + Sound.sfxPlayback);
 		}
 		// Print player's position
 		else if (e.getKeyCode() == KeyEvent.VK_P) {

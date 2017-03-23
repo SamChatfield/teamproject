@@ -140,7 +140,6 @@ public class ServerGameState extends GameState {
         boolean shootNow = false;
 
 		// Apply player movement
-		System.out.println("moves: " + moves);
 		for(String s:moves) {
 			switch(s){
 //			case "VK_1":
