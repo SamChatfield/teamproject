@@ -284,4 +284,12 @@ public class Entity implements Serializable {
 	public void setAttackDamage(int newDamage){
 		data.setAttackDamage(newDamage);
 	}
+
+	public boolean isAlive(){
+		return data.isAlive();
+	}
+
+	public void setAlive(boolean b) {
+		data.setAlive(b);
+	}
 }
