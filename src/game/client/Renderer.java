@@ -48,21 +48,21 @@ public class Renderer {
 
 
 	//Blood splatters
-    public static final BufferedImage splatter1 = ResourceLoader.splatter1();
-    public static final BufferedImage splatter2 = ResourceLoader.splatter2();
-    public static final BufferedImage splatter3 = ResourceLoader.splatter3();
+	public static final BufferedImage splatter1 = ResourceLoader.splatter1();
+	public static final BufferedImage splatter2 = ResourceLoader.splatter2();
+	public static final BufferedImage splatter3 = ResourceLoader.splatter3();
 
 
-    //Weapons
-    public static final BufferedImage machineGun = ResourceLoader.machineGun();
-    public static final BufferedImage shotgun = ResourceLoader.shotgun();
-    public static final BufferedImage converter = ResourceLoader.converter();
-    public static final BufferedImage uzi = ResourceLoader.uzi();
+	//Weapons
+	public static final BufferedImage machineGun = ResourceLoader.machineGun();
+	public static final BufferedImage shotgun = ResourceLoader.shotgun();
+	public static final BufferedImage converter = ResourceLoader.converter();
+	public static final BufferedImage uzi = ResourceLoader.uzi();
 
-    //ArrayList<BufferedImage> weaponImages = new ArrayList<>();
-    
+	//ArrayList<BufferedImage> weaponImages = new ArrayList<>();
 
-    public Rectangle menuButton;
+
+	public Rectangle menuButton;
 	public Rectangle exitButton;
 
 	public Color fadedWhite = new Color(255,255,255,190);
@@ -77,7 +77,7 @@ public class Renderer {
 		this.state = state;
 		this.gameH = Client.GAME_DIMENSION.height;
 		this.gameW = Client.GAME_DIMENSION.width;
-	
+
 		tradeWinds = ResourceLoader.getTradewindsFont();
 	}
 
@@ -91,7 +91,7 @@ public class Renderer {
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
 
-        MapData mapData = state.getMapData();
+		MapData mapData = state.getMapData();
 		ArrayList<PowerUp> powerups = state.getPowerups();
 		ArrayList<Weapon> weapons = state.getWeapons();
 
@@ -135,7 +135,7 @@ public class Renderer {
 				drawZombie(g2d, player, z);
 			}
 		}
-		
+
 		for(PowerUp p : powerups){
 			drawPowerup(g2d, p, player);
 		}
@@ -143,7 +143,7 @@ public class Renderer {
 		for(Weapon w : weapons){
 			drawWeapon(g2d, w, player);
 		}
-		
+
 		// Draw lighting
 		drawLighting(g2d);
 
@@ -172,52 +172,81 @@ public class Renderer {
 		////// Items box
 
 		WeaponState[] weaponStates = player.getInventory(); // Get states of weapons
-		
+		//WeaponState currentWeapon = player.getCurrentlyEquipped(); // Get currently equipped weapon
+
 		g2d.setColor(fadedWhite);
-		g2d.setFont(tradeWinds.deriveFont(12f));
+		g2d.setFont(tradeWinds.deriveFont(11f));
 		int xCoord = 10;
-		g2d.drawString("Current Weapon: blablabla", xCoord+5, 580);
-		
+
+		switch(player.getCurrentlyEquipped()) {
+			case PISTOL:
+				g2d.drawString("Current Weapon: Pistol", xCoord+5, 580);
+				break;
+			case MAC_GUN:
+				g2d.drawString("Current Weapon: Machine Gun", xCoord+5, 580);
+				break;
+			case SHOTGUN:
+				g2d.drawString("Current Weapon: Shotgun", xCoord+5, 580);
+				break;
+			case CONVERT:
+				g2d.drawString("Current Weapon: Zombie Converter", xCoord+5, 580);
+			case FLAME_THROWER:
+				g2d.drawString("Current Weapon: Flamethrower", xCoord+5, 580);
+			default:
+				break;
+		}
+
 		// Loop to draw each box and weapon image
 		for(int i = 0; i < 5; i++) {
-			g2d.setFont(tradeWinds.deriveFont(10f));
-			g2d.setColor(new Color(255,255,255, 160));
+			
+			if(player.getCurrentlyEquipped().equals(i)) {
+				g2d.setColor(new Color(255,255,255, 160));
+			} else {
+				g2d.setColor(new Color(255,255,255, 250));
+			}
+			
+			
 			Rectangle itemsBox = new Rectangle(xCoord, 590, 45, 45);
 			g2d.fill(itemsBox);
-			
+
 			// Draw border and number
 			g2d.setColor(new Color(0,0,0, 180));
+			g2d.setFont(tradeWinds.deriveFont(10f));
 			Rectangle itemsBox2 = new Rectangle(xCoord-1, 590-1, 45+1, 45+1);
 			g2d.draw(itemsBox2);
 			g2d.drawString(Integer.toString(i+1), xCoord+4, 632);
-			
+
 			// Change to !null
 			if(weaponStates[i] == null) {
-				
+
 				int weaponSizeX = 30;
 				int weaponSizeY = 30;
 				int weaponX = xCoord + 5;
 				int weaponY = 595;
-				
+
 				// Switch on index to determine which weapon to draw
+
+
 				switch(i) {
-					case 0:
-						g2d.drawImage(shotgun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
-						break;
-					case 1:
-						g2d.drawImage(machineGun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
-						break;
-					case 2:
-						g2d.drawImage(shotgun, weaponX, weaponY, null);
-						break;
-					case 3:
-						g2d.drawImage(converter, weaponX, weaponY, null);
-						break;
-					case 4:
-						g2d.drawImage(uzi, xCoord, weaponX, weaponSizeX, weaponSizeY, null);
-						break;
+				case 0:
+					g2d.drawImage(shotgun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
+					break;
+				case 1:
+					g2d.drawImage(machineGun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
+					break;
+				case 2:
+					g2d.drawImage(shotgun, weaponX, weaponY, null);
+					break;
+				case 3:
+					g2d.drawImage(converter, weaponX, weaponY, null);
+					break;
+				case 4:
+					g2d.drawImage(uzi, weaponX, weaponY, null);
+					break;
+
 				}
-				
+
+
 			}
 			xCoord+= 45;
 		}
@@ -511,27 +540,27 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-    private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
-        int w = Renderer.splatter1.getWidth();
-        int h = Renderer.splatter1.getHeight();
+	private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
+		int w = Renderer.splatter1.getWidth();
+		int h = Renderer.splatter1.getHeight();
 
-        Point drawPoint = player.relativeDrawPoint(d.getX(), d.getY(), w, h);
-        int drawX = drawPoint.x;
-        int drawY = drawPoint.y;
+		Point drawPoint = player.relativeDrawPoint(d.getX(), d.getY(), w, h);
+		int drawX = drawPoint.x;
+		int drawY = drawPoint.y;
 
-        BufferedImage image = Renderer.splatter1;
+		BufferedImage image = Renderer.splatter1;
 
-        if(i == 2){
-            image = Renderer.splatter2;
-        }else if (i == 3){
-            image = Renderer.splatter3;
-        }
-        g2d.drawImage(image, drawX, drawY, null);
-    }
+		if(i == 2){
+			image = Renderer.splatter2;
+		}else if (i == 3){
+			image = Renderer.splatter3;
+		}
+		g2d.drawImage(image, drawX, drawY, null);
+	}
 	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {
 		int w = Renderer.freezePlayer.getWidth();
 		int h = Renderer.freezePlayer.getHeight();
-		
+
 		Point drawPoint = player.relativeDrawPoint(p.getx(), p.gety(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
@@ -539,21 +568,21 @@ public class Renderer {
 		BufferedImage image = Renderer.opponentZombieImage;
 
 		switch(p.getpState()){
-			case FREEZE:
-				image = Renderer.freezePlayer;
-				break;
-            case HEALTH:
-                image = Renderer.moreHealth;
-                break;
-            case INVERSE:
-                image = Renderer.invertControls;
-                break;
-            case SPEED_UP:
-                image = Renderer.speedUp;
-                break;
-            case SLOW_DOWN:
-                image = Renderer.speedDown;
-                break;
+		case FREEZE:
+			image = Renderer.freezePlayer;
+			break;
+		case HEALTH:
+			image = Renderer.moreHealth;
+			break;
+		case INVERSE:
+			image = Renderer.invertControls;
+			break;
+		case SPEED_UP:
+			image = Renderer.speedUp;
+			break;
+		case SLOW_DOWN:
+			image = Renderer.speedDown;
+			break;
 
 		default:
 			break;
@@ -561,30 +590,30 @@ public class Renderer {
 		}
 		g2d.drawImage(image, drawX, drawY, null);
 	}
-	
+
 	private void drawWeapon(Graphics2D g2d, Weapon g, Player player) {
 		int w = Renderer.moreHealth.getWidth();
 		int h = Renderer.moreHealth.getHeight();
 
 		BufferedImage image = Renderer.machineGun;
 		switch(g.getwState()){
-            case MAC_GUN:
-                image = Renderer.machineGun;
-                break;
-            case SHOTGUN:
-                image = Renderer.shotgun;
-                break;
-            case CONVERT:
-                image = Renderer.converter;
-                break;
-            case UZI:
-                image = Renderer.uzi;
-        }
+		case MAC_GUN:
+			image = Renderer.machineGun;
+			break;
+		case SHOTGUN:
+			image = Renderer.shotgun;
+			break;
+		case CONVERT:
+			image = Renderer.converter;
+			break;
+		case UZI:
+			image = Renderer.uzi;
+		}
 
 		Point drawPoint = player.relativeDrawPoint(g.getx(), g.gety(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
 		g2d.drawImage(image, drawX, drawY, null);
 	}
-	
+
 }
