@@ -137,7 +137,7 @@ public class Renderer {
 		}
 		
 		// Draw lighting
-		drawLighting(g2d);
+		// drawLighting(g2d);
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
@@ -505,6 +505,10 @@ public class Renderer {
             case SLOW_DOWN:
                 image = Renderer.speedDown;
                 break;
+
+		default:
+			break;
+
 		}
 		g2d.drawImage(image, drawX, drawY, null);
 	}

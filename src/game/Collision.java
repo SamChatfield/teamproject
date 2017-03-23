@@ -64,8 +64,9 @@ public class Collision {
 	
 	
 	public static boolean checkWeaponCollision(Weapon w, Player player) {
-		if (w.getCollisionBox().intersects(player.getCollisionBox())) {
-			w.getWeaponStats(w, player);
+		if (w.getCollisionBox().intersects(player.getCollisionBox())) {		
+			w.addToInventory(w.getwState(), player);
+			
 			return true;
 		}
 		return false;
