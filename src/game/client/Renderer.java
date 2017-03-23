@@ -237,8 +237,8 @@ public class Renderer {
 		String player2Zombies = "0";
 		String wildZombies = "0";
 
-//		System.out.println(endState.getWinnerName());
-		endState.getPlayer1().getNumConvertedZombies();
+		//		System.out.println(endState.getWinnerName());
+		// endState.getPlayer1().getNumConvertedZombies();
 
 		try {
 			gameWinner = endState.getWinnerName();
