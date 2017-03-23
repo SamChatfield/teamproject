@@ -506,6 +506,8 @@ public class Renderer {
             case SLOW_DOWN:
                 image = Renderer.speedDown;
                 break;
+            case KOZ:
+            	image = Renderer.freezePlayer;
 
 		default:
 			break;

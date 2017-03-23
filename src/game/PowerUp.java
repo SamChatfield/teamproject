@@ -2,8 +2,10 @@ package game;
 
 import game.client.Player;
 import game.map.MapData;
+import game.util.DataPacket;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 //yolo pls
@@ -15,7 +17,7 @@ public class PowerUp extends Entity implements Serializable {
 	public long time;
 
 	public enum PuState {
-		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, TEST,
+		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, TEST, KOZ
 	}
 
 	public PuState getpState() {
@@ -32,7 +34,7 @@ public class PowerUp extends Entity implements Serializable {
 		this.pState = pState;
 	}
 
-	public void getPowerupStats(PowerUp powerup, Player player) {
+	public void getPowerupStats(PowerUp powerup, Player player, ArrayList<Zombie> zombies) {
 		if (!player.getIsActive()) {
 			if (powerup.pState == PuState.SPEED_UP) {
 				player.setIsActive(true);
@@ -44,6 +46,13 @@ public class PowerUp extends Entity implements Serializable {
 					player.setHealth(50);
 				} else {
 					player.setHealth(player.getHealth() + 10);
+				}
+			}
+			if (powerup.pState == PuState.KOZ){
+				for(Zombie z : zombies){
+					if(z.getState() == DataPacket.State.PLAYER && z.getUsername() != player.getUsername()){
+						z.setUsername(player.getUsername());
+					}
 				}
 			}
 		}
@@ -79,19 +88,19 @@ public class PowerUp extends Entity implements Serializable {
 		Random r = new Random();
 		int chance = r.nextInt(100) + 1;
 		if (chance <= 20) {
-			return PowerUp.PuState.SPEED_UP;
+			return PowerUp.PuState.KOZ;
 		}
 		if (20 < chance && chance <= 40) {
-			return PowerUp.PuState.SLOW_DOWN;
+			return PowerUp.PuState.KOZ;
 		}
 		if (40 < chance && chance <= 60) {
-			return PowerUp.PuState.FREEZE;
+			return PowerUp.PuState.KOZ;
 		}
 		if (60 < chance && chance <= 80) {
-			return PowerUp.PuState.INVERSE;
+			return PowerUp.PuState.KOZ;
 		}
 
-		return PowerUp.PuState.HEALTH;
+		return PowerUp.PuState.KOZ;
 	}
 
 	public static void normalSpeed(Player player) {

@@ -51,9 +51,9 @@ public class Collision {
 		}
 	}
 	
-	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent) {
+	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent, ArrayList<Zombie> z) {
 		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
-			p.getPowerupStats(p, player);
+			p.getPowerupStats(p, player, z);
 			p.getPowerdownStats(p, opponent);
 			return true;
 		}
