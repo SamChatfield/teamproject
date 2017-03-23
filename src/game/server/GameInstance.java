@@ -129,6 +129,12 @@ public class GameInstance extends Thread {
 		// RANDOMNESS
 		Random r = new Random();
 		int chancePU = r.nextInt(100) + 1;
+		
+		int xP = r.nextInt(40) - 20;
+		int yP = r.nextInt(40) - 20;
+		
+		
+
 
 		// WEAPONS
 		ArrayList<Weapon> newWeapon = new ArrayList<>();
@@ -152,14 +158,15 @@ public class GameInstance extends Thread {
 		long now1 = System.nanoTime();
 
 		for (PowerUp p : state.getPowerups()) {
-			if (now1 - p.time <= 1000000000l && !Collision.checkPowerupCollision(p, player1, player2)
+			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2)
 					&& !Collision.checkPowerupCollision(p, player2, player1)) {
 				newPowerup.add(p);
 			}
 		}
 
 		if (chancePU == 2) {
-			newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
+			//newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));			
+			newPowerup.add(new PowerUp(xP, yP, state.getMapData(),PowerUp.randomPU(), System.nanoTime()));
 		}
 
 		state.setPowerUp(newPowerup);

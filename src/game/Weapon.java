@@ -26,7 +26,7 @@ public class Weapon extends Entity {
 	}
 
 	public void getWeaponStats(Weapon weapon, Player player) {
-player.conversionMode = false;
+		player.conversionMode = false;
 		
 		if (weapon.getwState() == WeaponState.MAC_GUN) {
 			player.SHOOT_DELAY = 100000000L;
