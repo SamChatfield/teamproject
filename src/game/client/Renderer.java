@@ -59,9 +59,6 @@ public class Renderer {
 	public static final BufferedImage converter = ResourceLoader.converter();
 	public static final BufferedImage uzi = ResourceLoader.uzi();
 
-	//ArrayList<BufferedImage> weaponImages = new ArrayList<>();
-
-
 	public Rectangle menuButton;
 	public Rectangle exitButton;
 
@@ -77,7 +74,7 @@ public class Renderer {
 		this.state = state;
 		this.gameH = Client.GAME_DIMENSION.height;
 		this.gameW = Client.GAME_DIMENSION.width;
-
+	
 		tradeWinds = ResourceLoader.getTradewindsFont();
 	}
 
@@ -219,12 +216,11 @@ public class Renderer {
 
 			// Change to !null
 			if(weaponStates[i] == null) {
-
+				
 				int weaponSizeX = 30;
 				int weaponSizeY = 30;
 				int weaponX = xCoord + 5;
 				int weaponY = 595;
-
 				// Switch on index to determine which weapon to draw
 
 
@@ -246,8 +242,6 @@ public class Renderer {
 					break;
 
 				}
-
-
 			}
 			xCoord+= 45;
 		}
