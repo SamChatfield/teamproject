@@ -51,6 +51,7 @@ public class Player extends Entity {
         // Initially cannot convert zombies
         conversionMode = false;        
         getInventory()[0] = Weapon.WeaponState.PISTOL;
+        setCurrentlyEquipped(Weapon.WeaponState.PISTOL);
     }
 
     /**
