@@ -133,7 +133,8 @@ public class GameInstance extends Thread {
 		int xP = r.nextInt(40) - 20;
 		int yP = r.nextInt(40) - 20;
 		
-		
+		int xW = r.nextInt(40) - 20;
+		int yW = r.nextInt(40) - 20;
 
 
 		// WEAPONS
@@ -148,7 +149,9 @@ public class GameInstance extends Thread {
 		}
 
 		if (chancePU == 1) {
-			newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
+			newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));			
+			newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));			
+			//newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
 		}
 
 		state.setWeapons(newWeapon);

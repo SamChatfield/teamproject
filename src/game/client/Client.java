@@ -1,6 +1,8 @@
 package game.client;
 
 import game.ResourceLoader;
+import game.Weapon;
+import game.Weapon.WeaponState;
 import game.util.PlayerUpdatePacket;
 import game.util.User;
 import game.util.Vector;
@@ -30,8 +32,9 @@ import game.util.User;
 import game.util.Vector;
 
 /**
- * This class is the one that the player will run when they want to start the game.
- * When they click "play" in the menu, it will create a new 'Client' thread that will control input and data send/receive.
+ * This class is the one that the player will run when they want to start the
+ * game. When they click "play" in the menu, it will create a new 'Client'
+ * thread that will control input and data send/receive.
  */
 public class Client extends Canvas implements KeyListener, MouseListener {
 
@@ -39,7 +42,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	private static final String TITLE = "Outbreak";
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
 	static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
-	public static final int VIEW_SIZE = 10; // how many tiles can be seen in the game window e.g. 10 => 10x10 view
+	public static final int VIEW_SIZE = 10; // how many tiles can be seen in the
+											// game window e.g. 10 => 10x10 view
 	public static final int TILE_SIZE = 64;
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
@@ -61,18 +65,14 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	// Client state
 	private enum STATE {
-		START,
-		GAME,
-		END, 
-		EXIT;
+		START, GAME, END, EXIT;
 	}
 
 	// Menu state
 	private enum MSTATE {
-		MAIN,
-		HOPTIONS,
-		NONE;
+		MAIN, HOPTIONS, NONE;
 	}
+
 	private STATE currentState;
 	private MSTATE menuState;
 	private User user;
@@ -80,10 +80,14 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	private static String username;
 	private static String ipAddress;
 	private static int difficulty;
+
 	/**
 	 * Create a new Client object
-	 * @param state CurrentSlientState object
-	 * @param sender ClientSender object
+	 * 
+	 * @param state
+	 *            CurrentSlientState object
+	 * @param sender
+	 *            ClientSender object
 	 */
 	private Client(ClientGameState state, ClientSender sender, ClientReceiver receiver, User user) {
 		this.user = user;
@@ -100,17 +104,17 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 		// Set icon on macOS -- code from GitHub gist by bchapuis
 		try {
-		    Class util = Class.forName("com.apple.eawt.Application");
-		    Method getApplication = util.getMethod("getApplication", new Class[0]);
-		    Object application = getApplication.invoke(util);
-		    Class params[] = new Class[1];
-		    params[0] = Image.class;
-		    Method setDockIconImage = util.getMethod("setDockIconImage", params);
-		    setDockIconImage.invoke(application, ResourceLoader.iconImage());
+			Class util = Class.forName("com.apple.eawt.Application");
+			Method getApplication = util.getMethod("getApplication", new Class[0]);
+			Object application = getApplication.invoke(util);
+			Class params[] = new Class[1];
+			params[0] = Image.class;
+			Method setDockIconImage = util.getMethod("setDockIconImage", params);
+			setDockIconImage.invoke(application, ResourceLoader.iconImage());
 		} catch (Exception e) {
-		    // log exception
+			// log exception
 		}
-		
+
 		// Set icon on Windows
 		container.setIconImage(ResourceLoader.iconImage());
 		setIgnoreRepaint(true);
@@ -144,7 +148,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		keyArray = new boolean[256];
 		mouseButtonArray = new boolean[MouseInfo.getNumberOfButtons()];
 		mouseInside = false;
-//		keyPresses = new ArrayList<>();
+		// keyPresses = new ArrayList<>();
 	}
 
 	/**
@@ -162,7 +166,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		// Starts sound playing
 		soundManager.start();
 
-		while(running) {
+		while (running) {
 
 			// Displays the menu or options screen
 			while (currentState == STATE.START) {
@@ -171,19 +175,20 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				} else if (menuState == MSTATE.HOPTIONS) {
 					menu.renderHelpOptions();
 				}
-//				menuUpdate(menu);
+				// menuUpdate(menu);
 			}
 
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
 
-				if(!state.isConnected()) {
-					while(!state.isConnected()) {
-						//System.out.println("Client state: " + state.isConnected());
+				if (!state.isConnected()) {
+					while (!state.isConnected()) {
+						// System.out.println("Client state: " +
+						// state.isConnected());
 						renderer.renderWaitingForOpponent();
 						try {
 							Thread.sleep(200);
-						} catch(Exception e) {
+						} catch (Exception e) {
 
 						}
 					}
@@ -205,9 +210,12 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				// Render
 				renderer.render();
 
-				// We want each frame to be the active frame for OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
-				// So if the difference between now and the start of this loop (now assigned to lastLoopTime ready for the
-				// next loop) is less than this optimal time then we need to sleep the thread for the remaining time to fix
+				// We want each frame to be the active frame for
+				// OPTIMAL_TIME_DIFF nanoseconds to give 60 FPS
+				// So if the difference between now and the start of this loop
+				// (now assigned to lastLoopTime ready for the
+				// next loop) is less than this optimal time then we need to
+				// sleep the thread for the remaining time to fix
 				// at 60 FPS
 				now = System.nanoTime();
 				if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
@@ -221,16 +229,17 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				}
 
 				// Is the game over?
-				if(state.HasFinished()){
+				if (state.HasFinished()) {
 					currentState = STATE.END;
 
 				}
 			}
 
-			// If the game is over then we can pass the end state into the renderer.
+			// If the game is over then we can pass the end state into the
+			// renderer.
 			while (currentState == STATE.END) {
 				renderer.renderGameOver(state.getEndState());
-//				gameOverUpdate();
+				// gameOverUpdate();
 			}
 		}
 		System.exit(0);
@@ -238,6 +247,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	/**
 	 * Runs during the game to update the displayed game state.
+	 * 
 	 * @param delta
 	 */
 	private void update(double delta) {
@@ -257,7 +267,27 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		if (isKeyDown(KeyEvent.VK_S)) {
 			keyPresses.add("VK_S");
 		}
+		
+		
+		//Toggle Weapons
+		if (isKeyDown(KeyEvent.VK_1)) {
+			keyPresses.add("VK_1");
+		}
+		if (isKeyDown(KeyEvent.VK_2)) {
+			keyPresses.add("VK_2");
+		}
+		if (isKeyDown(KeyEvent.VK_3)) {
+			keyPresses.add("VK_3");
+		}
+		if (isKeyDown(KeyEvent.VK_4)) {
+			keyPresses.add("VK_4");
+		}
+		if (isKeyDown(KeyEvent.VK_5)) {
+			keyPresses.add("VK_5");
+		}
+		
 
+		
 		// Toggle conversion mode
 		if (isKeyDown(KeyEvent.VK_Z)) {
 			keyPresses.add("VK_Z");
@@ -274,35 +304,48 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		if (mouseInside && mousePos != null) {
 			fv = new Vector(mousePos.x - 320, 320 - mousePos.y).normalised();
 
-            if (isMouseButtonDown(MouseEvent.BUTTON1)) {
-            	keyPresses.add("BUTTON1");
+			if (isMouseButtonDown(MouseEvent.BUTTON1)) {
+				keyPresses.add("BUTTON1");
 				soundManager.bulletSound(player.canShoot());
 			}
 		}
 		// We need to do this in case fv is null
 		float x = -100;
 		float y = -100;
-		if(fv!=null) {
+		if (fv != null) {
 			x = fv.x();
 			y = fv.y();
 		}
 
-		sender.sendObject(new PlayerUpdatePacket(player.getData(),keyPresses,delta, x,y)); // We send an object to the server every tick.
+		sender.sendObject(new PlayerUpdatePacket(player.getData(), keyPresses, delta, x, y)); // We
+																								// send
+																								// an
+																								// object
+																								// to
+																								// the
+																								// server
+																								// every
+																								// tick.
 
-		updateLocalPlayer(keyPresses,delta,fv);
+		updateLocalPlayer(keyPresses, delta, fv);
 	}
 
 	/**
 	 * Update player status locally
-	 * @param keyPresses ArrayList of strings that represent key presses
-	 * @param delta Interpolation
-	 * @param fv Movement for x and y
+	 * 
+	 * @param keyPresses
+	 *            ArrayList of strings that represent key presses
+	 * @param delta
+	 *            Interpolation
+	 * @param fv
+	 *            Movement for x and y
 	 */
 	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {
 
-		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this update
-		for(String s:keyPresses) {
-			switch(s){
+		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this
+												// update
+		for (String s : keyPresses) {
+			switch (s) {
 			case "VK_W":
 				pdv.add(new Vector(0.0f, 1.0f));
 				break;
@@ -327,27 +370,35 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				break;
 			}
 		}
-		if(fv != null){
-			player.face(fv.x(),fv.y());
+		if (fv != null) {
+			player.face(fv.x(), fv.y());
 		}
-		Vector pnv = pdv.normalised(); // Player normal direction vector for this update
-		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual change in x this update
-		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual change in y this update
+		Vector pnv = pdv.normalised(); // Player normal direction vector for
+										// this update
+		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual
+																		// change
+																		// in x
+																		// this
+																		// update
+		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual
+																		// change
+																		// in y
+																		// this
+																		// update
 
 		player.move(pdx, pdy, state.getOtherPlayer());
 
 	}
 
 	/**
-	 * Display login prompt allowing to choose a username and the IP address of server
+	 * Display login prompt allowing to choose a username and the IP address of
+	 * server
 	 */
 	public static void loginPrompt() {
 
-
-
 		JTextField usernameEntry = new JTextField("a");
 		JTextField ipaddyEntry = new JTextField("127.0.0.1");
-		String[] difficultyStrings = { "Easy", "Medium", "Hard"};
+		String[] difficultyStrings = { "Easy", "Medium", "Hard" };
 		JComboBox difficultySelection = new JComboBox(difficultyStrings);
 		difficultySelection.setSelectedIndex(0);
 
@@ -355,46 +406,46 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox)e.getSource();
+				JComboBox cb = (JComboBox) e.getSource();
 			}
 		});
 
-		Object[] message = {
-				"Username: ", usernameEntry,
-				"Server IP Address: ", ipaddyEntry,
-				"Level Difficulty: ", difficultySelection
-		};
+		Object[] message = { "Username: ", usernameEntry, "Server IP Address: ", ipaddyEntry, "Level Difficulty: ",
+				difficultySelection };
 
 		String regex = "([0-9]+)[.]([0-9])+[.]([0-9])+[.][0-9]+";
-		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE);
+		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.PLAIN_MESSAGE);
 		if (option == JOptionPane.OK_OPTION) {
 			username = usernameEntry.getText();
 			String choice = (String) difficultySelection.getSelectedItem();
-			switch(choice) {
-				case "Easy":
-					difficulty = User.EASY;
-					break;
-				case "Medium":
-					difficulty = User.MED;
-					break;
-				case "Hard":
-					difficulty = User.HARD;
-					break;
+			switch (choice) {
+			case "Easy":
+				difficulty = User.EASY;
+				break;
+			case "Medium":
+				difficulty = User.MED;
+				break;
+			case "Hard":
+				difficulty = User.HARD;
+				break;
 			}
 
-			if(username.equals("")) {
+			if (username.equals("")) {
 				// Default value if no username selected
 				username = "a";
-			};
+			}
+			;
 			ipAddress = ipaddyEntry.getText();
 
 			// Pattern mattern correct format for IP address
 			/// XXX.XXX.XXX.XXX
-			if(!ipAddress.matches(regex)) {
-				JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX", "Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
+			if (!ipAddress.matches(regex)) {
+				JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX",
+						"Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
 				Client.main(new String[0]);
 			}
-			if(ipAddress.equals("")) {
+			if (ipAddress.equals("")) {
 				// Default value if no server address entered
 				ipAddress = "localhost";
 			}
@@ -406,6 +457,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	/**
 	 * Get the player object
+	 * 
 	 * @return Player object
 	 */
 	public Player getPlayer() {
@@ -424,32 +476,37 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 		try {
 			// Hardcoded port
-			outSocket = new Socket(ipAddress,4444);
+			outSocket = new Socket(ipAddress, 4444);
 			objOut = new ObjectOutputStream(outSocket.getOutputStream());
 			objIn = new ObjectInputStream(outSocket.getInputStream());
-		} catch(Exception e){
-			JOptionPane.showMessageDialog(null, "Server offline!", "Server hasn't been started", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Server offline!", "Server hasn't been started",
+					JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
 		User newUser = new User(username, difficulty);
-		// ClientSender and ClientReceiver objects to handle communication with server
-		ClientSender client_sender = new ClientSender(newUser, objOut,null);
+		// ClientSender and ClientReceiver objects to handle communication with
+		// server
+		ClientSender client_sender = new ClientSender(newUser, objOut, null);
 		ClientReceiver client_receiver = new ClientReceiver(newUser, objIn);
 
 		// Then create a client state for the client
 		ClientGameState state = new ClientGameState(newUser);
 
-		client_receiver.addState(state); // Must be called before starting the thread.
+		client_receiver.addState(state); // Must be called before starting the
+											// thread.
 		client_sender.addState(state);
-		// If this method didn't exist, stateface would need to be added above, but stateface relies on receiver.
+		// If this method didn't exist, stateface would need to be added above,
+		// but stateface relies on receiver.
 
 		// Starting threads
 		client_sender.start();
 		client_receiver.start();
 
-		Client client = new Client(state,client_sender, client_receiver, newUser);
+		Client client = new Client(state, client_sender, client_receiver, newUser);
 
-		// Create and start the client loop over the loop method of the client object.
+		// Create and start the client loop over the loop method of the client
+		// object.
 		// :: is a method reference since loop is an existing method,
 		// semantically the same as () -> client.loop() lambda expression.
 		Thread gameThread = new Thread(client::loop);
@@ -457,7 +514,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -466,6 +524,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+
 		// Collision box toggle
 		if (e.getKeyCode() == KeyEvent.VK_K) {
 			renderer.setShowCollBox(!renderer.getShowCollBox());
@@ -531,8 +590,9 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				currentState = STATE.START;
 				menuState = MSTATE.MAIN;
 				soundManager.playPressed();
-				//Resets the state, and sets HasFinished and Connected to false. This allows a new initial state
-				//for a new game
+				// Resets the state, and sets HasFinished and Connected to
+				// false. This allows a new initial state
+				// for a new game
 				state.resetState(user);
 				state.setHasFinished(false);
 				state.setConnected(false);
@@ -568,7 +628,9 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	/**
 	 * Get if a current key is down/pressed on the keyboard
-	 * @param keyCode Key to check
+	 * 
+	 * @param keyCode
+	 *            Key to check
 	 * @return Whether key is pressed on keyboard
 	 */
 	public boolean isKeyDown(int keyCode) {
@@ -577,7 +639,9 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	/**
 	 * Check if mouse button is down
-	 * @param button Button to check
+	 * 
+	 * @param button
+	 *            Button to check
 	 * @return Whether mouse button is currently down/clicked
 	 */
 	public boolean isMouseButtonDown(int button) {
