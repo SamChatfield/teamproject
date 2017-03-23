@@ -1,11 +1,6 @@
 package game.client;
 
-import game.Bullet;
-import game.Collision;
-import game.Entity;
-import game.ResourceLoader;
-import game.Weapon;
-import game.Weapon.WeaponState;
+import game.*;
 import game.map.MapData;
 import game.util.DataPacket;
 
@@ -38,8 +33,6 @@ public class Player extends Entity {
     private static final boolean isActivePD = false;
     private static final float appearTimePD = 0;
 
-    private static final WeaponState[] inventory = new WeaponState[5];  
-    
     
     /**
      * Create a new Player object in the game
@@ -57,7 +50,8 @@ public class Player extends Entity {
         
         // Initially cannot convert zombies
         conversionMode = false;        
-        inventory[0] = Weapon.WeaponState.PISTOL;
+        getInventory()[0] = Weapon.WeaponState.PISTOL;
+        setCurrentlyEquipped(Weapon.WeaponState.PISTOL);
     }
 
     /**
@@ -223,8 +217,4 @@ public class Player extends Entity {
         this.showCollBox = showCollBox;
     }
 
-    
-	public WeaponState[] getInventory(){
-		return inventory;
-	}
 }

@@ -1,5 +1,7 @@
 package game.util;
 
+import game.Weapon;
+
 import java.io.Serializable;
 
 /**
@@ -21,8 +23,36 @@ public class DataPacket implements Serializable {
 	private float appearTimePD;
 	private int attackDamage;
 
+	// Used by zombies
+	private boolean alive;
 
-		/**
+	// Used by players
+	private static final Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
+	private Weapon.WeaponState currentlyEquipped;
+
+
+	public void setCurrentlyEquipped(Weapon.WeaponState currentlyEquipped) {
+		this.currentlyEquipped = currentlyEquipped;
+	}
+
+	public Weapon.WeaponState getCurrentlyEquipped() {
+		return currentlyEquipped;
+	}
+
+
+	public Weapon.WeaponState[] getInventory() {
+		return inventory;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	/**
 	 * Object that the data packet refers to
 	 */
 	public enum Type {
@@ -254,6 +284,7 @@ public class DataPacket implements Serializable {
 		this.moveSpeed = moveSpeed;
 		this.health = health;
 		this.type = t;
+		this.alive = true;
 	}
 	
 	
@@ -268,5 +299,7 @@ public class DataPacket implements Serializable {
 		this.appearTime = appearTime;
 		
 		this.type = t;
+
+		this.alive = true;
 	}
 }

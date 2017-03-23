@@ -1,18 +1,11 @@
 package game.server;
 
-import game.Bullet;
-import game.Collision;
-import game.Zombie;
+import game.*;
 import game.client.Player;
-import game.util.DataPacket;
 import game.util.EndState;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.Random;
-import game.PowerUp;
-import game.Weapon;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie
@@ -101,27 +94,28 @@ public class GameInstance extends Thread {
 		ArrayList<Zombie> newZombies = new ArrayList<>();
 
 		for (Zombie z : state.getZombies()) {
-			if (z.getHealth() != 0) {
-				newZombies.add(z);
-			}else{
-				state.getDeadZombies().add(z.getData()); // if they are dead, add them to the appropriate list.
+			if (z.getHealth() == 0) {
+				z.setAlive(false);
 			}
-		}
+            newZombies.add(z);
+        }
 
 		for (Zombie z : newZombies) {
-			for (Player player : players) {
-				if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
-					z.followDirection(player);
-				} else {
-					if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-						z.newMovingDir();
-					}
-				}
-				// Check if player has collided with a zombie
-				Collision.checkCollision(z, player);
-			}
-			// Apply zombie movements on map
-			z.move(delta);
+		    if(z.isAlive()) {
+                for (Player player : players) {
+                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
+                        z.followDirection(player);
+                    } else {
+                        if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+                            z.newMovingDir();
+                        }
+                    }
+                    // Check if player has collided with a zombie
+                    Collision.checkCollision(z, player);
+                }
+                // Apply zombie movements on map
+                z.move(delta);
+            }
 		}
 
 		state.setZombies(newZombies);

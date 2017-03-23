@@ -1,8 +1,8 @@
 package game.util;
 
-import java.io.Serializable;
-
 import game.client.Player;
+
+import java.io.Serializable;
 
 /**
  * Class for passing information about why the game has ended to each player

@@ -82,7 +82,6 @@ public class ClientGameState extends GameState {
         this.bulletDataPackets = updatedState.getBullets();
         this.powerups = updatedState.getPowerups();
         this.weapons = updatedState.getWeapons();
-		this.deadZombies = updatedState.getDeadZombies();
 		updateTime(updatedState.getTimeRemaining());
 	}
 
@@ -140,5 +139,15 @@ public class ClientGameState extends GameState {
 			return player1;
 		}
 		return null;
+	}
+
+	public ArrayList<DataPacket> getAliveZombies(){
+		ArrayList<DataPacket> a = new ArrayList<>();
+		for(DataPacket z:getZombieDataPackets()){
+			if(z.isAlive()){
+				a.add(z);
+			}
+		}
+		return a;
 	}
 }

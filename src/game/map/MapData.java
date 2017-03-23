@@ -1,12 +1,12 @@
 package game.map;
 
-import java.awt.Color;
+import game.Entity;
+import game.ResourceLoader;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
-
-import game.Entity;
-import game.ResourceLoader;
 
 /**
  * Class to represent Map Data - The map itself, the size of the map, and the types of tile on the map
