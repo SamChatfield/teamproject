@@ -1,10 +1,12 @@
 package game;
 
-import java.io.Serializable;
-import java.util.Random;
-//yolo pls
 import game.client.Player;
 import game.map.MapData;
+
+import java.io.Serializable;
+import java.util.Random;
+
+//yolo pls
 
 public class PowerUp extends Entity implements Serializable {
 	private PuState pState;

@@ -43,14 +43,13 @@ public class Collision {
 			Player player) {
 		for (int i = 0; i < zombies.size(); i++) {
 			Zombie z = zombies.get(i);
-			if (!z.getUsername().equals(player.getUsername()) && b.getCollisionBox().intersects(z.getCollisionBox())) {
+			if (z.isAlive() && !z.getUsername().equals(player.getUsername()) && b.getCollisionBox().intersects(z.getCollisionBox())) {
 				b.damage(z, 25, player.conversionMode);
 				b.active = false;
 				break;
 			}
 		}
 	}
-	
 	
 	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent) {
 		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
@@ -60,13 +59,11 @@ public class Collision {
 		}
 		return false;
 	}
-	
-	
+
 	
 	public static boolean checkWeaponCollision(Weapon w, Player player) {
 		if (w.getCollisionBox().intersects(player.getCollisionBox())) {		
 			w.addToInventory(w.getwState(), player);
-			
 			return true;
 		}
 		return false;

@@ -1,17 +1,16 @@
 package game.map;
 
-import java.awt.Color;
+import game.ResourceLoader;
+import game.client.Client;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-
-import game.ResourceLoader;
-import game.client.Client;
 
 /**
  * Parse and create the map for the game

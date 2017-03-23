@@ -1,10 +1,10 @@
 package game.server;
 
+import game.util.SendableState;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ConcurrentModificationException;
-
-import game.util.SendableState;
 
 /**
  * Class for managing sending from the server to the specified client

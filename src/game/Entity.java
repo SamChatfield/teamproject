@@ -284,4 +284,24 @@ public class Entity implements Serializable {
 	public void setAttackDamage(int newDamage){
 		data.setAttackDamage(newDamage);
 	}
+
+	public boolean isAlive(){
+		return data.isAlive();
+	}
+
+	public void setAlive(boolean b) {
+		data.setAlive(b);
+	}
+
+	public Weapon.WeaponState[] getInventory(){
+		return data.getInventory();
+	}
+
+	public void setCurrentlyEquipped(Weapon.WeaponState newWeapon){
+		data.setCurrentlyEquipped(newWeapon);
+	}
+
+	public Weapon.WeaponState getCurrentlyEquipped(){
+		return data.getCurrentlyEquipped();
+	}
 }

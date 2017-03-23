@@ -13,11 +13,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.ArrayList;
-import java.util.Random;
-
-import static game.PowerUp.PuState.FREEZE;
 
 /**
  * Renders the game on screen
@@ -86,7 +82,6 @@ public class Renderer {
 		int timeRemaining = state.getTimeRemaining();
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
-        ArrayList<DataPacket> deadZombies = state.getDeadZombies();
 
         MapData mapData = state.getMapData();
 		ArrayList<PowerUp> powerups = state.getPowerups();
@@ -105,11 +100,15 @@ public class Renderer {
 		// Draw the map
 		drawMap(g2d, mapData, player);
 
-        for(DataPacket d: deadZombies){
-            drawDeadZombie(g2d,d,player,(deadZombies.indexOf(d)%3)+1);
-        }
 
-        // Draw the player
+		// Draw the zombies that are dead first
+		for (DataPacket z : zombiePackets) {
+			if(!z.isAlive()) {
+				drawDeadZombie(g2d, player, z,1);
+			}
+		}
+
+		// Draw the player
 		player.draw(g2d);
 
 		// Draw relative to other player
@@ -124,13 +123,14 @@ public class Renderer {
 
 		// Draw the zombies
 		for (DataPacket z : zombiePackets) {
-			drawZombie(g2d, player, z);
+			if(z.isAlive()){ // we don't want to draw the dead zombies again.
+				drawZombie(g2d, player, z);
+			}
 		}
 		
 		for(PowerUp p : powerups){
 			drawPowerup(g2d, p, player);
 		}
-
 
 		for(Weapon w : weapons){
 			drawWeapon(g2d, w, player);
@@ -182,7 +182,8 @@ public class Renderer {
 		// Display number of converted zombies
 		int playerZombies = player.getNumConvertedZombies();
 		int opponentZombies = state.getOtherPlayer().getNumConvertedZombies();
-		int totalZombies = zombiePackets.size();
+		int totalZombies = state.getAliveZombies().size();
+
 
 		// Zombie counts
 		ArrayList<Integer> zombieCounts = new ArrayList<Integer>();
@@ -462,7 +463,7 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-    private void drawDeadZombie(Graphics2D g2d, DataPacket d, Player player, int i) {
+    private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
         int w = Renderer.splatter1.getWidth();
         int h = Renderer.splatter1.getHeight();
 
