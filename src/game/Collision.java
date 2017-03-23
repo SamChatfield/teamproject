@@ -49,9 +49,32 @@ public class Collision {
 			}
 		}
 	}
+	
+	
+	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent) {
+		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
+			p.getPowerupStats(p, player);
+			p.getPowerdownStats(p, opponent);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	public static boolean checkWeaponCollision(Weapon w, Player player) {
+		if (w.getCollisionBox().intersects(player.getCollisionBox())) {
+			w.getWeaponStats(w, player);
+			return true;
+		}
+		return false;
+	}
+	
+	
 
 	public static boolean playersColliding(Entity player, Entity opponent) {
 		return player.getCollisionBox().intersects(opponent.getCollisionBox());
 	}
+
 
 }

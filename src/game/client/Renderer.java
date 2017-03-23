@@ -1,7 +1,9 @@
 package game.client;
 
 import game.CollisionBox;
+import game.PowerUp;
 import game.ResourceLoader;
+import game.Weapon;
 import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
@@ -69,6 +71,8 @@ public class Renderer {
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
 		MapData mapData = state.getMapData();
+		ArrayList<PowerUp> powerups = state.getPowerups();
+		ArrayList<Weapon> weapons = state.getWeapons();
 
 		// Set up the graphics instance for the current back buffer
 		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
@@ -100,7 +104,16 @@ public class Renderer {
 		for (DataPacket z : zombiePackets) {
 			drawZombie(g2d, player, z);
 		}
+		
+		for(PowerUp p : powerups){
+			drawPowerup(g2d, p, player);
+		}
+		
 
+		for(Weapon w : weapons){
+			drawWeapon(g2d, w, player);
+		}
+		
 		// Draw lighting
 		drawLighting(g2d);
 
@@ -426,5 +439,27 @@ public class Renderer {
 		g2d.drawImage(bulletImage, drawX, drawY, null);
 		g2d.setTransform(at);
 	}
+	
+	
+	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {
+		int w = Renderer.freezePlayer.getWidth();
+		int h = Renderer.freezePlayer.getHeight();
+		
+		Point drawPoint = player.relativeDrawPoint(p.getx(), p.gety(), w, h);
+		int drawX = drawPoint.x;
+		int drawY = drawPoint.y;
+		g2d.drawImage(Renderer.freezePlayer, drawX, drawY, null);
+	}
 
+	
+	private void drawWeapon(Graphics2D g2d, Weapon g, Player player) {
+		int w = Renderer.moreHealth.getWidth();
+		int h = Renderer.moreHealth.getHeight();
+		
+		Point drawPoint = player.relativeDrawPoint(g.getx(), g.gety(), w, h);
+		int drawX = drawPoint.x;
+		int drawY = drawPoint.y;
+		g2d.drawImage(Renderer.moreHealth, drawX, drawY, null);
+	}
+	
 }

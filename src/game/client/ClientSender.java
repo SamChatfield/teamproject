@@ -39,11 +39,11 @@ public class ClientSender extends Thread {
 		}
 	}
 
+
 	// Main method to run when thread starts
 	public void run() {
 		System.out.println("Client: ClientSender running");
 		sendObject(user);
-
 		// Keep running, sending the player object from the client game state every so often.
 		while(true) {
 			try {
@@ -51,9 +51,7 @@ public class ClientSender extends Thread {
 			} catch (Exception e) {
 				System.err.println("Exception in ClientSender: " + e.getMessage());
 				e.printStackTrace();
-
 				// System.exit(1);
-
 			}
 		}
 	}

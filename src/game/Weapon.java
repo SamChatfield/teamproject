@@ -1,67 +1,88 @@
 package game;
 
-import java.awt.Graphics2D;
+import java.util.Random;
+import game.PowerUp.PuState;
+import game.client.Player;
+import game.map.MapData;
 
-// IS THIS CLASS STILL NEEDED?
+public class Weapon extends Entity {
+	private WeaponState wState;
+	public long time;
+	public float x;
+	public float y;
 
-public class Weapon {
-	private static final int WIDTH = 5;
-	private static final int HEIGHT = 5;
+	public enum WeaponState {
+		PISTOL, MAC_GUN, SHOTGUN, UZI, CONVERT, FLAME_THROWER //  GRENADE
+												// Doesn't work yet
+	}
 
-	int x = 10;
-	int y = 10;
-	int xv = 10000000;
-	int yv = 10000000;
-	int direction = 0;
-
-	public Weapon(int direction, int x, int y, int xv, int yv) {
-
-		this.direction = direction;
+	public Weapon(float x, float y, MapData mapData, WeaponState state, long time) {
+		super(x, y, mapData);
+		this.setwState(state);
+		this.time = time;
 		this.x = x;
 		this.y = y;
-		this.yv = yv;
-		this.xv = xv;
-
+		this.time = time;
 	}
 
-	public void paint(Graphics2D g) {
-		g.fillRect(x, y, WIDTH, HEIGHT);
+	public void getWeaponStats(Weapon weapon, Player player) {
+		player.conversionMode = false;
+		
+		if (weapon.getwState() == WeaponState.MAC_GUN) {
+			player.SHOOT_DELAY = 100000000L;
+			Bullet.setBulletSpeed(0.3f);
+		} if (weapon.getwState() == WeaponState.PISTOL) {
+			player.SHOOT_DELAY = 500000000L;
+			Bullet.setBulletSpeed( 0.15f);
+			Bullet.setFadeDistance(0.4);
+		} if (weapon.getwState() == WeaponState.UZI) {
+			player.SHOOT_DELAY = 100000000L;
+			Bullet.setBulletSpeed(0.3f);
+			Bullet.setFadeDistance(3);
+		} if (weapon.getwState() == WeaponState.FLAME_THROWER) {
+			player.SHOOT_DELAY = 100000L;
+			Bullet.setFadeDistance(1);
+		} if (weapon.getwState() == WeaponState.CONVERT) {
+			player.SHOOT_DELAY = 500000000L;
+			Bullet.setBulletSpeed(0.15f);
+			player.conversionMode = true;
+		} 
+		//Doesn't work yet
+		if (weapon.getwState() == WeaponState.SHOTGUN) {
+			player.SHOOT_DELAY = 500000000L;
+			// add 3 angled bullets per shot
+		} 
 	}
 
-	public void move() {
-		if (direction == -2) {
-			x = x + xv;
+	public static WeaponState randomW() {
+		Random r = new Random();
+		int chance = r.nextInt(100) + 1;
+		if (chance <= 25) {
+			return Weapon.WeaponState.MAC_GUN;
 		}
-		if (direction == 2) {
-			x = x + xv;
+		if (25 < chance && chance <= 50) {
+			return Weapon.WeaponState.UZI;
 		}
-
-		if (direction == 1) {
-			y = y + yv;
+		if (50 < chance && chance <= 75) {
+			return Weapon.WeaponState.CONVERT;
 		}
-		if (direction == -1) {
-			y = y + yv;
-		}
-
-
+		return Weapon.WeaponState.PISTOL;
 	}
 
-	public int getX() {
+	public WeaponState getwState() {
+		return wState;
+	}
+
+	public void setwState(WeaponState wState) {
+		this.wState = wState;
+	}
+
+	public float getx() {
 		return x;
 	}
 
-	public int getY() {
+	public float gety() {
 		return y;
 	}
 
-	public static int getWidth() {
-		return WIDTH;
-	}
-
-	public static int getHeight() {
-		return HEIGHT;
-	}
-
-	
-	
 }

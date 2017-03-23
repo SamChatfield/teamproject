@@ -1,9 +1,12 @@
 package game.util;
 
+
 import game.server.ServerGameState;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import game.PowerUp;
+import game.Weapon;
 
 /**
  * Sendable state that is sent to the server to handle status of the game
@@ -14,8 +17,12 @@ public class SendableState implements Serializable {
 	private String mapImage;
 	private ArrayList<DataPacket> zombies;
 	private ArrayList<DataPacket> bullets;
+	
+	private ArrayList<PowerUp> powerups;
+	private ArrayList<Weapon> weapons;
 
 	private boolean hasFinished;
+	
 
 	private DataPacket player1;
 	private DataPacket player2;
@@ -50,6 +57,15 @@ public class SendableState implements Serializable {
 	 */
 	public ArrayList<DataPacket> getZombies() {
 		return zombies;
+	}
+	
+	
+	public ArrayList<PowerUp> getPowerups(){
+		return powerups;
+	}
+	
+	public ArrayList<Weapon> getWeapons(){
+		return weapons;
 	}
 
 	/**
@@ -103,7 +119,9 @@ public class SendableState implements Serializable {
 		this.timeRemaining = state.getTimeRemaining();
 		this.mapImage = state.getMapImage();
 		this.bullets = state.getSendableBullets();
-
+		this.powerups = state.getPowerups();
+		this.weapons = state.getWeapons();
+		
 		this.hasFinished = state.HasFinished();
 	}
 }

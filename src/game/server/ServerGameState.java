@@ -9,6 +9,9 @@ import game.util.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import game.PowerUp;
+import game.Weapon;
+
 /**
  * The game state of the server at any one time.
  */
@@ -18,6 +21,7 @@ public class ServerGameState extends GameState {
 	private String player2Username;
 	private int zombieCount = 5;
 	private int difficulty;
+
 
     public ServerGameState(String player1Username, String player2Username, int difficulty){
         this.player1Username = player1Username;
@@ -70,6 +74,14 @@ public class ServerGameState extends GameState {
 		this.player1 = new Player(13,0 ,mapData, player1Username);
 		this.player2 = new Player(15 ,0 ,mapData, player2Username);
 
+		ArrayList<PowerUp> startPowerups = new ArrayList<>();
+		//startPowerups.add(new PowerUp (13, 3, mapData, System.nanoTime()) );
+		this.powerups = startPowerups;
+		
+		
+		ArrayList<Weapon> startWeapons = new ArrayList<>();
+		this.weapons = startWeapons;
+		
 		ArrayList<Zombie> zombieFactory = new ArrayList<>();
 		try{
 			for (int i = 0; i < zombieCount; i++) {
@@ -120,6 +132,15 @@ public class ServerGameState extends GameState {
         }
         return data;
     }
+    
+
+	public ArrayList<PowerUp> getSendablePowerups() {
+		return powerups;
+	}
+	
+	public ArrayList<Weapon> getSendableWeapons() {
+		return weapons;
+	}
 
 	/**
 	 * Update a player in the game state
