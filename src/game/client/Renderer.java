@@ -74,7 +74,7 @@ public class Renderer {
 		this.state = state;
 		this.gameH = Client.GAME_DIMENSION.height;
 		this.gameW = Client.GAME_DIMENSION.width;
-	
+
 		tradeWinds = ResourceLoader.getTradewindsFont();
 	}
 
@@ -216,11 +216,12 @@ public class Renderer {
 
 			// Change to !null
 			if(weaponStates[i] == null) {
-				
+
 				int weaponSizeX = 30;
 				int weaponSizeY = 30;
 				int weaponX = xCoord + 5;
 				int weaponY = 595;
+
 				// Switch on index to determine which weapon to draw
 
 
