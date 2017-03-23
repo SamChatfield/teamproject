@@ -12,46 +12,60 @@ public class Weapon extends Entity {
 	public float y;
 
 	public enum WeaponState {
-		PISTOL, MAC_GUN, SHOTGUN, UZI, CONVERT, FLAME_THROWER //  GRENADE
-												// Doesn't work yet
+		PISTOL, MAC_GUN, SHOTGUN, UZI, CONVERT, FLAME_THROWER // GRENADE
+		// Doesn't work yet
+	}
+
+	public WeaponState getwState() {
+		return wState;
+	}
+
+	public void setwState(WeaponState wState) {
+		this.wState = wState;
 	}
 
 	public Weapon(float x, float y, MapData mapData, WeaponState state, long time) {
 		super(x, y, mapData);
-		this.setwState(state);
+		this.wState = state;
 		this.time = time;
 		this.x = x;
 		this.y = y;
 		this.time = time;
 	}
 
-	public void getWeaponStats(Weapon weapon, Player player) {
+	public static void getWeaponStats(WeaponState w, Player player) {
 		player.conversionMode = false;
-		
-		if (weapon.getwState() == WeaponState.MAC_GUN) {
-			player.SHOOT_DELAY = 100000000L;
-			Bullet.setBulletSpeed(0.3f);
-		} if (weapon.getwState() == WeaponState.PISTOL) {
-			player.SHOOT_DELAY = 500000000L;
-			Bullet.setBulletSpeed(0.3f);
-			Bullet.setFadeDistance(5);
-		} if (weapon.getwState() == WeaponState.UZI) {
-			player.SHOOT_DELAY = 100000000L;
-			Bullet.setBulletSpeed(0.3f);
-			Bullet.setFadeDistance(3);
-		} if (weapon.getwState() == WeaponState.FLAME_THROWER) {
-			player.SHOOT_DELAY = 100000L;
-			Bullet.setFadeDistance(1);
-		} if (weapon.getwState() == WeaponState.CONVERT) {
-			player.SHOOT_DELAY = 500000000L;
-			Bullet.setBulletSpeed(0.15f);
-			player.conversionMode = true;
-		} 
-		//Doesn't work yet
-		if (weapon.getwState() == WeaponState.SHOTGUN) {
-			player.SHOOT_DELAY = 500000000L;
-			// add 3 angled bullets per shot
-		} 
+
+		if (w != null) {
+
+			if (w == WeaponState.MAC_GUN) {
+				player.SHOOT_DELAY = 100000000L;
+				Bullet.setBulletSpeed(0.3f);
+				Bullet.setFadeDistance(5);
+			} if (w == WeaponState.PISTOL) {
+				player.SHOOT_DELAY = 500000000L;
+				Bullet.setBulletSpeed( 0.15f);
+				Bullet.setFadeDistance(5);
+			} if (w == WeaponState.UZI) {
+				player.SHOOT_DELAY = 100000000L;
+				Bullet.setBulletSpeed(0.3f);
+				Bullet.setFadeDistance(3);
+			} if (w == WeaponState.FLAME_THROWER) {
+				player.SHOOT_DELAY = 100000L;
+				Bullet.setBulletSpeed(0.3f);
+				Bullet.setFadeDistance(1);
+			} if (w == WeaponState.CONVERT) {
+				player.SHOOT_DELAY = 500000000L;
+				Bullet.setBulletSpeed( 0.15f);
+				Bullet.setFadeDistance(5);
+				player.conversionMode = true;
+			} 
+			//Doesn't work yet
+			if (w == WeaponState.SHOTGUN) {
+				player.SHOOT_DELAY = 500000000L;
+				// add 3 angled bullets per shot
+			} 
+		}
 	}
 
 	public static WeaponState randomW() {
@@ -69,12 +83,42 @@ public class Weapon extends Entity {
 		return Weapon.WeaponState.PISTOL;
 	}
 
-	public WeaponState getwState() {
-		return wState;
+	public static int getIndex(WeaponState w) {
+		switch (w) {
+		case PISTOL:
+			return 0;
+		case UZI:
+			return 1;
+		case SHOTGUN:
+			return 2;
+		case MAC_GUN:
+			return 3;
+		case CONVERT:
+			return 4;
+		default:
+			break;
+		}
+		return 0;
+
 	}
 
-	public void setwState(WeaponState wState) {
-		this.wState = wState;
+	public void addToInventory(WeaponState w, Player p) {
+		if (p.getInventory()[0] == null) {
+			p.getInventory()[0] = WeaponState.PISTOL;
+		}
+
+		int index = Weapon.getIndex(w);
+
+		if (p.getInventory()[index] == null) {
+			p.getInventory()[index] = w;
+		}
+
+		System.out.println(p.getInventory()[0]);
+		System.out.println(p.getInventory()[1]);
+		System.out.println(p.getInventory()[2]);
+		System.out.println(p.getInventory()[3]);
+		System.out.println(p.getInventory()[4]);
+
 	}
 
 	public float getx() {
