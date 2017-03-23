@@ -142,16 +142,16 @@ public class GameInstance extends Thread {
 		long now = System.nanoTime();
 
 		for (Weapon w : state.getWeapons()) {
-			if (now - w.time <= 1000000000l && !Collision.checkWeaponCollision(w, player1)
+			if (now - w.time <= 10000000000l && !Collision.checkWeaponCollision(w, player1)
 					&& !Collision.checkWeaponCollision(w, player2)) {
 				newWeapon.add(w);
 			}
 		}
 
 		if (chancePU == 1) {
-			newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));			
-			newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));			
-			//newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
+			//newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
+			//newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));
+			newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
 		}
 
 		state.setWeapons(newWeapon);
