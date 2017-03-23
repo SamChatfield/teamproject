@@ -148,7 +148,7 @@ public class GameInstance extends Thread {
 		}
 
 		if (chancePU == 1) {
-			newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
+			newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.randomW(), System.nanoTime()));
 		}
 
 		state.setWeapons(newWeapon);
