@@ -1,16 +1,5 @@
 package game.client;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
 import game.CollisionBox;
 import game.PowerUp;
 import game.ResourceLoader;
@@ -20,7 +9,12 @@ import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
 import game.util.EndState;
+
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Renders the game on screen
@@ -239,7 +233,7 @@ public class Renderer {
 				g2d.drawImage(ResourceLoader.pistol(weaponObtained), weaponX, weaponY, null);
 				break;
 			case UZI:
-				g2d.drawImage(ResourceLoader.converter(weaponObtained), weaponX, weaponY, null);
+				g2d.drawImage(ResourceLoader.uzi(weaponObtained), weaponX, weaponY, null);
 				break;
 			case SHOTGUN:
 				g2d.drawImage(ResourceLoader.shotgun(weaponObtained), weaponX, weaponY, 40, 40, null);
@@ -248,7 +242,7 @@ public class Renderer {
 				g2d.drawImage(ResourceLoader.machineGun(weaponObtained), weaponX, weaponY, 38, 38, null);
 				break;
 			case CONVERT:
-				g2d.drawImage(ResourceLoader.uzi(weaponObtained), weaponX, weaponY, null);
+				g2d.drawImage(ResourceLoader.converter(weaponObtained), weaponX, weaponY, null);
 				break;
 
 			}

@@ -51,15 +51,6 @@ public class Entity implements Serializable {
 		collisionBox = new CollisionBox(this);
 	}
 
-	
-	/**
-	 * Get the type of the DataPacket within this entity
-	 * @return Type of data packet
-	 */
-	public DataPacket.Type getType(){
-		return getType();
-	}
-
 	/**
 	 * Get the time of the last attack made by this entity
 	 * @return Time of last attack
