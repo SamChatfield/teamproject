@@ -42,7 +42,8 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetBullets() {
-		assertNotNull(sState.getBullets());
+		fail("Not yet implemented"); // TODO
+		//assertNotNull(sState.getBullets());
 	}
 
 	/**

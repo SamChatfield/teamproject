@@ -5,6 +5,8 @@ package game;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import game.PowerUp.PuState;
@@ -34,8 +36,9 @@ public class PowerUpTest {
 	Player playerLow = new Player(1, 1, null, "ryan"); 
 	Bullet bullet = new Bullet(playerHigh, 1, 1, 1, 1, null);
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
-	Zombie zombie = new Zombie(1,1,null, 49);
 	
+	Zombie zombie = new Zombie(1,1,null, 49);
+	ArrayList<Zombie> zombies = new ArrayList<>();
 	
 
 	
@@ -70,27 +73,27 @@ public class PowerUpTest {
 	 */
 	@Test
 	public final void testGetPowerupStats() {
-		powerH.getPowerupStats(powerH, playerHigh);
+		powerH.getPowerupStats(powerH, playerHigh, zombies);
 		assertNotNull(playerHigh.getAppearTime());
 		assertNotNull(playerHigh.getMoveSpeed());
 		assertNotNull(playerHigh.getIsActive());
 		
 		playerLow.setHealth(10);
-		powerH.getPowerupStats(powerH, playerLow);
+		powerH.getPowerupStats(powerH, playerLow, zombies);
 		assertNotNull(playerLow.getAppearTime());
 		assertNotNull(playerLow.getMoveSpeed());
 		assertNotNull(playerLow.getIsActive());
 		assertNotNull(playerLow.getHealth());
 		
 		playerHigh.setIsActive(true);
-		powerSp.getPowerupStats(powerSp, playerHigh);
+		powerSp.getPowerupStats(powerSp, playerHigh, zombies);
 		assertNotNull(playerHigh.getAppearTime());
 		assertNotNull(playerHigh.getMoveSpeed());
 		assertNotNull(playerHigh.getIsActive());
 		
 		
 		playerLow.setIsActive(false);
-		powerSp.getPowerupStats(powerSp, playerLow);
+		powerSp.getPowerupStats(powerSp, playerLow, zombies);
 		assertNotNull(playerLow.getAppearTime());
 		assertNotNull(playerLow.getMoveSpeed());
 		assertNotNull(playerLow.getIsActive());

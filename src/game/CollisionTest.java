@@ -67,7 +67,7 @@ public class CollisionTest {
 	 */
 	@Test
 	public final void testCheckPlayerCollision() {
-		coll.checkPlayerCollision(bullet, player);
+		coll.checkPlayerCollision(bullet, player, opponent);
 		assertEquals(25,player.getHealth(), 0.01);
 		assertEquals(50,player1.getHealth(), 0.01);
 	}
@@ -89,8 +89,8 @@ public class CollisionTest {
 	
 	@Test
 	public final void testCheckPowerupCollision() {
-		coll.checkPowerupCollision(power, playerPU, opponent );
-		coll.checkPowerupCollision(power, opponent, playerPU );
+		coll.checkPowerupCollision(power, playerPU, opponent, zombies );
+		coll.checkPowerupCollision(power, opponent, playerPU, zombies );
 	}
 	
 	@Test

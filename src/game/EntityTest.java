@@ -49,6 +49,7 @@ public class EntityTest {
 	 * Test method for {@link game.client.Player#Player(float, float, game.map.MapData, java.lang.String)}.
 	 */
 	Player player = new Player(1, 1, null, "ryan"); 
+	Player player1 = new Player(1, 1, null, "becca");
 	Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
 	Entity entityPU = new Entity(1,1,null);
@@ -138,7 +139,7 @@ public class EntityTest {
 	@Test
 	public final void testDrawRelativeToOtherPlayer() {
 		player.setShowCollBox(true);
-		player.drawRelativeToOtherPlayer(g2d, player);
+		player.drawRelativeToOtherPlayer(g2d, player, player1);
 	}
 
 
