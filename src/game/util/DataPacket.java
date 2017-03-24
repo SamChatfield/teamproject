@@ -314,5 +314,6 @@ public class DataPacket implements Serializable {
 		this.type = t;
 
 		this.alive = true;
+		this.shootDelay = 500000000L;
 	}
 }
