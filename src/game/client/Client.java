@@ -395,8 +395,11 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			}
 		});
 
-		Object[] message = { "Username: ", usernameEntry, "Server IP Address: ", ipaddyEntry, "Level Difficulty: ",
-				difficultySelection };
+		Object[] message = {
+				"Username (max 20 chars): ", usernameEntry,
+				"Server IP Address: ", ipaddyEntry,
+				"Level Difficulty: ", difficultySelection
+		};
 
 		String regex = "([0-9]+)[.]([0-9])+[.]([0-9])+[.][0-9]+";
 		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE,
@@ -426,8 +429,11 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			// Pattern mattern correct format for IP address
 			/// XXX.XXX.XXX.XXX
 			if (!ipAddress.matches(regex)) {
-				JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX",
-						"Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX", "Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
+				Client.main(new String[0]);
+			}
+			else if(username.length() > 20) {
+				JOptionPane.showMessageDialog(null, "Username must be no longer than 20 characters", "Username too long", JOptionPane.WARNING_MESSAGE);
 				Client.main(new String[0]);
 			}
 			if (ipAddress.equals("")) {
