@@ -112,7 +112,7 @@ public class Renderer {
 
 		// Draw relative to other player
 		if(state.getOtherPlayer() != null){
-			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
+			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player, state.getOtherPlayer());
 		}
 
 		// Draw the bullets

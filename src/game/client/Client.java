@@ -108,6 +108,12 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		container.setVisible(true);
 		container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		container.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				endClient();
+			}
+		});
+
 		// Handle input
 		addMouseListener(this);
 		addKeyListener(this);
@@ -180,6 +186,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 				// Get current state of player
 				this.player = state.getPlayer();
+
+				soundManager.addPlayer(this.player);
 
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
@@ -290,7 +298,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 			if (isMouseButtonDown(MouseEvent.BUTTON1)) {
 				keyPresses.add("BUTTON1");
-				soundManager.bulletSound(player.canShoot());
+				soundManager.bulletSound();
 			}
 		}
 		// We need to do this in case fv is null
@@ -441,6 +449,16 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		return player;
 	}
 
+	/**
+	 * End the client by sending a message to the server and closing all streams.
+	 */
+
+	public void endClient() {
+		sender.sendObject("Bye");
+		sender.closeStream();
+		receiver.closeStream();
+	}
+
 	public static void main(String[] args) {
 
 		// Showlogin prompt
@@ -464,23 +482,23 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		User newUser = new User(username, difficulty);
 		// ClientSender and ClientReceiver objects to handle communication with
 		// server
-		ClientSender client_sender = new ClientSender(newUser, objOut, null);
-		ClientReceiver client_receiver = new ClientReceiver(newUser, objIn);
+		ClientSender clientSender = new ClientSender(newUser, objOut, null);
+		ClientReceiver clientReceiver = new ClientReceiver(newUser, objIn);
 
 		// Then create a client state for the client
 		ClientGameState state = new ClientGameState(newUser);
 
-		client_receiver.addState(state); // Must be called before starting the
+		clientReceiver.addState(state); // Must be called before starting the
 											// thread.
-		client_sender.addState(state);
+		clientSender.addState(state);
 		// If this method didn't exist, stateface would need to be added above,
 		// but stateface relies on receiver.
 
 		// Starting threads
-		client_sender.start();
-		client_receiver.start();
+		clientSender.start();
+		clientReceiver.start();
 
-		Client client = new Client(state, client_sender, client_receiver, newUser);
+		Client client = new Client(state, clientSender, clientReceiver, newUser);
 
 		// Create and start the client loop over the loop method of the client
 		// object.
@@ -576,6 +594,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			}
 			// If exit button was clicked
 			else if (renderer.exitButton.contains(mx, my)) {
+				endClient();
 				soundManager.buttonPressed();
 				currentState = STATE.EXIT;
 				running = false;
