@@ -19,7 +19,7 @@ public class ServerGameState extends GameState {
 
 	private String player1Username;
 	private String player2Username;
-	private int zombieCount = 50;
+	private int zombieCount;
 	private int difficulty;
 
     public ServerGameState(String player1Username, String player2Username, int difficulty){
@@ -27,6 +27,7 @@ public class ServerGameState extends GameState {
         this.player2Username = player2Username;
         this.bullets = new ArrayList<>();
         this.difficulty = difficulty;
+        this.zombieCount = 20*difficulty;
     }
 
 
