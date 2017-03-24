@@ -41,7 +41,7 @@ public class PowerUp extends Entity implements Serializable {
 			if (powerup.pState == PuState.SPEED_UP) {
 				player.setIsActive(true);
 				player.setAppearTime(System.nanoTime());
-				player.setMoveSpeed(player.getMoveSpeed() + 0.05f);
+				player.setMoveSpeed(0.15f);
 			}
 			if (powerup.pState == PuState.HEALTH) {
 				if (player.getHealth() >= 40) {
