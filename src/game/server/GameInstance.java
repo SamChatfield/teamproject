@@ -1,13 +1,11 @@
 package game.server;
 
-import game.ArtInt;
-import game.Bullet;
-import game.Collision;
-import game.Zombie;
+import game.*;
 import game.client.Player;
 import game.util.EndState;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie
@@ -54,7 +52,7 @@ public class GameInstance extends Thread {
 				System.out.println("Game ended");
 				state.setEndState(end); // Give the game state the end state.
 				state.setHasFinished(true); // Will cause the timer thread to
-											// close too
+				// close too
 				running = false;
 			}
 			now = System.nanoTime();
@@ -72,7 +70,7 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Update the game instance
-	 * 
+	 *
 	 * @param delta
 	 *            Interpolation
 	 */
@@ -91,22 +89,86 @@ public class GameInstance extends Thread {
 		players.add(player2);
 
 		// Move the zombies around randomly
-//		Random rand = new Random();
+		Random rand = new Random();
+
 		ArrayList<Zombie> newZombies = new ArrayList<>();
 
 		for (Zombie z : state.getZombies()) {
 			if (z.getHealth() == 0) {
 				z.setAlive(false);
 			}
-            newZombies.add(z);
-        }
+			newZombies.add(z);
+		}
 
 		for (Zombie z : newZombies) {
-			if(z.isAlive()) {
-				ArtInt.followPlayer(z, players);
-				z.move(delta);
-				for (Player p : players) {
-					Collision.checkCollision(z, p);
+			ArtInt.followPlayer(z, players);
+			z.move(delta);
+			for (Player p : players) {
+				Collision.checkCollision(z, p);
+			}
+		}
+
+		state.setZombies(newZombies);
+
+		// RANDOMNESS
+		Random r = new Random();
+		int chancePU = r.nextInt(100) + 1;
+
+		int xP = r.nextInt(40) - 20;
+		int yP = r.nextInt(40) - 20;
+
+		int xW = r.nextInt(40) - 20;
+		int yW = r.nextInt(40) - 20;
+
+
+		// WEAPONS
+		ArrayList<Weapon> newWeapon = new ArrayList<>();
+		long now = System.nanoTime();
+
+		for (Weapon w : state.getWeapons()) {
+			if (now - w.time <= 10000000000l && !Collision.checkWeaponCollision(w, player1)
+					&& !Collision.checkWeaponCollision(w, player2)) {
+				newWeapon.add(w);
+			}
+		}
+
+		if (chancePU == 1) {
+			//newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
+			//newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));
+			newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
+		}
+
+		state.setWeapons(newWeapon);
+
+		// POWERUPS & DOWNS
+		ArrayList<PowerUp> newPowerup = new ArrayList<>();
+		long now1 = System.nanoTime();
+
+		for (PowerUp p : state.getPowerups()) {
+			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2, state.getZombies())
+					&& !Collision.checkPowerupCollision(p, player2, player1, state.getZombies())) {
+				newPowerup.add(p);
+			}
+		}
+
+		if (chancePU == 2) {
+			//newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
+			newPowerup.add(new PowerUp(xP, yP, state.getMapData(),PowerUp.randomPU(), System.nanoTime()));
+		}
+
+		state.setPowerUp(newPowerup);
+
+		// CHECK ACTIVE POWERUPS
+		for (Player p : players) {
+			long now11 = System.nanoTime();
+			if (p.getIsActive()) {
+				if (now11 - p.getAppearTime() >= 10000000000l) {
+					PowerUp.normalSpeed(p);
+				}
+			}
+			if (p.getIsActivePD()) {
+				if (now11 - p.getAppearTimePD() >= 10000000000l) {
+					PowerUp.normalSpeedPD(p);
 				}
 			}
 		}
@@ -148,18 +210,18 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Method that checks of the end of the game
-	 * 
+	 *
 	 * @return EndState of the game
 	 */
 	private EndState checkForEnd() {
 		Player winner;
 
 		// First of all, do any players have 0 health.
-		if (state.getPlayer1().getHealth() <= 0) {
+		if (state.getPlayer1().getHealth() == 0) {
 			winner = state.getPlayer2();
 			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
 					EndState.EndReason.PLAYER_DIED);
-		} else if (state.getPlayer2().getHealth() <= 0) {
+		} else if (state.getPlayer2().getHealth() == 0) {
 			winner = state.getPlayer1();
 			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
 					EndState.EndReason.PLAYER_DIED);
