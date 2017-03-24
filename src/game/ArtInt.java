@@ -19,7 +19,7 @@ public class ArtInt {
 		float zy = zombie.getY();
 		ArrayList<Player> players = new ArrayList<>(ps);
 
-		players.removeIf(p -> p.getUsername().equals(zombie.getUsername()) || Math.hypot(zombie.getX() - p.getX(), zombie.getY() - p.getY()) > Zombie.AGGRO_RANGE);
+		players.removeIf(p -> p.getUsername().equals(zombie.getUsername()) || Math.hypot(zombie.getX() - p.getX(), zombie.getY() - p.getY()) > zombie.AGGRO_RANGE);
 
 		players.sort(Comparator.comparing(p -> Math.hypot(zombie.getX() - p.getX(), zombie.getY() - p.getY())));
 

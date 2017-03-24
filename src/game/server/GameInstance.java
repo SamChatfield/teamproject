@@ -102,10 +102,12 @@ public class GameInstance extends Thread {
         }
 
 		for (Zombie z : newZombies) {
-			ArtInt.followPlayer(z, players);
-			z.move(delta);
-			for (Player p : players) {
-				Collision.checkCollision(z, p);
+			if(z.isAlive()) {
+				ArtInt.followPlayer(z, players);
+				z.move(delta);
+				for (Player p : players) {
+					Collision.checkCollision(z, p);
+				}
 			}
 		}
 
