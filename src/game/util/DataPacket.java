@@ -1,5 +1,7 @@
 package game.util;
 
+import game.PowerUp;
+import game.PowerUp.PuState;
 import game.Weapon;
 
 import java.io.Serializable;
@@ -30,6 +32,7 @@ public class DataPacket implements Serializable {
 	// Used by players
 	private Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
 	private Weapon.WeaponState currentlyEquipped;
+	private PowerUp.PuState currentPU;
 
 
 	public void setCurrentlyEquipped(Weapon.WeaponState newEquipped) {
@@ -40,6 +43,16 @@ public class DataPacket implements Serializable {
 		return currentlyEquipped;
 	}
 
+	
+	public void setCurrentPU(PuState newPU){
+		this.currentPU = newPU;
+	}
+	
+	public PuState getCurrentPU(){
+		return currentPU;
+	}
+	
+	
 	public Weapon.WeaponState[] getInventory() {
 		return inventory;
 	}

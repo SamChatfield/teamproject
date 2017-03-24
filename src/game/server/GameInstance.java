@@ -164,12 +164,14 @@ public class GameInstance extends Thread {
 				if (now11 - p.getAppearTime() >= 10000000000l) {
 					PowerUp.normalSpeed(p);
 				}
+				
+				System.out.print(p.getCurrentPU());
 			}
-			if (p.getIsActivePD()) {
+			/*if (p.getIsActivePD()) {
 				if (now11 - p.getAppearTimePD() >= 10000000000l) {
 					PowerUp.normalSpeedPD(p);
 				}
-			}
+			}*/
 		}
 
 		// BULLETS
