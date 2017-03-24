@@ -201,9 +201,15 @@ public class Renderer {
 			
 			// See if weapon obtained
 			boolean weaponObtained = false;
-			if(weaponStates[i] != null) {
-				weaponObtained = true;
+			
+			try {
+				if(weaponStates[i] != null) {
+					weaponObtained = true;
+				}
+			} catch(NullPointerException e) {
+				System.err.println("Error in Renderer: NullPointer in checking weaponStates, this shouldn't happen!"); 
 			}
+
 			
 			// Highlight selected weapon
 			if(player.getCurrentlyEquipped() == weapon) {
