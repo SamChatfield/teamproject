@@ -19,6 +19,7 @@ public class PowerUp extends Entity implements Serializable {
 
 	public enum PuState {
 		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, COZ,
+
 	}
 
 	public PuState getpState() {
@@ -49,6 +50,7 @@ public class PowerUp extends Entity implements Serializable {
 					player.setHealth(player.getHealth() + 10);
 				}
 			}
+
 			
 			if(powerup.pState == PuState.COZ){
 				for(Zombie z : zombies){
@@ -57,6 +59,7 @@ public class PowerUp extends Entity implements Serializable {
 					}
 				}
 			}
+
 		}
 	}
 
@@ -88,6 +91,7 @@ public class PowerUp extends Entity implements Serializable {
 
 	public static PuState randomPU() {
 		Random r = new Random();
+
 		int chance = r.nextInt(6) + 1;
 		if (chance == 1) {
 			return PowerUp.PuState.COZ;
@@ -106,6 +110,7 @@ public class PowerUp extends Entity implements Serializable {
 		}
 
 		return PowerUp.PuState.SPEED_UP;
+
 	}
 
 	public static void normalSpeed(Player player) {

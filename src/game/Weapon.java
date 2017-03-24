@@ -80,7 +80,6 @@ public class Weapon extends Entity {
 		if (chance == 2) {
 			return Weapon.WeaponState.UZI;
 		}
-
 		return Weapon.WeaponState.CONVERT;
 
 	}
