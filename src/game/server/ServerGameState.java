@@ -238,12 +238,6 @@ public class ServerGameState extends GameState {
 				//System.out.println("Weapon 5");
 
 				break;
-			case "VK_Z":
-				toModify.conversionMode = true;
-				break;
-			case "VK_X":
-				toModify.conversionMode = false;
-				break;
 			case "BUTTON1":
 				shootNow = true;
 				break;
