@@ -34,37 +34,40 @@ public class Weapon extends Entity {
 
 	public static void getWeaponStats(WeaponState w, Player player) {
 		player.conversionMode = false;
-		
+
 		System.out.println("getWeaponStats called");
 
 		if (w != null) {
-			
+
 			player.setCurrentlyEquipped(w);
 			System.out.println(player.getCurrentlyEquipped());
-			
+
 			if (w == WeaponState.MAC_GUN) {
 				player.SHOOT_DELAY = 100000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(5);
-			} if (w == WeaponState.PISTOL) {
+			}
+			if (w == WeaponState.PISTOL) {
 				player.SHOOT_DELAY = 500000000L;
-				Bullet.setBulletSpeed( 0.15f);
+				Bullet.setBulletSpeed(0.15f);
 				Bullet.setFadeDistance(5);
-			} if (w == WeaponState.UZI) {
+			}
+			if (w == WeaponState.UZI) {
 				player.SHOOT_DELAY = 100000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(2);
-			} if (w == WeaponState.CONVERT) {
+			}
+			if (w == WeaponState.CONVERT) {
 				player.SHOOT_DELAY = 500000000L;
-				Bullet.setBulletSpeed( 0.15f);
+				Bullet.setBulletSpeed(0.15f);
 				Bullet.setFadeDistance(5);
 				player.conversionMode = true;
-			} 
-			//Doesn't work yet
+			}
+			// Doesn't work yet
 			if (w == WeaponState.SHOTGUN) {
-			//	player.SHOOT_DELAY = 500000000L;
+				// player.SHOOT_DELAY = 500000000L;
 				// add 3 angled bullets per shot
-			} 
+			}
 		}
 	}
 
@@ -77,10 +80,9 @@ public class Weapon extends Entity {
 		if (25 < chance && chance <= 50) {
 			return Weapon.WeaponState.UZI;
 		}
-		if (50 < chance && chance <= 75) {
-			return Weapon.WeaponState.CONVERT;
-		}
-		return WeaponState.SHOTGUN;
+
+		return Weapon.WeaponState.CONVERT;
+
 	}
 
 	public static int getIndex(WeaponState w) {
