@@ -148,6 +148,7 @@ public class Entity implements Serializable {
 		setAppearTimePD(data2.getAppearTimePD());
 		setCurrentlyEquipped(data2.getCurrentlyEquipped());
 		setInventory(data2.getInventory());
+		setShootDelay(data2.getShootDelay());
 	}
 	/**
 	 * Set number of zombies that entity has converted
