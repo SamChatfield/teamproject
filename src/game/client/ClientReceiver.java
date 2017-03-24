@@ -1,10 +1,11 @@
 package game.client;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import game.util.EndState;
 import game.util.SendableState;
 import game.util.User;
-
-import java.io.ObjectInputStream;
 
 /**
  * Class for receiving objects from the server and then determining what to do with them
@@ -14,7 +15,7 @@ public class ClientReceiver extends Thread {
 	private User user;
 	private ObjectInputStream objIn;
 	private ClientGameState state;
-	private boolean inProgress, initialState;
+	private boolean inProgress, initialState, running;
 
 	/**
 	 * Constructor
@@ -25,6 +26,7 @@ public class ClientReceiver extends Thread {
 		this.user = user;
 		this.objIn = objIn;
 		this.initialState = true;
+		this.running = true;
 	}
 
 	/**
@@ -35,11 +37,17 @@ public class ClientReceiver extends Thread {
 		this.state = state;
 	}
 
+	/**
+	 * Close the stream to close the socket
+	 */
+
+	public void closeStream() { running = false; }
+
 	// Main method to run when thread starts
 	public void run() {
 		System.out.println("Client: ClientReceiver started");
 		try {
-			while(true) {
+			while(running) {
 				Thread.sleep(1000/120);
 				Object obj = objIn.readObject();
 
@@ -62,6 +70,7 @@ public class ClientReceiver extends Thread {
 				}else if(obj.getClass() == SendableState.class){
 					SendableState updatedState = (SendableState) obj;
 					state.updateClientState(updatedState); // update the clients view of the game state.
+
 					if(initialState){
 						state.setConnected(true);
 						initialState = false;
@@ -74,10 +83,14 @@ public class ClientReceiver extends Thread {
 					initialState = true;
 				}
 			}
-		} catch(Exception e) {
-			System.err.println("Exception in ClientReceiver: " + e.getMessage());
 
-			e.printStackTrace();;
+			try {
+				objIn.close();
+			} catch (IOException e) {
+				System.out.println("Couldn't close client input stream");
+			}
+		} catch(Exception e) {
+			//System.err.println("Exception in ClientReceiver: " + e.getMessage());
 			//System.exit(1);
 
 		}
