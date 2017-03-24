@@ -1,11 +1,13 @@
 package game.server;
 
-import game.*;
+import game.ArtInt;
+import game.Bullet;
+import game.Collision;
+import game.Zombie;
 import game.client.Player;
 import game.util.EndState;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie
@@ -89,8 +91,7 @@ public class GameInstance extends Thread {
 		players.add(player2);
 
 		// Move the zombies around randomly
-		Random rand = new Random();
-
+//		Random rand = new Random();
 		ArrayList<Zombie> newZombies = new ArrayList<>();
 
 		for (Zombie z : state.getZombies()) {
@@ -101,85 +102,10 @@ public class GameInstance extends Thread {
         }
 
 		for (Zombie z : newZombies) {
-		    if(z.isAlive()) {
-                for (Player player : players) {
-                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= z.AGGRO_RANGE) {
-                        z.followDirection(player);
-                    } else {
-                        if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                            z.newMovingDir();
-                        }
-                    }
-                    // Check if player has collided with a zombie
-                    Collision.checkCollision(z, player);
-                }
-                // Apply zombie movements on map
-                z.move(delta);
-            }
-		}
-
-		state.setZombies(newZombies);
-
-		// RANDOMNESS
-		Random r = new Random();
-		int chancePU = r.nextInt(100) + 1;
-		
-		int xP = r.nextInt(40) - 20;
-		int yP = r.nextInt(40) - 20;
-		
-		int xW = r.nextInt(40) - 20;
-		int yW = r.nextInt(40) - 20;
-
-
-		// WEAPONS
-		ArrayList<Weapon> newWeapon = new ArrayList<>();
-		long now = System.nanoTime();
-
-		for (Weapon w : state.getWeapons()) {
-			if (now - w.time <= 10000000000l && !Collision.checkWeaponCollision(w, player1)
-					&& !Collision.checkWeaponCollision(w, player2)) {
-				newWeapon.add(w);
-			}
-		}
-
-		if (chancePU == 1) {
-			//newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
-			//newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));
-			newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
-		}
-
-		state.setWeapons(newWeapon);
-
-		// POWERUPS & DOWNS
-		ArrayList<PowerUp> newPowerup = new ArrayList<>();
-		long now1 = System.nanoTime();
-
-		for (PowerUp p : state.getPowerups()) {
-			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2, state.getZombies())
-					&& !Collision.checkPowerupCollision(p, player2, player1, state.getZombies())) {
-				newPowerup.add(p);
-			}
-		}
-
-		if (chancePU == 2) {
-			//newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));			
-			newPowerup.add(new PowerUp(xP, yP, state.getMapData(),PowerUp.randomPU(), System.nanoTime()));
-		}
-
-		state.setPowerUp(newPowerup);
-
-		// CHECK ACTIVE POWERUPS
-		for (Player p : players) {
-			long now11 = System.nanoTime();
-			if (p.getIsActive()) {
-				if (now11 - p.getAppearTime() >= 10000000000l) {
-					PowerUp.normalSpeed(p);
-				}
-			}
-			if (p.getIsActivePD()) {
-				if (now11 - p.getAppearTimePD() >= 10000000000l) {
-					PowerUp.normalSpeedPD(p);
-				}
+			ArtInt.followPlayer(z, players);
+			z.move(delta);
+			for (Player p : players) {
+				Collision.checkCollision(z, p);
 			}
 		}
 
