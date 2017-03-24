@@ -140,7 +140,7 @@ public class Renderer {
 		// drawLighting(g2d);
 
 		// Health bar
-		float healthPercentage = (player.getHealth() / 50.0f) * 100;
+		float healthPercentage =  (player.getHealth() / 50.0f) * 100;
 
 		g2d.setFont(tradeWinds.deriveFont(15f));
 
