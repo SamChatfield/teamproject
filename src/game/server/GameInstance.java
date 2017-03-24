@@ -206,9 +206,11 @@ public class GameInstance extends Thread {
 		int play2Converted = 0;
 
 		for (int i = 0; i < state.getZombies().size(); i++) {
-			if (state.getZombies().get(i).getUsername().equals(state.getPlayer1().getUsername())) {
+			Zombie z = state.getZombies().get(i);
+			if(!z.isAlive()){ continue; }
+			if (z.getUsername().equals(state.getPlayer1().getUsername())) {
 				play1Converted += 1;
-			} else if (state.getZombies().get(i).getUsername().equals(state.getPlayer2().getUsername())) {
+			} else if (z.getUsername().equals(state.getPlayer2().getUsername())) {
 				play2Converted += 1;
 			}
 		}

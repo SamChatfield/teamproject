@@ -18,7 +18,7 @@ public class PowerUp extends Entity implements Serializable {
 	public long time;
 
 	public enum PuState {
-		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, TEST, KOZ
+		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, COZ,
 	}
 
 	public PuState getpState() {
@@ -49,9 +49,10 @@ public class PowerUp extends Entity implements Serializable {
 					player.setHealth(player.getHealth() + 10);
 				}
 			}
-			if (powerup.pState == PuState.KOZ){
+			
+			if(powerup.pState == PuState.COZ){
 				for(Zombie z : zombies){
-					if(z.getState() == DataPacket.State.PLAYER && z.getUsername() != player.getUsername()){
+					if( z.getState() == DataPacket.State.PLAYER && z.getUsername() != player.getUsername()){
 						z.setUsername(player.getUsername());
 					}
 				}
@@ -89,21 +90,22 @@ public class PowerUp extends Entity implements Serializable {
 		Random r = new Random();
 		int chance = r.nextInt(6) + 1;
 		if (chance == 1) {
-			return PowerUp.PuState.SPEED_UP;
+			return PowerUp.PuState.COZ;
 		}
 		if (chance == 2) {
-			return PowerUp.PuState.HEALTH;
-		}
-		if (chance == 3) {
-			return PowerUp.PuState.KOZ;
-		}
-		if (chance == 4) {
 			return PowerUp.PuState.SLOW_DOWN;
 		}
-		if (chance == 5) {
+		if (chance == 3) {
 			return PowerUp.PuState.FREEZE;
 		}
-		return PowerUp.PuState.INVERSE;
+		if (chance == 4) {
+			return PowerUp.PuState.INVERSE;
+		}
+		if (chance == 5){
+			return PowerUp.PuState.COZ;
+		}
+
+		return PowerUp.PuState.SPEED_UP;
 	}
 
 	public static void normalSpeed(Player player) {

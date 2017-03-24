@@ -51,15 +51,6 @@ public class Entity implements Serializable {
 		collisionBox = new CollisionBox(this);
 	}
 
-	
-	/**
-	 * Get the type of the DataPacket within this entity
-	 * @return Type of data packet
-	 */
-	public DataPacket.Type getType(){
-		return getType();
-	}
-
 	/**
 	 * Get the time of the last attack made by this entity
 	 * @return Time of last attack
@@ -171,6 +162,8 @@ public class Entity implements Serializable {
 		setAppearTime(data2.getAppearTime());
 		setIsActivePD(data2.getIsActivePD());
 		setAppearTimePD(data2.getAppearTimePD());
+		setCurrentlyEquipped(data2.getCurrentlyEquipped());
+		setInventory(data2.getInventory());
 	}
 
 	/**
@@ -295,6 +288,10 @@ public class Entity implements Serializable {
 
 	public Weapon.WeaponState[] getInventory(){
 		return data.getInventory();
+	}
+	
+	public void setInventory(Weapon.WeaponState[] newInventory){
+		data.setInventory(newInventory);
 	}
 
 	public void setCurrentlyEquipped(Weapon.WeaponState newWeapon){

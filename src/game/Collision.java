@@ -51,9 +51,9 @@ public class Collision {
 		}
 	}
 	
-	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent, ArrayList<Zombie> z) {
+	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent, ArrayList<Zombie> zombies) {
 		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
-			p.getPowerupStats(p, player, z);
+			p.getPowerupStats(p, player, zombies);
 			p.getPowerdownStats(p, opponent);
 			return true;
 		}
@@ -64,6 +64,7 @@ public class Collision {
 	public static boolean checkWeaponCollision(Weapon w, Player player) {
 		if (w.getCollisionBox().intersects(player.getCollisionBox())) {		
 			w.addToInventory(w.getwState(), player);
+			System.out.println("Added to inventory");
 			return true;
 		}
 		return false;
