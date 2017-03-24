@@ -27,12 +27,12 @@ public class DataPacket implements Serializable {
 	private boolean alive;
 
 	// Used by players
-	private static final Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
+	private Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
 	private Weapon.WeaponState currentlyEquipped;
 
 
-	public void setCurrentlyEquipped(Weapon.WeaponState currentlyEquipped) {
-		this.currentlyEquipped = currentlyEquipped;
+	public void setCurrentlyEquipped(Weapon.WeaponState newEquipped) {
+		this.currentlyEquipped = newEquipped;
 	}
 
 	public Weapon.WeaponState getCurrentlyEquipped() {
@@ -42,6 +42,10 @@ public class DataPacket implements Serializable {
 
 	public Weapon.WeaponState[] getInventory() {
 		return inventory;
+	}
+	
+	public void setInventory(Weapon.WeaponState[] newInventory) {
+		this.inventory = newInventory;
 	}
 
 	public boolean isAlive() {

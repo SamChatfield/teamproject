@@ -174,36 +174,46 @@ public class Renderer {
 		g2d.setColor(fadedWhite);
 		g2d.setFont(tradeWinds.deriveFont(11f));
 		int xCoord = 10;
-
+		
 		switch(player.getCurrentlyEquipped()) {
-			case PISTOL:
-				g2d.drawString("Current Weapon: Pistol", xCoord+5, 580);
-				break;
-			case MAC_GUN:
-				g2d.drawString("Current Weapon: Machine Gun", xCoord+5, 580);
-				break;
-			case SHOTGUN:
-				g2d.drawString("Current Weapon: Shotgun", xCoord+5, 580);
-				break;
-			case UZI:
-				g2d.drawString("Current Weapon:  Uzi", xCoord+5, 580);
-				break;
-			case CONVERT:
-				g2d.drawString("Current Weapon: Zombie Converter", xCoord+5, 580);
-				break;
-			default:
-				break;
+		case PISTOL:
+			g2d.drawString("Current Weapon: Pistol", xCoord+5, 580);
+			break;
+		case UZI:
+			g2d.drawString("Current Weapon:  Uzi", xCoord+5, 580);
+			break;
+		case SHOTGUN:
+			g2d.drawString("Current Weapon: Shotgun", xCoord+5, 580);
+			break;
+		case MAC_GUN:
+			g2d.drawString("Current Weapon: Machine Gun", xCoord+5, 580);
+			break;
+		case CONVERT:
+			g2d.drawString("Current Weapon: Zombie Converter", xCoord+5, 580);
+			break;
+		default:
+			break;
 		}
 
 		// Loop to draw each box and weapon image
-		for(int i = 0; i < 5; i++) {
+		int i = 0;
+		for(WeaponState weapon: WeaponState.values()) {
 			
-			if(player.getCurrentlyEquipped().equals(i)) {
-				g2d.setColor(new Color(255,255,255, 160));
-			} else {
-				g2d.setColor(new Color(255,255,255, 250));
+			// See if weapon obtained
+			boolean weaponObtained = false;
+			if(weaponStates[i] != null) {
+				weaponObtained = true;
 			}
 			
+			// Highlight selected weapon
+			if(player.getCurrentlyEquipped() == weapon) {
+				g2d.setColor(new Color(255, 255, 0, 150));
+			} else if(weaponObtained) {
+				g2d.setColor(new Color(255,255,255, 150));
+			} else {
+				g2d.setColor(new Color(255,255,255, 50));
+			}
+
 			Rectangle itemsBox = new Rectangle(xCoord, 590, 45, 45);
 			g2d.fill(itemsBox);
 
@@ -214,36 +224,30 @@ public class Renderer {
 			g2d.draw(itemsBox2);
 			g2d.drawString(Integer.toString(i+1), xCoord+4, 632);
 
-			// Change to !null
-			if(weaponStates[i] == null) {
+			int weaponX = xCoord + 3;
+			int weaponY = 587;
+				
+			switch(weapon) {
 
-				int weaponSizeX = 30;
-				int weaponSizeY = 30;
-				int weaponX = xCoord + 5;
-				int weaponY = 595;
+			case PISTOL:
+				g2d.drawImage(ResourceLoader.pistol(weaponObtained), weaponX, weaponY, null);
+				break;
+			case UZI:
+				g2d.drawImage(ResourceLoader.converter(weaponObtained), weaponX, weaponY, null);
+				break;
+			case SHOTGUN:
+				g2d.drawImage(ResourceLoader.shotgun(weaponObtained), weaponX, weaponY, 40, 40, null);
+				break;
+			case MAC_GUN:
+				g2d.drawImage(ResourceLoader.machineGun(weaponObtained), weaponX, weaponY, 38, 38, null);
+				break;
+			case CONVERT:
+				g2d.drawImage(ResourceLoader.uzi(weaponObtained), weaponX, weaponY, null);
+				break;
 
-				// Switch on index to determine which weapon to draw
-
-
-				switch(i) {
-				case 0:
-					g2d.drawImage(shotgun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
-					break;
-				case 1:
-					g2d.drawImage(machineGun, weaponX, weaponY, weaponSizeX, weaponSizeY, null);
-					break;
-				case 2:
-					g2d.drawImage(shotgun, weaponX, weaponY, null);
-					break;
-				case 3:
-					g2d.drawImage(converter, weaponX, weaponY, null);
-					break;
-				case 4:
-					g2d.drawImage(uzi, weaponX, weaponY, null);
-					break;
-
-				}
 			}
+			
+			i++;
 			xCoord+= 45;
 		}
 

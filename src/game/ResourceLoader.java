@@ -211,7 +211,7 @@ public class ResourceLoader {
 			return getImage("/weapons/hotbar/machineGun.png");
 		}
 		else {
-			return getImage("/weapons/hotbar/machineGun.png");
+			return getImage("/weapons/hotbar/machineGunDark.png");
 		}
 	}
 
@@ -245,7 +245,7 @@ public class ResourceLoader {
 	 * Load image for the uzi
 	 * @return BufferedImage for the uzi
 	 */
-	public static BufferedImage uziHotBar(boolean weaponObtained) {
+	public static BufferedImage uzi(boolean weaponObtained) {
 		if(weaponObtained) {
 			return getImage("/weapons/hotbar/uzi.png");
 		}
