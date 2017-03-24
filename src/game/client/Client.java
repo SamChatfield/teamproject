@@ -298,7 +298,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 			if (isMouseButtonDown(MouseEvent.BUTTON1)) {
 				keyPresses.add("BUTTON1");
-				soundManager.bulletSound(player.canShoot());
+				soundManager.bulletSound();
 			}
 		}
 		// We need to do this in case fv is null

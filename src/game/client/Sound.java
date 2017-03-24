@@ -33,6 +33,7 @@ public class Sound extends Thread{
 	public boolean initial = true;
 	public boolean isActive = true;
 	private Player player;
+	long lastSoundPlayed;
 
 	/**
 	 * Initialise sound object
@@ -41,6 +42,7 @@ public class Sound extends Thread{
 		running = true;
 		rn = new Random();
 		oneTwoOrThree = new Random();
+		this.lastSoundPlayed = System.nanoTime();
 	}
 
 	/**
@@ -111,34 +113,39 @@ public class Sound extends Thread{
 	}
 
 	/**
-	 * Method to play the gun sound. 
-	 * @param playerShot Boolean of wherever the player has been allowed to shoot (fire rate)
+	 * Method to play the different gun sounds.
 	 */
-	public void bulletSound(boolean playerShot) {
+	public void bulletSound() {
 		String toUse = null;
-		if (playerShot && sfxPlayback) {
-			System.out.println(player.getCurrentlyEquipped());
-			switch(player.getCurrentlyEquipped()) {
-				case PISTOL:
-					toUse = pistolSound;
-					break;
-				case CONVERT:
-					toUse = convertSound;
-					break;
-				case UZI:
-					toUse = uziSound;
-					break;
-				case MAC_GUN:
-					toUse = macGunSound;
-					break;
-				case SHOTGUN:
-					toUse = shotgunSound;
-					break;
+		long now = System.nanoTime();
+		//This if statement stops the bug of the pistol firing two shots in quick succession
+		if (now - lastSoundPlayed > player.SHOOT_DELAY) {
+			System.out.println(this.player.canShoot());
+			if (this.player.canShoot() && sfxPlayback) {
+				switch(player.getCurrentlyEquipped()) {
+					case PISTOL:
+						toUse = pistolSound;
+						break;
+					case CONVERT:
+						toUse = convertSound;
+						break;
+					case UZI:
+						toUse = uziSound;
+						break;
+					case MAC_GUN:
+						toUse = macGunSound;
+						break;
+					case SHOTGUN:
+						toUse = shotgunSound;
+						break;
+				}
+				Clip gunClip = this.createClip(toUse);
+				//turnDownVolume(gunClip, -10.0f);
+				gunClip.start();
+				lastSoundPlayed = now;
 			}
-			Clip gunClip = this.createClip(toUse);
-			turnDownVolume(gunClip, -10.0f);
-			gunClip.start();
-		}  
+		}
+
 	}
 
 	public void buttonPressed() {
