@@ -103,7 +103,7 @@ public class Renderer {
 		// Draw the zombies that are dead first
 		for (DataPacket z : zombiePackets) {
 			if(!z.isAlive()) {
-				drawDeadZombie(g2d, player, z,1);
+				drawDeadZombie(g2d, player, z);
 			}
 		}
 
@@ -578,7 +578,7 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-	private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
+	private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d) {
 		int w = Renderer.splatter1.getWidth();
 		int h = Renderer.splatter1.getHeight();
 
@@ -587,6 +587,8 @@ public class Renderer {
 		int drawY = drawPoint.y;
 
 		BufferedImage image = Renderer.splatter1;
+
+		int i = d.getSplatterImg();
 
 		if(i == 2){
 			image = Renderer.splatter2;

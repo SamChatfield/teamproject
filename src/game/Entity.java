@@ -255,8 +255,9 @@ public class Entity implements Serializable {
 	public boolean isAlive(){
 		return data.isAlive();
 	}
-	public void setAlive(boolean b) {
+	public void setAlive(boolean b, int img) {
 		data.setAlive(b);
+		data.setSplatterImg(img);
 	}
 	public Weapon.WeaponState[] getInventory(){
 		return data.getInventory();
