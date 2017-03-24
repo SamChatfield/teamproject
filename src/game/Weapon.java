@@ -12,8 +12,7 @@ public class Weapon extends Entity {
 	public float y;
 
 	public enum WeaponState {
-		PISTOL, MAC_GUN, SHOTGUN, UZI, CONVERT, FLAME_THROWER // GRENADE
-		// Doesn't work yet
+		PISTOL, UZI, SHOTGUN, MAC_GUN, CONVERT
 	}
 
 	public WeaponState getwState() {
@@ -35,9 +34,14 @@ public class Weapon extends Entity {
 
 	public static void getWeaponStats(WeaponState w, Player player) {
 		player.conversionMode = false;
+		
+		System.out.println("getWeaponStats called");
 
 		if (w != null) {
+			
 			player.setCurrentlyEquipped(w);
+			System.out.println(player.getCurrentlyEquipped());
+			
 			if (w == WeaponState.MAC_GUN) {
 				player.SHOOT_DELAY = 100000000L;
 				Bullet.setBulletSpeed(0.3f);
@@ -50,10 +54,6 @@ public class Weapon extends Entity {
 				player.SHOOT_DELAY = 100000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(2);
-			} if (w == WeaponState.FLAME_THROWER) {
-				player.SHOOT_DELAY = 100000L;
-				Bullet.setBulletSpeed(0.3f);
-				Bullet.setFadeDistance(1);
 			} if (w == WeaponState.CONVERT) {
 				player.SHOOT_DELAY = 500000000L;
 				Bullet.setBulletSpeed( 0.15f);
