@@ -4,6 +4,7 @@ import game.CollisionBox;
 import game.PowerUp;
 import game.ResourceLoader;
 import game.Weapon;
+import game.Weapon.WeaponState;
 import game.map.MapData;
 import game.map.Tile;
 import game.util.DataPacket;
@@ -41,20 +42,18 @@ public class Renderer {
 
 
 	//Blood splatters
-    public static final BufferedImage splatter1 = ResourceLoader.splatter1();
-    public static final BufferedImage splatter2 = ResourceLoader.splatter2();
-    public static final BufferedImage splatter3 = ResourceLoader.splatter3();
+	public static final BufferedImage splatter1 = ResourceLoader.splatter1();
+	public static final BufferedImage splatter2 = ResourceLoader.splatter2();
+	public static final BufferedImage splatter3 = ResourceLoader.splatter3();
 
 
-    //Weapons
-    public static final BufferedImage machineGun = ResourceLoader.machineGun();
-    public static final BufferedImage shotgun = ResourceLoader.shotgun();
-    public static final BufferedImage converter = ResourceLoader.converter();
-    public static final BufferedImage uzi = ResourceLoader.uzi();
+	//Weapons
+	public static final BufferedImage machineGun = ResourceLoader.machineGun();
+	public static final BufferedImage shotgun = ResourceLoader.shotgun();
+	public static final BufferedImage converter = ResourceLoader.converter();
+	public static final BufferedImage uzi = ResourceLoader.uzi();
 
-
-
-    public Rectangle menuButton;
+	public Rectangle menuButton;
 	public Rectangle exitButton;
 
 	public Color fadedWhite = new Color(255,255,255,190);
@@ -83,7 +82,7 @@ public class Renderer {
 		ArrayList<DataPacket> zombiePackets = state.getZombieDataPackets();
 		ArrayList<DataPacket> bulletPackets = state.getBulletDataPackets();
 
-        MapData mapData = state.getMapData();
+		MapData mapData = state.getMapData();
 		ArrayList<PowerUp> powerups = state.getPowerups();
 		ArrayList<Weapon> weapons = state.getWeapons();
 
@@ -127,7 +126,7 @@ public class Renderer {
 				drawZombie(g2d, player, z);
 			}
 		}
-		
+
 		for(PowerUp p : powerups){
 			drawPowerup(g2d, p, player);
 		}
@@ -135,9 +134,9 @@ public class Renderer {
 		for(Weapon w : weapons){
 			drawWeapon(g2d, w, player);
 		}
-		
+
 		// Draw lighting
-		// drawLighting(g2d);
+		drawLighting(g2d);
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
@@ -161,16 +160,95 @@ public class Renderer {
 		String healthFormat = String.format("%.2f", healthPercentage);
 		g2d.drawString("Health: " + healthFormat + "%", 15, (int) (healthBarBackground.getY() + healthBarBackground.getHeight() + 20));
 
-		// Items box
+		////// Items box
+
+		WeaponState[] weaponStates = player.getInventory(); // Get states of weapons
+		//WeaponState currentWeapon = player.getCurrentlyEquipped(); // Get currently equipped weapon
+
 		g2d.setColor(fadedWhite);
-
+		g2d.setFont(tradeWinds.deriveFont(11f));
 		int xCoord = 10;
-		for(int i = 0; i < 5; i++) {
-			Rectangle itemsBox = new Rectangle(xCoord, 590, 40, 40);
-			g2d.draw(itemsBox);
+		
+		switch(player.getCurrentlyEquipped()) {
+		case PISTOL:
+			g2d.drawString("Current Weapon: Pistol", xCoord+5, 580);
+			break;
+		case UZI:
+			g2d.drawString("Current Weapon:  Uzi", xCoord+5, 580);
+			break;
+		case SHOTGUN:
+			g2d.drawString("Current Weapon: Shotgun", xCoord+5, 580);
+			break;
+		case MAC_GUN:
+			g2d.drawString("Current Weapon: Machine Gun", xCoord+5, 580);
+			break;
+		case CONVERT:
+			g2d.drawString("Current Weapon: Zombie Converter", xCoord+5, 580);
+			break;
+		default:
+			break;
+		}
 
-			g2d.drawString(Integer.toString(i+1), xCoord+4, 628);
-			xCoord+= 40;
+		// Loop to draw each box and weapon image
+		int i = 0;
+		for(WeaponState weapon: WeaponState.values()) {
+			
+			// See if weapon obtained
+			boolean weaponObtained = false;
+			
+			try {
+				if(weaponStates[i] != null) {
+					weaponObtained = true;
+				}
+			} catch(NullPointerException e) {
+				System.err.println("Error in Renderer: NullPointer in checking weaponStates, this shouldn't happen!"); 
+			}
+
+			
+			// Highlight selected weapon
+			if(player.getCurrentlyEquipped() == weapon) {
+				g2d.setColor(new Color(255, 255, 0, 150));
+			} else if(weaponObtained) {
+				g2d.setColor(new Color(255,255,255, 150));
+			} else {
+				g2d.setColor(new Color(255,255,255, 50));
+			}
+
+			Rectangle itemsBox = new Rectangle(xCoord, 590, 45, 45);
+			g2d.fill(itemsBox);
+
+			// Draw border and number
+			g2d.setColor(new Color(0,0,0, 180));
+			g2d.setFont(tradeWinds.deriveFont(10f));
+			Rectangle itemsBox2 = new Rectangle(xCoord-1, 590-1, 45+1, 45+1);
+			g2d.draw(itemsBox2);
+			g2d.drawString(Integer.toString(i+1), xCoord+4, 632);
+
+			int weaponX = xCoord + 3;
+			int weaponY = 587;
+				
+			switch(weapon) {
+
+			case PISTOL:
+				g2d.drawImage(ResourceLoader.pistol(weaponObtained), weaponX, weaponY, null);
+				break;
+			case UZI:
+				g2d.drawImage(ResourceLoader.uzi(weaponObtained), weaponX, weaponY, null);
+				break;
+			case SHOTGUN:
+				g2d.drawImage(ResourceLoader.shotgun(weaponObtained), weaponX, weaponY, 40, 40, null);
+				break;
+			case MAC_GUN:
+				g2d.drawImage(ResourceLoader.machineGun(weaponObtained), weaponX, weaponY, 38, 38, null);
+				break;
+			case CONVERT:
+				g2d.drawImage(ResourceLoader.converter(weaponObtained), weaponX, weaponY, null);
+				break;
+
+			}
+			
+			i++;
+			xCoord+= 45;
 		}
 
 		// Display time remaining
@@ -194,8 +272,8 @@ public class Renderer {
 		// Zombie count box labels
 		ArrayList<String> zombieCountLabels = new ArrayList<String>();
 		zombieCountLabels.add("Wild");
-		zombieCountLabels.add("You");
-		zombieCountLabels.add("Opponent");
+		zombieCountLabels.add(state.getPlayer().getUsername());
+		zombieCountLabels.add(state.getOtherPlayer().getUsername());
 
 		// Colours for zombie count boxes
 		ArrayList<Color> zombieCountColours = new ArrayList<Color>();
@@ -463,27 +541,27 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-    private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
-        int w = Renderer.splatter1.getWidth();
-        int h = Renderer.splatter1.getHeight();
+	private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
+		int w = Renderer.splatter1.getWidth();
+		int h = Renderer.splatter1.getHeight();
 
-        Point drawPoint = player.relativeDrawPoint(d.getX(), d.getY(), w, h);
-        int drawX = drawPoint.x;
-        int drawY = drawPoint.y;
+		Point drawPoint = player.relativeDrawPoint(d.getX(), d.getY(), w, h);
+		int drawX = drawPoint.x;
+		int drawY = drawPoint.y;
 
-        BufferedImage image = Renderer.splatter1;
+		BufferedImage image = Renderer.splatter1;
 
-        if(i == 2){
-            image = Renderer.splatter2;
-        }else if (i == 3){
-            image = Renderer.splatter3;
-        }
-        g2d.drawImage(image, drawX, drawY, null);
-    }
+		if(i == 2){
+			image = Renderer.splatter2;
+		}else if (i == 3){
+			image = Renderer.splatter3;
+		}
+		g2d.drawImage(image, drawX, drawY, null);
+	}
 	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {
 		int w = Renderer.freezePlayer.getWidth();
 		int h = Renderer.freezePlayer.getHeight();
-		
+
 		Point drawPoint = player.relativeDrawPoint(p.getx(), p.gety(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
@@ -491,21 +569,21 @@ public class Renderer {
 		BufferedImage image = Renderer.opponentZombieImage;
 
 		switch(p.getpState()){
-			case FREEZE:
-				image = Renderer.freezePlayer;
-				break;
-            case HEALTH:
-                image = Renderer.moreHealth;
-                break;
-            case INVERSE:
-                image = Renderer.invertControls;
-                break;
-            case SPEED_UP:
-                image = Renderer.speedUp;
-                break;
-            case SLOW_DOWN:
-                image = Renderer.speedDown;
-                break;
+		case FREEZE:
+			image = Renderer.freezePlayer;
+			break;
+		case HEALTH:
+			image = Renderer.moreHealth;
+			break;
+		case INVERSE:
+			image = Renderer.invertControls;
+			break;
+		case SPEED_UP:
+			image = Renderer.speedUp;
+			break;
+		case SLOW_DOWN:
+			image = Renderer.speedDown;
+			break;
 
 		default:
 			break;
@@ -513,30 +591,30 @@ public class Renderer {
 		}
 		g2d.drawImage(image, drawX, drawY, null);
 	}
-	
+
 	private void drawWeapon(Graphics2D g2d, Weapon g, Player player) {
 		int w = Renderer.moreHealth.getWidth();
 		int h = Renderer.moreHealth.getHeight();
 
 		BufferedImage image = Renderer.machineGun;
 		switch(g.getwState()){
-            case MAC_GUN:
-                image = Renderer.machineGun;
-                break;
-            case SHOTGUN:
-                image = Renderer.shotgun;
-                break;
-            case CONVERT:
-                image = Renderer.converter;
-                break;
-            case UZI:
-                image = Renderer.uzi;
-        }
+		case MAC_GUN:
+			image = Renderer.machineGun;
+			break;
+		case SHOTGUN:
+			image = Renderer.shotgun;
+			break;
+		case CONVERT:
+			image = Renderer.converter;
+			break;
+		case UZI:
+			image = Renderer.uzi;
+		}
 
 		Point drawPoint = player.relativeDrawPoint(g.getx(), g.gety(), w, h);
 		int drawX = drawPoint.x;
 		int drawY = drawPoint.y;
 		g2d.drawImage(image, drawX, drawY, null);
 	}
-	
+
 }

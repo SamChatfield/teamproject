@@ -348,13 +348,6 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			case "VK_S":
 				pdv.add(new Vector(0.0f, -1.0f));
 				break;
-			case "VK_Z":
-				player.conversionMode = true;
-				System.out.println("enabling conv client side");
-				break;
-			case "VK_X":
-				player.conversionMode = false;
-				break;
 			case "BUTTON1":
 				// this should still happen on the server
 				break;
