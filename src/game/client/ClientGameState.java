@@ -29,6 +29,8 @@ public class ClientGameState extends GameState {
 		this.bullets = new ArrayList<>();
 		this.zombieDataPackets = new ArrayList<>();
         this.bulletDataPackets = new ArrayList<>();
+        this.powerups = new ArrayList<>();
+        this.weapons = new ArrayList<>();
 	}
 
 	public void resetState(User user) {
@@ -78,7 +80,8 @@ public class ClientGameState extends GameState {
 
 		this.zombieDataPackets = updatedState.getZombies();
         this.bulletDataPackets = updatedState.getBullets();
-
+        this.powerups = updatedState.getPowerups();
+        this.weapons = updatedState.getWeapons();
 		updateTime(updatedState.getTimeRemaining());
 	}
 
@@ -100,6 +103,7 @@ public class ClientGameState extends GameState {
 
 		//System.out.println(player1.getX());
 		//System.out.println(player1.getY());
+
 	}
 
 	/**
@@ -135,5 +139,15 @@ public class ClientGameState extends GameState {
 			return player1;
 		}
 		return null;
+	}
+
+	public ArrayList<DataPacket> getAliveZombies(){
+		ArrayList<DataPacket> a = new ArrayList<>();
+		for(DataPacket z:getZombieDataPackets()){
+			if(z.isAlive()){
+				a.add(z);
+			}
+		}
+		return a;
 	}
 }

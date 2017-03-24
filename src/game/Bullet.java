@@ -12,14 +12,15 @@ import java.io.Serializable;
  */
 public class Bullet extends Entity implements Serializable {
 
-	public static final float BULLET_SPEED = 0.3f; // Speed of bullets
+	public static float BULLET_SPEED = 0.3f; // Speed of bullets
 
 	private float dx, dy; // Change in x and y of the bullet each update before delta
 
 	public boolean active;
 	private Player player;
 	private double distance;
-	private static final double fadeDistance = 5;
+	private static double fadeDistance = 5;
+
 
 	/**
 	 * Create a new bullet
@@ -58,7 +59,7 @@ public class Bullet extends Entity implements Serializable {
 
 		distance = distance + Math.sqrt((deltX * deltX) + (deltY * deltY));
 
-		if(distance > fadeDistance) {
+		if(distance > getFadeDistance()) {
 			this.active = false;
 		}
 	}
@@ -110,4 +111,22 @@ public class Bullet extends Entity implements Serializable {
 	public CollisionBox getCollisionBox() {
 		return collisionBox;
 	}
+
+
+	public static double getFadeDistance() {
+		return fadeDistance;
+	}
+
+	public static void setFadeDistance(double fadeDistance) {
+		Bullet.fadeDistance = fadeDistance;
+	}
+	
+	public static float getBulletSpeed() {
+		return BULLET_SPEED;
+	}
+
+	public static void setBulletSpeed(float bulletspeed) {
+		Bullet.BULLET_SPEED = bulletspeed;
+	}
+	
 }

@@ -1,18 +1,12 @@
 package game.client;
 
+import game.Weapon;
+
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Random;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * Class that manages sound, mainly music and the game's sound effects.
@@ -20,6 +14,10 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Sound extends Thread{
 	private String pistolSound = "src/game/sounds/pistol.wav";
 	private String shotgunSound = "src/game/sounds/shotgun.wav";
+	private String macGunSound = "src/game/sounds/uzi.wav";
+	private String uziSound = "src/game/sounds/uzi.wav";
+	private String convertSound = "src/game/sounds/converter.wav";
+
 	private String music = "src/game/sounds/music.wav";
 	private String zombieDeath = "src/game/sounds/zombieDeath.wav";
 	private String zombieSound ="src/game/sounds/zombieSound";
@@ -34,6 +32,8 @@ public class Sound extends Thread{
 	public static boolean sfxPlayback = true;
 	public boolean initial = true;
 	public boolean isActive = true;
+	private Player player;
+	long lastSoundPlayed;
 
 	/**
 	 * Initialise sound object
@@ -42,6 +42,7 @@ public class Sound extends Thread{
 		running = true;
 		rn = new Random();
 		oneTwoOrThree = new Random();
+		this.lastSoundPlayed = System.nanoTime();
 	}
 
 	/**
@@ -112,15 +113,38 @@ public class Sound extends Thread{
 	}
 
 	/**
-	 * Method to play the gun sound. 
-	 * @param playerShot Boolean of wherever the player has been allowed to shoot (fire rate)
+	 * Method to play the different gun sounds.
 	 */
-	public void bulletSound(boolean playerShot) {
-		if (playerShot && sfxPlayback) {
-			Clip gunClip = this.createClip(pistolSound);
-			turnDownVolume(gunClip, -10.0f);
-			gunClip.start();
-		}  
+	public void bulletSound() {
+		String toUse = null;
+		long now = System.nanoTime();
+		//This if statement stops the bug of the pistol firing two shots in quick succession
+		if (now - lastSoundPlayed > player.getShootDelay()) {
+			if (this.player.canShoot() && sfxPlayback) {
+				switch(player.getCurrentlyEquipped()) {
+					case PISTOL:
+						toUse = pistolSound;
+						break;
+					case CONVERT:
+						toUse = convertSound;
+						break;
+					case UZI:
+						toUse = uziSound;
+						break;
+					case MAC_GUN:
+						toUse = macGunSound;
+						break;
+					case SHOTGUN:
+						toUse = shotgunSound;
+						break;
+				}
+				Clip gunClip = this.createClip(toUse);
+				//turnDownVolume(gunClip, -10.0f);
+				gunClip.start();
+				lastSoundPlayed = now;
+			}
+		}
+
 	}
 
 	public void buttonPressed() {
@@ -178,6 +202,15 @@ public class Sound extends Thread{
 			zombies.start();
 			// System.out.println("Zombie noise played");
 		}
+	}
+
+	/**
+	 * Add the player to the soundManager, to be able to get player dataq (such as currently equipped weapon)
+	 * @param player the player from which we need to extract the data
+	 */
+
+	public void addPlayer(Player player) {
+		this.player = player;
 	}
 
 	/**

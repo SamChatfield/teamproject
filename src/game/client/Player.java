@@ -1,9 +1,6 @@
 package game.client;
 
-import game.Bullet;
-import game.Collision;
-import game.Entity;
-import game.ResourceLoader;
+import game.*;
 import game.map.MapData;
 import game.util.DataPacket;
 
@@ -20,7 +17,6 @@ public class Player extends Entity {
 	private static final float COLL_BOX_WIDTH = 25.0f;
 	private static final float COLL_BOX_HEIGHT = 25.0f;
 	public static final int HEALTH = 50;
-	private static final long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
 	private static final float MOVE_SPEED = 0.1f;
 	private static final BufferedImage image = ResourceLoader.playerImage();
 	private static final BufferedImage opponentImage = ResourceLoader.opponentImage();
@@ -29,7 +25,14 @@ public class Player extends Entity {
 
 	public boolean conversionMode;
     private ArrayList<Bullet> bullets;
+    
+    private static final boolean isActivePU = false;
+    private static final long appearTimePU = 0;
+    
+    private static final boolean isActivePD = false;
+    private static final float appearTimePD = 0;
 
+    
     /**
      * Create a new Player object in the game
      * @param x Initial X coordinate
@@ -38,14 +41,16 @@ public class Player extends Entity {
      * @param username Username of this player
      */
     public Player(float x, float y, MapData mapData, String username) {
-        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER);
+        super(x, y, MOVE_SPEED, HEALTH, mapData, DataPacket.Type.PLAYER, isActivePU, appearTimePU, isActivePD, appearTimePD);
 
         showCollBox = false;
         bullets = new ArrayList<>(20);
         setUsername(username);
         
         // Initially cannot convert zombies
-        conversionMode = false;
+        conversionMode = false;        
+        getInventory()[0] = Weapon.WeaponState.PISTOL;
+        setCurrentlyEquipped(Weapon.WeaponState.PISTOL);
     }
 
     /**
@@ -86,7 +91,7 @@ public class Player extends Entity {
     public Bullet shoot(float aimX, float aimY, float pdx, float pdy) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
-        if (now - getLastAttackTime() > SHOOT_DELAY) {
+        if (now - getLastAttackTime() > getShootDelay()) {
             setLastAttackTime(now);
             return new Bullet(this, aimX, aimY, pdx, pdy, mapData);
         } else {
@@ -100,12 +105,13 @@ public class Player extends Entity {
      */
     public boolean canShoot(){
         long now = System.nanoTime();
-        if (now - getLastAttackTime() > SHOOT_DELAY) {
+        if (now - getLastAttackTime() > getShootDelay()) {
             return true;
         } else {
             return false;
         }
     }
+
 
     /**
      * Draw the player on the screen
@@ -140,7 +146,7 @@ public class Player extends Entity {
      * @param g2d Graphics2D object
      * @param player Player object
      */
-    public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player) {
+    public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player, Player otherPlayer) {
         // Width and height of the entity sprite
         int w = opponentImage.getWidth();
         int h = opponentImage.getHeight();
@@ -152,7 +158,7 @@ public class Player extends Entity {
         // Display player name
         g2d.setFont(ResourceLoader.getTradewindsFont().deriveFont(15f));
         g2d.setColor(Color.WHITE);
-        g2d.drawString(player.getUsername(), drawX, drawY-20);
+        g2d.drawString(otherPlayer.getUsername(), drawX, drawY-20);
 
         // Health bar
         g2d.setColor(Color.GREEN);

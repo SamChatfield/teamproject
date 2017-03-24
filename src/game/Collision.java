@@ -25,10 +25,15 @@ public class Collision {
 	 * @param b Bullet object
 	 * @param toDamage Amount of damage the bullet will apply
 	 */
-	public static void checkPlayerCollision(Bullet b, Player toDamage) {
+	public static void checkPlayerCollision(Bullet b, Player p, Player toDamage) {
 
 		if (b.getCollisionBox().intersects(toDamage.getCollisionBox())) {
-			b.damagePlayer(toDamage, 25);
+			if (p.getCurrentlyEquipped() == Weapon.WeaponState.SHOTGUN){
+				b.damagePlayer(toDamage, 15);
+			}
+			else{
+				b.damagePlayer(toDamage, 2);
+			}
 			b.active = false;
 		}
 	}
@@ -42,16 +47,39 @@ public class Collision {
 	public static void checkBulletCollision(Bullet b, ArrayList<Zombie> zombies,
 			Player player) {
 		for (int i = 0; i < zombies.size(); i++) {
-			if (b.getCollisionBox().intersects(zombies.get(i).getCollisionBox())) {
-				b.damage(zombies.get(i), 25, player.conversionMode);
+			Zombie z = zombies.get(i);
+			if (z.isAlive() && !z.getUsername().equals(player.getUsername()) && b.getCollisionBox().intersects(z.getCollisionBox())) {
+				b.damage(z, 25, player.conversionMode);
 				b.active = false;
 				break;
 			}
 		}
 	}
+	
+
+	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent, ArrayList<Zombie> zombies) {
+		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
+			p.getPowerupStats(p, player, zombies);
+
+			p.getPowerdownStats(p, opponent);
+			return true;
+		}
+		return false;
+	}
+
+	
+	public static boolean checkWeaponCollision(Weapon w, Player player) {
+		if (w.getCollisionBox().intersects(player.getCollisionBox())) {		
+			w.addToInventory(w.getwState(), player);
+			System.out.println("Added to inventory");
+			return true;
+		}
+		return false;
+	}
 
 	public static boolean playersColliding(Entity player, Entity opponent) {
 		return player.getCollisionBox().intersects(opponent.getCollisionBox());
 	}
+
 
 }

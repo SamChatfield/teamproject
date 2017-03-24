@@ -1,6 +1,8 @@
 package game.util;
 
 import game.Bullet;
+import game.PowerUp;
+import game.Weapon;
 import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
@@ -14,10 +16,16 @@ import java.util.ArrayList;
  */
 public class GameState implements Serializable {
 
+	//Used w/ ServerGameState
 	protected ArrayList<Zombie> zombies;
 	protected ArrayList<Bullet> bullets;
+
+	//Used w/ ClientGameState
 	protected ArrayList<DataPacket> zombieDataPackets;
     protected ArrayList<DataPacket> bulletDataPackets;
+    protected ArrayList<PowerUp> powerups;
+    protected ArrayList<Weapon>  weapons;
+    
 	protected Player player1;
 	protected Player player2;
 	protected String mapImage; // Name of the file being used to create the image.
@@ -87,6 +95,25 @@ public class GameState implements Serializable {
 		this.bullets = bullets;
 	}
 
+	
+	public ArrayList<PowerUp> getPowerups(){
+		return powerups;
+	}
+	
+	public void setPowerUp(ArrayList<PowerUp> powerups){
+		this.powerups = powerups;
+	}
+	
+	
+	public ArrayList<Weapon> getWeapons(){
+		return weapons;
+	}
+	
+	public void setWeapons(ArrayList<Weapon> weapons){
+		this.weapons = weapons;
+	}
+	
+	
 	/**
 	 * Get the current MapData
 	 * @return MapData object
@@ -135,6 +162,7 @@ public class GameState implements Serializable {
 		this.zombies = zombies;
 	}
 
+
 	/**
 	 * Get data packet of zombies
 	 * @return ArrayList of data packets for zombies currently in the game
@@ -166,9 +194,5 @@ public class GameState implements Serializable {
 	public Player getPlayer2() {
 		return player2;
 	}
-
-
-
-
 
 }

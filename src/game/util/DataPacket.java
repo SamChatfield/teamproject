@@ -1,5 +1,7 @@
 package game.util;
 
+import game.Weapon;
+
 import java.io.Serializable;
 
 /**
@@ -15,9 +17,47 @@ public class DataPacket implements Serializable {
 	private String username;
 	private Type type;
 	private int numConvertedZombies;
+	private boolean isActive;
+	private float appearTime;
+	private boolean isActivePD;
+	private float appearTimePD;
 	private int attackDamage;
+	private long shootDelay;
 
-		/**
+	// Used by zombies
+	private boolean alive;
+
+	// Used by players
+	private Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
+	private Weapon.WeaponState currentlyEquipped;
+
+
+	public void setCurrentlyEquipped(Weapon.WeaponState newEquipped) {
+		this.currentlyEquipped = newEquipped;
+	}
+
+	public Weapon.WeaponState getCurrentlyEquipped() {
+		return currentlyEquipped;
+	}
+
+
+	public Weapon.WeaponState[] getInventory() {
+		return inventory;
+	}
+	
+	public void setInventory(Weapon.WeaponState[] newInventory) {
+		this.inventory = newInventory;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	/**
 	 * Object that the data packet refers to
 	 */
 	public enum Type {
@@ -64,7 +104,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the username
-	 * @param Username to set
+	 * @param username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -94,6 +134,23 @@ public class DataPacket implements Serializable {
 		return moveSpeed;
 	}
 
+	public boolean getIsActive(){
+		return isActive;
+	}
+	
+	public float getAppearTime(){
+		return appearTime;
+	}
+	
+	public boolean getIsActivePD(){
+		return isActivePD;
+	}
+	
+	public float getAppearTimePD(){
+		return appearTimePD;
+	}
+	
+	
 	/**
 	 * Set move speed
 	 * @param moveSpeed New movespeed to set
@@ -101,7 +158,24 @@ public class DataPacket implements Serializable {
 	public void setMoveSpeed(float moveSpeed) {
 		this.moveSpeed = moveSpeed;
 	}
+	
+	public void setIsActive(boolean isActive){
+		this.isActive = isActive;
+	}
+	
+	public void setAppearTime(float appearTime){
+		this.appearTime = appearTime;
+	}
+	
+	public void setIsActivePD(boolean isActivePD){
+		this.isActivePD = isActivePD;
+	}
 
+	public void setAppearTimePD(float appearTimePD){
+		this.appearTimePD = appearTimePD;
+	}
+	
+	
 	/**
 	 * Get the last attack time
 	 * @return Time of the last attack of the object
@@ -197,6 +271,13 @@ public class DataPacket implements Serializable {
 		this.attackDamage = attackDamage;
 	}
 
+	public long getShootDelay() {
+		return shootDelay;
+	}
+
+	public void setShootDelay(long shootDelay) {
+		this.shootDelay = shootDelay;
+	}
 
 	/**
 	 * Constructor to create a new DataPacket
@@ -215,5 +296,24 @@ public class DataPacket implements Serializable {
 		this.moveSpeed = moveSpeed;
 		this.health = health;
 		this.type = t;
+		this.alive = true;
+		this.shootDelay = 500000000L;
+	}
+	
+	
+	public DataPacket(float x, float y, float moveSpeed, int health, long lastAttackTime, Type t, boolean isActive, float appearTime, boolean isActivePD, float appearTimePD) {
+		this.lastAttackTime = lastAttackTime;
+
+		this.x = x;
+		this.y = y;
+		this.moveSpeed = moveSpeed;
+		this.health = health;
+		this.isActive = isActive;
+		this.appearTime = appearTime;
+		
+		this.type = t;
+
+		this.alive = true;
+		this.shootDelay = 500000000L;
 	}
 }

@@ -1,19 +1,15 @@
 package game.client;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import game.ResourceLoader;
+import game.Weapon.WeaponState;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
-import game.ResourceLoader;
 
 /**
  * Renders the game menus on screen (main menu and options/help screen)
@@ -32,6 +28,13 @@ public class MenuRenderer {
 	public Rectangle musicButton;
 	public Rectangle returnButton = new Rectangle((Client.GAME_DIMENSION.width / 2) - 75, (Client.GAME_DIMENSION.height/10) * 9, 150, 50);
 
+	private ArrayList<BufferedImage> powerUpImages;
+	private ArrayList<BufferedImage> weaponImages;
+	private ArrayList<String> helpStrings;
+	
+	// Read background image
+	private BufferedImage backgroundImage = null;
+	
 	/**
 	 * Creates a new MenuRenderer, initialising fonts and sizes
 	 * @param bufferStrategy BufferStrategy object
@@ -42,6 +45,34 @@ public class MenuRenderer {
 		gameW = Client.GAME_DIMENSION.width;
 
 		tradeWinds = ResourceLoader.getTradewindsFont();
+		
+		helpStrings = new ArrayList<String>();
+		helpStrings.add("Press W,A,S,D to move in the corresponding 4 directions");
+		helpStrings.add("Use the mouse pointer to aim");
+		helpStrings.add("Left click to shoot in the direction of the player");
+		helpStrings.add("Use number keys 1-5 to use the corresponding item");
+		helpStrings.add("O = Music and SFX on / P = Music and SFX off");
+		
+		weaponImages = new ArrayList<BufferedImage>();
+		weaponImages.add(ResourceLoader.pistol(true));
+		weaponImages.add(ResourceLoader.uzi(true));
+		weaponImages.add(ResourceLoader.shotgun(true));
+		weaponImages.add(ResourceLoader.machineGun(true));
+		weaponImages.add(ResourceLoader.converter(true));
+		
+		powerUpImages = new ArrayList<BufferedImage>();
+		powerUpImages.add(ResourceLoader.speedUp());
+		powerUpImages.add(ResourceLoader.speedDown());
+		powerUpImages.add(ResourceLoader.moreHealth());
+		powerUpImages.add(ResourceLoader.invertControls());
+		powerUpImages.add(ResourceLoader.freezePlayer());
+		powerUpImages.add(ResourceLoader.coz());
+		
+		try {
+			backgroundImage = ImageIO.read(new File("src/game/res/background.png"));
+		} catch (IOException e) {
+			System.err.println("Error reading background image: " + e.getMessage());
+		}
 	}
 
 	/**
@@ -55,6 +86,9 @@ public class MenuRenderer {
 
 		// Fill background
 		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, this.gameW, this.gameH);
+		g2d.drawImage(backgroundImage, 0, 0, this.gameH, this.gameW, null);
+		g2d.setColor(new Color(0, 0, 0, 150));
 		g2d.fillRect(0, 0, Client.GAME_DIMENSION.width, Client.GAME_DIMENSION.height);
 
 		// Set font
@@ -63,15 +97,15 @@ public class MenuRenderer {
 
 		// Display title of page
 		int width = g2d.getFontMetrics().stringWidth("Help & Options");
-		g2d.drawString("Help & Options", (Client.GAME_DIMENSION.width / 2) - width / 2, Client.GAME_DIMENSION.height / 7);
+		g2d.drawString("Help & Options", (Client.GAME_DIMENSION.width / 2) - width / 2, Client.GAME_DIMENSION.height / 10);
 
 		g2d.setFont(tradeWinds.deriveFont(20f));
 
 		// Setup buttons
 		ArrayList<Rectangle> helpButtons = new ArrayList<Rectangle>();
 
-		musicButton = new Rectangle(50, 480, 170, 60);
-		sfxButton = new Rectangle(this.gameW - (200 + 50), 480, 170, 60);
+		musicButton = new Rectangle(50, 500, 170, 60);
+		sfxButton = new Rectangle(this.gameW - (200 + 50), 500, 170, 60);
 
 		helpButtons.add(returnButton);
 		helpButtons.add(sfxButton);
@@ -111,19 +145,76 @@ public class MenuRenderer {
 		}
 
 		// Strings on page
-		g2d.setFont(tradeWinds.deriveFont(20f));
-		ArrayList<String> helpStrings = new ArrayList<String>();
-		helpStrings.add("Press W,A,S,D to move in the corresponding 4 directions");
-		helpStrings.add("Use the mouse pointer to aim");
-		helpStrings.add("Left click to shoot in the direction of the player");
-		helpStrings.add("Use number keys 1-5 to use the corresponding item");
-		helpStrings.add("O = Music and SFX on / P = Music and SFX off");
-		int helpX = 175;
-
+		g2d.setFont(tradeWinds.deriveFont(15f));
+		int helpX = 110;
 		for(String helpString : helpStrings) {
 			int helpStringWidth = g2d.getFontMetrics().stringWidth(helpString);
 			g2d.drawString(helpString, (Client.GAME_DIMENSION.width / 2) - helpStringWidth / 2, helpX);
-			helpX += 60;
+			helpX += 35;
+		}
+		
+		int powerUpX = 10;
+		int powerUpY = 310;
+		int weaponX = 10;
+		int weaponY = 430;
+		int powerUpSize = 25;
+		int textAdjustment = 5;
+		
+		g2d.drawString("Powerups", (this.gameW / 2) - g2d.getFontMetrics().stringWidth("Powerups"), powerUpY - 15);
+		g2d.drawString("Weapons",  (this.gameW / 2) - g2d.getFontMetrics().stringWidth("Weapons"), weaponY - 15);
+		
+		g2d.setFont(tradeWinds.deriveFont(10f));
+		
+		for(int i = 0; i < 6; i++) {
+
+			switch(i) {
+			case 0: 
+				g2d.drawImage(weaponImages.get(0), weaponX, weaponY, 30, 30, null);
+				g2d.drawString("Pistol", weaponX + weaponImages.get(0).getWidth() - textAdjustment, weaponY + (weaponImages.get(0).getHeight() / 2));
+				
+				g2d.drawImage(powerUpImages.get(0), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
+				g2d.drawString("Speed Up", powerUpX + powerUpImages.get(0).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(0).getHeight() / 2));
+				break;
+			case 1:
+				g2d.drawImage(weaponImages.get(1), weaponX, weaponY, 30, 30, null);
+				g2d.drawString("Uzi", weaponX + weaponImages.get(1).getWidth() - textAdjustment, weaponY + (weaponImages.get(1).getHeight() / 2));
+				
+				g2d.drawImage(powerUpImages.get(1), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
+				g2d.drawString("Slow Down Opponent", powerUpX + powerUpImages.get(1).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(1).getHeight() / 2));
+				break;
+			case 2:
+				g2d.drawImage(weaponImages.get(2), weaponX, weaponY, 30, 30, null);
+				g2d.drawString("Shotgun", weaponX + weaponImages.get(2).getWidth() - textAdjustment, weaponY + (weaponImages.get(2).getHeight() / 2));
+				
+				g2d.drawImage(powerUpImages.get(2), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
+				g2d.drawString("Health Up", powerUpX + powerUpImages.get(2).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(2).getHeight() / 2));
+				break;
+			case 3:
+				g2d.drawImage(weaponImages.get(3), weaponX, weaponY, 30, 30, null);
+				g2d.drawString("Machine Gun", weaponX + weaponImages.get(3).getWidth() - textAdjustment, weaponY + (weaponImages.get(3).getHeight() / 2));
+				
+				g2d.drawImage(powerUpImages.get(3), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
+				g2d.drawString("Invert Opponent Controls", powerUpX + powerUpImages.get(3).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(3).getHeight() / 2));
+				break;
+			case 4:
+				g2d.drawImage(weaponImages.get(4), weaponX, weaponY, 30, 30, null);
+				g2d.drawString("Zombie Converter", weaponX + weaponImages.get(4).getWidth() - textAdjustment, weaponY + (weaponImages.get(4).getHeight() / 2));
+				
+				g2d.drawImage(powerUpImages.get(4), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
+				g2d.drawString("Freeze Opponent", powerUpX + powerUpImages.get(4).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(4).getHeight() / 2));
+				break;
+			case 5:
+				g2d.drawImage(powerUpImages.get(5), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
+				g2d.drawString("Convert Opposition Zombies", powerUpX + powerUpImages.get(5).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(5).getHeight() / 2));
+			
+			}
+			powerUpX += 210;
+			weaponX += 120;
+			
+			if(i == 2) {
+				powerUpX = 30;
+				powerUpY += 35;
+			}
 		}
 
 		// Clean up and flip the buffer
@@ -140,14 +231,6 @@ public class MenuRenderer {
 		Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// Read background image
-		BufferedImage background = null;
-		try {
-			background = ImageIO.read(new File("src/game/res/background.png"));
-		} catch (IOException e) {
-			System.err.println("Error reading background image: " + e.getMessage());
-		}
-
 		// Setup buttons
 		ArrayList<Rectangle> buttons = new ArrayList<Rectangle>();
 
@@ -160,7 +243,7 @@ public class MenuRenderer {
 		// Fill background and apply background image
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, this.gameW, this.gameH);
-		g2d.drawImage(background, 0, 0, this.gameH, this.gameW, null);
+		g2d.drawImage(backgroundImage, 0, 0, this.gameH, this.gameW, null);
 
 		// Set font and display game name
 		g2d.setFont(tradeWinds.deriveFont(70f));
