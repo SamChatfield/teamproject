@@ -2,8 +2,10 @@ package game;
 
 import game.client.Player;
 import game.map.MapData;
+import game.util.DataPacket;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 //yolo pls
@@ -15,7 +17,7 @@ public class PowerUp extends Entity implements Serializable {
 	public long time;
 
 	public enum PuState {
-		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, TEST,
+		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, TEST, KOZ
 	}
 
 	public PuState getpState() {
@@ -32,7 +34,7 @@ public class PowerUp extends Entity implements Serializable {
 		this.pState = pState;
 	}
 
-	public void getPowerupStats(PowerUp powerup, Player player) {
+	public void getPowerupStats(PowerUp powerup, Player player, ArrayList<Zombie> zombies) {
 		if (!player.getIsActive()) {
 			if (powerup.pState == PuState.SPEED_UP) {
 				player.setIsActive(true);
@@ -44,6 +46,13 @@ public class PowerUp extends Entity implements Serializable {
 					player.setHealth(50);
 				} else {
 					player.setHealth(player.getHealth() + 10);
+				}
+			}
+			if (powerup.pState == PuState.KOZ){
+				for(Zombie z : zombies){
+					if(z.getState() == DataPacket.State.PLAYER && z.getUsername() != player.getUsername()){
+						z.setUsername(player.getUsername());
+					}
 				}
 			}
 		}
@@ -77,21 +86,23 @@ public class PowerUp extends Entity implements Serializable {
 
 	public static PuState randomPU() {
 		Random r = new Random();
-		int chance = r.nextInt(100) + 1;
-		if (chance <= 20) {
+		int chance = r.nextInt(6) + 1;
+		if (chance == 1) {
 			return PowerUp.PuState.SPEED_UP;
 		}
-		if (20 < chance && chance <= 40) {
+		if (chance == 2) {
+			return PowerUp.PuState.HEALTH;
+		}
+		if (chance == 3) {
+			return PowerUp.PuState.KOZ;
+		}
+		if (chance == 4) {
 			return PowerUp.PuState.SLOW_DOWN;
 		}
-		if (40 < chance && chance <= 60) {
+		if (chance == 5) {
 			return PowerUp.PuState.FREEZE;
 		}
-		if (60 < chance && chance <= 80) {
-			return PowerUp.PuState.INVERSE;
-		}
-
-		return PowerUp.PuState.HEALTH;
+		return PowerUp.PuState.INVERSE;
 	}
 
 	public static void normalSpeed(Player player) {

@@ -155,8 +155,8 @@ public class GameInstance extends Thread {
 		long now1 = System.nanoTime();
 
 		for (PowerUp p : state.getPowerups()) {
-			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2)
-					&& !Collision.checkPowerupCollision(p, player2, player1)) {
+			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2, state.getZombies())
+					&& !Collision.checkPowerupCollision(p, player2, player1, state.getZombies())) {
 				newPowerup.add(p);
 			}
 		}
