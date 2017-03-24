@@ -16,6 +16,7 @@ public class ServerReceiver extends Thread {
 	private ObjectInputStream objIn;
 	private User username;
 	private ClientTable table;
+	private boolean running;
 	
 	/**
 	 * Constructor method
@@ -25,16 +26,20 @@ public class ServerReceiver extends Thread {
 		this.objIn = objIn;
 		this.username = username;
 		this.table = table;
+		this.running = true;
 	}
 	
 	// Main method to run when thread starts
 	public void run() {
-		while(true) {
+		while(running) {
 			try {
 				Object obj = objIn.readObject();
 				if(obj.getClass() == String.class){
 					if(obj.toString().equals("Waiting")) { 	//the player is waiting to be paired with another player
 						table.changePlayerStatus(username, ClientTable.playerStatus.WAITING);
+					} else if(obj.toString().equals("Bye")) {
+						System.out.println("The client said bye :'(");
+						running = false;
 					}
 				}else if(obj.getClass() == PlayerUpdatePacket.class){
 					PlayerUpdatePacket plr = (PlayerUpdatePacket) obj;
@@ -43,10 +48,19 @@ public class ServerReceiver extends Thread {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("User disconnected -- closing the server");
-				System.exit(1);
-				//e.printStackTrace();
+				System.out.println("User disconnected -- closing the socket");
+				running = false;
 			}
+		}
+
+		try {
+			table.removeFromTable(username);
+			System.out.println("Closing socket");
+			objIn.close();
+
+		} catch(IOException e) {
+			System.out.println("Closing socket didn't work, dying");
+			System.exit(1);
 		}
 
 	}

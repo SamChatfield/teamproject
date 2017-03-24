@@ -108,6 +108,12 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		container.setVisible(true);
 		container.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		container.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				sender.sendObject("Bye");
+			}
+		});
+
 		// Handle input
 		addMouseListener(this);
 		addKeyListener(this);
@@ -180,6 +186,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 				// Get current state of player
 				this.player = state.getPlayer();
+
+				soundManager.addPlayer(this.player);
 
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
@@ -290,7 +298,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 			if (isMouseButtonDown(MouseEvent.BUTTON1)) {
 				keyPresses.add("BUTTON1");
-				soundManager.bulletSound(player.canShoot());
+				soundManager.bulletSound();
 			}
 		}
 		// We need to do this in case fv is null
@@ -576,6 +584,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			}
 			// If exit button was clicked
 			else if (renderer.exitButton.contains(mx, my)) {
+				sender.sendObject("Bye");
 				soundManager.buttonPressed();
 				currentState = STATE.EXIT;
 				running = false;
