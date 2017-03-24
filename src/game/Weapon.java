@@ -70,17 +70,14 @@ public class Weapon extends Entity {
 
 	public static WeaponState randomW() {
 		Random r = new Random();
-		int chance = r.nextInt(100) + 1;
-		if (chance <= 25) {
+		int chance = r.nextInt(3) + 1;
+		if (chance == 1) {
 			return Weapon.WeaponState.CONVERT;
 		}
-		if (25 < chance && chance <= 50) {
-			return Weapon.WeaponState.CONVERT;
+		if (chance == 2) {
+			return Weapon.WeaponState.MAC_GUN;
 		}
-		if (50 < chance && chance <= 75) {
-			return Weapon.WeaponState.CONVERT;
-		}
-		return WeaponState.CONVERT;
+		return WeaponState.UZI;
 	}
 
 	public static int getIndex(WeaponState w) {

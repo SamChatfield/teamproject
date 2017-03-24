@@ -86,21 +86,23 @@ public class PowerUp extends Entity implements Serializable {
 
 	public static PuState randomPU() {
 		Random r = new Random();
-		int chance = r.nextInt(100) + 1;
-		if (chance <= 20) {
+		int chance = r.nextInt(6) + 1;
+		if (chance == 1) {
+			return PowerUp.PuState.SPEED_UP;
+		}
+		if (chance == 2) {
+			return PowerUp.PuState.HEALTH;
+		}
+		if (chance == 3) {
 			return PowerUp.PuState.KOZ;
 		}
-		if (20 < chance && chance <= 40) {
-			return PowerUp.PuState.KOZ;
+		if (chance == 4) {
+			return PowerUp.PuState.SLOW_DOWN;
 		}
-		if (40 < chance && chance <= 60) {
-			return PowerUp.PuState.KOZ;
+		if (chance == 5) {
+			return PowerUp.PuState.FREEZE;
 		}
-		if (60 < chance && chance <= 80) {
-			return PowerUp.PuState.KOZ;
-		}
-
-		return PowerUp.PuState.KOZ;
+		return PowerUp.PuState.INVERSE;
 	}
 
 	public static void normalSpeed(Player player) {
