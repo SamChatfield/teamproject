@@ -551,13 +551,6 @@ public class Renderer {
 
 		BufferedImage image = Renderer.splatter1;
 
-		int i = d.getSplatterImg();
-
-		if(i == 2){
-			image = Renderer.splatter2;
-		}else if (i == 3){
-			image = Renderer.splatter3;
-		}
 		g2d.drawImage(image, drawX, drawY, null);
 	}
 	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {

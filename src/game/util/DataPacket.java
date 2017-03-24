@@ -26,7 +26,6 @@ public class DataPacket implements Serializable {
 
 	// Used by zombies
 	private boolean alive;
-	private int splatterImg;
 
 	// Used by players
 	private Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
@@ -39,14 +38,6 @@ public class DataPacket implements Serializable {
 
 	public Weapon.WeaponState getCurrentlyEquipped() {
 		return currentlyEquipped;
-	}
-
-	public int getSplatterImg() {
-		return splatterImg;
-	}
-
-	public void setSplatterImg(int splatterImg) {
-		this.splatterImg = splatterImg;
 	}
 
 	public Weapon.WeaponState[] getInventory() {
