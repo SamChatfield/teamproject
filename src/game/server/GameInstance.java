@@ -195,7 +195,7 @@ public class GameInstance extends Thread {
 		for (Bullet b : newBullets) {
 			Player owner = state.getPlayer(b.getUsername());
 			Collision.checkBulletCollision(b, zombies, owner);
-			Collision.checkPlayerCollision(b, state.getOtherPlayer(owner.getUsername()));
+			Collision.checkPlayerCollision(b, owner, state.getOtherPlayer(owner.getUsername()));
 			b.move(delta);
 		}
 

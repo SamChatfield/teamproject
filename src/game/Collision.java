@@ -25,10 +25,15 @@ public class Collision {
 	 * @param b Bullet object
 	 * @param toDamage Amount of damage the bullet will apply
 	 */
-	public static void checkPlayerCollision(Bullet b, Player toDamage) {
+	public static void checkPlayerCollision(Bullet b, Player p, Player toDamage) {
 
 		if (b.getCollisionBox().intersects(toDamage.getCollisionBox())) {
-			b.damagePlayer(toDamage, 25);
+			if (p.getCurrentlyEquipped() == Weapon.WeaponState.SHOTGUN){
+				b.damagePlayer(toDamage, 15);
+			}
+			else{
+				b.damagePlayer(toDamage, 2);
+			}
 			b.active = false;
 		}
 	}

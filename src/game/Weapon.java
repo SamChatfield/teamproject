@@ -43,7 +43,7 @@ public class Weapon extends Entity {
 			System.out.println(player.getCurrentlyEquipped());
 
 			if (w == WeaponState.MAC_GUN) {
-				player.SHOOT_DELAY = 100000000L;
+				player.SHOOT_DELAY = 200000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(5);
 			}
@@ -53,7 +53,7 @@ public class Weapon extends Entity {
 				Bullet.setFadeDistance(5);
 			}
 			if (w == WeaponState.UZI) {
-				player.SHOOT_DELAY = 100000000L;
+				player.SHOOT_DELAY = 10000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(2);
 			}
@@ -65,20 +65,24 @@ public class Weapon extends Entity {
 			}
 			// Doesn't work yet
 			if (w == WeaponState.SHOTGUN) {
-				// player.SHOOT_DELAY = 500000000L;
-				// add 3 angled bullets per shot
+				player.SHOOT_DELAY = 1000000000L;
+				Bullet.setBulletSpeed(0.1f);
+				Bullet.setFadeDistance(2);
 			}
 		}
 	}
 
 	public static WeaponState randomW() {
 		Random r = new Random();
-		int chance = r.nextInt(3) + 1;
+		int chance = r.nextInt(4) + 1;
 		if (chance == 1) {
-			return Weapon.WeaponState.MAC_GUN;
+			return Weapon.WeaponState.SHOTGUN;
 		}
 		if (chance == 2) {
 			return Weapon.WeaponState.UZI;
+		}
+		if (chance == 3){
+			return Weapon.WeaponState.MAC_GUN;
 		}
 		return Weapon.WeaponState.CONVERT;
 
