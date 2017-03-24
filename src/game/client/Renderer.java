@@ -112,7 +112,7 @@ public class Renderer {
 
 		// Draw relative to other player
 		if(state.getOtherPlayer() != null){
-			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player);
+			state.getOtherPlayer().drawRelativeToOtherPlayer(g2d,player, state.getOtherPlayer());
 		}
 
 		// Draw the bullets
@@ -272,8 +272,8 @@ public class Renderer {
 		// Zombie count box labels
 		ArrayList<String> zombieCountLabels = new ArrayList<String>();
 		zombieCountLabels.add("Wild");
-		zombieCountLabels.add("You");
-		zombieCountLabels.add("Opponent");
+		zombieCountLabels.add(state.getPlayer().getUsername());
+		zombieCountLabels.add(state.getOtherPlayer().getUsername());
 
 		// Colours for zombie count boxes
 		ArrayList<Color> zombieCountColours = new ArrayList<Color>();

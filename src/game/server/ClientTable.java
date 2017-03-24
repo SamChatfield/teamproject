@@ -34,6 +34,8 @@ public class ClientTable {
 		clientTable.put(username, playerStatus.NOT_PLAYING);
 	}
 
+	public void removeFromTable(User username) { clientTable.remove(username); }
+
 	public ArrayList<User> checkAvailable() {
 		availablePlayers = new ArrayList<>();
 		Iterator<?> itr = clientTable.entrySet().iterator();

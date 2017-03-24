@@ -13,6 +13,7 @@ public class ClientSender extends Thread {
 	private User user;
 	private ObjectOutputStream objOut;
 	private ClientGameState state;
+	private boolean running;
 
 	/**
 	 * Constructor
@@ -23,6 +24,7 @@ public class ClientSender extends Thread {
 		this.user = user;
 		this.objOut = objOut;
 		this.state = state;
+		this.running = true;
 	}
 
 	/**
@@ -35,7 +37,9 @@ public class ClientSender extends Thread {
 			objOut.flush();
 		} catch (IOException e) {
 			System.err.println("Communication Error in ClientSender: " + e.getMessage());
-			System.exit(1);
+			//e.printStackTrace();
+			state.setHasFinished(true);
+			//System.exit(1);
 		}
 	}
 
@@ -45,7 +49,7 @@ public class ClientSender extends Thread {
 		System.out.println("Client: ClientSender running");
 		sendObject(user);
 		// Keep running, sending the player object from the client game state every so often.
-		while(true) {
+		while(running) {
 			try {
 				Thread.sleep(3000);
 			} catch (Exception e) {
@@ -53,6 +57,12 @@ public class ClientSender extends Thread {
 				e.printStackTrace();
 				// System.exit(1);
 			}
+		}
+
+		try {
+			objOut.close();
+		} catch (IOException e) {
+			System.out.println("Couldn't close client output stream");
 		}
 	}
 
@@ -63,4 +73,7 @@ public class ClientSender extends Thread {
 	public void addState(ClientGameState state){
 		this.state = state;
 	}
+
+	public void closeStream() { running = false; }
+
 }

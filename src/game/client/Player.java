@@ -147,7 +147,7 @@ public class Player extends Entity {
      * @param g2d Graphics2D object
      * @param player Player object
      */
-    public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player) {
+    public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player, Player otherPlayer) {
         // Width and height of the entity sprite
         int w = opponentImage.getWidth();
         int h = opponentImage.getHeight();
@@ -159,7 +159,7 @@ public class Player extends Entity {
         // Display player name
         g2d.setFont(ResourceLoader.getTradewindsFont().deriveFont(15f));
         g2d.setColor(Color.WHITE);
-        g2d.drawString(player.getUsername(), drawX, drawY-20);
+        g2d.drawString(otherPlayer.getUsername(), drawX, drawY-20);
 
         // Health bar
         g2d.setColor(Color.GREEN);
