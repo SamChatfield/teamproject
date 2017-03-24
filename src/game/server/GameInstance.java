@@ -77,7 +77,7 @@ public class GameInstance extends Thread {
 	private void update(double delta) {
 		// System.out.println("delta: " + delta);
 		ArrayList<Zombie> zombies = state.getZombies();
-		// ArrayList<PowerUp> powerups = state.getPowerups();
+		ArrayList<PowerUp> powerups = state.getPowerups();
 
 		// Update the player states
 		Player player1 = state.getPlayer1();
@@ -88,14 +88,12 @@ public class GameInstance extends Thread {
 		players.add(player1);
 		players.add(player2);
 
-		// Move the zombies around randomly
-		Random rand = new Random();
-
 		ArrayList<Zombie> newZombies = new ArrayList<>();
 
+		Random r = new Random();
 		for (Zombie z : state.getZombies()) {
-			if (z.getHealth() == 0) {
-				z.setAlive(false);
+			if (z.getHealth() == 0 && z.isAlive()) {
+				z.setAlive(false,r.nextInt(3) + 1);
 			}
 			newZombies.add(z);
 		}
@@ -113,7 +111,6 @@ public class GameInstance extends Thread {
 		state.setZombies(newZombies);
 
 		// RANDOMNESS
-		Random r = new Random();
 		int chancePU = r.nextInt(100) + 1;
 
 		int xP = r.nextInt(40) - 20;
