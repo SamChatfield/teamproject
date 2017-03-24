@@ -103,7 +103,7 @@ public class GameInstance extends Thread {
 		for (Zombie z : newZombies) {
 		    if(z.isAlive()) {
                 for (Player player : players) {
-                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
+                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= z.AGGRO_RANGE) {
                         z.followDirection(player);
                     } else {
                         if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
