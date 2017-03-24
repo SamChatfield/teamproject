@@ -95,25 +95,6 @@ public class GameInstance extends Thread {
 			}
 		}
 
-//		for (Zombie z : newZombies) {
-//			for (Player player : players) {
-//				if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
-////					z.followDirection(player);
-//					if (z.getState() == DataPacket.State.WILD || !player.getUsername().equals(z.getUsername())) {
-//						ArtInt.followPlayer(z, players);
-//					}
-//				} else {
-//					if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-//						z.newMovingDir();
-//					}
-//				}
-//				// Check if player has collided with a zombie
-//				Collision.checkCollision(z, player);
-//			}
-//			// Apply zombie movements on map
-//			z.move(delta);
-//		}
-
 		for (Zombie z : newZombies) {
 			ArtInt.followPlayer(z, players);
 			z.move(delta);
