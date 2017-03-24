@@ -119,7 +119,7 @@ public class Sound extends Thread{
 		String toUse = null;
 		long now = System.nanoTime();
 		//This if statement stops the bug of the pistol firing two shots in quick succession
-		if (now - lastSoundPlayed > player.SHOOT_DELAY) {
+		if (now - lastSoundPlayed > player.getShootDelay()) {
 			System.out.println(this.player.canShoot());
 			if (this.player.canShoot() && sfxPlayback) {
 				switch(player.getCurrentlyEquipped()) {

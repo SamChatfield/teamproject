@@ -268,4 +268,12 @@ public class Entity implements Serializable {
 	public Weapon.WeaponState getCurrentlyEquipped(){
 		return data.getCurrentlyEquipped();
 	}
+
+	public long getShootDelay() {
+		return data.getShootDelay();
+	}
+
+	public void setShootDelay(long shootDelay) {
+		data.setShootDelay(shootDelay);
+	}
 }
