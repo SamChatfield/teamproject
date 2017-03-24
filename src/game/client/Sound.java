@@ -1,5 +1,7 @@
 package game.client;
 
+import game.Weapon;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +14,10 @@ import java.util.Random;
 public class Sound extends Thread{
 	private String pistolSound = "src/game/sounds/pistol.wav";
 	private String shotgunSound = "src/game/sounds/shotgun.wav";
+	private String macGunSound = "src/game/sounds/AK47.wav";
+	private String uziSound = "src/game/sounds/uzi.wav";
+	private String convertSound = "src/game/sounds/converter.wav";
+
 	private String music = "src/game/sounds/music.wav";
 	private String zombieDeath = "src/game/sounds/zombieDeath.wav";
 	private String zombieSound ="src/game/sounds/zombieSound";
@@ -26,6 +32,7 @@ public class Sound extends Thread{
 	public static boolean sfxPlayback = true;
 	public boolean initial = true;
 	public boolean isActive = true;
+	private Player player;
 
 	/**
 	 * Initialise sound object
@@ -108,8 +115,27 @@ public class Sound extends Thread{
 	 * @param playerShot Boolean of wherever the player has been allowed to shoot (fire rate)
 	 */
 	public void bulletSound(boolean playerShot) {
+		String toUse = null;
 		if (playerShot && sfxPlayback) {
-			Clip gunClip = this.createClip(pistolSound);
+			System.out.println(player.getCurrentlyEquipped());
+			switch(player.getCurrentlyEquipped()) {
+				case PISTOL:
+					toUse = pistolSound;
+					break;
+				case CONVERT:
+					toUse = convertSound;
+					break;
+				case UZI:
+					toUse = uziSound;
+					break;
+				case MAC_GUN:
+					toUse = macGunSound;
+					break;
+				case SHOTGUN:
+					toUse = shotgunSound;
+					break;
+			}
+			Clip gunClip = this.createClip(toUse);
 			turnDownVolume(gunClip, -10.0f);
 			gunClip.start();
 		}  
@@ -170,6 +196,15 @@ public class Sound extends Thread{
 			zombies.start();
 			// System.out.println("Zombie noise played");
 		}
+	}
+
+	/**
+	 * Add the player to the soundManager, to be able to get player dataq (such as currently equipped weapon)
+	 * @param player the player from which we need to extract the data
+	 */
+
+	public void addPlayer(Player player) {
+		this.player = player;
 	}
 
 	/**

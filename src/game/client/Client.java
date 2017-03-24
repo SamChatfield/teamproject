@@ -187,6 +187,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 				// Get current state of player
 				this.player = state.getPlayer();
 
+				soundManager.addPlayer(this.player);
+
 				// Calculate how long since last update
 				// Delta is how far things should move this update to compensate
 				long now = System.nanoTime();
