@@ -227,11 +227,11 @@ public class GameInstance extends Thread {
 		Player winner;
 
 		// First of all, do any players have 0 health.
-		if (state.getPlayer1().getHealth() == 0) {
+		if (state.getPlayer1().getHealth() <= 0) {
 			winner = state.getPlayer2();
 			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
 					EndState.EndReason.PLAYER_DIED);
-		} else if (state.getPlayer2().getHealth() == 0) {
+		} else if (state.getPlayer2().getHealth() <= 0) {
 			winner = state.getPlayer1();
 			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
 					EndState.EndReason.PLAYER_DIED);
