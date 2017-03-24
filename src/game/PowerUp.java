@@ -2,11 +2,14 @@ package game;
 
 import game.client.Player;
 import game.map.MapData;
+import game.util.DataPacket;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 //yolo pls
+//revert
 
 public class PowerUp extends Entity implements Serializable {
 	private PuState pState;
@@ -32,12 +35,12 @@ public class PowerUp extends Entity implements Serializable {
 		this.pState = pState;
 	}
 
-	public void getPowerupStats(PowerUp powerup, Player player) {
+	public void getPowerupStats(PowerUp powerup, Player player, ArrayList<Zombie> zombies) {
 		if (!player.getIsActive()) {
 			if (powerup.pState == PuState.SPEED_UP) {
 				player.setIsActive(true);
 				player.setAppearTime(System.nanoTime());
-				player.setMoveSpeed(player.getMoveSpeed() + 0.05f);
+				player.setMoveSpeed(0.15f);
 			}
 			if (powerup.pState == PuState.HEALTH) {
 				if (player.getHealth() >= 40) {
@@ -46,6 +49,16 @@ public class PowerUp extends Entity implements Serializable {
 					player.setHealth(player.getHealth() + 10);
 				}
 			}
+
+			
+			if(powerup.pState == PuState.COZ){
+				for(Zombie z : zombies){
+					if( z.getState() == DataPacket.State.PLAYER && z.getUsername() != player.getUsername()){
+						z.setUsername(player.getUsername());
+					}
+				}
+			}
+
 		}
 	}
 
@@ -77,21 +90,26 @@ public class PowerUp extends Entity implements Serializable {
 
 	public static PuState randomPU() {
 		Random r = new Random();
-		int chance = r.nextInt(100) + 1;
-		if (chance <= 20) {
-			return PowerUp.PuState.SPEED_UP;
+
+		int chance = r.nextInt(6) + 1;
+		if (chance == 1) {
+			return PowerUp.PuState.HEALTH;
 		}
-		if (20 < chance && chance <= 40) {
+		if (chance == 2) {
 			return PowerUp.PuState.SLOW_DOWN;
 		}
-		if (40 < chance && chance <= 60) {
+		if (chance == 3) {
 			return PowerUp.PuState.FREEZE;
 		}
-		if (60 < chance && chance <= 80) {
+		if (chance == 4) {
 			return PowerUp.PuState.INVERSE;
 		}
+		if (chance == 5){
+			return PowerUp.PuState.COZ;
+		}
 
-		return PowerUp.PuState.HEALTH;
+		return PowerUp.PuState.SPEED_UP;
+
 	}
 
 	public static void normalSpeed(Player player) {

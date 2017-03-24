@@ -103,7 +103,7 @@ public class GameInstance extends Thread {
 		for (Zombie z : newZombies) {
 		    if(z.isAlive()) {
                 for (Player player : players) {
-                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
+                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= z.AGGRO_RANGE) {
                         z.followDirection(player);
                     } else {
                         if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
@@ -155,8 +155,8 @@ public class GameInstance extends Thread {
 		long now1 = System.nanoTime();
 
 		for (PowerUp p : state.getPowerups()) {
-			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2)
-					&& !Collision.checkPowerupCollision(p, player2, player1)) {
+			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2, state.getZombies())
+					&& !Collision.checkPowerupCollision(p, player2, player1, state.getZombies())) {
 				newPowerup.add(p);
 			}
 		}
@@ -195,7 +195,7 @@ public class GameInstance extends Thread {
 		for (Bullet b : newBullets) {
 			Player owner = state.getPlayer(b.getUsername());
 			Collision.checkBulletCollision(b, zombies, owner);
-			Collision.checkPlayerCollision(b, state.getOtherPlayer(owner.getUsername()));
+			Collision.checkPlayerCollision(b, owner, state.getOtherPlayer(owner.getUsername()));
 			b.move(delta);
 		}
 
