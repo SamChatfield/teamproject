@@ -39,7 +39,7 @@ public class Renderer {
 	public static final BufferedImage moreHealth = ResourceLoader.moreHealth();
 	public static final BufferedImage invertControls = ResourceLoader.invertControls();
 	public static final BufferedImage freezePlayer = ResourceLoader.freezePlayer();
-
+	public static final BufferedImage coz = ResourceLoader.coz();
 
 	//Blood splatters
 	public static final BufferedImage splatter1 = ResourceLoader.splatter1();
@@ -207,7 +207,7 @@ public class Renderer {
 			
 			// Highlight selected weapon
 			if(player.getCurrentlyEquipped() == weapon) {
-				g2d.setColor(new Color(255, 255, 0, 150));
+				g2d.setColor(new Color(50, 205, 50, 150));
 			} else if(weaponObtained) {
 				g2d.setColor(new Color(255,255,255, 150));
 			} else {
@@ -584,7 +584,9 @@ public class Renderer {
 		case SLOW_DOWN:
 			image = Renderer.speedDown;
 			break;
-
+		case COZ:
+			image = Renderer.coz;
+			break;
 		default:
 			break;
 

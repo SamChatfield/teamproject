@@ -66,7 +66,7 @@ public class MenuRenderer {
 		powerUpImages.add(ResourceLoader.moreHealth());
 		powerUpImages.add(ResourceLoader.invertControls());
 		powerUpImages.add(ResourceLoader.freezePlayer());
-		powerUpImages.add(ResourceLoader.freezePlayer());
+		powerUpImages.add(ResourceLoader.coz());
 		
 		try {
 			backgroundImage = ImageIO.read(new File("src/game/res/background.png"));
