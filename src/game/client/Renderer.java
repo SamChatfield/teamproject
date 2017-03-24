@@ -585,6 +585,10 @@ public class Renderer {
 			image = Renderer.speedDown;
 			break;
 
+		case COZ:
+			image = Renderer.freezePlayer;
+
+
 		default:
 			break;
 
