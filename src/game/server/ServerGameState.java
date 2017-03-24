@@ -190,42 +190,53 @@ public class ServerGameState extends GameState {
 
 			// PISTOL
 			case "VK_1":
-				WeaponState w = toModify.getInventory()[0];
-				Weapon.getWeaponStats(w, toModify);
+				WeaponState pistol = toModify.getInventory()[0];
+				
+				Weapon.getWeaponStats(pistol, toModify);
+				
+				//toModify.setCurrentlyEquipped(WeaponState.PISTOL);
+				//System.out.println("Weapon 1");
+				
 				break;
 			// UZI
 			case "VK_2":
-				WeaponState w1 = toModify.getInventory()[1];
+				WeaponState uzi = toModify.getInventory()[1];
 
-				Weapon.getWeaponStats(w1, toModify);
-
+				Weapon.getWeaponStats(uzi, toModify);
+				
+				//toModify.setCurrentlyEquipped(WeaponState.UZI);
+				//System.out.println("Weapon 2");
+				
 				break;
 			// SHOTGUN
 			case "VK_3":
-				WeaponState w11 = toModify.getInventory()[2];
+				WeaponState shotgun = toModify.getInventory()[2];
 
-				Weapon.getWeaponStats(w11, toModify);
+				Weapon.getWeaponStats(shotgun, toModify);
 
+				//toModify.setCurrentlyEquipped(WeaponState.SHOTGUN);
+				//System.out.println("Weapon 3");
+				
 				break;
 			// MACGUN
 			case "VK_4":
-				WeaponState w111 = toModify.getInventory()[3];
+				WeaponState macGun = toModify.getInventory()[3];
 
-				Weapon.getWeaponStats(w111, toModify);
+				Weapon.getWeaponStats(macGun, toModify);
+				
+				//toModify.setCurrentlyEquipped(WeaponState.MAC_GUN);
+				//System.out.println("Weapon 4");
 
 				break;
 			// CONVERT
 			case "VK_5":
-				WeaponState w1111 = toModify.getInventory()[4];
+				WeaponState convert = toModify.getInventory()[4];
 
-				Weapon.getWeaponStats(w1111, toModify);
+				Weapon.getWeaponStats(convert, toModify);
+				
+				//toModify.setCurrentlyEquipped(WeaponState.CONVERT);
+				//System.out.println("Weapon 5");
 
-				break;
-			case "VK_Z":
-				toModify.conversionMode = true;
-				break;
-			case "VK_X":
-				toModify.conversionMode = false;
 				break;
 			case "BUTTON1":
 				shootNow = true;

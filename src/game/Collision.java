@@ -25,10 +25,15 @@ public class Collision {
 	 * @param b Bullet object
 	 * @param toDamage Amount of damage the bullet will apply
 	 */
-	public static void checkPlayerCollision(Bullet b, Player toDamage) {
+	public static void checkPlayerCollision(Bullet b, Player p, Player toDamage) {
 
 		if (b.getCollisionBox().intersects(toDamage.getCollisionBox())) {
-			b.damagePlayer(toDamage, 25);
+			if (p.getCurrentlyEquipped() == Weapon.WeaponState.SHOTGUN){
+				b.damagePlayer(toDamage, 15);
+			}
+			else{
+				b.damagePlayer(toDamage, 2);
+			}
 			b.active = false;
 		}
 	}
@@ -51,9 +56,11 @@ public class Collision {
 		}
 	}
 	
-	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent) {
+
+	public static boolean checkPowerupCollision(PowerUp p, Player player, Player opponent, ArrayList<Zombie> zombies) {
 		if (p.getCollisionBox().intersects(player.getCollisionBox())) {
-			p.getPowerupStats(p, player);
+			p.getPowerupStats(p, player, zombies);
+
 			p.getPowerdownStats(p, opponent);
 			return true;
 		}
@@ -64,6 +71,7 @@ public class Collision {
 	public static boolean checkWeaponCollision(Weapon w, Player player) {
 		if (w.getCollisionBox().intersects(player.getCollisionBox())) {		
 			w.addToInventory(w.getwState(), player);
+			System.out.println("Added to inventory");
 			return true;
 		}
 		return false;

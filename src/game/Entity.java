@@ -51,7 +51,6 @@ public class Entity implements Serializable {
 		collisionBox = new CollisionBox(this);
 	}
 
-	
 	/**
 	 * Get the time of the last attack made by this entity
 	 * @return Time of last attack
@@ -94,8 +93,7 @@ public class Entity implements Serializable {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
+
 	 * Move entity on the map
 	 * @param dx Movement X
 	 * @param dy Movement Y
@@ -116,7 +114,7 @@ public class Entity implements Serializable {
 	}
 
 	/**
->>>>>>> tests
+
 	 * Set the facing angle of the entity
 	 * @param fx Facing X value
 	 * @param fy Facing Y value
@@ -186,6 +184,8 @@ public class Entity implements Serializable {
 		setAppearTime(data2.getAppearTime());
 		setIsActivePD(data2.getIsActivePD());
 		setAppearTimePD(data2.getAppearTimePD());
+		setCurrentlyEquipped(data2.getCurrentlyEquipped());
+		setInventory(data2.getInventory());
 	}
 
 	/**
@@ -312,6 +312,10 @@ public class Entity implements Serializable {
 
 	public Weapon.WeaponState[] getInventory(){
 		return data.getInventory();
+	}
+	
+	public void setInventory(Weapon.WeaponState[] newInventory){
+		data.setInventory(newInventory);
 	}
 
 	public void setCurrentlyEquipped(Weapon.WeaponState newWeapon){

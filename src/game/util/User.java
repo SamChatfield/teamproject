@@ -1,5 +1,7 @@
 package game.util;
 
+import game.client.ClientReceiver;
+import game.client.ClientSender;
 import game.server.ServerReceiver;
 import game.server.ServerSender;
 
@@ -16,10 +18,10 @@ public class User implements Serializable{
 	public static final int MED =2;
 	public static final int HARD =3;
 
-	public ServerSender server_sender;
-	public ServerReceiver server_receiver;
+	public ServerSender serverSender;
+	public ServerReceiver serverReceiver;
 
-	public User(String username, int difficulty) {
+	public User(String username, int difficulty){
 		this.username = username;
 		this.difficulty = difficulty;
 
@@ -34,18 +36,18 @@ public class User implements Serializable{
 	public void setUsername(String username) { this.username = username; }
 
 	public void setServerSender(ServerSender sender) {
-		server_sender = sender;
+		serverSender = sender;
 	}
 
 	public void setServerReceiver(ServerReceiver receiver) {
-		server_receiver = receiver;
+		serverReceiver = receiver;
 	}
 
 	public ServerSender getServerSender() {
-		return server_sender;
+		return serverSender;
 	}
 
 	public ServerReceiver getServerReceiver() {
-		return server_receiver;
+		return serverReceiver;
 	}
 }

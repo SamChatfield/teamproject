@@ -17,7 +17,7 @@ public class Zombie extends Entity {
 	private static final float COLL_BOX_HEIGHT = 25.0f;
 	private static final int HEALTH = 25;
 	private static final float MOVE_SPEED = 0.05f;
-	public static final float AGGRO_RANGE = 4.0f;
+	public float AGGRO_RANGE = 4.0f;
 
 	/**
 	 * Create a new zombie
@@ -54,6 +54,7 @@ public class Zombie extends Entity {
 	 */
 	public void convert(String username) {
 		setUsername(username); // Change the owner of the zombie to the new player
+		AGGRO_RANGE = 40f;
 		setState(DataPacket.State.PLAYER);
 	}
 
@@ -134,4 +135,6 @@ public class Zombie extends Entity {
 			}
 		}
 	}
+	
+
 }

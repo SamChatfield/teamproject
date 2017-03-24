@@ -12,8 +12,7 @@ public class Weapon extends Entity {
 	public float y;
 
 	public enum WeaponState {
-		PISTOL, MAC_GUN, SHOTGUN, UZI, CONVERT, FLAME_THROWER // GRENADE
-		// Doesn't work yet
+		PISTOL, UZI, SHOTGUN, MAC_GUN, CONVERT
 	}
 
 	public WeaponState getwState() {
@@ -36,51 +35,57 @@ public class Weapon extends Entity {
 	public static void getWeaponStats(WeaponState w, Player player) {
 		player.conversionMode = false;
 
+		System.out.println("getWeaponStats called");
+
 		if (w != null) {
+
 			player.setCurrentlyEquipped(w);
+			System.out.println(player.getCurrentlyEquipped());
+
 			if (w == WeaponState.MAC_GUN) {
-				player.SHOOT_DELAY = 100000000L;
+				player.SHOOT_DELAY = 200000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(5);
-			} if (w == WeaponState.PISTOL) {
+			}
+			if (w == WeaponState.PISTOL) {
 				player.SHOOT_DELAY = 500000000L;
-				Bullet.setBulletSpeed( 0.15f);
+				Bullet.setBulletSpeed(0.15f);
 				Bullet.setFadeDistance(5);
-			} if (w == WeaponState.UZI) {
-				player.SHOOT_DELAY = 100000000L;
+			}
+			if (w == WeaponState.UZI) {
+				player.SHOOT_DELAY = 10000000L;
 				Bullet.setBulletSpeed(0.3f);
 				Bullet.setFadeDistance(2);
-			} if (w == WeaponState.FLAME_THROWER) {
-				player.SHOOT_DELAY = 100000L;
-				Bullet.setBulletSpeed(0.3f);
-				Bullet.setFadeDistance(1);
-			} if (w == WeaponState.CONVERT) {
+			}
+			if (w == WeaponState.CONVERT) {
 				player.SHOOT_DELAY = 500000000L;
-				Bullet.setBulletSpeed( 0.15f);
+				Bullet.setBulletSpeed(0.15f);
 				Bullet.setFadeDistance(5);
 				player.conversionMode = true;
-			} 
-			//Doesn't work yet
+			}
+			// Doesn't work yet
 			if (w == WeaponState.SHOTGUN) {
-			//	player.SHOOT_DELAY = 500000000L;
-				// add 3 angled bullets per shot
-			} 
+				player.SHOOT_DELAY = 1000000000L;
+				Bullet.setBulletSpeed(0.1f);
+				Bullet.setFadeDistance(2);
+			}
 		}
 	}
 
 	public static WeaponState randomW() {
 		Random r = new Random();
-		int chance = r.nextInt(100) + 1;
-		if (chance <= 25) {
-			return Weapon.WeaponState.MAC_GUN;
+		int chance = r.nextInt(4) + 1;
+		if (chance == 1) {
+			return Weapon.WeaponState.SHOTGUN;
 		}
-		if (25 < chance && chance <= 50) {
+		if (chance == 2) {
 			return Weapon.WeaponState.UZI;
 		}
-		if (50 < chance && chance <= 75) {
-			return Weapon.WeaponState.CONVERT;
+		if (chance == 3){
+			return Weapon.WeaponState.MAC_GUN;
 		}
-		return WeaponState.SHOTGUN;
+		return Weapon.WeaponState.CONVERT;
+
 	}
 
 	public static int getIndex(WeaponState w) {

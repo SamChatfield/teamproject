@@ -13,7 +13,7 @@ public class ServerSender extends Thread {
 
 	private ServerGameState state;
 	private ObjectOutputStream objOut;
-	private boolean initial, playersReadyInitial, gameInProgress;
+	private boolean initial, playersReadyInitial, gameInProgress, running;
 
 
 	/**
@@ -27,6 +27,7 @@ public class ServerSender extends Thread {
 		this.gameInProgress = false;
 		//This is a dummy state that won't be used, it is waiting for a real state to be created
 		this.state = new ServerGameState("a", "b", 0);
+		this.running = true;
 	}
 
 	/**
@@ -39,7 +40,7 @@ public class ServerSender extends Thread {
 			objOut.flush();
 			objOut.reset();
 		} catch (IOException e) {
-			System.err.println("Communication Error! " + e.getMessage());
+			System.err.println("Can't send game state! " + e.getMessage());
 			//System.exit(1);
 		} catch(ConcurrentModificationException c){
 			System.out.println("Concurrent mod exception in sendGameState()");
@@ -57,8 +58,8 @@ public class ServerSender extends Thread {
 			objOut.flush();
 			objOut.reset();
 		} catch (IOException e) {
-			System.err.println("Communication Error! " + e.getMessage());
-			System.exit(1);
+			System.err.println("Can't send end game state! " + e.getMessage());
+			//System.exit(1);
 		}
 	}
 
@@ -71,8 +72,8 @@ public class ServerSender extends Thread {
 			objOut.writeObject(obj);
 			objOut.flush();
 		} catch (IOException e) {
-			System.err.println("Communication Error! " + e.getMessage());
-			System.exit(1);
+			System.err.println("Can't send object! " + e.getMessage());
+			//System.exit(1);
 		}
 		System.out.println("Server: Object successfully sent");
 	}
@@ -80,16 +81,9 @@ public class ServerSender extends Thread {
 	// Main method to run when thread starts
 	public void run() {
 		boolean finalStateSent = false;
-		while(true) {
+		while(running) {
             try {
 				Thread.sleep(1000/60);
-//				if(state.playersReady()) {
-//					if(playersReadyInitial) {
-//						sendObject("PlayersReady");
-//						System.out.println("Sent out playersReady");
-//						playersReadyInitial = false;
-//					}
-//				}
 				if (gameInProgress) { // if there is a game in progress
 					if(initial){
 						sendObject("StartingGame");
@@ -97,6 +91,7 @@ public class ServerSender extends Thread {
 						finalStateSent = false;
 					}
 					if(state.HasFinished() && !finalStateSent){
+						System.out.println("hasFinished is now true");
 						finalStateSent = true;
 
 						sendGameState(); // Send a final update (so players don't finish with 50% health because they didn't get the final update.
@@ -113,8 +108,16 @@ public class ServerSender extends Thread {
 				}
 
 			} catch (InterruptedException e) {
-				System.err.println("ServerSender Interupted Exception: " + e.getMessage());
+				System.err.println("ServerSender Interrupted Exception: " + e.getMessage());
 			} 
+		}
+
+		try {
+			System.out.println("Closing OutputStream");
+			objOut.close();
+		} catch(IOException e) {
+			System.out.println("Closing the object output stream didn't work");
+			//System.exit(1);
 		}
 	}
 
@@ -123,4 +126,6 @@ public class ServerSender extends Thread {
 		this.gameInProgress = true;
 		this.playersReadyInitial = true;
 	}
+
+	public void closeStream() { running = false; }
 }
