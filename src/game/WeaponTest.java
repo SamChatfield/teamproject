@@ -26,8 +26,10 @@ public class WeaponTest {
 	Weapon.WeaponState w2 = WeaponState.MAC_GUN;
 	Weapon.WeaponState w3 = WeaponState.CONVERT;
 	Weapon.WeaponState w4 = WeaponState.SHOTGUN;
-
+	Weapon.WeaponState w5 = null;
 	Weapon weapon = new Weapon (2, 2, null, w, 5);
+	
+	
 
 
 	/**
@@ -92,18 +94,25 @@ public class WeaponTest {
 		assertNotNull(weapon.getIndex(w2));
 		assertNotNull(weapon.getIndex(w3));
 		assertNotNull(weapon.getIndex(w4));
+		//assertNull(weapon.getIndex(w5));
 		}
 
 	/**
 	 * Test method for {@link game.Weapon#addToInventory(game.Weapon.WeaponState, game.client.Player)}.
 	 */
+	
 	@Test
 	public final void testAddToInventory() {
+		
+		assertNotNull(player.getInventory()[0]);
+		//assertNull(player.getInventory()[0]);
+		//assertNotNull(player.getInventory()[1]);
+		
 		weapon.addToInventory(w, player);
 		assertNotNull(player.getInventory());
 		
 		weapon.addToInventory(w1, player);
-		assertNull(player.getInventory());
+		assertNotNull(player.getInventory());
 	}
 
 }

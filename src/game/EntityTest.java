@@ -10,6 +10,7 @@ import game.ResourceLoader;
 import game.Zombie;
 import game.map.MapData;
 import game.util.DataPacket;
+import game.util.DataPacket.Type;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -50,11 +51,12 @@ public class EntityTest {
 	Player player = new Player(1, 1, null, "ryan"); 
 	Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
+	Entity entityPU = new Entity(1,1,null);
 	Zombie zombie = new Zombie(1,1,null, 0);
 	private ArrayList<Bullet> bullets;
 	protected transient MapData mapData;
-	DataPacket data = new DataPacket(1, 1, 0.3f, 50, 10l, null);
-	
+	//DataPacket data = new DataPacket(1, 1, 0.3f, 50, 10l, null);
+	DataPacket data = new DataPacket(1, 1, 0.3f, 50, 100l, null, true, 100, false, 1000);
 	
 	@Test
 	public final void testPlayer() {
@@ -107,7 +109,9 @@ public class EntityTest {
 		long time = 100000000000l;
 		player.setLastAttackTime(time);
 		assertTrue(player.canShoot());
-		//assertSame(false, player.canShoot());
+		time = 999999999999999l;
+		player.setLastAttackTime(time);
+		assertTrue(!player.canShoot());
 	}
 
 	Graphics2D g2d;
@@ -176,6 +180,7 @@ public class EntityTest {
 	 */
 	@Test
 	public final void testGetDy() {
+		
 		assertNotNull(zombie.getDy());
 	}
 
@@ -272,13 +277,47 @@ public class EntityTest {
 		assertNotNull(player.getData());
 	}
 
+	
+	@Test
+	public final void testGetAppearTimePD() {
+		assertNotNull(player.getAppearTimePD());
+	}
+	
+	@Test
+	public final void testGetAppearTime() {
+		assertNotNull(player.getAppearTime());
+	}
+	
+	@Test
+	public final void testSetAlive() {
+		assertTrue(data.isAlive());
+		data.setAlive(false);
+		assertTrue(!data.isAlive());
+		player.setAlive(true);
+		assertTrue(player.isAlive());
+	}
+	
+	@Test
+	public final void testGetCurrentlyEquipped() {
+		assertNotNull(player.getCurrentlyEquipped());
+	}
+
+	@Test
+	public final void testGetx() {
+		assertNotNull(player.getx());
+	}
+	
+	@Test
+	public final void testGety() {
+		assertNotNull(player.gety());
+	}
+	
 	/**
 	 * Test method for {@link game.Entity#updateLocalPlayerData(game.util.DataPacket)}.
 	 */
 	@Test
 	public final void testUpdateLocalPlayerData() {
 		player.updateLocalPlayerData(data);
-		
 		
 	}
 

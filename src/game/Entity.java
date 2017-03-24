@@ -53,14 +53,6 @@ public class Entity implements Serializable {
 
 	
 	/**
-	 * Get the type of the DataPacket within this entity
-	 * @return Type of data packet
-	 */
-	public DataPacket.Type getType(){
-		return getType();
-	}
-
-	/**
 	 * Get the time of the last attack made by this entity
 	 * @return Time of last attack
 	 */
@@ -315,6 +307,8 @@ public class Entity implements Serializable {
 	public void setAlive(boolean b) {
 		data.setAlive(b);
 	}
+	
+	
 
 	public Weapon.WeaponState[] getInventory(){
 		return data.getInventory();
