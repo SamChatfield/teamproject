@@ -27,7 +27,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	static final Dimension GAME_DIMENSION = new Dimension(640, 640);
 	static final Point SCREEN_CENTRE = new Point(GAME_DIMENSION.width / 2, GAME_DIMENSION.height / 2);
 	public static final int VIEW_SIZE = 10; // how many tiles can be seen in the
-											// game window e.g. 10 => 10x10 view
+	// game window e.g. 10 => 10x10 view
 	public static final int TILE_SIZE = 64;
 	private static final int TARGET_FPS = 60;
 	private static final long OPTIMAL_TIME_DIFF = 1000000000L / TARGET_FPS;
@@ -47,7 +47,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	private Renderer renderer;
 	private MenuRenderer menu;
-	
+
 
 	// Client state
 	private enum STATE {
@@ -159,7 +159,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		soundManager.start();
 
 		while (running) {
-			
+
 
 			// Displays the menu or options screen
 			while (currentState == STATE.START) {
@@ -173,7 +173,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
-		
+
 
 				if (!state.isConnected()) {
 					while (!state.isConnected()) {
@@ -190,7 +190,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 				// Get current state of player
 				this.player = state.getPlayer();
-				
+
 				if(nameCheck) {
 					try {
 						System.out.println(player.getUsername());
@@ -258,7 +258,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	 * @param delta
 	 */
 	private void update(double delta) {
-		
+
 
 		// Lets store every keypress we see this tick
 		ArrayList<String> keyPresses = new ArrayList<>();
@@ -275,8 +275,8 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		if (isKeyDown(KeyEvent.VK_S)) {
 			keyPresses.add("VK_S");
 		}
-		
-		
+
+
 		//Toggle Weapons
 		if (isKeyDown(KeyEvent.VK_1)) {
 			keyPresses.add("VK_1");
@@ -293,9 +293,9 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		if (isKeyDown(KeyEvent.VK_5)) {
 			keyPresses.add("VK_5");
 		}
-		
 
-		
+
+
 		// Toggle conversion mode
 		if (isKeyDown(KeyEvent.VK_Z)) {
 			keyPresses.add("VK_Z");
@@ -326,14 +326,14 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		}
 
 		sender.sendObject(new PlayerUpdatePacket(player.getData(), keyPresses, delta, x, y)); // We
-																								// send
-																								// an
-																								// object
-																								// to
-																								// the
-																								// server
-																								// every
-																								// tick.
+		// send
+		// an
+		// object
+		// to
+		// the
+		// server
+		// every
+		// tick.
 
 		updateLocalPlayer(keyPresses, delta, fv);
 	}
@@ -351,7 +351,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	private void updateLocalPlayer(ArrayList<String> keyPresses, double delta, Vector fv) {
 
 		Vector pdv = new Vector(0.0f, 0.0f); // Player direction vector for this
-												// update
+		// update
 		for (String s : keyPresses) {
 			switch (s) {
 			case "VK_W":
@@ -375,17 +375,17 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 			player.face(fv.x(), fv.y());
 		}
 		Vector pnv = pdv.normalised(); // Player normal direction vector for
-										// this update
+		// this update
 		float pdx = pnv.x() * player.getMoveSpeed() * ((float) delta); // Actual
-																		// change
-																		// in x
-																		// this
-																		// update
+		// change
+		// in x
+		// this
+		// update
 		float pdy = pnv.y() * player.getMoveSpeed() * ((float) delta); // Actual
-																		// change
-																		// in y
-																		// this
-																		// update
+		// change
+		// in y
+		// this
+		// update
 
 		player.move(pdx, pdy, state.getOtherPlayer());
 
@@ -412,54 +412,56 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		});
 
 		Object[] message = {
-				"Username (max 20 chars): ", usernameEntry,
+				"Username (max 10 chars): ", usernameEntry,
 				"Server IP Address: ", ipaddyEntry,
 				"Level Difficulty: ", difficultySelection
 		};
 
 		String regex = "([0-9]+)[.]([0-9])+[.]([0-9])+[.][0-9]+";
-		int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE,
-				JOptionPane.PLAIN_MESSAGE);
-		if (option == JOptionPane.OK_OPTION) {
-			username = usernameEntry.getText();
-			String choice = (String) difficultySelection.getSelectedItem();
-			switch (choice) {
-			case "Easy":
-				difficulty = User.EASY;
-				break;
-			case "Medium":
-				difficulty = User.MED;
-				break;
-			case "Hard":
-				difficulty = User.HARD;
-				break;
-			}
+		while(username == null || username.length() > 10 || !ipAddress.matches(regex)) {
+	
+			int option = JOptionPane.showConfirmDialog(null, message, "Outbreak v1.0", JOptionPane.PLAIN_MESSAGE,
+					JOptionPane.PLAIN_MESSAGE);
+			if (option == JOptionPane.OK_OPTION) {
+				username = usernameEntry.getText();
+				String choice = (String) difficultySelection.getSelectedItem();
+				switch (choice) {
+				case "Easy":
+					difficulty = User.EASY;
+					break;
+				case "Medium":
+					difficulty = User.MED;
+					break;
+				case "Hard":
+					difficulty = User.HARD;
+					break;
+				}
 
-			if (username.equals("")) {
-				// Default value if no username selected
-				username = "a";
-			}
-			;
-			ipAddress = ipaddyEntry.getText();
+				if (username.equals("")) {
+					// Default value if no username selected
+					username = "a";
+				}
+				;
+				ipAddress = ipaddyEntry.getText();
 
-			// Pattern mattern correct format for IP address
-			/// XXX.XXX.XXX.XXX
-			if (!ipAddress.matches(regex)) {
-				JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX", "Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
-				Client.main(new String[0]);
-			}
-			else if(username.length() > 20) {
-				JOptionPane.showMessageDialog(null, "Username must be no longer than 20 characters", "Username too long", JOptionPane.WARNING_MESSAGE);
-				Client.main(new String[0]);
-			}
-			if (ipAddress.equals("")) {
-				// Default value if no server address entered
-				ipAddress = "localhost";
-			}
-		} else {
-			System.out.println("Game login cancelled");
-			System.exit(0);
+				// Pattern mattern correct format for IP address
+				/// XXX.XXX.XXX.XXX
+				if (!ipAddress.matches(regex)) {
+					JOptionPane.showMessageDialog(null, "Please format your server IP address as XXX.XXX.XXX.XXX", "Incorrect IP Format", JOptionPane.WARNING_MESSAGE);
+				}
+				else if(username.length() > 10) {
+					JOptionPane.showMessageDialog(null, "Username must be no longer than 10 characters", "Username too long", JOptionPane.WARNING_MESSAGE);
+				}
+				if (ipAddress.equals("")) {
+					// Default value if no server address entered
+					ipAddress = "localhost";
+				}
+			} else {
+				System.out.println("Game login cancelled");
+				System.exit(0);
+			}	
 		}
+
 	}
 
 	/**
@@ -511,7 +513,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		ClientGameState state = new ClientGameState(newUser);
 
 		clientReceiver.addState(state); // Must be called before starting the
-											// thread.
+		// thread.
 		clientSender.addState(state);
 		// If this method didn't exist, stateface would need to be added above,
 		// but stateface relies on receiver.
