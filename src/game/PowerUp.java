@@ -18,8 +18,7 @@ public class PowerUp extends Entity implements Serializable {
 	public long time;
 
 	public enum PuState {
-		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, COZ,
-
+		SPEED_UP, HEALTH, SLOW_DOWN, FREEZE, INVERSE, COZ
 	}
 
 	public PuState getpState() {
