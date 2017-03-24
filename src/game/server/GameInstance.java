@@ -1,5 +1,6 @@
 package game.server;
 
+import game.ArtInt;
 import game.Bullet;
 import game.Collision;
 import game.Zombie;
@@ -7,7 +8,6 @@ import game.client.Player;
 import game.util.EndState;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * A class that runs whilst the game is running. It primarily updates zombie positions.
@@ -86,7 +86,7 @@ public class GameInstance extends Thread {
 		players.add(player2);
 
 		// Move the zombies around randomly
-		Random rand = new Random();
+//		Random rand = new Random();
 		ArrayList<Zombie> newZombies = new ArrayList<>();
 
 		for (Zombie z : state.getZombies()) {
@@ -95,20 +95,31 @@ public class GameInstance extends Thread {
 			}
 		}
 
+//		for (Zombie z : newZombies) {
+//			for (Player player : players) {
+//				if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
+////					z.followDirection(player);
+//					if (z.getState() == DataPacket.State.WILD || !player.getUsername().equals(z.getUsername())) {
+//						ArtInt.followPlayer(z, players);
+//					}
+//				} else {
+//					if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
+//						z.newMovingDir();
+//					}
+//				}
+//				// Check if player has collided with a zombie
+//				Collision.checkCollision(z, player);
+//			}
+//			// Apply zombie movements on map
+//			z.move(delta);
+//		}
+
 		for (Zombie z : newZombies) {
-			for (Player player : players) {
-				if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= Zombie.AGGRO_RANGE) {
-					z.followDirection(player);
-				} else {
-					if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-						z.newMovingDir();
-					}
-				}
-				// Check if player has collided with a zombie
-				Collision.checkCollision(z, player);
-			}
-			// Apply zombie movements on map
+			ArtInt.followPlayer(z, players);
 			z.move(delta);
+			for (Player p : players) {
+				Collision.checkCollision(z, p);
+			}
 		}
 
 		state.setZombies(newZombies);

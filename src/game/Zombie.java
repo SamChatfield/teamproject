@@ -1,6 +1,5 @@
 package game;
 
-import game.client.Player;
 import game.map.MapData;
 import game.util.DataPacket;
 import game.util.Vector;
@@ -90,19 +89,19 @@ public class Zombie extends Entity {
 	 * Make zombie follow the player
 	 * @param player Player object of player zombie sohuld follow
 	 */
-	public void followDirection(Player player) {
-
-		// Zombie vector changed to follow player, if wild or if it is an opposing player
-		if (getState() == DataPacket.State.WILD || player.getUsername() != getUsername()) {
-			Vector zdv = ArtInt.followPlayer(getX(), getY(), player);
-			Vector znv = zdv.normalised();
-
-			dx = znv.x();
-			dy = znv.y();
-
-			face((int) zdv.x(), (int) zdv.y());
-		}
-	}
+//	public void followDirection(Player player) {
+//
+//		// Zombie vector changed to follow player, if wild or if it is an opposing player
+//		if (getState() == DataPacket.State.WILD || player.getUsername() != getUsername()) {
+//			Vector zdv = ArtInt.followPlayer(this, players);
+//			Vector znv = zdv.normalised();
+//
+//			dx = znv.x();
+//			dy = znv.y();
+//
+//			face((int) zdv.x(), (int) zdv.y());
+//		}
+//	}
 
 	/**
 	 * Change movement direction of zombie to a new random one
@@ -134,4 +133,14 @@ public class Zombie extends Entity {
 			}
 		}
 	}
+
+
+	public void setDx(float dx) {
+		this.dx = dx;
+	}
+
+	public void setDy(float dy) {
+		this.dy = dy;
+	}
+
 }
