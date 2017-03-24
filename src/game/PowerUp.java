@@ -94,7 +94,7 @@ public class PowerUp extends Entity implements Serializable {
 
 		int chance = r.nextInt(6) + 1;
 		if (chance == 1) {
-			return PowerUp.PuState.COZ;
+			return PowerUp.PuState.HEALTH;
 		}
 		if (chance == 2) {
 			return PowerUp.PuState.SLOW_DOWN;
