@@ -1,4 +1,5 @@
 package game;
+import game.PowerUp.PuState;
 import game.map.MapData;
 import game.util.DataPacket;
 import java.io.Serializable;
@@ -149,6 +150,7 @@ public class Entity implements Serializable {
 		setCurrentlyEquipped(data2.getCurrentlyEquipped());
 		setInventory(data2.getInventory());
 		setShootDelay(data2.getShootDelay());
+		setCurrentPU(data2.getCurrentPU());
 	}
 	/**
 	 * Set number of zombies that entity has converted
@@ -266,9 +268,20 @@ public class Entity implements Serializable {
 	public void setCurrentlyEquipped(Weapon.WeaponState newWeapon){
 		data.setCurrentlyEquipped(newWeapon);
 	}
+	
+	
 	public Weapon.WeaponState getCurrentlyEquipped(){
 		return data.getCurrentlyEquipped();
 	}
+	
+	public void setCurrentPU(PuState newPU){
+		data.setCurrentPU(newPU);
+	}
+	
+	public PuState getCurrentPU(){
+		return data.getCurrentPU();
+	}
+	
 
 	public long getShootDelay() {
 		return data.getShootDelay();

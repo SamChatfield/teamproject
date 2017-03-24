@@ -137,6 +137,9 @@ public class Renderer {
 
 		// Draw lighting
 		drawLighting(g2d);
+		
+		
+		
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
@@ -188,6 +191,40 @@ public class Renderer {
 		default:
 			break;
 		}
+		
+		
+		
+		/*switch(player.getCurrentPU()) {
+		case SPEED_UP:
+			g2d.drawString("Current PowerUp: Speed Up", xCoord+5, 575);
+			break;
+		case FREEZE:
+			g2d.drawString("Current PowerUp:  Frozen", xCoord+5, 575);
+			break;
+		case SLOW_DOWN:
+			g2d.drawString("Current PowerUp: Slow Down", xCoord+5, 575);
+			break;
+		case INVERSE:
+			g2d.drawString("Current PowerUp: Inverse", xCoord+5, 575);
+			break;
+		default:
+			break;
+		}*/
+		
+		if(player.getCurrentPU() == PowerUp.PuState.SPEED_UP){
+			g2d.drawString("Current PowerUp: Speed Up", xCoord+5, 560);
+		}
+		if(player.getCurrentPU() == PowerUp.PuState.FREEZE){
+			g2d.drawString("Current PowerUp: Frozen", xCoord+5, 560);
+		}
+		if(player.getCurrentPU() == PowerUp.PuState.SLOW_DOWN){
+			g2d.drawString("Current PowerUp: Slow Down", xCoord+5, 560);
+		}
+		if(player.getCurrentPU() == PowerUp.PuState.INVERSE){
+			g2d.drawString("Current PowerUp: Invert Controls", xCoord+5, 560);
+		}
+		
+		
 
 		// Loop to draw each box and weapon image
 		int i = 0;

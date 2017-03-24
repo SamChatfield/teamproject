@@ -36,11 +36,14 @@ public class PowerUp extends Entity implements Serializable {
 	}
 
 	public void getPowerupStats(PowerUp powerup, Player player, ArrayList<Zombie> zombies) {
-		if (!player.getIsActive()) {
+		
 			if (powerup.pState == PuState.SPEED_UP) {
+				player.setMoveSpeed(0.1f);
+				
 				player.setIsActive(true);
 				player.setAppearTime(System.nanoTime());
 				player.setMoveSpeed(0.15f);
+				player.setCurrentPU(PuState.SPEED_UP);
 			}
 			if (powerup.pState == PuState.HEALTH) {
 				if (player.getHealth() >= 40) {
@@ -48,9 +51,7 @@ public class PowerUp extends Entity implements Serializable {
 				} else {
 					player.setHealth(player.getHealth() + 10);
 				}
-			}
-
-			
+			}		
 			if(powerup.pState == PuState.COZ){
 				for(Zombie z : zombies){
 					if( z.getState() == DataPacket.State.PLAYER && z.getUsername() != player.getUsername()){
@@ -59,24 +60,30 @@ public class PowerUp extends Entity implements Serializable {
 				}
 			}
 
-		}
+		
 	}
 
 	public void getPowerdownStats(PowerUp powerup, Player opponent) {
-		if (!opponent.getIsActivePD()) {
-			opponent.setIsActivePD(true);
-			opponent.setAppearTimePD(System.nanoTime());
+		
+			opponent.setIsActive(true);
+			opponent.setAppearTime(System.nanoTime());
 						
 			if (powerup.pState == PuState.SLOW_DOWN) {
+				opponent.setMoveSpeed(0.1f);
 				opponent.setMoveSpeed(opponent.getMoveSpeed() - 0.05f);
+				opponent.setCurrentPU(PuState.SLOW_DOWN);
 			}
 			if (powerup.pState == PuState.FREEZE) {
+				opponent.setMoveSpeed(0.1f);
 				opponent.setMoveSpeed(opponent.getMoveSpeed() - 0.1f);
+				opponent.setCurrentPU(PuState.FREEZE);
 			}
 			if (powerup.pState == PuState.INVERSE) {
+				opponent.setMoveSpeed(0.1f);
 				opponent.setMoveSpeed(opponent.getMoveSpeed() - 0.2f);
+				opponent.setCurrentPU(PuState.INVERSE);
 			}
-		}
+		
 
 	}
 
@@ -116,12 +123,13 @@ public class PowerUp extends Entity implements Serializable {
 		player.setMoveSpeed(0.1f);
 		player.setIsActive(false);
 		player.setAppearTime(0);
+		player.setCurrentPU(null);
 	}
 	
-	public static void normalSpeedPD(Player player) {
+/*	public static void normalSpeedPD(Player player) {
 		player.setMoveSpeed(0.1f);
 		player.setIsActivePD(false);
 		player.setAppearTimePD(0);
-	}
+	}*/
 
 }
