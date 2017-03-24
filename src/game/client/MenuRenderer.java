@@ -183,21 +183,21 @@ public class MenuRenderer {
 				g2d.drawString("Slow Down Opponent", powerUpX + powerUpImages.get(1).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(1).getHeight() / 2));
 				break;
 			case 2:
-				g2d.drawImage(weaponImages.get(0), weaponX, weaponY, 30, 30, null);
+				g2d.drawImage(weaponImages.get(2), weaponX, weaponY, 30, 30, null);
 				g2d.drawString("Shotgun", weaponX + weaponImages.get(2).getWidth() - textAdjustment, weaponY + (weaponImages.get(2).getHeight() / 2));
 				
 				g2d.drawImage(powerUpImages.get(2), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
 				g2d.drawString("Health Up", powerUpX + powerUpImages.get(2).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(2).getHeight() / 2));
 				break;
 			case 3:
-				g2d.drawImage(weaponImages.get(0), weaponX, weaponY, 30, 30, null);
+				g2d.drawImage(weaponImages.get(3), weaponX, weaponY, 30, 30, null);
 				g2d.drawString("Machine Gun", weaponX + weaponImages.get(3).getWidth() - textAdjustment, weaponY + (weaponImages.get(3).getHeight() / 2));
 				
 				g2d.drawImage(powerUpImages.get(3), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
 				g2d.drawString("Invert Opponent Controls", powerUpX + powerUpImages.get(3).getWidth() - textAdjustment, powerUpY + (powerUpImages.get(3).getHeight() / 2));
 				break;
 			case 4:
-				g2d.drawImage(weaponImages.get(0), weaponX, weaponY, 30, 30, null);
+				g2d.drawImage(weaponImages.get(4), weaponX, weaponY, 30, 30, null);
 				g2d.drawString("Zombie Converter", weaponX + weaponImages.get(4).getWidth() - textAdjustment, weaponY + (weaponImages.get(4).getHeight() / 2));
 				
 				g2d.drawImage(powerUpImages.get(4), powerUpX, powerUpY, powerUpSize, powerUpSize, null);
