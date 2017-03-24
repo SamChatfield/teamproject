@@ -39,6 +39,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	private Player player;
 	private boolean[] keyArray, mouseButtonArray;
 	private boolean mouseInside;
+	private boolean nameCheck = true;
 
 	private ClientGameState state;
 	private ClientSender sender;
@@ -46,6 +47,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 	private Renderer renderer;
 	private MenuRenderer menu;
+	
 
 	// Client state
 	private enum STATE {
@@ -157,6 +159,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 		soundManager.start();
 
 		while (running) {
+			
 
 			// Displays the menu or options screen
 			while (currentState == STATE.START) {
@@ -170,6 +173,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 			// Starts the game once play button is clicked
 			while (currentState == STATE.GAME) {
+		
 
 				if (!state.isConnected()) {
 					while (!state.isConnected()) {
@@ -186,6 +190,17 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 
 				// Get current state of player
 				this.player = state.getPlayer();
+				
+				if(nameCheck) {
+					try {
+						System.out.println(player.getUsername());
+						container.setTitle("Outbreak - " + player.getUsername());
+						nameCheck = false;
+					}
+					catch(NullPointerException e) {
+					}
+				}
+
 
 				soundManager.addPlayer(this.player);
 
@@ -243,6 +258,7 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	 * @param delta
 	 */
 	private void update(double delta) {
+		
 
 		// Lets store every keypress we see this tick
 		ArrayList<String> keyPresses = new ArrayList<>();
