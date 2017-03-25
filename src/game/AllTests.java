@@ -20,5 +20,5 @@ import game.util.VectorTest;
 	SoundTest.class, EndStateTest.class, VectorTest.class, UserTest.class, ClientGameStateTest.class, WeaponTest.class, PowerUpTest.class})
 public class AllTests {
 
-	
+	//this is the testing suite to run all tests from
 }
