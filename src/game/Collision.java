@@ -76,8 +76,6 @@ public class Collision {
 		}
 		return false;
 	}
-	
-	
 
 	public static boolean playersColliding(Entity player, Entity opponent) {
 		return player.getCollisionBox().intersects(opponent.getCollisionBox());

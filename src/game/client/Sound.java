@@ -14,8 +14,8 @@ import java.util.Random;
 public class Sound extends Thread{
 	private String pistolSound = "src/game/sounds/pistol.wav";
 	private String shotgunSound = "src/game/sounds/shotgun.wav";
-	private String macGunSound = "src/game/sounds/AK47.wav";
-	private String uziSound = "src/game/sounds/AK47.wav";
+	private String macGunSound = "src/game/sounds/uzi.wav";
+	private String uziSound = "src/game/sounds/uzi.wav";
 	private String convertSound = "src/game/sounds/converter.wav";
 
 	private String music = "src/game/sounds/music.wav";
@@ -119,8 +119,7 @@ public class Sound extends Thread{
 		String toUse = null;
 		long now = System.nanoTime();
 		//This if statement stops the bug of the pistol firing two shots in quick succession
-		if (now - lastSoundPlayed > player.SHOOT_DELAY) {
-			System.out.println(this.player.canShoot());
+		if (now - lastSoundPlayed > player.getShootDelay()) {
 			if (this.player.canShoot() && sfxPlayback) {
 				switch(player.getCurrentlyEquipped()) {
 					case PISTOL:

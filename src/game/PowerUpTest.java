@@ -160,11 +160,11 @@ public class PowerUpTest {
 
 	/**
 	 * Test method for {@link game.PowerUp#normalSpeedPD(game.client.Player)}.
-	 */
+	 
 	@Test
 	public final void testNormalSpeedPD() {
 		powerSp.normalSpeedPD(player);
 		assertEquals(0.1f, player.getMoveSpeed(), 0.05);
-	}
+	}*/
 
 }

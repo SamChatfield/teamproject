@@ -131,6 +131,14 @@ public class ResourceLoader {
 	}
 
 	/**
+	 * Load image for converter powerup into the game
+	 * @return BufferedImage for converter powerup
+	 */
+	public static BufferedImage coz() {
+		return getImage("/powerups/converter.png");
+	}
+	
+	/**
 	 * Load image for the blood splatter
 	 * @return BufferedImage for the blood splatter
 	 */

@@ -39,7 +39,7 @@ public class Renderer {
 	public static final BufferedImage moreHealth = ResourceLoader.moreHealth();
 	public static final BufferedImage invertControls = ResourceLoader.invertControls();
 	public static final BufferedImage freezePlayer = ResourceLoader.freezePlayer();
-
+	public static final BufferedImage coz = ResourceLoader.coz();
 
 	//Blood splatters
 	public static final BufferedImage splatter1 = ResourceLoader.splatter1();
@@ -103,7 +103,7 @@ public class Renderer {
 		// Draw the zombies that are dead first
 		for (DataPacket z : zombiePackets) {
 			if(!z.isAlive()) {
-				drawDeadZombie(g2d, player, z,1);
+				drawDeadZombie(g2d, player, z);
 			}
 		}
 
@@ -137,6 +137,9 @@ public class Renderer {
 
 		// Draw lighting
 		drawLighting(g2d);
+		
+		
+		
 
 		// Health bar
 		float healthPercentage = (player.getHealth() / 50.0f) * 100;
@@ -188,6 +191,40 @@ public class Renderer {
 		default:
 			break;
 		}
+		
+		
+		
+		/*switch(player.getCurrentPU()) {
+		case SPEED_UP:
+			g2d.drawString("Current PowerUp: Speed Up", xCoord+5, 575);
+			break;
+		case FREEZE:
+			g2d.drawString("Current PowerUp:  Frozen", xCoord+5, 575);
+			break;
+		case SLOW_DOWN:
+			g2d.drawString("Current PowerUp: Slow Down", xCoord+5, 575);
+			break;
+		case INVERSE:
+			g2d.drawString("Current PowerUp: Inverse", xCoord+5, 575);
+			break;
+		default:
+			break;
+		}*/
+		
+		if(player.getCurrentPU() == PowerUp.PuState.SPEED_UP){
+			g2d.drawString("Current PowerUp: Speed Up", xCoord+5, 560);
+		}
+		if(player.getCurrentPU() == PowerUp.PuState.FREEZE){
+			g2d.drawString("Current PowerUp: Frozen", xCoord+5, 560);
+		}
+		if(player.getCurrentPU() == PowerUp.PuState.SLOW_DOWN){
+			g2d.drawString("Current PowerUp: Slow Down", xCoord+5, 560);
+		}
+		if(player.getCurrentPU() == PowerUp.PuState.INVERSE){
+			g2d.drawString("Current PowerUp: Invert Controls", xCoord+5, 560);
+		}
+		
+		
 
 		// Loop to draw each box and weapon image
 		int i = 0;
@@ -207,7 +244,7 @@ public class Renderer {
 			
 			// Highlight selected weapon
 			if(player.getCurrentlyEquipped() == weapon) {
-				g2d.setColor(new Color(255, 255, 0, 150));
+				g2d.setColor(new Color(50, 205, 50, 150));
 			} else if(weaponObtained) {
 				g2d.setColor(new Color(255,255,255, 150));
 			} else {
@@ -541,7 +578,7 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-	private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d, int i) {
+	private void drawDeadZombie(Graphics2D g2d, Player player, DataPacket d) {
 		int w = Renderer.splatter1.getWidth();
 		int h = Renderer.splatter1.getHeight();
 
@@ -551,11 +588,6 @@ public class Renderer {
 
 		BufferedImage image = Renderer.splatter1;
 
-		if(i == 2){
-			image = Renderer.splatter2;
-		}else if (i == 3){
-			image = Renderer.splatter3;
-		}
 		g2d.drawImage(image, drawX, drawY, null);
 	}
 	private void drawPowerup(Graphics2D g2d, PowerUp p, Player player) {
@@ -584,11 +616,9 @@ public class Renderer {
 		case SLOW_DOWN:
 			image = Renderer.speedDown;
 			break;
-
 		case COZ:
-			image = Renderer.freezePlayer;
-
-
+			image = Renderer.coz;
+			break;
 		default:
 			break;
 

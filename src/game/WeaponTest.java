@@ -40,6 +40,12 @@ public class WeaponTest {
 		weapon.setwState(w);
 		assertNotNull(weapon.getwState());
 	}
+	
+	@Test
+	public final void testGetShootDelay() {
+		player.setShootDelay(500000000l);
+		assertEquals(500000000l, player.getShootDelay());
+	}
 
 	/**
 	 * Test method for {@link game.Weapon#getWeaponStats(game.Weapon.WeaponState, game.client.Player)}.
@@ -47,19 +53,19 @@ public class WeaponTest {
 	@Test
 	public final void testGetWeaponStats() {
 		weapon.getWeaponStats(w, player);
-		assertEquals(500000000L, player.SHOOT_DELAY, 0.1);
+		assertEquals(500000000L, player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w1, player);
-		assertEquals(100000000L, player.SHOOT_DELAY, 0.1);
+		assertEquals(100000000L,player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w2, player);
-		assertEquals(100000000L, player.SHOOT_DELAY, 0.1);
+		assertEquals(100000000L, player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w3, player);
-		assertEquals(500000000L, player.SHOOT_DELAY, 0.1);
+		assertEquals(500000000L, player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w4, player);
-		assertEquals(500000000L, player.SHOOT_DELAY, 0.1);
+		assertEquals(500000000L, player.getShootDelay(), 0.1);
 	}
 
 	/**

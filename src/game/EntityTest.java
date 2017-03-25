@@ -210,14 +210,14 @@ public class EntityTest {
 
 	/**
 	 * Test method for {@link game.Zombie#followDirection(game.client.Player)}.
-	 */
+	 
 	@Test
 	public final void testFollowDirection() {
 		zombie.followDirection(player);
 		
 		
 	}
-
+*/
 	/**
 	 * Test method for {@link game.Zombie#newMovingDir()}.
 	 */
@@ -265,7 +265,7 @@ public class EntityTest {
 	 */
 	@Test
 	public final void testMove() {
-		player.move(0.01f, 0.01f);
+		player.move(0.01f, 0.01f, bullet);
 		
 	}
 
@@ -294,7 +294,7 @@ public class EntityTest {
 		assertTrue(data.isAlive());
 		data.setAlive(false);
 		assertTrue(!data.isAlive());
-		player.setAlive(true);
+		player.setAlive(true, 0);
 		assertTrue(player.isAlive());
 	}
 	

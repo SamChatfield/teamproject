@@ -52,7 +52,7 @@ public class GameInstance extends Thread {
 				System.out.println("Game ended");
 				state.setEndState(end); // Give the game state the end state.
 				state.setHasFinished(true); // Will cause the timer thread to
-											// close too
+				// close too
 				running = false;
 			}
 			now = System.nanoTime();
@@ -70,14 +70,14 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Update the game instance
-	 * 
+	 *
 	 * @param delta
 	 *            Interpolation
 	 */
 	private void update(double delta) {
 		// System.out.println("delta: " + delta);
 		ArrayList<Zombie> zombies = state.getZombies();
-		// ArrayList<PowerUp> powerups = state.getPowerups();
+		ArrayList<PowerUp> powerups = state.getPowerups();
 
 		// Update the player states
 		Player player1 = state.getPlayer1();
@@ -88,45 +88,34 @@ public class GameInstance extends Thread {
 		players.add(player1);
 		players.add(player2);
 
-		// Move the zombies around randomly
-		Random rand = new Random();
-
 		ArrayList<Zombie> newZombies = new ArrayList<>();
 
+		Random r = new Random();
 		for (Zombie z : state.getZombies()) {
-			if (z.getHealth() == 0) {
-				z.setAlive(false);
+			if (z.getHealth() == 0 && z.isAlive()) {
+				z.setAlive(false,r.nextInt(3) + 1);
 			}
-            newZombies.add(z);
-        }
+			newZombies.add(z);
+		}
 
 		for (Zombie z : newZombies) {
-		    if(z.isAlive()) {
-                for (Player player : players) {
-                    if (Math.hypot(z.getX() - player.getX(), z.getY() - player.getY()) <= z.AGGRO_RANGE) {
-                        z.followDirection(player);
-                    } else {
-                        if (rand.nextFloat() < Zombie.DIRECTION_CHANGE_PROBABILITY) {
-                            z.newMovingDir();
-                        }
-                    }
-                    // Check if player has collided with a zombie
-                    Collision.checkCollision(z, player);
-                }
-                // Apply zombie movements on map
-                z.move(delta);
-            }
+			if(z.isAlive()) {
+				ArtInt.followPlayer(z, players);
+				z.move(delta);
+				for (Player p : players) {
+					Collision.checkCollision(z, p);
+				}
+			}
 		}
 
 		state.setZombies(newZombies);
 
 		// RANDOMNESS
-		Random r = new Random();
 		int chancePU = r.nextInt(100) + 1;
-		
+
 		int xP = r.nextInt(40) - 20;
 		int yP = r.nextInt(40) - 20;
-		
+
 		int xW = r.nextInt(40) - 20;
 		int yW = r.nextInt(40) - 20;
 
@@ -162,7 +151,7 @@ public class GameInstance extends Thread {
 		}
 
 		if (chancePU == 2) {
-			//newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));			
+			//newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
 			newPowerup.add(new PowerUp(xP, yP, state.getMapData(),PowerUp.randomPU(), System.nanoTime()));
 		}
 
@@ -175,12 +164,14 @@ public class GameInstance extends Thread {
 				if (now11 - p.getAppearTime() >= 10000000000l) {
 					PowerUp.normalSpeed(p);
 				}
+				
+				System.out.print(p.getCurrentPU());
 			}
-			if (p.getIsActivePD()) {
+			/*if (p.getIsActivePD()) {
 				if (now11 - p.getAppearTimePD() >= 10000000000l) {
 					PowerUp.normalSpeedPD(p);
 				}
-			}
+			}*/
 		}
 
 		// BULLETS
@@ -220,7 +211,7 @@ public class GameInstance extends Thread {
 
 	/**
 	 * Method that checks of the end of the game
-	 * 
+	 *
 	 * @return EndState of the game
 	 */
 	private EndState checkForEnd() {

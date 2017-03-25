@@ -1,5 +1,7 @@
 package game.util;
 
+import game.PowerUp;
+import game.PowerUp.PuState;
 import game.Weapon;
 
 import java.io.Serializable;
@@ -22,6 +24,7 @@ public class DataPacket implements Serializable {
 	private boolean isActivePD;
 	private float appearTimePD;
 	private int attackDamage;
+	private long shootDelay;
 
 	// Used by zombies
 	private boolean alive;
@@ -29,6 +32,7 @@ public class DataPacket implements Serializable {
 	// Used by players
 	private Weapon.WeaponState[] inventory = new Weapon.WeaponState[5];
 	private Weapon.WeaponState currentlyEquipped;
+	private PowerUp.PuState currentPU;
 
 
 	public void setCurrentlyEquipped(Weapon.WeaponState newEquipped) {
@@ -39,7 +43,16 @@ public class DataPacket implements Serializable {
 		return currentlyEquipped;
 	}
 
-
+	
+	public void setCurrentPU(PuState newPU){
+		this.currentPU = newPU;
+	}
+	
+	public PuState getCurrentPU(){
+		return currentPU;
+	}
+	
+	
 	public Weapon.WeaponState[] getInventory() {
 		return inventory;
 	}
@@ -103,7 +116,7 @@ public class DataPacket implements Serializable {
 
 	/**
 	 * Set the username
-	 * @param Username to set
+	 * @param username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -270,6 +283,13 @@ public class DataPacket implements Serializable {
 		this.attackDamage = attackDamage;
 	}
 
+	public long getShootDelay() {
+		return shootDelay;
+	}
+
+	public void setShootDelay(long shootDelay) {
+		this.shootDelay = shootDelay;
+	}
 
 	/**
 	 * Constructor to create a new DataPacket
@@ -289,6 +309,7 @@ public class DataPacket implements Serializable {
 		this.health = health;
 		this.type = t;
 		this.alive = true;
+		this.shootDelay = 500000000L;
 	}
 	
 	
@@ -305,5 +326,6 @@ public class DataPacket implements Serializable {
 		this.type = t;
 
 		this.alive = true;
+		this.shootDelay = 500000000L;
 	}
 }

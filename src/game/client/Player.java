@@ -17,7 +17,6 @@ public class Player extends Entity {
 	private static final float COLL_BOX_WIDTH = 25.0f;
 	private static final float COLL_BOX_HEIGHT = 25.0f;
 	public static final int HEALTH = 50;
-	public long SHOOT_DELAY = 500000000L; // Min time between player shots, 0.5 seconds
 	private static final float MOVE_SPEED = 0.1f;
 	private static final BufferedImage image = ResourceLoader.playerImage();
 	private static final BufferedImage opponentImage = ResourceLoader.opponentImage();
@@ -92,7 +91,7 @@ public class Player extends Entity {
     public Bullet shoot(float aimX, float aimY, float pdx, float pdy) {
         // Limit the player to firing at their shooting speed
         long now = System.nanoTime();
-        if (now - getLastAttackTime() > SHOOT_DELAY) {
+        if (now - getLastAttackTime() > getShootDelay()) {
             setLastAttackTime(now);
             return new Bullet(this, aimX, aimY, pdx, pdy, mapData);
         } else {
@@ -106,7 +105,7 @@ public class Player extends Entity {
      */
     public boolean canShoot(){
         long now = System.nanoTime();
-        if (now - getLastAttackTime() > SHOOT_DELAY) {
+        if (now - getLastAttackTime() > getShootDelay()) {
             return true;
         } else {
             return false;
