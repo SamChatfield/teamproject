@@ -21,6 +21,7 @@ import game.util.User;
  * @author ryan-
  *
  */
+//--
 public class ClientGameStateTest {
 	ServerGameState serverState;
 	Player player = new Player(1, 1, null, "ryan"); 

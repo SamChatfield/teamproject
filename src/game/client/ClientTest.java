@@ -16,7 +16,7 @@ import game.util.User;
  *
  */
 
-
+//--
 public class ClientTest {
 User user;
 ObjectOutputStream objOut;

@@ -17,7 +17,7 @@ import game.client.Player;
  *
  */
 public class PowerUpTest {
-
+//--
 
 	PuState puHealth = PuState.HEALTH;
 	PuState puSpeed = PuState.SPEED_UP;
