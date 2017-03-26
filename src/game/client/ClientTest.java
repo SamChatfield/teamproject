@@ -17,6 +17,7 @@ public class ClientTest {
 	ObjectOutputStream objOut;
 	ObjectInputStream objIn;
 	Client c;
+	ClientGameState gameState;
 
 	ClientGameState state = new ClientGameState(user);
 	ClientSender sender = new ClientSender(user, objOut, state);
@@ -28,14 +29,10 @@ public class ClientTest {
 	@Before
 	public void setUp() throws Exception {
 		User u = new User("ryan",1);
+		gameState = new ClientGameState(u);
 		//c.loginPrompt();
 		
 
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		
 	}
 
 	@Test

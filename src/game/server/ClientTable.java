@@ -18,7 +18,7 @@ public class ClientTable {
 	 * Constructor creates a hashmap: the key is the username, the value is a bool
 	 * False means that the user is not in a game, true means they are.
 	 */
-	ClientTable() {
+	public ClientTable() {
 		clientTable = new HashMap();
 	}
 

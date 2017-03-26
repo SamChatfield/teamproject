@@ -3,8 +3,12 @@
  */
 package game.client;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import javax.sound.sampled.Clip;
+
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -13,8 +17,14 @@ import org.junit.Test;
  */
 public class SoundTest {
 //--
-	Sound sound = new Sound();
+	Sound sound;
 	
+	@Before
+	public void setUp() {
+		sound = new Sound();
+	}
+	
+
 	//@Test
 	//public final void testSound() {
 	//	assertNull(sound.run());
@@ -22,9 +32,9 @@ public class SoundTest {
 		
 		
 		
-	/**
-	 * Test method for {@link game.client.Sound#run()}.
-	 */
+//	/**
+//	 * Test method for {@link game.client.Sound#run()}.
+//	 */
 	//@Test
 	//public final void testRun() {
 	//	assert(sound.run());
@@ -38,7 +48,7 @@ public class SoundTest {
 	 */
 	@Test
 	public final void testSound() {
-		fail("Not yet implemented"); // TODO
+		sound = new Sound();
 	}
 
 	/**
@@ -54,7 +64,9 @@ public class SoundTest {
 	 */
 	@Test
 	public final void testCreateClip() {
-		fail("Not yet implemented"); // TODO
+		Clip clip = sound.createClip("src/game/sounds/pistol.wav");
+		assertNotNull(clip);
+		
 	}
 
 	/**
