@@ -1,7 +1,5 @@
 package game.client;
 
-import game.Weapon;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;

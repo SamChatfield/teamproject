@@ -1,6 +1,5 @@
 package game.client;
 
-import game.CollisionBox;
 import game.PowerUp;
 import game.ResourceLoader;
 import game.Weapon;

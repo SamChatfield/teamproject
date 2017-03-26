@@ -1,8 +1,10 @@
 package game;
+
 import game.client.Client;
 import game.client.Player;
 import game.client.Renderer;
 import game.util.DataPacket;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
