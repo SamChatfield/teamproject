@@ -34,7 +34,43 @@ public class DataPacket implements Serializable {
 	private Weapon.WeaponState currentlyEquipped;
 	private PowerUp.PuState currentPU;
 
+	/**
+	 * Object that the data packet refers to
+	 */
+	public enum Type {
+		ZOMBIE,PLAYER,BULLET
+	}
 
+	// These are used for Zombies
+	private State state;
+	public enum State {
+		WILD, PLAYER
+	}
+
+	/**
+	 * Get the current state of the DataPacket
+	 * @return State of DataPacket
+	 */
+	public State getState(){
+		return state;
+	}
+	
+	/**
+	 * Set the state of the DataPacket
+	 * @param state New state of the DataPacket
+	 */
+	public void setState(State state){
+		this.state = state;
+	}
+	
+	/**
+	 * Get the type of the DataPacket
+	 * @return Type of data packet
+	 */
+	public Type getType(){
+		return type;
+	}
+	
 	public void setCurrentlyEquipped(Weapon.WeaponState newEquipped) {
 		this.currentlyEquipped = newEquipped;
 	}
@@ -69,42 +105,8 @@ public class DataPacket implements Serializable {
 		this.alive = alive;
 	}
 
-	/**
-	 * Object that the data packet refers to
-	 */
-	public enum Type {
-		ZOMBIE,PLAYER,BULLET
-	}
 
-	// These are used for Zombies
-	private State state;
-	public enum State {
-		WILD, PLAYER
-	}
 
-	/**
-	 * Get the current state of the DataPacket
-	 * @return State of DataPacket
-	 */
-	public State getState(){
-		return state;
-	}
-
-	/**
-	 * Set the state of the DataPacket
-	 * @param state New state of the DataPacket
-	 */
-	public void setState(State state){
-		this.state = state;
-	}
-
-	/**
-	 * Get the type of the DataPacket
-	 * @return Type of data packet
-	 */
-	public Type getType(){
-		return type;
-	}
 
 	/**
 	 * Get the username - mailny used to refer to Player

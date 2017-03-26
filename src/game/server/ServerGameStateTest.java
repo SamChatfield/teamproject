@@ -42,11 +42,15 @@ public class ServerGameStateTest {
 	@Test
 	public void testGetPlayer() {
 		assertEquals(servState.getPlayer("ryan").getUsername(),"ryan");
+		assertEquals(servState.getPlayer("becca").getUsername(),"becca");
+		assertNull(servState.getPlayer("should return null"));
 	}
 
 	@Test
 	public void testGetOtherPlayer() {
 		assertEquals(servState.getOtherPlayer("ryan").getUsername(),"becca");
+		assertEquals(servState.getOtherPlayer("becca").getUsername(),"ryan");
+		assertNull(servState.getOtherPlayer("should return null"));
 	}
 
 	@Test
@@ -73,6 +77,16 @@ public class ServerGameStateTest {
 	public void testUpdatePlayer() {
 		ArrayList<String> keyPresses = new ArrayList<>();
 		keyPresses.add("VK_W");
+		keyPresses.add("VK_A");
+		keyPresses.add("VK_S");
+		keyPresses.add("VK_D");
+		keyPresses.add("VK_1");
+		keyPresses.add("VK_2");
+		keyPresses.add("VK_3");
+		keyPresses.add("VK_4");
+		keyPresses.add("VK_5");
+		keyPresses.add("BUTTON1");
+
 		
 		DataPacket d = servState.getPlayer("ryan").getData();
 		float x = -100;
@@ -85,7 +99,7 @@ public class ServerGameStateTest {
 		servState.updatePlayer("ryan", pup);
 		
 		assertEquals(servState.getPlayer("ryan").getData().getX(),preUpdateX,1);
-		assertNotEquals(servState.getPlayer("ryan").getData().getY(),preUpdateY);
+		assertEquals(servState.getPlayer("ryan").getCurrentlyEquipped(),game.Weapon.WeaponState.PISTOL); // gun 1 (loop breaks after first selection)
 	}
 
 	@Test

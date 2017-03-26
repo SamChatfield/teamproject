@@ -32,6 +32,9 @@ public class ClientTest {
 		gameState = new ClientGameState(u);
 		//c.loginPrompt();
 		
+		receiver.addState(gameState);
+		sender.addState(gameState);
+		
 
 	}
 

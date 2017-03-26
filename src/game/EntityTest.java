@@ -67,6 +67,7 @@ public class EntityTest {
 		assertTrue(!player.conversionMode);
 		player.setMoveSpeed(0.3f);
 		assertEquals(0.3, player.getMoveSpeed(), 0.01);
+		assertEquals(player.getData().getType(),game.util.DataPacket.Type.PLAYER);
 	}
 
 	/**

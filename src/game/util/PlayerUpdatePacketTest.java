@@ -67,17 +67,17 @@ public class PlayerUpdatePacketTest {
 
 	@Test
 	public void testGetDelta() {
-		//assertEquals(pup.getfX(),-100.0f);
+		assertEquals(pup.getfX(),-100.0f,0.1);
 	}
 
 	@Test
 	public void testGetfX() {
-		//assertEquals(pup.getfX(),-100);
+		assertEquals(pup.getfX(),-100.0f,0.1);
 	}
 
 	@Test
 	public void testGetfY() {
-		//fail("Not yet implemented");
+		assertEquals(pup.getfY(),-100.0f,0.1);
 	}
 
 	@Test
