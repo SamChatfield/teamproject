@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import game.Bullet;
@@ -15,6 +16,7 @@ import game.Zombie;
 import game.client.Player;
 import game.map.MapData;
 import game.server.ServerGameState;
+import game.server.Timer;
 
 //--
 /**
@@ -23,28 +25,47 @@ import game.server.ServerGameState;
  */
 public class SendableStateTest {
 	ServerGameState servState = new ServerGameState("ryan", "becca", 1);
-	SendableState sState = new SendableState(servState);
+	SendableState sState; 
 	
-	Player player = new Player(1, 1, null, "ryan"); 
-	Player player1 = new Player(1, 1, null, "becca"); 
-	Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
+	Player player1 = new Player(1, 1, null, "ryan"); 
+	Player player2 = new Player(1, 1, null, "becca"); 
+	
+	Bullet bullet = new Bullet(player1, 1, 1, 1, 1, null);
+	ArrayList<Bullet> b = new ArrayList<>();
+	
 	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
 	Entity entityPU = new Entity(1,1,null);
+	
 	Zombie zombie = new Zombie(1,1,null, 0);
+	ArrayList<Zombie> zombies = new ArrayList<>();
+	
 	private ArrayList<DataPacket> bullets;
 	protected transient MapData mapData;
 	//DataPacket data = new DataPacket(1, 1, 0.3f, 50, 10l, null);
 	DataPacket data = new DataPacket(1, 1, 0.3f, 50, 100l, null, true, 100, false, 1000);
 	
-	
+	Timer t = new Timer(180,servState);
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		servState.startNewGame();
+		b.add(bullet);
+		zombies.add(zombie);
+		servState.setBullets(b);
+		//servState.setZombies(zombies);
+		sState = servState.getPackagedState();
+	}
+
 
 	/**
 	 * Test method for {@link game.util.SendableState#getBullets()}.
 	 */
 	@Test
 	public final void testGetBullets() {
-		fail("Not yet implemented"); // TODO
-		//assertNotNull(sState.getBullets());
+		assertEquals(b,servState.getBullets());
 	}
 
 	/**
@@ -52,7 +73,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetTimeRemaining() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getTimeRemaining(),180);
 	}
 
 	/**
@@ -60,23 +81,16 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetMapImage() {
-		fail("Not yet implemented"); // TODO
+		assertNotNull(sState.getMapImage());
 	}
 
-	/**
-	 * Test method for {@link game.util.SendableState#getDeadZombies()}.
-	 */
-	@Test
-	public final void testGetDeadZombies() {
-		fail("Not yet implemented"); // TODO
-	}
 
 	/**
 	 * Test method for {@link game.util.SendableState#getZombies()}.
 	 */
 	@Test
 	public final void testGetZombies() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getZombies(),servState.getSendableZombies());
 	}
 
 	/**
@@ -84,7 +98,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetPowerups() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getPowerups(),servState.getPowerups());
 	}
 
 	/**
@@ -92,7 +106,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetWeapons() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getPowerups(),servState.getWeapons());
 	}
 
 	/**
@@ -100,7 +114,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetPlayer() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getPlayer("ryan"),servState.getPlayer1().getData());
 	}
 
 	/**
@@ -108,7 +122,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetPlayer1() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getPlayer1(),servState.getPlayer1().getData());
 	}
 
 	/**
@@ -116,7 +130,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testGetPlayer2() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.getPlayer2(),servState.getPlayer2().getData());
 	}
 
 	/**
@@ -124,7 +138,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testHasFinished() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(sState.HasFinished(),false);
 	}
 
 	/**
@@ -132,7 +146,7 @@ public class SendableStateTest {
 	 */
 	@Test
 	public final void testSendableState() {
-		fail("Not yet implemented"); // TODO
+		assertNotNull(sState);
 	}
 
 }

@@ -1,56 +1,111 @@
-/**
- * 
- */
 package game.client;
 
 import static org.junit.Assert.*;
 
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import game.util.User;
 
-/**
- * @author ryan-
- *
- */
-
-//--
 public class ClientTest {
-User user;
-ObjectOutputStream objOut;
-ClientGameState state = new ClientGameState(user);
-ClientSender sender = new ClientSender(user, objOut, state);
+	
+	User user;
+	ObjectOutputStream objOut;
+	ObjectInputStream objIn;
+	Client c;
 
-	Client client;// = new Client(state, sender, user);
+	ClientGameState state = new ClientGameState(user);
+	ClientSender sender = new ClientSender(user, objOut, state);
+	ClientReceiver receiver = new ClientReceiver(user, objIn);
+
 	/**
-	 * Test method for {@link game.client.Client#loginPrompt()}.
+	 * @throws java.lang.Exception
 	 */
-	@Test
-	public final void testLoginPrompt() {
-		fail("Not yet implemented"); // TODO
+	@Before
+	public void setUp() throws Exception {
+		User u = new User("ryan",1);
+		//c.loginPrompt();
+		
+
 	}
 
-	/**
-	 * Test method for {@link game.client.Client#getPlayer()}.
-	 */
-	@Test
-	public final void testGetPlayer() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link game.client.Client#main(java.lang.String[])}.
-	 */
-	@Test
-	public final void testMain() {
-		fail("Not yet implemented"); // TODO
+	@After
+	public void tearDown() throws Exception {
+		
 	}
 
 	@Test
-	public final void testUpdate() {
-		fail("Not yet implemented"); // TODO
+	public void testLoginPrompt() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPlayer() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testEndClient() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testMain() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testKeyTyped() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testKeyPressed() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testKeyReleased() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testMouseClicked() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testMousePressed() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testMouseReleased() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testMouseEntered() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testMouseExited() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testIsKeyDown() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testIsMouseButtonDown() {
+		fail("Not yet implemented");
 	}
 
 }

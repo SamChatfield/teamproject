@@ -544,12 +544,9 @@ public class Client extends Canvas implements KeyListener, MouseListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 
-		// Collision box toggle
-		if (e.getKeyCode() == KeyEvent.VK_K) {
-			renderer.setShowCollBox(!renderer.getShowCollBox());
-		}
+	
 		// Toggle sound
-		else if (e.getKeyCode() == KeyEvent.VK_M) {
+		if (e.getKeyCode() == KeyEvent.VK_M) {
 			Sound.sfxPlayback = !Sound.sfxPlayback;
 			Sound.musicPlayback = !Sound.musicPlayback;
 			System.out.println("sfx: " + Sound.sfxPlayback);

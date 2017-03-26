@@ -1,12 +1,10 @@
-/**
- * 
- */
 package game.client;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import game.Bullet;
@@ -17,13 +15,9 @@ import game.util.GameState;
 import game.util.SendableState;
 import game.util.User;
 
-/**
- * @author ryan-
- *
- */
-//--
 public class ClientGameStateTest {
-	ServerGameState serverState;
+	
+	ServerGameState servState = new ServerGameState("ryan","becca",1);
 	Player player = new Player(1, 1, null, "ryan"); 
 	Player player1 = new Player(1, 1, null, "becca"); 
 	GameState state = new GameState();
@@ -33,62 +27,49 @@ public class ClientGameStateTest {
 	Zombie zombie = new Zombie(1,1,null, 0);
 	Zombie zombie1 = new Zombie(1,1,null, 0);
 	User user = new User("ryan", 1);
-	SendableState updatedState = new SendableState(serverState);
+	Sound m = new Sound();
 	
-	ClientGameState cgState = new ClientGameState(user);
+	SendableState sState;
+	
+	ClientGameState cgState; 
 	boolean isConnected = true;
-	/**
-	 * Test method for {@link game.client.ClientGameState#ClientGameState(game.util.User)}.
-	 */
-	@Test
-	public final void testClientGameState() {
-		
-		assertNull(updatedState);
-		assertNotNull(user);
-		
-		//cgState.updateClientState(updatedState);
-		
+
+	@Before
+	public void setUp() throws Exception {
+		servState.startNewGame();
+		sState = servState.getPackagedState();
+	
+		cgState = new ClientGameState(user);
+		cgState.updateClientState(sState);
+
 	}
 
-	/**
-	 * Test method for {@link game.client.ClientGameState#addSoundManager(game.client.Sound)}.
-	 */
+
+
 	@Test
-	public final void testAddSoundManager() {
-		fail("Not yet implemented"); // TODO
+	public void testResetState() {
+		cgState.resetState(user);
+		assertNull(cgState.getMapImage());
 	}
 
-	/**
-	 * Test method for {@link game.client.ClientGameState#updateClientState(game.util.SendableState)}.
-	 */
 	@Test
-	public final void testUpdateClientState() {
-		fail("Not yet implemented"); // TODO
+	public void testAddSoundManager() {
+		cgState.addSoundManager(m);
 	}
 
-	/**
-	 * Test method for {@link game.client.ClientGameState#setUpMapData(java.lang.String)}.
-	 */
 	@Test
-	public final void testSetUpMapData() {
-		fail("Not yet implemented"); // TODO
+	public void testGetPlayer() {
+		assertEquals(cgState.getPlayer().getData().getUsername(),"ryan");
 	}
 
-	/**
-	 * Test method for {@link game.client.ClientGameState#getPlayer()}.
-	 */
 	@Test
-	public final void testGetPlayer() {
-		assertNull(cgState.getPlayer());
-		
+	public void testGetOtherPlayer() {
+		assertEquals(cgState.getOtherPlayer().getData().getUsername(),"becca");
 	}
 
-	/**
-	 * Test method for {@link game.client.ClientGameState#getOtherPlayer()}.
-	 */
 	@Test
-	public final void testGetOtherPlayer() {
-		fail("Not yet implemented"); // TODO
+	public void testGetAliveZombies() {
+		assertEquals(cgState.getAliveZombies().size(),20);
 	}
 
 }

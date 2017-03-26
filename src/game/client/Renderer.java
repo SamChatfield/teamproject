@@ -26,7 +26,6 @@ public class Renderer {
 	private int gameH, gameW;
 	private Font tradeWinds;
 	private ClientGameState state;
-	private boolean showCollBox = false;
 
 	// Load main iamges into the game
 	public static final BufferedImage wildZombieImage = ResourceLoader.zombieImage();
@@ -520,11 +519,6 @@ public class Renderer {
 		g2d.fill(healthBarFill);
 		g2d.setColor(Color.BLACK);
 
-		if (showCollBox) {
-			g2d.setColor(Color.BLUE);
-			g2d.draw(CollisionBox.collBoxRectFromData(z, player));
-			g2d.setColor(Color.BLACK);
-		}
 
 		AffineTransform at = g2d.getTransform();
 		g2d.rotate(z.getFacingAngle(), drawX + w / 2, drawY + h / 2);
@@ -541,23 +535,7 @@ public class Renderer {
 		g2d.setTransform(at);
 	}
 
-	/**
-	 * Get whether collision boxes are being shown
-	 * @return are collision boxes being shown
-	 */
-	public boolean getShowCollBox() {
-		return showCollBox;
-	}
-
-	/**
-	 * DEBUG METHOD: Set whether to show collision boxes
-	 * @param showCollBox Boolean to set
-	 */
-	public void setShowCollBox(boolean showCollBox) {
-		this.showCollBox = showCollBox;
-		player.setShowCollBox(showCollBox);
-	}
-
+	
 	/**
 	 * Draw bullets on the screen
 	 * @param g2d Graphics2D object
