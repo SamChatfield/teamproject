@@ -3,14 +3,13 @@
  */
 package game.util;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import game.Bullet;
 import game.Entity;
 import game.client.Player;
-import game.util.EndState.EndReason;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 //--
 /**
  * @author ryan-

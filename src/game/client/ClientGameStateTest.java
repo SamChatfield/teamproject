@@ -1,12 +1,5 @@
 package game.client;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import game.Bullet;
 import game.Zombie;
 import game.server.ServerGameState;
@@ -14,6 +7,13 @@ import game.util.EndState;
 import game.util.GameState;
 import game.util.SendableState;
 import game.util.User;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ClientGameStateTest {
 	

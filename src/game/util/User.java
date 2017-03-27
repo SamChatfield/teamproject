@@ -1,7 +1,5 @@
 package game.util;
 
-import game.client.ClientReceiver;
-import game.client.ClientSender;
 import game.server.ServerReceiver;
 import game.server.ServerSender;
 

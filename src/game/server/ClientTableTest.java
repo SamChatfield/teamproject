@@ -1,12 +1,12 @@
 package game.server;
 
-import static org.junit.Assert.*;
-
+import game.server.ClientTable.playerStatus;
+import game.util.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.server.ClientTable.playerStatus;
-import game.util.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ClientTableTest {
 	

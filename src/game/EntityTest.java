@@ -1,38 +1,18 @@
 package game;
 
-import static org.junit.Assert.*;
-
-
-
-import game.Bullet;
-import game.Entity;
-import game.ResourceLoader;
-import game.Zombie;
+import game.client.Player;
 import game.map.MapData;
 import game.server.ServerGameState;
 import game.util.DataPacket;
-import game.util.DataPacket.Type;
-
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import game.Bullet;
-import game.Entity;
-import game.client.Player;
 import java.awt.*;
-//import game.map.MapData;
 import java.util.ArrayList;
 
-import game.map.MapData;
-import game.util.DataPacket;
+import static org.junit.Assert.*;
+
+//import game.map.MapData;
 
 
 /**

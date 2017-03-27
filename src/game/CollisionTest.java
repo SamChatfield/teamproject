@@ -3,18 +3,17 @@
  */
 package game;
 
-import static org.junit.Assert.*;
-
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-
-import org.junit.Test;
-
 import game.PowerUp.PuState;
 import game.Weapon.WeaponState;
 import game.client.Player;
 import game.map.MapData;
 import game.util.DataPacket;
+import org.junit.Test;
+
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 //
 /**

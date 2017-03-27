@@ -1,18 +1,13 @@
 package game.client;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferStrategy;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+
+import static org.junit.Assert.assertNotNull;
 
 public class MenuRendererTest extends Canvas{
 	

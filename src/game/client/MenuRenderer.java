@@ -1,7 +1,6 @@
 package game.client;
 
 import game.ResourceLoader;
-import game.Weapon.WeaponState;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -1,12 +1,10 @@
 package game.client;
 
-import static org.junit.Assert.*;
-
-import javax.sound.sampled.Clip;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.sound.sampled.Clip;
 
 public class SoundTest {
 	

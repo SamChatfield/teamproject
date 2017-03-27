@@ -1,19 +1,17 @@
 package game.server;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import game.Bullet;
 import game.Entity;
 import game.Zombie;
 import game.client.Player;
 import game.util.DataPacket;
 import game.util.PlayerUpdatePacket;
-import game.util.SendableState;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class ServerGameStateTest {
 	

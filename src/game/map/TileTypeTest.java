@@ -1,12 +1,12 @@
 package game.map;
 
-import static org.junit.Assert.assertEquals;
-
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+import static org.junit.Assert.assertEquals;
 
 public class TileTypeTest {
 	

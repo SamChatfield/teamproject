@@ -1,20 +1,18 @@
 package game.util;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import game.Bullet;
 import game.Entity;
 import game.Zombie;
 import game.client.ClientGameState;
 import game.client.Player;
-import game.map.MapData;
 import game.server.ServerGameState;
-import game.server.Timer;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class PlayerUpdatePacketTest {
 

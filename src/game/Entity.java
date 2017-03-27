@@ -1,7 +1,9 @@
 package game;
+
 import game.PowerUp.PuState;
 import game.map.MapData;
 import game.util.DataPacket;
+
 import java.io.Serializable;
 /**
  * Representation of entities in the game (Zombies and Players)

@@ -3,14 +3,14 @@
  */
 package game;
 
-import static org.junit.Assert.*;
+import game.PowerUp.PuState;
+import game.client.Player;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-
-import game.PowerUp.PuState;
-import game.client.Player;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author ryan-

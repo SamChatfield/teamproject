@@ -3,12 +3,12 @@
  */
 package game;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import game.Weapon.WeaponState;
 import game.client.Player;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author ryan-

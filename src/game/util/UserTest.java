@@ -3,12 +3,12 @@
  */
 package game.util;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import game.server.ServerReceiver;
 import game.server.ServerSender;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 //--
 /**

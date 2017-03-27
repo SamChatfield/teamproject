@@ -1,32 +1,17 @@
 package game.client;
 
-import static org.junit.Assert.*;
-
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferStrategy;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import game.Bullet;
-import game.Entity;
-import game.PowerUp;
-import game.ResourceLoader;
-import game.Weapon;
-import game.Zombie;
+import game.*;
 import game.server.ServerGameState;
 import game.util.EndState;
 import game.util.SendableState;
 import game.util.User;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 public class RendererTest extends Canvas {
 

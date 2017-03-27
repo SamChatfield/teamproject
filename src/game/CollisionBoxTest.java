@@ -3,16 +3,15 @@
  */
 package game;
 
-import static org.junit.Assert.*;
+import game.client.Player;
+import game.map.MapData;
+import game.util.DataPacket;
+import org.junit.Test;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.junit.Test;
-
-import game.client.Player;
-import game.map.MapData;
-import game.util.DataPacket;
+import static org.junit.Assert.*;
 
 //
 /**

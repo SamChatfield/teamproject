@@ -1,15 +1,13 @@
 package game.client;
 
-import static org.junit.Assert.*;
+import game.util.User;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import game.util.User;
+import static org.junit.Assert.fail;
 
 public class ClientTest {
 	

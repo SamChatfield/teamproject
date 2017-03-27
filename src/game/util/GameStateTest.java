@@ -3,17 +3,16 @@
  */
 package game.util;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
-import org.junit.Test;
-
 import game.Bullet;
 import game.PowerUp;
 import game.Weapon;
 import game.Zombie;
 import game.client.Player;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 //--
 /**
  * @author ryan-
