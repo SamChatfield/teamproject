@@ -1,3 +1,5 @@
+package tests;
+
 import game.map.Tile;
 import game.map.TileType;
 import org.junit.Before;

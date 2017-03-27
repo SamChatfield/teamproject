@@ -1,3 +1,5 @@
+package tests;
+
 import game.client.Player;
 import game.client.Sound;
 import org.junit.After;

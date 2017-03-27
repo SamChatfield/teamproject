@@ -1,3 +1,5 @@
+package tests;
+
 import game.Bullet;
 import game.Zombie;
 import game.client.ClientGameState;

@@ -1,3 +1,5 @@
+package tests;
+
 import game.server.ClientTable;
 import game.server.Matchmaker;
 import game.server.ServerReceiver;

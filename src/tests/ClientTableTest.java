@@ -1,3 +1,5 @@
+package tests;
+
 import game.server.ClientTable;
 import game.server.ClientTable.playerStatus;
 import game.util.User;

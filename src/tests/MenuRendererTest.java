@@ -1,3 +1,5 @@
+package tests;
+
 import game.client.MenuRenderer;
 import org.junit.Before;
 import org.junit.Test;

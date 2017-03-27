@@ -1,4 +1,4 @@
-/**
+package tests; /**
  *
  */
 
@@ -65,7 +65,7 @@ public class GameStateTest {
     @Test
     public final void testSetHasFinished() {
         state.setHasFinished(true);
-        assertTrue(state.hasFinished);
+        assertTrue(state.HasFinished());
     }
 
     /**
@@ -156,7 +156,7 @@ public class GameStateTest {
     }
 
     /**
-     * Test method for {@link game.util.GameState#setReady(boolean)}.
+     * Test method for {@link game.util.GameState#setConnected(boolean)}.
      */
     @Test
     public final void testSetConnected() {
@@ -165,9 +165,8 @@ public class GameStateTest {
     }
 
     /**
-     * Test method for {@link game.util.GameState#setInProgress(boolean)}.
+     * Test method for {@link game.util.GameState#setZombies(ArrayList)}.
      */
-
     @Test
     public final void testSetZombies() {
         state.setZombies(zombies);

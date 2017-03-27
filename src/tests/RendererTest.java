@@ -1,3 +1,5 @@
+package tests;
+
 import game.*;
 import game.client.ClientGameState;
 import game.client.Player;
