@@ -61,7 +61,7 @@ public class Renderer {
 	 * @param bufferStrategy Strategy to use to draw in a buffer
 	 * @param state The current ClientGameState
 	 */
-	Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
+	public Renderer(BufferStrategy bufferStrategy, ClientGameState state) {
 		this.bufferStrategy = bufferStrategy;
 		this.state = state;
 		this.gameH = Client.GAME_DIMENSION.height;

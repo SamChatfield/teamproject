@@ -20,7 +20,7 @@ public class ClientSender extends Thread {
 	 * @param user Object of user
 	 * @param objOut ObjectOutputStream
 	 */
-	ClientSender(User user, ObjectOutputStream objOut, ClientGameState state) {
+	public ClientSender(User user, ObjectOutputStream objOut, ClientGameState state) {
 		this.user = user;
 		this.objOut = objOut;
 		this.state = state;
