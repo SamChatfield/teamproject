@@ -23,8 +23,6 @@ public class MenuRendererTest extends Canvas{
 
 	@Before
 	public void setUp() {
-
-		
 		container = new JFrame("test");
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(new Dimension(640,640));
@@ -46,7 +44,6 @@ public class MenuRendererTest extends Canvas{
 		
 		g2d = (Graphics2D) bs.getDrawGraphics();
 		
-		createBufferStrategy(2);
 		m = new MenuRenderer(bs);
 
 	}

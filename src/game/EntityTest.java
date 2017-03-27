@@ -9,6 +9,7 @@ import game.Entity;
 import game.ResourceLoader;
 import game.Zombie;
 import game.map.MapData;
+import game.server.ServerGameState;
 import game.util.DataPacket;
 import game.util.DataPacket.Type;
 
@@ -48,16 +49,34 @@ public class EntityTest {
 	/**
 	 * Test method for {@link game.client.Player#Player(float, float, game.map.MapData, java.lang.String)}.
 	 */
-	Player player = new Player(1, 1, null, "ryan"); 
-	Player player1 = new Player(1, 1, null, "becca");
-	Bullet bullet = new Bullet(player, 1, 1, 1, 1, null);
-	Entity entity = new Entity (1, 1,  0.3f, 50, null, null); 
-	Entity entityPU = new Entity(1,1,null);
-	Zombie zombie = new Zombie(1,1,null, 0);
+	
+	ServerGameState s;
+	
+	Player player;
+	Player player1; 
+	Bullet bullet; 
+	Entity entity;
+	Entity entityPU; 
+	Zombie zombie; 
 	private ArrayList<Bullet> bullets;
 	protected transient MapData mapData;
 	//DataPacket data = new DataPacket(1, 1, 0.3f, 50, 10l, null);
 	DataPacket data = new DataPacket(1, 1, 0.3f, 50, 100l, null, true, 100, false, 1000);
+	
+	@Before
+	public final void setUp(){
+		s = new ServerGameState("ryan", "becca", 1);
+		s.startNewGame();
+		MapData m = s.getMapData();
+		
+		player = new Player(1, 1, m, "ryan"); 
+		player1 = new Player(1, 1, m, "becca");
+		
+		bullet = new Bullet(player, 1, 1, 1, 1, null);
+		entity = new Entity (1, 1,  0.3f, 50, m, null);
+		entityPU = new Entity(1,1,m);
+		zombie = new Zombie(1,1,m, 0);
+	}
 	
 	@Test
 	public final void testPlayer() {
@@ -135,20 +154,6 @@ public class EntityTest {
 	}
 
 	/**
-	 * Test method for {@link game.client.Player#drawRelativeToOtherPlayer(java.awt.Graphics2D, game.client.Player)}.
-	 */
-	@Test
-	public final void testDrawRelativeToOtherPlayer() {
-		player.setShowCollBox(true);
-		player.drawRelativeToOtherPlayer(g2d, player, player1);
-	}
-
-
-
-
-
-
-	/**
 	 * Test method for {@link game.client.Player#setShowCollBox(boolean)}.
 	 */
 	@Test
@@ -205,8 +210,6 @@ public class EntityTest {
 		float moveX = 1;
 		float moveY = 1;
 		zombie.move(1f);
-		
-		//entity.move(moveX,moveY);
 	}
 
 	/**

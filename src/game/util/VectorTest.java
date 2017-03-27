@@ -40,14 +40,6 @@ public class VectorTest {
 	}
 
 	/**
-	 * Test method for {@link game.util.Vector#magnitude()}.
-	 */
-	@Test
-	public final void testMagnitude() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
 	 * Test method for {@link game.util.Vector#add(game.util.Vector)}.
 	 */
 	@Test
@@ -80,14 +72,6 @@ public class VectorTest {
 	@Test
 	public final void testY() {
 		assertNotNull(vector.y());
-	}
-
-	/**
-	 * Test method for {@link game.util.Vector#equals(java.lang.Object)}.
-	 */
-	@Test
-	public final void testEqualsObject() {
-		fail("Not yet implemented"); // TODO
 	}
 
 	/**

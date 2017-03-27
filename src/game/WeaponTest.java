@@ -56,16 +56,16 @@ public class WeaponTest {
 		assertEquals(500000000L, player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w1, player);
-		assertEquals(100000000L,player.getShootDelay(), 0.1);
+		assertEquals(10000000L,player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w2, player);
-		assertEquals(100000000L, player.getShootDelay(), 0.1);
+		assertEquals(200000000L, player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w3, player);
 		assertEquals(500000000L, player.getShootDelay(), 0.1);
 		
 		weapon.getWeaponStats(w4, player);
-		assertEquals(500000000L, player.getShootDelay(), 0.1);
+		assertEquals(1000000000L, player.getShootDelay(), 0.1);
 	}
 
 	/**

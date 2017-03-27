@@ -69,7 +69,7 @@ public class CollisionTest {
 	@Test
 	public final void testCheckPlayerCollision() {
 		coll.checkPlayerCollision(bullet, player, opponent);
-		assertEquals(25,player.getHealth(), 0.01);
+		assertEquals(50,player.getHealth(), 0.01);
 		assertEquals(50,player1.getHealth(), 0.01);
 	}
 
