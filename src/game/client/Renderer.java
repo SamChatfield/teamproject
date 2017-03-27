@@ -183,24 +183,6 @@ public class Renderer {
                 break;
         }
 
-		
-		
-		/*switch(player.getCurrentPU()) {
-		case SPEED_UP:
-			g2d.drawString("Current PowerUp: Speed Up", xCoord+5, 575);
-			break;
-		case FREEZE:
-			g2d.drawString("Current PowerUp:  Frozen", xCoord+5, 575);
-			break;
-		case SLOW_DOWN:
-			g2d.drawString("Current PowerUp: Slow Down", xCoord+5, 575);
-			break;
-		case INVERSE:
-			g2d.drawString("Current PowerUp: Inverse", xCoord+5, 575);
-			break;
-		default:
-			break;
-		}*/
 
         if (player.getCurrentPU() == PowerUp.PuState.SPEED_UP) {
             g2d.drawString("Current PowerUp: Speed Up", xCoord + 5, 560);
