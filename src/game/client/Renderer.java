@@ -183,7 +183,6 @@ public class Renderer {
                 break;
         }
 
-
         if (player.getCurrentPU() == PowerUp.PuState.SPEED_UP) {
             g2d.drawString("Current PowerUp: Speed Up", xCoord + 5, 560);
         }
@@ -196,7 +195,6 @@ public class Renderer {
         if (player.getCurrentPU() == PowerUp.PuState.INVERSE) {
             g2d.drawString("Current PowerUp: Invert Controls", xCoord + 5, 560);
         }
-
 
         // Loop to draw each box and weapon image
         int i = 0;
