@@ -196,7 +196,6 @@ public class Renderer {
             g2d.drawString("Current PowerUp: Invert Controls", xCoord + 5, 560);
         }
 
-
         // Loop to draw each box and weapon image
         int i = 0;
         for (WeaponState weapon : WeaponState.values()) {
