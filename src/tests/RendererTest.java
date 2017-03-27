@@ -3,6 +3,7 @@ package tests;
 import game.*;
 import game.client.ClientGameState;
 import game.client.Player;
+import game.client.Renderer;
 import game.server.ServerGameState;
 import game.util.EndState;
 import game.util.SendableState;
@@ -93,8 +94,7 @@ public class RendererTest extends Canvas {
 
         g2d = (Graphics2D) bs.getDrawGraphics();
 
-
-        r = new game.client.Renderer(bs, g);
+        r = new Renderer(bs, g);
     }
 
 

@@ -5,7 +5,6 @@ import game.server.Matchmaker;
 import game.server.ServerReceiver;
 import game.server.ServerSender;
 import game.util.User;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

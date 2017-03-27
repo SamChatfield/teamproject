@@ -13,239 +13,241 @@ import java.util.Random;
  */
 public class GameInstance extends Thread {
 
-	private static final long OPTIMAL_TIME_DIFF = 1000000000L / 60;
+    private static final long OPTIMAL_TIME_DIFF = 1000000000L / 60;
 
-	private ServerGameState state;
-	private boolean running;
+    private ServerGameState state;
+    private boolean running;
 
-	/**
-	 * Constructor to create a new game instance.
-	 * @param state The state of the server
-	 */
-	public GameInstance(ServerGameState state) {
-		this.state = state;
-		Timer timer = new Timer(180, state);
-		new Thread(timer).start();
+    /**
+     * Constructor to create a new game instance.
+     *
+     * @param state The state of the server
+     */
+    public GameInstance(ServerGameState state) {
+        this.state = state;
+        Timer timer = new Timer(180, state);
+        new Thread(timer).start();
 
-		state.updateTime(timer.getTimeRemaining());
-		running = true;
-	}
+        state.updateTime(timer.getTimeRemaining());
+        running = true;
+    }
 
-	// Main thread method
-	public void run() {
+    // Main thread method
+    public void run() {
 
-		// Loop time
-		long lastLoopTime = System.nanoTime();
+        // Loop time
+        long lastLoopTime = System.nanoTime();
 
-		while (running) {
-			long now = System.nanoTime();
-			long updateLength = now - lastLoopTime;
-			lastLoopTime = now;
-			double delta = updateLength / ((double) 1000000000L / 60);
+        while (running) {
+            long now = System.nanoTime();
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            double delta = updateLength / ((double) 1000000000L / 60);
 
-			// Update the game
-			update(delta);
+            // Update the game
+            update(delta);
 
-			// Check if the game has ended
-			EndState end = checkForEnd();
-			if (end.hasFinished()) {
-				System.out.println("Game ended");
-				state.setEndState(end); // Give the game state the end state.
-				state.setHasFinished(true); // Will cause the timer thread to
-				// close too
-				running = false;
-			}
-			now = System.nanoTime();
-			// System.out.println("time diff: " + (now - lastLoopTime));
-			if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
-				try {
-					Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					System.out.println("Client loop interrupted exception: " + e.getMessage());
-				}
-			}
-		}
-	}
+            // Check if the game has ended
+            EndState end = checkForEnd();
+            if (end.hasFinished()) {
+                System.out.println("Game ended");
+                state.setEndState(end); // Give the game state the end state.
+                state.setHasFinished(true); // Will cause the timer thread to
+                // close too
+                running = false;
+            }
+            now = System.nanoTime();
+            // System.out.println("time diff: " + (now - lastLoopTime));
+            if (now - lastLoopTime < OPTIMAL_TIME_DIFF) {
+                try {
+                    Thread.sleep((lastLoopTime - now + OPTIMAL_TIME_DIFF) / 1000000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.out.println("Client loop interrupted exception: " + e.getMessage());
+                }
+            }
+        }
+    }
 
-	/**
-	 * Update the game instance
-	 *
-	 * @param delta
-	 *            Interpolation
-	 */
-	private void update(double delta) {
-		// System.out.println("delta: " + delta);
-		ArrayList<Zombie> zombies = state.getZombies();
-		ArrayList<PowerUp> powerups = state.getPowerups();
+    /**
+     * Update the game instance
+     *
+     * @param delta Interpolation
+     */
+    private void update(double delta) {
+        // System.out.println("delta: " + delta);
+        ArrayList<Zombie> zombies = state.getZombies();
+        ArrayList<PowerUp> powerups = state.getPowerups();
 
-		// Update the player states
-		Player player1 = state.getPlayer1();
-		Player player2 = state.getPlayer2();
+        // Update the player states
+        Player player1 = state.getPlayer1();
+        Player player2 = state.getPlayer2();
 
-		// Add the players
-		ArrayList<Player> players = new ArrayList<>();
-		players.add(player1);
-		players.add(player2);
+        // Add the players
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
 
-		ArrayList<Zombie> newZombies = new ArrayList<>();
+        ArrayList<Zombie> newZombies = new ArrayList<>();
 
-		Random r = new Random();
-		for (Zombie z : state.getZombies()) {
-			if (z.getHealth() == 0 && z.isAlive()) {
-				z.setAlive(false,r.nextInt(3) + 1);
-			}
-			newZombies.add(z);
-		}
+        Random r = new Random();
+        for (Zombie z : state.getZombies()) {
+            if (z.getHealth() == 0 && z.isAlive()) {
+                z.setAlive(false, r.nextInt(3) + 1);
+            }
+            newZombies.add(z);
+        }
 
-		for (Zombie z : newZombies) {
-			if(z.isAlive()) {
-				ArtInt.followPlayer(z, players);
-				z.move(delta);
-				for (Player p : players) {
-					Collision.checkCollision(z, p);
-				}
-			}
-		}
+        for (Zombie z : newZombies) {
+            if (z.isAlive()) {
+                ArtInt.followPlayer(z, players);
+                z.move(delta);
+                for (Player p : players) {
+                    Collision.checkCollision(z, p);
+                }
+            }
+        }
 
-		state.setZombies(newZombies);
+        state.setZombies(newZombies);
 
-		// RANDOMNESS
-		int chancePU = r.nextInt(100) + 1;
+        // RANDOMNESS
+        int chancePU = r.nextInt(100) + 1;
 
-		int xP = r.nextInt(40) - 20;
-		int yP = r.nextInt(40) - 20;
+        int xP = r.nextInt(40) - 20;
+        int yP = r.nextInt(40) - 20;
 
-		int xW = r.nextInt(40) - 20;
-		int yW = r.nextInt(40) - 20;
+        int xW = r.nextInt(40) - 20;
+        int yW = r.nextInt(40) - 20;
 
 
-		// WEAPONS
-		ArrayList<Weapon> newWeapon = new ArrayList<>();
-		long now = System.nanoTime();
+        // WEAPONS
+        ArrayList<Weapon> newWeapon = new ArrayList<>();
+        long now = System.nanoTime();
 
-		for (Weapon w : state.getWeapons()) {
-			if (now - w.time <= 10000000000l && !Collision.checkWeaponCollision(w, player1)
-					&& !Collision.checkWeaponCollision(w, player2)) {
-				newWeapon.add(w);
-			}
-		}
+        for (Weapon w : state.getWeapons()) {
+            if (now - w.time <= 10000000000l && !Collision.checkWeaponCollision(w, player1)
+                    && !Collision.checkWeaponCollision(w, player2)) {
+                newWeapon.add(w);
+            }
+        }
 
-		if (chancePU == 1) {
-			//newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
-			//newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));
-			newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
-		}
+        if (chancePU == 1) {
+            //newWeapon.add(new Weapon(13, -3, state.getMapData(), Weapon.WeaponState.MAC_GUN, System.nanoTime()));
+            //newWeapon.add(new Weapon(15, -3, state.getMapData(), Weapon.WeaponState.UZI, System.nanoTime()));
+            newWeapon.add(new Weapon(xW, yW, state.getMapData(), Weapon.randomW(), System.nanoTime()));
+        }
 
-		state.setWeapons(newWeapon);
+        state.setWeapons(newWeapon);
 
-		// POWERUPS & DOWNS
-		ArrayList<PowerUp> newPowerup = new ArrayList<>();
-		long now1 = System.nanoTime();
+        // POWERUPS & DOWNS
+        ArrayList<PowerUp> newPowerup = new ArrayList<>();
+        long now1 = System.nanoTime();
 
-		for (PowerUp p : state.getPowerups()) {
-			if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2, state.getZombies())
-					&& !Collision.checkPowerupCollision(p, player2, player1, state.getZombies())) {
-				newPowerup.add(p);
-			}
-		}
+        for (PowerUp p : state.getPowerups()) {
+            if (now1 - p.time <= 5000000000l && !Collision.checkPowerupCollision(p, player1, player2, state.getZombies())
+                    && !Collision.checkPowerupCollision(p, player2, player1, state.getZombies())) {
+                newPowerup.add(p);
+            }
+        }
 
-		if (chancePU == 2) {
-			//newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
-			newPowerup.add(new PowerUp(xP, yP, state.getMapData(),PowerUp.randomPU(), System.nanoTime()));
-		}
+        if (chancePU == 2) {
+            //newPowerup.add(new PowerUp(13, 3, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
+            newPowerup.add(new PowerUp(xP, yP, state.getMapData(), PowerUp.randomPU(), System.nanoTime()));
+        }
 
-		state.setPowerUp(newPowerup);
+        state.setPowerUp(newPowerup);
 
-		// CHECK ACTIVE POWERUPS
-		for (Player p : players) {
-			long now11 = System.nanoTime();
-			if (p.getIsActive()) {
-				if (now11 - p.getAppearTime() >= 10000000000l) {
-					PowerUp.normalSpeed(p);
-				}
-				
-				System.out.print(p.getCurrentPU());
-			}
-			/*if (p.getIsActivePD()) {
-				if (now11 - p.getAppearTimePD() >= 10000000000l) {
+        // CHECK ACTIVE POWERUPS
+        for (Player p : players) {
+            long now11 = System.nanoTime();
+            if (p.getIsActive()) {
+                if (now11 - p.getAppearTime() >= 10000000000l) {
+                    PowerUp.normalSpeed(p);
+                }
+
+                System.out.print(p.getCurrentPU());
+            }
+            /*if (p.getIsActivePD()) {
+                if (now11 - p.getAppearTimePD() >= 10000000000l) {
 					PowerUp.normalSpeedPD(p);
 				}
 			}*/
-		}
+        }
 
-		// BULLETS
+        // BULLETS
 
-		ArrayList<Bullet> newBullets = new ArrayList<>();
-		for (Bullet b : state.getBullets()) {
-			if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {
-				newBullets.add(b);
-			}
-		}
+        ArrayList<Bullet> newBullets = new ArrayList<>();
+        for (Bullet b : state.getBullets()) {
+            if (state.getMapData().isEntityMoveValid(b.getX(), b.getY(), b) && b.active) {
+                newBullets.add(b);
+            }
+        }
 
-		for (Bullet b : newBullets) {
-			Player owner = state.getPlayer(b.getUsername());
-			Collision.checkBulletCollision(b, zombies, owner);
-			Collision.checkPlayerCollision(b, owner, state.getOtherPlayer(owner.getUsername()));
-			b.move(delta);
-		}
+        for (Bullet b : newBullets) {
+            Player owner = state.getPlayer(b.getUsername());
+            Collision.checkBulletCollision(b, zombies, owner);
+            Collision.checkPlayerCollision(b, owner, state.getOtherPlayer(owner.getUsername()));
+            b.move(delta);
+        }
 
-		state.setBullets(newBullets);
+        state.setBullets(newBullets);
 
-		// Player converted zombies
-		int play1Converted = 0;
-		int play2Converted = 0;
+        // Player converted zombies
+        int play1Converted = 0;
+        int play2Converted = 0;
 
-		for (int i = 0; i < state.getZombies().size(); i++) {
-			Zombie z = state.getZombies().get(i);
-			if(!z.isAlive()){ continue; }
-			if (z.getUsername().equals(state.getPlayer1().getUsername())) {
-				play1Converted += 1;
-			} else if (z.getUsername().equals(state.getPlayer2().getUsername())) {
-				play2Converted += 1;
-			}
-		}
-		state.getPlayer1().setNumConvertedZombies(play1Converted);
-		state.getPlayer2().setNumConvertedZombies(play2Converted);
-	}
+        for (int i = 0; i < state.getZombies().size(); i++) {
+            Zombie z = state.getZombies().get(i);
+            if (!z.isAlive()) {
+                continue;
+            }
+            if (z.getUsername().equals(state.getPlayer1().getUsername())) {
+                play1Converted += 1;
+            } else if (z.getUsername().equals(state.getPlayer2().getUsername())) {
+                play2Converted += 1;
+            }
+        }
+        state.getPlayer1().setNumConvertedZombies(play1Converted);
+        state.getPlayer2().setNumConvertedZombies(play2Converted);
+    }
 
-	/**
-	 * Method that checks of the end of the game
-	 *
-	 * @return EndState of the game
-	 */
-	private EndState checkForEnd() {
-		Player winner;
+    /**
+     * Method that checks of the end of the game
+     *
+     * @return EndState of the game
+     */
+    private EndState checkForEnd() {
+        Player winner;
 
-		// First of all, do any players have 0 health.
-		if (state.getPlayer1().getHealth() == 0) {
-			winner = state.getPlayer2();
-			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
-					EndState.EndReason.PLAYER_DIED);
-		} else if (state.getPlayer2().getHealth() == 0) {
-			winner = state.getPlayer1();
-			return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
-					EndState.EndReason.PLAYER_DIED);
-		}
+        // First of all, do any players have 0 health.
+        if (state.getPlayer1().getHealth() == 0) {
+            winner = state.getPlayer2();
+            return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+                    EndState.EndReason.PLAYER_DIED);
+        } else if (state.getPlayer2().getHealth() == 0) {
+            winner = state.getPlayer1();
+            return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+                    EndState.EndReason.PLAYER_DIED);
+        }
 
-		// Now we should see if the time has ended
-		if (state.getTimeRemaining() <= 0) {// time has ended
-			// the winner is now who has converted more zombies.
-			if (state.getPlayer1().getNumConvertedZombies() > state.getPlayer2().getNumConvertedZombies()) {
-				winner = state.getPlayer1();
-				return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
-						EndState.EndReason.TIME_EXPIRED);
-			} else if (state.getPlayer2().getNumConvertedZombies() > state.getPlayer1().getNumConvertedZombies()) {
-				winner = state.getPlayer2();
-				return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
-						EndState.EndReason.TIME_EXPIRED);
+        // Now we should see if the time has ended
+        if (state.getTimeRemaining() <= 0) {// time has ended
+            // the winner is now who has converted more zombies.
+            if (state.getPlayer1().getNumConvertedZombies() > state.getPlayer2().getNumConvertedZombies()) {
+                winner = state.getPlayer1();
+                return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+                        EndState.EndReason.TIME_EXPIRED);
+            } else if (state.getPlayer2().getNumConvertedZombies() > state.getPlayer1().getNumConvertedZombies()) {
+                winner = state.getPlayer2();
+                return new EndState(true, winner.getUsername(), state.getPlayer1(), state.getPlayer2(),
+                        EndState.EndReason.TIME_EXPIRED);
 
-			} else {
-				return new EndState(true, "Tie", state.getPlayer1(), state.getPlayer2(),
-						EndState.EndReason.TIME_EXPIRED);
-			}
-		} else {
-			return new EndState(false, "InProgress", null, null, null);
-		}
-	}
+            } else {
+                return new EndState(true, "Tie", state.getPlayer1(), state.getPlayer2(),
+                        EndState.EndReason.TIME_EXPIRED);
+            }
+        } else {
+            return new EndState(false, "InProgress", null, null, null);
+        }
+    }
 }

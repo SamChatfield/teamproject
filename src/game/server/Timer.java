@@ -5,45 +5,46 @@ package game.server;
  */
 public class Timer implements Runnable {
 
-	private int time;
-	private ServerGameState state;
+    private int time;
+    private ServerGameState state;
 
-	/**
-	 * Constructor to set the timer duration
-	 * @param duration Number of seconds for the game to last
-	 */
-	public Timer(int duration,ServerGameState state)
-	{
-		time = duration;
-		this.state = state;
-	}
+    /**
+     * Constructor to set the timer duration
+     *
+     * @param duration Number of seconds for the game to last
+     */
+    public Timer(int duration, ServerGameState state) {
+        time = duration;
+        this.state = state;
+    }
 
-	/**
-	 * Get time remaining in seconds
-	 * @return Current time remaining in seconds
-	 */
-	public int getTimeRemaining() {
-		return time;
-	}
+    /**
+     * Get time remaining in seconds
+     *
+     * @return Current time remaining in seconds
+     */
+    public int getTimeRemaining() {
+        return time;
+    }
 
-	// Start the thread
-	public void run() {
-		boolean running = true;
-		for(time = time; time>=0; time--) {
-			if(!running){
-				break;
-			}
-			// System.out.println("Time "+time);
+    // Start the thread
+    public void run() {
+        boolean running = true;
+        for (time = time; time >= 0; time--) {
+            if (!running) {
+                break;
+            }
+            // System.out.println("Time "+time);
 
-			if (state.HasFinished()) {
-				running = false; // Stop the countdown
-			}
-			try {
-				state.updateTime(time);
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				System.err.println("Thread Error in Timer! " + e.getMessage());
-			}
-		}
-	}
+            if (state.HasFinished()) {
+                running = false; // Stop the countdown
+            }
+            try {
+                state.updateTime(time);
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.err.println("Thread Error in Timer! " + e.getMessage());
+            }
+        }
+    }
 }

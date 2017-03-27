@@ -16,74 +16,74 @@ import java.net.Socket;
  */
 public class Server {
 
-	public static void main(String[] args){
+    public static void main(String[] args) {
 
-		int port = 4444;
+        int port = 4444;
 
-		// Keep track of connected users
-		// TODO: Expand clientTable
-		ClientTable clientTable = new ClientTable();
+        // Keep track of connected users
+        // TODO: Expand clientTable
+        ClientTable clientTable = new ClientTable();
 
-		// Create ServerSocket
-		ServerSocket outSocket = null;
+        // Create ServerSocket
+        ServerSocket outSocket = null;
 
-		Matchmaker matchmaker = new Matchmaker(clientTable);
-		matchmaker.start();
+        Matchmaker matchmaker = new Matchmaker(clientTable);
+        matchmaker.start();
 
-		// this state should be shared between two connected clients. One made for each game.
-		//ServerGameState state = new ServerGameState("a","b");
+        // this state should be shared between two connected clients. One made for each game.
+        //ServerGameState state = new ServerGameState("a","b");
 
-		try {
-			outSocket = new ServerSocket(port);
-		} catch (IOException e) {
-			System.err.println("Error! Unable to listen on port " + port );
-			System.exit(1);
-		}
+        try {
+            outSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            System.err.println("Error! Unable to listen on port " + port);
+            System.exit(1);
+        }
 
-		System.out.println("Success! Server successfully started");
+        System.out.println("Success! Server successfully started");
 
-		try {
-			while(true) {
-				Socket clientSocket = outSocket.accept();
+        try {
+            while (true) {
+                Socket clientSocket = outSocket.accept();
 
-				// Someone connected, for debug we'll now generate the game state
-				System.out.println("DEBUG: Accepting socket connection");
+                // Someone connected, for debug we'll now generate the game state
+                System.out.println("DEBUG: Accepting socket connection");
 
-				ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
-				ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
-				System.out.println("DEBUG: I/O streams created");
+                ObjectOutputStream objOut = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectInputStream objIn = new ObjectInputStream(clientSocket.getInputStream()); // this seems to break
+                System.out.println("DEBUG: I/O streams created");
 
-				User clientObject = (User)objIn.readObject();
-				System.out.println("DEBUG: Read client name");
-				int counter = 1;
-				boolean userExists = clientTable.userExists(clientObject.getUsername());
-				if(userExists) {
-					clientObject.setUsername(clientObject.getUsername() + counter);
-					counter++;
-				}
-				clientTable.addToTable(clientObject);
-				System.out.println("New user connected: " + clientObject.getUsername());
+                User clientObject = (User) objIn.readObject();
+                System.out.println("DEBUG: Read client name");
+                int counter = 1;
+                boolean userExists = clientTable.userExists(clientObject.getUsername());
+                if (userExists) {
+                    clientObject.setUsername(clientObject.getUsername() + counter);
+                    counter++;
+                }
+                clientTable.addToTable(clientObject);
+                System.out.println("New user connected: " + clientObject.getUsername());
 
-				// Start threads
-				ServerSender server_sender = new ServerSender(objOut);
-				server_sender.start();
-				ServerReceiver server_receiver = new ServerReceiver(objIn, clientObject, clientTable);
-				server_receiver.start();
+                // Start threads
+                ServerSender server_sender = new ServerSender(objOut);
+                server_sender.start();
+                ServerReceiver server_receiver = new ServerReceiver(objIn, clientObject, clientTable);
+                server_receiver.start();
 
-				clientObject.setServerReceiver(server_receiver);
-				clientObject.setServerSender(server_sender);
-				if(userExists) {
-					server_sender.sendObject("newUsername:"+ clientObject.getUsername());
-				}
+                clientObject.setServerReceiver(server_receiver);
+                clientObject.setServerSender(server_sender);
+                if (userExists) {
+                    server_sender.sendObject("newUsername:" + clientObject.getUsername());
+                }
 
-				// REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
-			}
+                // REST OF SERVER CODE SHOULD BE IN SENDER/RECEIVER
+            }
 
-		} catch(Exception e) {
-			//e.printStackTrace();
-			System.exit(1);
-		}
-	}
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
 
 }

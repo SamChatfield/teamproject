@@ -14,30 +14,27 @@ import java.util.ArrayList;
  */
 public class Player extends Entity {
 
-	private static final float COLL_BOX_WIDTH = 25.0f;
-	private static final float COLL_BOX_HEIGHT = 25.0f;
-	public static final int HEALTH = 50;
-	private static final float MOVE_SPEED = 0.1f;
-	private static final BufferedImage image = ResourceLoader.playerImage();
-	private static final BufferedImage opponentImage = ResourceLoader.opponentImage();
-
-	private boolean showCollBox;
-
-	public boolean conversionMode;
-    private ArrayList<Bullet> bullets;
-    
+    public static final int HEALTH = 50;
+    private static final float COLL_BOX_WIDTH = 25.0f;
+    private static final float COLL_BOX_HEIGHT = 25.0f;
+    private static final float MOVE_SPEED = 0.1f;
+    private static final BufferedImage image = ResourceLoader.playerImage();
+    private static final BufferedImage opponentImage = ResourceLoader.opponentImage();
     private static final boolean isActivePU = false;
     private static final long appearTimePU = 0;
-    
     private static final boolean isActivePD = false;
     private static final float appearTimePD = 0;
+    public boolean conversionMode;
+    private boolean showCollBox;
+    private ArrayList<Bullet> bullets;
 
-    
+
     /**
      * Create a new Player object in the game
-     * @param x Initial X coordinate
-     * @param y Initial Y coordinate
-     * @param mapData The game map
+     *
+     * @param x        Initial X coordinate
+     * @param y        Initial Y coordinate
+     * @param mapData  The game map
      * @param username Username of this player
      */
     public Player(float x, float y, MapData mapData, String username) {
@@ -46,17 +43,27 @@ public class Player extends Entity {
         showCollBox = false;
         bullets = new ArrayList<>(20);
         setUsername(username);
-        
+
         // Initially cannot convert zombies
-        conversionMode = false;        
+        conversionMode = false;
         getInventory()[0] = Weapon.WeaponState.PISTOL;
         setCurrentlyEquipped(Weapon.WeaponState.PISTOL);
     }
 
     /**
+     * Get the image used for the player
+     *
+     * @return BufferedImage of player image
+     */
+    public static BufferedImage getImage() {
+        return image;
+    }
+
+    /**
      * Move entity on the map
-     * @param dx Movement X
-     * @param dy Movement Y
+     *
+     * @param dx       Movement X
+     * @param dy       Movement Y
      * @param opponent Opponent player
      */
     public void move(float dx, float dy, Entity opponent) {
@@ -82,10 +89,11 @@ public class Player extends Entity {
 
     /**
      * Shoots player's weapon in direction of mouse cursor
+     *
      * @param aimX Direction X weapon is aimed in
      * @param aimY Direction Y weapon is aimed in
-     * @param pdx Player's velocity in the x direction at the time of firing
-     * @param pdy Player's velocity in the y direction at the time of firing
+     * @param pdx  Player's velocity in the x direction at the time of firing
+     * @param pdy  Player's velocity in the y direction at the time of firing
      * @return Bullet object travelling in specified direction
      */
     public Bullet shoot(float aimX, float aimY, float pdx, float pdy) {
@@ -101,9 +109,10 @@ public class Player extends Entity {
 
     /**
      * Smaller method than above, used on the client so it knows if it can shoot on the server
+     *
      * @return Boolean of whether the player can shoot.
      */
-    public boolean canShoot(){
+    public boolean canShoot() {
         long now = System.nanoTime();
         if (now - getLastAttackTime() > getShootDelay()) {
             return true;
@@ -112,9 +121,9 @@ public class Player extends Entity {
         }
     }
 
-
     /**
      * Draw the player on the screen
+     *
      * @param g2d Graphics2D object
      */
     public void draw(Graphics2D g2d) {
@@ -135,15 +144,16 @@ public class Player extends Entity {
         // Ensures player is facing the right direction (based on mouse pointer location)
         AffineTransform at = g2d.getTransform();
         g2d.rotate(data.getFacingAngle(), sw / 2, sh / 2);
-        
+
         g2d.drawImage(image, sw / 2 - w / 2, sw / 2 - h / 2, null);
         g2d.setTransform(at);
-        
+
     }
 
     /**
      * Draw opponent relative to the player
-     * @param g2d Graphics2D object
+     *
+     * @param g2d    Graphics2D object
      * @param player Player object
      */
     public void drawRelativeToOtherPlayer(Graphics2D g2d, Player player, Player otherPlayer) {
@@ -154,11 +164,11 @@ public class Player extends Entity {
         Point drawPoint = player.relativeDrawPoint(getX(), getY(), w, h);
         int drawX = drawPoint.x;
         int drawY = drawPoint.y;
-        
+
         // Display player name
         g2d.setFont(ResourceLoader.getTradewindsFont().deriveFont(15f));
         g2d.setColor(Color.WHITE);
-        g2d.drawString(otherPlayer.getUsername(), drawX, drawY-20);
+        g2d.drawString(otherPlayer.getUsername(), drawX, drawY - 20);
 
         // Health bar
         g2d.setColor(Color.GREEN);
@@ -181,6 +191,7 @@ public class Player extends Entity {
 
     /**
      * Calculate the point relative to the player at which the given entity will be drawn
+     *
      * @param x x coord of entity
      * @param y y coord of entity
      * @param w width of entity sprite
@@ -201,15 +212,8 @@ public class Player extends Entity {
     }
 
     /**
-     * Get the image used for the player 
-     * @return BufferedImage of player image
-     */
-    public static BufferedImage getImage() {
-        return image;
-    }
-
-    /**
      * Set whether to show collision boxes
+     *
      * @param showCollBox Boolean of whether to show collision boxes
      */
     public void setShowCollBox(boolean showCollBox) {
