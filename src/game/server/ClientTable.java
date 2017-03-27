@@ -11,8 +11,8 @@ import java.util.Iterator;
  */
 public class ClientTable {
 
-	HashMap clientTable;
-	ArrayList<User> availablePlayers;
+	private HashMap clientTable;
+	private ArrayList<User> availablePlayers;
 
 	/**
 	 * Constructor creates a hashmap: the key is the username, the value is a bool
@@ -22,8 +22,9 @@ public class ClientTable {
 		clientTable = new HashMap();
 	}
 
-
-	public enum playerStatus {NOT_PLAYING, WAITING, IN_GAME }
+	public ArrayList<User> getAvailablePlayers() {
+		return availablePlayers;
+	}
 
 	/**
 	 * Add a user to the table
@@ -71,4 +72,6 @@ public class ClientTable {
 		}
 		return exists;
 	}
+
+	public enum playerStatus {NOT_PLAYING, WAITING, IN_GAME }
 }
